@@ -1,0 +1,1053 @@
+\documentclass{article}
+
+% For using float option H that places figures exatcly where we want them
+\usepackage{float}
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+
+\title{%
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 1: Group Theory \\
+    \LARGE Chapter 1: Introduction to Groups \\
+    \Large Section 1: Basic Axioms and Examples
+}
+\date{2023-07-14}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+
+    \section*{Exercise 1}
+    To prove a group $(G, \ast)$ is associative,
+    we need to show that $ \forall a, b, c \in G$,
+    we have $\ast(\ast(a, b), c) = \ast(a, \ast(b, c))$.
+    % Defines new way to enumerate using bold lowercase letters with a period 
+    % at the end (use Alph for uppercase)
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item
+            For $G = (\Z, \ast)$ where $\ast(a, b) = a - b$: \\
+            We have $\ast(\ast(a, b), c) = (a - b) - c$
+            and $\ast(a, \ast(b, c)) = a - (b - c) = a - (b - c)$
+            (subtraction is associative in $\Z$).
+            So $G$ is associative. 
+        \item
+            For $G = (\R, \ast)$ where $\ast(a, b) = a + b + ab$: \\
+            We have $\ast(\ast(a, b), c)
+            = (a + b + ab) + c + (a + b + ab)c
+            = a + b + c + ab + ac + bc + abc$
+            and $\ast(a, \ast(b, c))
+            = a + (b + c + bc) + a(b + c + bc)
+            = a + b + c + ab + ac + bc + abc$.
+            So $G$ is associative.
+        \item
+            For $G = (\Q, \ast)$ where $\ast(a, b) = \dfrac{a+b}{5}$: \\
+            We have \[\ast(\ast(a, b), c)
+            = \dfrac{\dfrac{a + b}{5} + c}{5}
+            = \dfrac{a}{25} + \dfrac{b}{25} + \dfrac{c}{5}\]
+            and \[\ast(a, \ast(b, c))
+            = \dfrac{a + \dfrac{b + c}{5}}{5}
+            = \dfrac{a}{5} + \dfrac{b}{25} + \dfrac{c}{25}\]
+            So $G$ isn't associative.
+        \item
+            For $G = (\Z \times \Z, \ast)$
+            where $\ast((a, b), (c, d)) = (ad + bc, bd)$: \\
+            We have $\ast(\ast((a, b), (c, d)), (e, f)) 
+            = \ast((ad + bc, bd), (e, f)) 
+            = ((ad + bc)f + (bd)e, (bd)f) = (adf + bcf + bde, bdf)$
+            and $\ast((a, b), \ast((c, d), (e, f)))
+            = \ast((a, b), (cf + de, df)) 
+            = (a(df) + b(cf + de), b(df)) 
+            = (adf + bcf + bde, bdf)$.
+            So $G$ is associative.
+        \item
+            For $G = (\Q - \{0\}, \ast)$ where $\ast(a, b) = \dfrac{a}{b}$: \\
+            We have \[\ast(\ast(a, b), c)
+            = \dfrac{\sfrac{a}{b}}{c} = \dfrac{ac}{b}\]
+            and \[\ast(a, \ast(b, c))
+            = \dfrac{a}{\sfrac{b}{c}} = \dfrac{ac}{b}\]
+            So $G$ is associative.
+    \end{enumerate}
+   
+
+    \section*{Exercise 2}
+    To prove a group $(G, \ast)$ is commutative,
+    we need to show that $ \forall a, b \in G$, $\ast(a, b) = \ast(b, a)$.
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item
+            For $G = (\Z, \ast)$ where $\ast(a, b) = a - b$: \\
+            We have $\ast(a, b) = a - b$ and $\ast(b, a) = b - a$.
+            So $G$ isn't commutative.
+        \item
+            For $G = (\R, \ast)$ where $\ast(a, b) = a + b + ab$: \\
+            We have $\ast(a, b) = a + b + ab$ and $\ast(b, a) = b + a + ba$.
+            So $G$ is commutative.
+        \item
+            For $G = (\Q, \ast)$ where $\ast(a, b) = \dfrac{a+b}{5}$: \\
+            We have \[\ast(a, b) = \dfrac{a + b}{5}\]
+            And \[\ast(b, a) = \dfrac{b + a}{5}\]
+            So $G$ is commutative.
+        \item
+            For $G = (\Z \times \Z, \ast)$
+            where $\ast((a, b), (c, d)) = (ad + bc, bd)$: \\
+            We have $\ast((a, b), (c, d)) = (ad + bc, bd)$
+            and $\ast((c, d), (a, b)) = (cb + da, db)$.
+            So $G$ is commutative.
+        \item
+            For $G = (\Q - \{0\}, \ast)$ where $\ast(a, b) = \dfrac{a}{b}$: \\
+            We have $\ast(a, b) = \dfrac{a}{b}$ and $\ast(b, a) = \dfrac{b}{a}$.
+            So $G$ isn't commutative. 
+    \end{enumerate}
+
+
+    \section*{Exercise 3}
+    Proof that the addition of residue classes in $\Z/n\Z$ is associative: \\
+    We have, $\forall \olsi{a}, \olsi{b}, \olsi{c} \in \Z/n\Z$,
+    $(\olsi{a} + \olsi{b}) + \olsi{c}
+    = \olsi{a + b} + \olsi{c}
+    = \olsi{a + b + c}$
+    and $\olsi{a} + (\olsi{b} + \olsi{c})
+    = \olsi{a} + \olsi{b + c} 
+    = \olsi{a + b + c}$.
+    So addition is associative in $\Z/n\Z$.
+
+
+    \section*{Exercise 4}
+    Proof that the multiplication of residue classes
+    in $\Z/n\Z$ is associative: \\
+    We have, $\forall \olsi{a}, \olsi{b}, \olsi{c} \in \Z/n\Z$,
+    $(\olsi{a}\olsi{b})\olsi{c}
+    = (\olsi{ab})\olsi{c} 
+    = \olsi{abc}$ 
+    and $\olsi{a}(\olsi{b}\olsi{c})
+    = \olsi{a}(\olsi{bc})
+    = \olsi{abc}$.
+    So multiplication is associative in $\Z/n\Z$.
+    
+
+    \section*{Exercise 5}
+    Proof that the residue classes $\Z/n\Z$ aren't groups under multiplication
+    when $n > 1$: \\
+    The issue is that $\olsi{0} \in (\Z/n\Z, \times)$ has more than one inverse
+    when $n > 1$.
+    This is because $\forall \olsi{a} \in \Z/n\Z$,
+    $\olsi{0}\olsi{a} = \olsi{0 \cdot a} = \olsi{0}$.
+    So every $\olsi{a} \in \Z/n\Z$ is an inverse of $\olsi{0}$,
+    which contradicts the uniqueness of the inverse.
+    So $\Z/n\Z$ isn't a group under multiplication.
+
+
+    \section*{Exercise 6}
+    In this exercise, we determine whether the given set $G$ forms a group
+    under addition:
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item
+            For $G = \{q \in \Q \mid$ where for $q = \dfrac{a}{b}$
+            written in lowest terms, $b$ is odd$\}$: \\
+            We have $0 = \sfrac{0}{1}$ is the idenity,
+            $q^{-1} = -q$ $\forall q \in \Q$,
+            and we know that addition is associative in $\Q$.
+            So all we have left to show is closure under addition.
+            For any $p, q \in \Q$,
+            where $p = \dfrac{a}{b}$ and $q = \dfrac{c}{d}$
+            are written in lowest terms, $b$, and $d$ are odd,
+            and \[p + q = \dfrac{a}{b} + \dfrac{c}{d} = \dfrac{ad + cb}{bd}\]
+            As both b and d are odd, $bd$ is odd.
+            So even if we reduce the fraction further,
+            the denominator will remain odd (no even factor in $bd$).
+            So $G$ is closed under addition,
+            so $G$ is a group under addition.
+        \item
+            For $G = \{q \in \Q \mid$ where for $q = \dfrac{a}{b}$
+            written in lowest terms, $b$ is even$\}$: \\
+            This is not a group as it is not closed under addition.
+            To give a counterexample,
+            we have $\sfrac{1}{2} + \sfrac{1}{2} = \sfrac{1}{1}$
+            where $\sfrac{1}{1} \notin G$.
+            So $G$ is not a group under addition.
+        \item
+            For $G = \{q \in \Q\ \mid |q| < 1\}$: \\
+            This is not a group as it is not closed under addition.
+            To give a counterexample,
+            we have $0.8 + 0.8 = 1.6$, and $1.6 \notin G$.
+            So $G$ is not a group under addition.
+        \item
+            For $G = \{q \in \Q\ \mid |q| > 1\} + \{0\}$: \\
+            This is not a group as it is not closed under addition.
+            To give a counterexample,
+            we have $1.2 - 1.1 = 0.1$, and $0.1 \notin G$.
+            So $G$ is not a group under addition.
+        \item
+            For $G = \{q \in \Q \mid$ where for $q = \dfrac{a}{b}$
+            written in lowest terms, $b = 1$ or $2\}$: \\
+            We have $0 = \sfrac{0}{1}$ is the idenity,
+            $q^{-1} = -q$ $\forall q \in \Q$,
+            and we know that addition is associative in $\Q$.
+            So all we have left to show is closure under addition.
+            For any $p, q \in \Q$,
+            where $p = \dfrac{a}{b}$
+            and $p = \dfrac{c}{d}$ are written in lowest terms,
+            $b$ and $d$ are either both equal to $1$ or $2$,
+            or one is $1$ and the other $2$.
+            For the last case,
+            we can assume with no loss of generality that $b = 1$ and $d = 2$.
+            \begin{enumerate}[label=\textbf{case \arabic*:}]
+                \item
+                    If $b$ and $d$ are both 1,
+                    then $\dfrac{a}{1} + \dfrac{c}{1} = \dfrac{a + c}{1}$,
+                    where $\dfrac{a+c}{1} \in G$.
+                \item
+                    If b and d are both 2,
+                    then $\dfrac{a}{2} + \dfrac{c}{2} = \dfrac{a + c}{2}$.
+                    Since the fractions are written in lowest terms,
+                    $a$ and $c$ are odd,
+                    so $a + c$ is even.
+                    So $a + c = 2n$ for some $n \in \Z$.
+                    So we can reduce the fraction to $\dfrac{n}{1}$
+                    where $\dfrac{n}{1} \in G$.
+                \item
+                    If $b = 1$ and $d = 2$,
+                    then $\dfrac{a}{1} + \dfrac{c}{2} = \dfrac{a + 2c}{2}$.
+                    Since the  fractions are written in lowest terms,
+                    $a$ and $c$ are odd,
+                    and $2c$ is obviosuly even,
+                    so $a + 2c$ is even.
+                    So $a + 2c$ is odd,
+                    so as the sum is written in lowest terms,
+                    we can check that $\dfrac{a + 2c}{2} \in G$.
+                    The same would apply for $b = 2$ and $d = 1$.
+            \end{enumerate}
+            So $G$ is closed under addition,
+            which means $G$ is a group under addition.
+        \item
+        For $G = \{q \in \Q \mid$ where for $q = \dfrac{a}{b}$
+        written in lowest terms, $b = 1$ or $2$ or $b = 3\}$: \\
+        We can show that G is not closed under addition.
+        To give a counterexample,
+        take $\dfrac{1}{3} + \dfrac{1}{2} = \dfrac{2 + 3}{6} = \dfrac{5}{6}$,
+        which is written in lowest terms as is.
+        Since $\dfrac{5}{6} \notin G$,
+        $G$ is not closed under addition,
+        and is therefore not a group under addition.
+    \end{enumerate}
+
+
+    \section*{Exercise 7}
+    For $(G, \ast)$, where $G = \{r \in \R \mid 0 \leqslant r < 1\}$,
+    and $\forall x, y \in G$, 
+    $x \ast y \equiv (x + y) \mod{1}$
+    or $x \ast y = (x + y - \lfloor x + y \rfloor)$
+    (The fractional part of $x + y$).
+    First we have to show that $\ast$ is well defined in $G$. 
+    This means we need to show that the function $\ast:G \times G \to G$
+    is well defined.
+    For $(x, y), (z, w) \in G \times G$,
+    if $(x, y) = (z, w)$,
+    then $x = z$ and $y = w$,
+    so $\ast(x, y) 
+    = (x + y - \lfloor x + y \rfloor) 
+    = (z + w - \lfloor z + w \rfloor) 
+    = \ast(z, w)$.
+    So $\ast$ is well defined.
+    Now, to show that $G$ is a group under $\ast$.
+    We first note that $\forall r \in G$, $0 + r = r$
+    since $0 \leqslant r < 1$,
+    so $0$ is the identity.
+    Moreover, $r^{-1} = 1 - r$
+    when $r \neq 0$.
+    This is because when $0 < r < 1$, $0 < 1 - r < 1$
+    and $r \ast (1 - r) 
+    = r + 1 - r - \lfloor r + 1 - r \rfloor 
+    = 1 - \lfloor 1 \rfloor 
+    = 1 - 1 = 0$.
+    As for associativity, $\forall x, y, z \in G$,
+    we have $(x \ast y) \ast z = $
+    \[(x + y - \lfloor x + y \rfloor) + c -
+    \lfloor (x + y - \lfloor x + y \rfloor) + c \rfloor\]
+    and $(x \ast y) \ast z = $
+    \[x + (y + z - \lfloor y + z \rfloor)
+    - \lfloor x + (y + z - \lfloor y + z \rfloor) \rfloor\] 
+    \begin{enumerate}[label=\textbf{case \arabic*:}]
+        \item
+            If $x + y < 1$ and $y + z < 1$,
+            then $(x \ast y) \ast z 
+            = (x + y - 0) + c - \lfloor (x + y - 0) + c \rfloor
+            = x + y + c - \lfloor x + y + c \rfloor$
+            and $(x \ast y) \ast z 
+            = x + (y + z - 0) - \lfloor x + (y + z - 0) \rfloor
+            = x + y + c - \lfloor x + y + c \rfloor$.
+        \item
+            If $x + y < 1$ and $y + z \leqslant 1$,
+            then $(x \ast y) \ast z 
+            = (x + y - 0) + c - \lfloor (x + y - 0) + c \rfloor
+            = x + y + c - \lfloor x + y + c \rfloor$
+            and $(x \ast y) \ast z 
+            = x + (y + z - 1) - \lfloor x + (y + z - 1) \rfloor
+            = x + y + c - 1 - (\lfloor x + y + c \rfloor - 1)$ 
+            (since $\lfloor r - 1 \rfloor = \lfloor r \rfloor - 1$)
+            $ = x + y + c - \lfloor x + y + c \rfloor$.
+        \item
+            If $x + y \leqslant 1$ and $y + z \leqslant 1$,
+            then $(x \ast y) \ast z
+            = (x + y - 1) + c - \lfloor (x + y - 1) + c
+            = x + y + c - 1 - (\lfloor x + y + c \rfloor - 1)
+            = x + y + c - \lfloor x + y + c \rfloor$
+            and $(x \ast y) \ast z
+            = x + (y + z - 1) - \lfloor x + (y + z - 1) \rfloor
+            = x + y + c + 1 - (\lfloor x + y + c \rfloor - 1)
+            = x + y + c - \lfloor x + y + c \rfloor$.
+    \end{enumerate}
+    So as $(x \ast y) \ast z = (x \ast y) \ast z$,
+    $G$ is associative.
+    Finally, $\forall x, y \in G, x, y < 1$,
+    so $x + y < 2$.
+    This means that if $x + y < 1$,
+    then  $\lfloor x + y \rfloor = 0$,
+    which means that $x \ast y = x + y - \lfloor x + y \rfloor = x + y - 0 < 1$.
+    And if $x + y > 1$,
+    then $\lfloor x + y \rfloor = 1$,
+    which means that $x \ast y = x + y - \lfloor x + y \rfloor = x + y - 1 < 1$
+    since $x + y < 2$.
+    So either way $0 \leqslant x \ast y < 1$.
+    Which means that G is closed under $\ast$.
+    So $G$ is a group under $\ast$.
+
+    
+    \section*{Exercise 8}
+    For $G = \{c \in \C \mid c^{n} = 1$ for some $n \in \Z^{+}\}$:
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            To show that $G$ is a group under multilication
+            (called the \textit{group of roots of unity} in $\C$),
+            we first note that trivially, the identity is $1$,
+            and $1 \in G$ because $1^{1} = 1$.
+            Moreover, $\forall c \in G$ and $n \in \Z^{+}$,
+            $c^{-1} = \dfrac{1}{c}$
+            since $c^{n} = 1$
+            implies $(\dfrac{1}{c})^{n} = \dfrac{1}{c^{n}} = \dfrac{1}{1} = 1$,
+            meaning $\dfrac{1}{c} \in G$.
+            Furthermore, $\forall a, b \in G$
+            such that $a^{n} = b^{m} = 1$,
+            $(a \cdot b)^{nm}
+            = a^{nm} \cdot b^{nm}
+            = (a^{n})^{m} \cdot (b^{m})^{n}
+            = 1^{m} + 1^{n}
+            = 1$.
+            So $G$ is closed under multiplication.
+            Since multiplication is associative in the complex plane,
+            this means $G$ is a group under multiplication.
+        \item 
+            To show that $G$ is not a group under addition,
+            we will first note that the only number $x \in \C$
+            that satisfies the equation $x + a = a, \forall a \in G$ is $0$.
+            But $0 \notin \C$
+            as $\nexists n \in \Z^{+}$
+            such that $0^n = 1$.
+            As $G$ can't have an idenity,
+            it doesn't form a group under addition. 
+    \end{enumerate}
+
+
+    \section*{Exercise 9}
+    Let $S = \{a + b\sqrt{2} \mid a, b \in \Q\}$
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            Proof that $S$ is a group under addition.
+            We know addition is associative for all reals.
+            Moreover, we know that $\forall x \in S$, $x^{-1} = -x$
+            and 0 is the identity.
+            So all we have to show is closure.
+            For $x = a + b\sqrt{2}$ and $y = c + d\sqrt{2}$,
+            $x + y = (a + c) + (b + d)\sqrt{2}$
+            where $(a + c), (b, d) \in \Q$.
+            So $x + y \in S$,
+            which means S is closed under addition, making it a group. 
+        \item
+            Proof that $S - \{0\}$ is a group under multiplication.
+            We know 1 is the identity,
+            and we know multiplication is associative for all the reals.
+            Moreover, $\dfrac{1}{a + b\sqrt{2}} \times (a + b\sqrt{2}) = 1$,
+            and that $\dfrac{1}{a + b\sqrt{2}}
+            = \dfrac{a - b\sqrt{2}}{(a + b\sqrt{2})(a - b\sqrt{2})}
+            = \dfrac{a - b\sqrt{2}}{a^{2} + 2b^{2}}
+            = \dfrac{a}{n} + \dfrac{-b}{n}\sqrt{2}$
+            where $n \in \Q$,
+            so $\dfrac{1}{a + b\sqrt{2}} \in S - \{0\}$,
+            making it the inverse of $a + b\sqrt{2}$.
+            Finally, $\forall a, b, c, d \in \Q$,
+            we have $(a + b\sqrt{2})(c + d\sqrt{2})
+            = (ac + 2) + (ad + cb)\sqrt{2}$
+            where $(ac + 2), (ad + cb) \in \Q$,
+            so $S$ is closed under multiplication,
+            making it a group under multiplication.
+    \end{enumerate}
+
+
+    \section*{Exercise 10}
+    For the group table of size $n$:
+
+    % Triangle figure
+    \begin{figure}[H]
+        \centering
+
+        \[\vbox{\tabskip0.5em\offinterlineskip
+        \halign{\strut$#$\hfil\ \tabskip1em\vrule&&$#$\hfil\cr
+        ~   & a_1   & a_2   & a_3 & a_4   & ...   & a_n   \cr
+        \noalign{\hrule}\vrule height 12pt width 0pt
+        a_1   & a_{11}   & a_{12}   & a_{13} & a_{14} & \dots & a_{1n} \cr
+        a_2   & a_{21}   & a_{22} & \ddots \cr
+        a_3   & a_{31}   & \ddots & \ddots \cr
+        a_4   & a_{41} \cr
+        \vdots & \vdots & & & & & \vdots \cr
+        a_n   & a_{n1} & & & & \dots & a_{nn} \cr
+        }}\]
+
+        \caption{\label{fig:figure1} Group table of size $n$.}
+    \end{figure}
+
+    By definition, if the group table is symmetric,
+    then $\forall a_i, a_j$ in the group,
+    we have $a_i \cdot a_j = a_{ij} = a_{ji} = a_j \cdot a_i$,
+    making it abelian.
+    Conversely, if the group is abelian,
+    then $\forall a_i, a_j$ in the group, $a_i \cdot a_j = a_j \cdot a_i$,
+    and all $a_{ij} = a_{ji}$,
+    making the group table symmetric.
+
+
+    \section*{Exercise 11}
+    We have $\Z/12\Z = \{\olsi{0},\olsi{1}, \olsi{2}, \olsi{3}, \olsi{4},
+    \olsi{5}, \olsi{6}, \olsi{7}, \olsi{8}, \olsi{9}, \olsi{10}, \olsi{11}\}$.
+    In the group $(\Z/12\Z, +)$:
+    $|\olsi{0}| = 1$,
+    $|\olsi{1}| = 12$,
+    $|\olsi{2}| = 6$,
+    $|\olsi{3}| = 4$,
+    $|\olsi{4}| = 3$, 
+    $|\olsi{5}| = 12$,
+    $|\olsi{6}| = 2$,
+    $|\olsi{7}| = 12$,
+    $|\olsi{8}| = 3$,
+    $|\olsi{9}| = 4$, 
+    $|\olsi{10}| = 6$,
+    $|\olsi{11}| = 12$. \\
+    In other words, it's the $lcm(\olsi{n}, 12)$.
+
+
+    \section*{Exercise 12}
+    As for the group $(\Z/12\Z, \times)$
+    and the elements $\{\olsi{1}, \olsi{-1}, \olsi{5}, \olsi{7}, \olsi{-7},
+    \olsi{13}\}$:
+    $|\olsi{1}| = 1$,
+    $|\olsi{-1}| = 2$,
+    $|\olsi{5}| = 2$,
+    $|\olsi{7}| = 2$,
+    $|\olsi{-7}| = 2$, 
+    $|\olsi{13}| = |\olsi{1}| = 1$.
+
+
+    \section*{Exercise 13}
+    As for the group $(\Z/36\Z, +)$
+    and the elements $\{\olsi{1}, \olsi{2}, \olsi{6}, \olsi{9}, \olsi{10},
+    \olsi{12}, \olsi{-1}, \olsi{-10}, \olsi{-18}\}$:
+    $|\olsi{1}| = 36$,
+    $|\olsi{2}| = 18$,
+    $|\olsi{6}| = 6$,
+    $|\olsi{9}| = 4$,
+    $|\olsi{10}| = 18$, 
+    $|\olsi{12}| = 3$,
+    $|\olsi{-1}| = |\olsi{37}| = 36$,
+    $|\olsi{-10}| = |\olsi{26}| = 18$,
+    $|\olsi{-18}| = |\olsi{-18}| = 2$.
+
+
+
+    \section*{Exercise 14}
+    As for the group $(\Z/36\Z, \times)$
+    and the elements $\{\olsi{1}, \olsi{-1}, \olsi{5}, \olsi{13}, \olsi{-13},
+    \olsi{17}\}$:
+    $|\olsi{1}| = 1$,
+    $|\olsi{-1}| = 2$,
+    $|\olsi{5}| = 6$,
+    $|\olsi{13}| = 3$,
+    $|\olsi{-13}| = 6$, 
+    $|\olsi{17}| = 2$.
+
+
+    \section*{Exercise 15}
+    Proof that $(a_1a_2...a_n)^{-1} = a_n^{-1}...a_2^{-1}a_1^{-1},
+    \forall a_i$ in a group $G$: \\
+    We can use induction to show this is the case:\\
+    \textbf{Basis step:}
+    We know that for $n = 2$, $(ab)^{-1}
+    = b^{-1}a^{-1}$.\\
+    \textbf{Inductive hypothesis:}
+    Assume that for $n = k$, $(a_1a_2...a_n)^{-1}
+    = a_n^{-1}...a_2^{-1}a_1^{-1}$. \\ 
+    \textbf{Inductive step:}
+    For $n = k + 1$,
+    take $(a_1a_2...a_na_{n+1})^{-1}
+    = (ba_{n+1})^{-1} = a_{n-1}^{-1}b^{-1}
+    = a_{n-1}^{-1}a_n^{-1}...a_2^{-1}a_1^{-1}$.
+
+    \section*{Exercise 16}
+    Proof that $x^2 = 1$ if and only if $|x| = 1$ or $|x| = 2$: \\
+    First, if $x^2 = 1$
+    where 1 is the identity,
+    then $|x| < 1$ as the order is defined as the smallest such number.
+    Since the order is a positive integer,
+    that means $|x| = 1$ or $|x| = 2$.
+    Conversely, if $|x| = 1$,
+    then $x = 1$ so $x^2 = 1^2 = 1$.
+    And if $|x| = 2$,
+    then $x^2 = 1$.
+
+
+    \section*{Exercise 17}
+    Proof that if $x^n = 1$ then $x^{-1} = x^{n-1}$: \\
+    If we multiply both sides by $x^{-1}$,
+    we get  $x^n = 1 = x^{n-1} = x^{-1}$.
+
+
+    \section*{Exercise 18}
+    Proof that $xy = yx$ if and only if $y^{-1}xy = x$
+    if and only if $x^{-1}y^{-1}xy = 1$: \\
+    If $xy = yx$
+    (multiply both sides by $y^{-1}$)
+    $\implies y^{-1}xy = x$
+    (multiply both sides by $x^{-1}$)
+    $\implies x^{-1}y^{-1}xy = 1$. \\
+    Conversely, if $x^{-1}y^{-1}xy = 1$
+    (multiply both sides by $x$)
+    $\implies y^{-1}xy = x$
+    (multiply both sides by $y$)
+    $\implies xy = yx$.
+
+
+    \section*{Exercise 19 $***$}
+    Proof that for $x \in G$ and $a, b \in \Z^{+}:$
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            Proof that $x^{a+b} = x^ax^b$: \\
+            \[x^{a+b}
+            = \underbrace{x \cdot x \cdot x ... x}_\text{a} \cdot
+            \underbrace{x \cdot x \cdot x ... x}_\text{b}
+            = (\underbrace{x \cdot x \cdot x ... x}_\text{a})(
+                \underbrace{x \cdot x \cdot x ... x}_\text{b})
+            = x^ax^b\] \\
+            Proof that $x^{ab} = (x^a)^b$: \\
+            \[x^{ab}
+            = \underbrace{\underbrace{x \cdot x ... x}_\text{a} \cdot
+            \underbrace{x \cdot x ... x}_\text{a} ...
+            \underbrace{x \cdot x ... x}_\text{a}}_{b}
+            = \underbrace{x^a \cdot x^a \cdot ... x^a}_{b}
+            = (x^a)^b\]
+        \item 
+            Proof that $(x^a)^{-1} = x^{-a}$:
+            \[(x^a)^{-1} = (\underbrace{x \cdot x \cdot x ... x}_\text{a})^{-1}
+            = \underbrace{x^{-1} \cdot x^{-1} \cdot x^{-1} ... x^{-1}}_\text{a}
+            = x^{-a}\]
+        \item
+            Proof that $x^{a+b} = x^ax^b$ applies even when $a, b \leqslant 0$:
+            \begin{enumerate}[label=\textbf{case \arabic*:}]
+                \item
+                    If $b = 0$ and $a$ is an arbitrary integer
+                    then $-b > 0$. So $x^{-b} = (x^{b})^{-1}$ by part b.
+                    So $x^{a+b} = x^{a-} = x^a \cdot 1 = x^ax^0 = x^ax^b$.
+                    Same for $a = 0$ and $b$ as an arbitrary integer.
+                \item
+                    If $a, b < 0$,
+                    then we have $a + b < 0$
+                    and $-a, -b, -(a+b) > 0$.
+                    So $x^{-(a+b)} = x^{-b - a} = x^{-b}x^{-a}$.
+                    Since $-a, -b, -(a+b) > 0$, we can say, by part b,
+                    that $(x^{-(a+b)})^{-1} = x^{-(a+b) \times -1} = x^{a+b}$.
+                    Same for $(x^{-a})^{-1} = x^a$ and $(x^{-b})^{-1} = x^b$.
+                    So $(x^{-(a+b)})^{-1} = (x^{-b}x^{-a})^{-1}$
+                    implies $x^{a+b} = (x^{-a})^{-1}(x^{-b})^{-1}$,
+                    which gets us $x^{a+b} = x^ax^b$.
+                \item
+                    If $a > 0$ and $b < 0$ and $a + b < 0$,
+                    then since $a, -(a+b) > 0$, using part a,
+                    we get that $x^{-(a+b)} \cdot x^{a} = x^{-b}$.
+                    We know by part b that as $a > 0$, $x^{-a} = (x^{a})^{-1}$,
+                    so by multiplying both sides by $x^{-a}$,
+                    we get $x^{-(a+b)} \cdot x^{a}x^{-a} = x^{-b}x^{-a}
+                    \implies x^{-(a+b)} = x^{-b}x^{-a}$.
+                    Now, as $-b, -(a+b) > 0$, using part b, we get that
+                    $(x^{-(a+b)})^{-1} = x^{-(a+b) \times -1} = x^{a+b}.$
+                    Same for $(x^{-b})^{-1} = x^b$.
+                    As for $a > 0$, $x^{-a}$ is the inverse of $x^{a}$,
+                    so $(x^{-a})^{-1} = x^a$.
+                    So by inverting both sides,
+                    we get that $x^{-(a+b)} = x^{-b}x^{-a}
+                    \implies (x^{-(a+b)})^{-1} = (x^{-b}x^{-a})^{-1}
+                    \implies x^{(a+b)} = (x^{-a})^{-1}(x^{-b})^{-1}
+                    \implies x^{(a+b)} = x^{a}x^{b}$.
+                    The same would apply if we had $a < 0$ and $b > 0$.
+                \item
+                    If $a > 0$ and $b < 0$ and $a + b > 0$,
+                    then since $-b > 0$, using part a,
+                    we get that $x^{a+b} \cdot x^{-b} = x^{a}$.
+                    We know by part b that as $-b > 0$, $x^{-b}
+                    = (x^{-b})^{-1} = x^{-b \times -1} = x^{b}$.
+                    So even when $b < 0$, $x^{-b} = (x^{b})^{-1}$. 
+                    By multiplying both sides by $x^{b}$,
+                    we arrive at $x^{a+b} \cdot x^{-b}x^{b} = x^{a}x^{b}
+                    \implies x^{a+b} = x^{a}x^{b}$.
+                    The same would apply if we had $a < 0$ and $b > 0$.
+            \end{enumerate}
+            Proof that $x^{ab} = (x^a)^b$ applies even when $a, b \leqslant 0$:
+            \begin{enumerate}[label=\textbf{case \arabic*:}]
+                \item
+                    Assume that $a = 0$ and $b$ is an arbitrary integer.
+                    Then $x^{ab} = x^{0 \times b}
+                    = x^{0} = 1 = 1^b = (x^{0})^{b}
+                    = (x^{a})^{b}$.
+                    The same would apply for $b = 0$
+                    and $a$ as an arbitrary integer.
+                \item
+                    Assume that $a, b < 0$.
+                    Then $x^{ab} = x^{-a \times -b}$
+                    where $-a, -b > 0$.
+                    So by part a, we have $(x^{-a})^{-b}$.
+                    Now, We know by part b that as $-a > 0$, $x^{-a}
+                    = (x^{-a})^{-1} = x^{-a \times -1}
+                    = x^{a}$.
+                    So even when $a < 0$, $x^{-a} = (x^{a})^{-1}$. 
+                    So $(x^{-a})^{-b} = ((x^{a})^{-1})^{-b}$ with $-b > 0$,
+                    so by part a, $((x^{a})^{-1})^{-b}
+                    = (x^{a})^{-1 \times -b}
+                    = (x^{a})^{b}$.
+                \item
+                    Now, assume that $a < 0$ and $b > 0$.
+                    Then $-ab > 0$.
+                    This means that, by part b, $x^{-ab} = (x^{ab})^{-1}$.
+                    Since $-a, b > 0$, by part a, $x^{ab}
+                    = (x^{-ab})^{-1}
+                    = ((x^{-a})^{b})^{-1}$
+                    and as $b > 0$, by part b, $(x^{b})^{-1} = x^{-b}$,
+                    so $((x^{-a})^{b})^{-1}
+                    = (x^{-a})^{-b}
+                    = ((x^{-a})^{-1})^{b}$.
+                    Again, by part b, since $-a > 0$, $x^{-a} = (x^{a})^{-1}$,
+                    so $((x^{-a})^{-1})^{b}
+                    = (x^{-a \times -1})^{b}
+                    = (x^{a})^{b}$.
+                    The same would apply if $a > 0$ and $b < 0$.
+                \end{enumerate}
+    \end{enumerate}
+
+
+    \section*{Exercise 20 $***$}
+    Proof that for $x \in G$, $|x| = |x^{-1}|$:
+    According to the exercise 1.1.1.19, $(x^{a})^{-1} = (x^{-1})^{a}$.
+    We have $x^{a}(x^{a})^{-1} = 1$.
+    Now assume that $x^a = 1$.
+    Then $1 \cdot (x^{a})^{-1} = 1$, so $(x^{a})^{-1} = 1$.
+    So$(x^{-1})^{a} = 1$.
+    This means that $|x^{-1}| \leqslant a$
+    since the order is the smallest such number.
+    Now assume that $|x| = a$, and that $|x^{-1}| = b$ for $b < a$.
+    Then we have $(x^{-1})^{b} = 1$.
+    So $x^{a} \cdot (x^{-1})^{b} = 1$,
+    so $\underbrace{x \cdot x ... x}_\text{a} \cdot
+    \underbrace{x^{-1} \cdot x^{-1} ... x^{-1}}_\text{b} = 1$.
+    Since $b < a$, we can cancel out $b$ terms and get
+    $\underbrace{x \cdot x \cdot x ... x}_\text{a - b} = 1$,
+    which implies that $x^{a-b} = 1$.
+    Since $a > a - b$, This contradicts our assumption that $|x| = a$,
+    as the order is the smallest such number.
+    So $|x^{-1}|$ isn't smaller than $a$.
+    This only leaves that $|x| = a$,
+    which means $|x| = |x^{-1}|$.
+
+
+    \section*{Exercise 21}
+    Proof that for $x \in G$,
+    if $|x| = n$ and $2 \nmid n$,
+    then $(x^2)^k = x$ for some integer $k$:
+    We know that $(x^2)^k = x^{2k}$.
+    If $|x| = n$ and $n$ is odd,
+    then $2m - 1$ for some $m \in \Z$.
+    So $x^n = x^{2m-1} = 1
+    \implies x^{2m-1} \cdot x = x
+    \implies x^{2m}x^{-1} \cdot x = x
+    \implies x^{2m} = 1
+    \implies (x^{2})^{k}$ (by exercise 1.1.1.20).
+    Which proves the statement for $k = m$.
+
+
+    \section*{Exercise 22}
+    Proof that $\forall g, x \in G$, $|x| = |gxg^{-1}|$:
+    Take $|x| = n$.
+    Now consider the product 
+    \[(gxg^{-1})^n
+    = \underbrace{gxg^{-1} \cdot gxg^{-1} \cdot gxg^{-1} ... gxg^{-1}}_{n}\]
+    And because $\cdot$ is associative: 
+    \[(gxg^{-1})^n
+    = \underbrace{gx(g^{-1}g)x(g^{-1}g)xg^{-1} ... (g^{-1}g)xg^{-1}}_{n}
+    = \underbrace{gx(1)x(1)xg^{-1} ... (1)xg^{-1}}_{n}\]
+    \[= g\underbrace{x \cdot x \cdot x ... x}_{n}g
+    = gx^ng^{-1}
+    = g1g^{-1}
+    = 1\]
+    So $|gxg^{-1}| \leqslant n$.
+    Now assume that $|gxg^{-1}| = k < n$.
+    Then 
+    \[(gxg^{-1})^{k} = 1
+    \implies
+    \underbrace{gx(g^{-1}g)x(g^{-1}g)xg^{-1} ... (g^{-1}g)xg^{-1}}_{k} = 1
+    \implies\]
+    \[\underbrace{gx(1)x(1)xg^{-1} ... (1)xg^{-1}}_{k} = 1
+    \implies g\underbrace{x \cdot x \cdot x ... x}_{k}g = 1
+    \implies gx^kg^{-1} = 1
+    \implies\]
+    \[gx^k = g
+    \implies x^k = gg^{-1} = 1\]
+    This is a contradiction is as the order $n$
+    is defined as the smallest such number,
+    So $|gxg^{-1}|$ isn't smaller than $n$.
+    The only remaining option is for $|gxg^{-1}| = n$.
+    The proposition we proved applies $\forall x, g \in G$.
+    So $\forall a, b \in G$,
+    take $g = b$ and $x = (ab)$.
+    Then $|b(ab)b^{-1}| = |ab|$,
+    so  $|ba(bb^{-1})| = |ba| = |ab|$.
+
+
+    \section*{Exercise 23}
+    Proof that for $x \in G$,
+    if $|x| = n < \infty$ and $n = s \cdot t$ where $s, t \in \Z$,
+    then $|x^s| = t$: \\
+    We have $x^n = 1$,
+    so $x^{st} = 1$,
+    so $(x^{s}){t} = 1$ (by exercise 1.1.1.20).
+    This means $|x^s| \leqslant t$ as it is the smallest such number.
+    Now assume that $|x^s| = u < t$.
+    This means that $su < st = n$.
+    Then $x^{su} = 1$,
+    which is a contradiction since we assumed $n$ was the order,
+    by definition the smallest such number.
+    So $|x^s|$ isn't smaller than $t$,
+    so the only remaining option is for $|x^s| = t$.
+    
+    
+    \section*{Exercise 24}
+    Proof that for $a, b \in G$,
+    if $a$ and $b$ commute ($ab = ba$),
+    then $(ab)^n = a^nb^n \forall n \in \Z$: \\
+    We first start with proving the proposition for $n > 0$ using induction: \\
+    \textbf{Basis step:}
+    We know that for $n = 1$, then $(ab)^1 = ab = a^1b^1$. \\
+    \textbf{Inductive hypothesis:}
+    Assume that for $n = k$, that $(ab)^k = a^kb^k$. \\
+    \textbf{Inductive step:}
+    For $n = k + 1$, we have $(ab)^{k+1} = (ab)^k(ab)$.
+    Then $(ab)^k(ab) = a^kb^k(ab) = a^kab^kb = a^{k+1}b^{k+1}$
+    (Since $a$ and $b$ commute,
+    then by extension, $a$ and $b^k$ must commute). \\
+    Now, for $n = 0$, it is trivial:
+    $(ab)^n = (ab)^0 = 1 = 1 \cdot 1 = a^0 \cdot b^0$. \\
+    Now assume that $n < 0$.
+    Then $-n > 0$,
+    so $(ab)^{-n} = a^{-n}b^{-n}$.
+    We know from exercise 1.1.1.20 that $(ab)^{-n}
+    = ((ab)^{-1})^n
+    = ((ba)^{-1})^n
+    = (a^{-1}b^{-1})^n$,
+    and that $a^{-n}b^{-n} = (a^{-1})^n(b^{-1})^n$.
+    So $(a^{-1}b^{-1})^n = (a^{-1})^n(b^{-1})^n$.
+    We know that if $ab = ba$,
+    then $b^{-1}a = ab^{-1}$,
+    so their inverses commute $a^{-1}b^{-1} = b^{-1}a^{-1}$.
+    And we know that each element in $G$ has a unique inverse.
+    So if by starting with $a$ and $b$
+    we get that the second proposition to apply to their inverses,
+    we can instead start with $a^{-1}$ and $b^{-1}$ which exist and are unique
+    (to which the initial proposition applies as they commute),
+    and end up with their inverses, $a$ and $b$, satisfying the second
+    proposition, $\forall a, b \in G$.
+
+
+    \section*{Exercise 25}
+    Proof that if $x^2 = 1, \forall x \in G$,
+    then $G$ is abelian: \\
+    Take any two elements $a, b \in G$.
+    Then $ab \in G$,
+    so $(ab)^2 = (ab)(ab) = 1$.
+    This implies that $(ab)(ab) = 1 = 1 \cdot 1 = a^2b^2$,
+    so $abab = aabb$,
+    and $a^{-1}ababb^{-1} = a^{-1}aabbb^{-1}$,
+    which in turn tells us that $ba = ab$.
+    As this applies to any two elements in $G$, $G$ is abelian.
+
+    \section*{Exercise 26 $***$}
+    Proof that for a group $(G, \ast)$ and a set $S \neq \emptyset$,
+    if $S \subseteq G$ and $S$ is closed under inverses and $\ast$,
+    then $S$ is a group: \\
+    In $S$, every element has an inverse,
+    and the group is closed under $\ast$.
+    This means that the identity 1 of $G$ must be in $S$.
+    Since $S \neq \emptyset$,
+    either 1 is the only element in $S$, completing the proof,
+    or at least one element $x \in S$,
+    so $x^{-1} \in S$,
+    which means $x \ast x^{-1} \in S$,
+    so $1 \in S$.
+    Furthermore, since $\ast$ is associative in $G$,
+    and $S \subseteq G$,
+    then $\ast$ is also associative in $S$.
+    So $S$ must be a group
+    (Called a \textit{subgroup} of $G$ and denoted $S \leqslant G$).
+
+
+    \section*{Exercise 27}
+    Proof that if $x \in G$ is a fixed element,
+    and $S = \{x^n \mid n \in \Z\}$,
+    $(S, \cdot)$ is a subrgoup of $(G, \cdot)$: \\
+    Every element $x$'s inverse $x^{-1} \in S$.
+    This is because if $x^n = 1$,
+    then $x^{-n} = 1$ where $-n \in \Z$.
+    Likewise, for some $n, m \in \Z$, $x^n, x^m \in G$,
+    and $x^n \cdot x^m = x^{n+m}$ where $n, m \in \Z$.
+    So $x^n \cdot x^m \in G$, which makes $G$ closed under multiplication. 
+    Moreover, the multiplicative identity of $S$ is that of $G$,
+    as it is in $S$: $x^0 = 1 \in S$.
+    Moreover, $\cdot$ is associative in $G$,
+    so it is associative in $S$, as $S \subseteq G$.
+    So $(S, \cdot) \leqslant (G, \cdot)$.
+
+
+    \section*{Exercise 28}
+    Let $G = A \times B$ be the direct product of $(A, \ast)$ and $(B, \circ)$:
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            Proof of associativity: \\
+            For $(a, b), (c, d), (e, f) \in G$,
+            \[((a, b)(c, d)) \cdot (e, f)
+            = (a \ast c, b \circ d) \cdot (e, f)
+            = ((a \ast c) \ast e, (b \circ d) \circ f)\]
+            And \[(a, b) \cdot ((c, d)(e, f))
+            = (a, b) \cdot ((c \ast e, d \circ f))
+            = (a \ast (c \ast e), b \circ (d \circ f))\]
+            Since $\ast$ and $\circ$ are associative in $A$ and $B$,
+            then $(a \ast c) \ast e = a \ast (c \ast e)$
+            and $(b \circ d) \circ f = b \circ (d \circ f)$.
+            So $G$ is associative.
+        \item     
+            Proof that if $1_A$ and $1_B$ are $A$ and $B$'s identities,
+            then $(1_A, 1_B)$ is the identity of $G$: \\
+            For all $(a, b) \in G$,
+            we have $(a, b) \cdot (1_A, 1_B)
+            = (a \ast 1_A, b \circ 1_B)
+            = (a, b)$.
+            Same for $(1_A, 1_B) \cdot (a, b)$.
+        \item 
+            Proof that for all $(a, b) \in G$,
+            $(a, b)^{-1} = (a^{-1}, b^{-1})$: \\
+            W have $(a, b) \cdot (a^{-1}, b{-1})
+            = (a \ast a^{-1}, b \circ b^{-1})
+            = (1_A, 1_B)$.
+            Same for $(a^{-1}, b^{-1}) \cdot (a, b)$.
+    \end{enumerate}
+
+
+    \section*{Exercise 29}
+    Proof that $A \times B$ is abelian
+    if and only if $(A, \ast)$ and $(B, \circ)$ are abelian: \\
+    If $A \times B $ is abelian,
+    then $\forall a, c \in A$ and $b, d \in B$,
+    $(a, b) \cdot (c, d) = (c, d) \cdot (a, b)$,
+    so, $(a \ast c, b \circ d) \cdot (c \ast a, d \ast b)$,
+    which means $ac = ca$ and $bd = db$,
+    meaning $A$ is abelian, and $B$ is abelian.
+    Conversely, if we assume that that $A$ and $B$ are abelian, 
+    then $(a, b) \cdot (c, d)
+    = (a \ast c, b \circ d)
+    = (c \ast a, d \circ b)
+    = (c, d) \cdot (a, b)$.
+    So $A \times B$ is abelian. 
+
+
+    \section*{Exercise 30}
+    Proof that in $A \times B$, $(a, 1_B)$ and $(1_a, b)$ commute: \\
+    We know that the identities of $A$ and $B$ commute with every element
+    in the groups.
+    So since $(a, 1_B)(1_A, b)
+    = (a1_A, 1_Bb)
+    = (1_Aa, b1_B)
+    = (1_A, b)(a, 1_B)$.
+    So they commute. \\
+    Now we know that $(a, b)^l = (a^l, b^l) = (1_A, 1_B)$
+    implies that $n \mid l$ and $m \mid l$,
+    where $|a| = n$ and $|b| = m$,
+    so any power to which $a$ or $b$ is the identity must be
+    a multiple of $n$ and $m$ respectively,
+    so one that does so for both $a$ and $b$ must be a multiple of both.
+    Since the $lcm(n, m)$ is by definition the smallest number that both
+    $n$ and $m$ divide, that makes it the order of $(a, b)$. 
+
+    \section*{Exercise 31 $***$}
+    Proof that if $G$ is a finite group with an even order,
+    then there is at least one element $x \in G$ such that $|x| = 2$: \\
+    Consider the set $t(G) = \{g \in G \mid g \neq g^{-1}\}$.
+    Since no $g \in t(G)$ is equal to its own inverse by definition,
+    and since each element has a unique inverse to which it is the inverse,
+    that means that for each $g \in t(G)$,
+    $g^{-1} \in t(G)$, and $g^{-1}$ is distinct from $g$.
+    So the elements and their inverses exist in pairs inside of $t(G)$.
+    So $t(G)$ must have an even number of elements.
+    As for the elements $x \in G - t(G)$ (in $G$ but not $t(G)$),
+    we know that $x = x^{-1}$,
+    so $x^2 = 1$.
+    This means that $|x| \leqslant 2$.
+    So $|x| = 1$ or $|x| = 2$.
+    Since the identity is the only element in any group with order 1, 
+    then the set $t(G) \cup {1}$ has an odd number of elements.
+    That means that we have to at least one more element for the set to be
+    even, and since the remaining elements all have order 2, then there is
+    at least one more element with order 2.
+
+
+    \section*{Exercise 32}
+    Proof that if $x \in G$ and $|x| = n < \infty$,
+    then $x^1, x^2, x^3 ... x^n$ are all unique:
+    Assume that the opposite is true.
+    Then $\exists i, j \in Z$, $1 \leqslant i, j \leqslant n$
+    such that $x^i = x^j$.
+    Assume with no loss of generality that $i \geqslant j$.
+    Then $x^{i - j} = 0$.
+    Since $i - j < n$, this contradicts our assumption that $|x| = n$,
+    which is by definition the smallest such number.
+    So all elements $x^1, x^2, x^3 ... x^n$ are unique. 
+
+
+    \section*{Exercise 33}
+    Consider $x \in G$ such that $|x| = n < \infty$:
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            Proof that if $n$ is odd,
+            then $x^i \neq x^{-1}$ when $1 \leqslant i < n$: \\
+            Assume that $x^i = x^{-i}$.
+            This implies that $x^ix^i = x^{2i} = 1$.
+            This is impossible. We know that after $n$, the next largest
+            number to the power which $x$ turns to 1 is $2n$.
+            We know that $i < n$,
+            so $2i < 2n$,
+            and $2i \neq n$ as n is odd.
+            So this is a contradiction,
+            which means that $x^i \neq x^{-i}$ under the given conditions. 
+        \item 
+            Proof that if $n$ is even such that $n = 2k, k \in \Z$,
+            then $x^i = x^{-i}$ for $1 \leqslant i < n$ only when $i = k$: \\
+            We know that after $n$, the next largest number to the power 
+            which $x$ turns to 1 is $2n$.
+            We know that $i < n$,
+            so $2i < 2n$.
+            There is only one number smaller than $2n$ for which the
+            proposition holds, and that is $n$.
+            So $2i = n = 2k$ as n is even.
+            So this $n = k$.
+    \end{enumerate}
+
+
+    \section*{Exercise 34}
+    Proof that if $x \in G$, and $|x| = \infty$,
+    then all $x^n \forall n \in \Z$ are unique:
+    For $i, j \in \Z$ and $i \neq j$, 
+    assume by contradiction that $x^i = x^j$.
+    Then $x^{i - j} = 1$.
+    But this contradicts our assumption that $|x| = \infty$.
+    So $x^n$ must be unique $\forall n$.
+
+
+    \section*{Exercise 35}
+    Proof that for $x \in G$ where $|x| = n < \infty$,
+    $\forall n \in \Z$, $x^n = x^i$ for some integer $i$
+    such that $0 \leqslant i < n$: \\
+    If $0 \leqslant m < n$, then we've already proven it.
+    If $m < 0$ or $m \geqslant n$,
+    then we can start by using the division algorithm to write $m = qn + r$
+    where by definition $q, r \in \Z$ and $0 \leqslant r < n$.
+    So we have $x^m = x^{qn + r} = x^{qn}x^r = (x^n)^qx^r = 1^nx^r = x^r$.
+    Since $0 \leqslant r < n$, this proves the proposition.
+
+
+    \section*{Exercise 36 $***$}
+    Proof that the group $G = {1, a, b, c}$ is unique and is abelian
+    if we assume that none of the elements have order 4: \\
+    We define two groups as being the same when a bijective mapping
+    of one group's element to another produces a group table with the same
+    structure. \\
+    Since $|G| = 4$ then all elements in $G$ have an order smaller or equal
+    to 4. We've assumed however that no elements have order 4. \\
+    Let's start by assuming that $|a| = 3$.
+    Then we have $G = {1, a, a^2, b}$.
+    This implies that $a^2a = a^3 = 1$.
+    So $a^{-1} = a^2$ and vice-versa.
+    This also implies that $b$ has no inverse.
+    Which is a contradiction as we assumed $G$ was a group.
+    So $a$, $b$, and $c$ can't have order 3. \\
+    They also can't have order 1 as it is a unique property of the identity. \\
+    That means that $|a| = |b| = |c| = 2$.
+    So $a = a^{-1}$, $b = b^{-1}$, and $b = b^{-1}$.
+    So $aa = bb = cc = 1$.
+    Since $a,b \neq 1$, and since the identity is unique,
+    $ab \neq a$ and $ab \neq b$,
+    so $ab = ba = c$.
+    Likewise, $ac = ca = b$ and $bc = cb = a$.
+    Since these values are fixed, this means the group is unique, with the
+    following group table.
+
+    \begin{figure}[H]
+        \centering
+
+        \[\vbox{\tabskip0.5em\offinterlineskip
+        \halign{\strut$#$\hfil\ \tabskip1em\vrule&&$#$\hfil\cr
+        ~   & 1   & a   & b & c \cr
+        \noalign{\hrule}\vrule height 12pt width 0pt
+        1   & 1 & a & b & c \cr 
+        a   & a & 1 & c & b \cr 
+        b   & b & c & 1 & a \cr 
+        c   & c & b & a & 1 \cr
+        }}\]
+
+        \caption{\label{fig:figure1} The table of the described group.}
+    \end{figure}
+
+    Since the group table is symmetric, by exercise 1.1.1.10,
+    the group is abelian.
+
+\end{document}
