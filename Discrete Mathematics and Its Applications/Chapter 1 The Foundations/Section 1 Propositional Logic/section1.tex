@@ -33,6 +33,8 @@
 \usepackage{amsmath}
 % For degree sign
 \usepackage{gensymb}
+% For quotes
+\usepackage{csquotes}
 % For "\mathbb" macro
 \usepackage{amsfonts}
 \newcommand{\N}{\mathbb{N}}
@@ -75,6 +77,169 @@
 
 
     \section*{Exercise 1}
-    This is the first Exercise. Back to TEX!!!
+    A proposition has to be true or false,
+    so that means:
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item
+            \enquote{Boston is the capital of Massachusetts} 
+            is a proposition (true).
+        \item
+            \enquote{Miami is the capital of Florida} 
+            is a proposition (false).
+        \item 
+            $2 + 3 = 5$ is a proposition (true).
+        \item 
+            $5 + 7 = 10$ is a proposition (false).
+        \item 
+            $x + 2 = 11$ is not a proposition 
+            (can be true or false depending on $x$).
+        \item
+            \enquote{Answer this question} 
+            doesn't even make a claim,
+            so not a proposition.
+    \end{enumerate}
+
+
+    \section*{Exercise 2}
+    Same as exercise 1.1.1, so it can be skipped.
+
+
+    \section*{Exercise 3}
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item
+            Linda is older or has the same age as Sanjay.
+        \item
+            Mei makes less or as much money as Isabella. 
+        \item 
+            Moshe is shorter or has the same height as Monica.
+        \item 
+            Abby is poorer or just as rich as Ricardo.
+    \end{enumerate}
+
+
+    \section*{Exercise 4}
+    Same as exercise 1.1.3, so it can be skipped.
+
+
+    \section*{Exercise 5}
+    Same as exercise 1.1.3, so it can be skipped.
+
+
+    \section*{Exercise 6}
+    Same as exercise 1.1.3, so it can be skipped.
+
+
+    \section*{Exercise 7}
+    Same as exercise 1.1.3, so it can be skipped.
+
+
+    \section*{Exercise 8}
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item
+            True.
+        \item
+            True.
+        \item 
+            False.
+        \item 
+            False.
+        \item
+            False.
+    \end{enumerate}
+
+
+    \section*{Exercise 9}
+    Same as exercise 1.1.8, so it can be skipped.
+
+
+    \section*{Exercise 10}
+    We have 
+    \[ p \text{: I bought a lottery ticket this week.} \]
+    \[ q \text{: I won the million dollar jackpot.} \]
+    So
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item
+            $\neg p$: I did not buy a lottery ticket this week.
+        \item
+            $p \lor q$: I bought a lottery ticket this week
+            or won the million dollar jackpot.
+        \item 
+            $p \implies q$: If I bought a lottery ticket this week,
+            then I won the million dollar jackpot.
+        \item 
+            $p \land q$: I bought a lottery ticket this week
+            and I won the million dollar jackpot.
+        \item
+            $p \iff q$: I bought a lottery ticket this week if and only if
+            I won the million dollar jackpot.
+        \item
+            $\neg p \implies \neg q$:
+            If I did not buy a lottery ticket this week,
+            then I did not win the million dollar jackpot.
+        \item
+            $\neg p \land \neg q$:
+            I did not buy a lottery ticket this week
+            and I did not win the million dollar jackpot.
+        \item 
+            $\neg p \lor (p \land q)$:
+            I did not buy a lottery ticket this week
+            or I bought a lottery ticket this week
+            and I wont the million dollar jackpot.
+    \end{enumerate}
+
+
+    \section*{Exercise 11}
+    Same as exercise 1.1.10, so it can be skipped.
+
+    
+    \section*{Exercise 12}
+    Same as exercise 1.1.10, so it can be skipped.
+
+
+    \section*{Exercise 13}
+    We have 
+    \[ p \text{: It is below freezing.} \]
+    \[ q \text{: It is snowing.} \]
+    So
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item
+            It is below freezing and snowing:
+            $p \land q$.
+        \item
+            It is below freezing but not snowing:
+            $p \land \neg q$.
+        \item 
+            It is not below freezing and it is not snowing:
+            $\neg p \land \neg q$.
+        \item 
+            It is either snowing or below freezing (or both):
+            $p \lor q$.
+        \item
+            If it is below freezing, it is also snowing:
+            $p \implies q$.
+        \item
+            Either it is below freezing or it is snowing, but it is
+            not snowing if it is below freezing:
+            $(p \lor q) \land (p \implies \neg q)$.
+        \item
+            That it is below freezing is necessary and sufficient
+            for it to be snowing:
+            $p \iff q$.
+    \end{enumerate}
+
+
+    \section*{Exercise 14}
+    Same as exercise 1.1.13, so it can be skipped.
+
+
+    \section*{Exercise 15}
+    Same as exercise 1.1.13, so it can be skipped.
+
+    \section*{Exercise 16}
+    Same as exercise 1.1.13, so it can be skipped.
+
+    
+    \section*{Exercise 17}
+    Same as exercise 1.1.13, so it can be skipped.
 
 \end{document}
