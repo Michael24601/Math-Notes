@@ -1,0 +1,809 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For vertical brace rcases
+\usepackage{mathtools}
+% For positioning figures
+\usepackage{float}
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For manipulating coordinates
+\usetikzlibrary{calc}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+
+\title{%
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 1: Group Theory \\
+    \LARGE Chapter 1: Introduction to Groups \\
+    \Large Section 4: Matrix Groups
+}
+\date{2023-07-14}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+
+    \section*{Exercise 1}
+    Consider the field $\Z/2\Z$ denoted by $\F_2$. \\
+    Since $\F_2 = \{\olsi{0}, \olsi{1}\}$,
+    then we have $2^4 = 16$ different ways of creating a 2 by 2 matrix out of its
+    elements.
+    However, for the elements to belong to the group $GL_2(\F_2)$,
+    they must have a determinant that's not 0.
+    So $ad - bc \neq 0$. This means that: \\
+    $a, b, c, d$ can't all be 1,
+    and if either $a$ or $d$ were 0, $b$ and $c$ can't be 0.
+    Likewise, if either $b$ or $c$ were 0, $a$ and $b$ can't be 0.
+    This eliminates $1 + 9 = 10$ of the configurations, leaving 6.
+    So $|GL_2(\F_2)| = 6$.
+
+
+    \section*{Exercise 2}
+    $GL_2(\F_2)$ contains the following elements: \\
+    \[ \begin{bmatrix}
+        1 & 0 \\
+        0 & 1 \\
+    \end{bmatrix},
+    \begin{bmatrix}
+        1 & 1 \\
+        1 & 0 \\
+    \end{bmatrix},
+    \begin{bmatrix}
+        1 & 1 \\
+        0 & 1 \\
+    \end{bmatrix},
+    \begin{bmatrix}
+        1 & 0 \\
+        1 & 1 \\
+    \end{bmatrix},
+    \begin{bmatrix}
+        0 & 1 \\
+        1 & 1 \\
+    \end{bmatrix},
+    \begin{bmatrix}
+        0 & 1 \\
+        1 & 0 \\
+    \end{bmatrix} \]
+    which respectively, have orders 2, 3, 3, 3, 3, 2.
+
+
+    \section*{Exercise 3}
+    We have:
+    \[ \begin{bmatrix}
+        1 & 1 \\
+        1 & 0 \\
+    \end{bmatrix} \cdot
+    \begin{bmatrix}
+        1 & 1 \\
+        0 & 1 \\
+    \end{bmatrix}
+    = \begin{bmatrix}
+        1 & 0 \\
+        0 & 1 \\
+    \end{bmatrix} \]
+    and: 
+    \[ \begin{bmatrix}
+        1 & 1 \\
+        0 & 1 \\
+    \end{bmatrix} \cdot
+    \begin{bmatrix}
+        1 & 1 \\
+        1 & 0 \\
+    \end{bmatrix}
+    = \begin{bmatrix}
+        1 & 0 \\
+        1 & 1 \\
+    \end{bmatrix} \]
+    So $GL_2(\F_2)$ is not abelian.
+
+
+    \section*{Exercise 4}
+    Proof that if $n$ isn't prime, $\Z/n\Z$ isn't a field: \\
+    Assume that $\Z/n\Z$ is a field and $n$ is composite.
+    Then there exists an element $\olsi(a) \in (\Z/n\Z)^\times$
+    such that $gcd(a, n) > 1$.
+    If this is the case,
+    then there is a modulo class $\olsi{b} \in (\Z/n\Z)^\times$
+    such that $\olsi{a} \cdot \olsi{b} = \olsi{n} = \olsi{0}$.
+    Since $(\Z/n\Z)^\times$ (the multiplicative group of $\Z/n\Z$)
+    is by definition $\Z/n\Z - \{0\}$ (the additive identity),
+    then our demonstartion shows that $(\Z/n\Z)^\times$ is not closed
+    under multiplication, which is a contradition since it's supposed to
+    be an (abelian) group, completing the proof.
+
+
+    \section*{Exercise 5}
+    Proof that $GL_n(F)$ is finite if an only if $F$ is finite
+    (where $F$ is a field and $n \in \Z^+$): \\
+    If $F$ is finite, we can assume $|F| = m < \infty$
+    then for each element in the $n$ by $n$ matrix, we have $m$ options.
+    So we can combine the elements in the field in $m^{n^2}$ ways.
+    Not all of these matrices are invertible,
+    so this is just an upper limit,
+    but it does show that $GL_n(F)$ has at most $m^{n^2}$ elements,
+    making it finite. \\
+    Conversely, if $F$ is infinite,
+    then consider the susbet of $GL_n(F)$ made up of matrices of the form:
+    \[\begin{bmatrix}
+    f & 0 & 0 & \dots & 0\\
+    0 & 1 & 0 & \dots & 0 \\
+    0 & 0 & 1 & & \vdots \\
+    \vdots & \vdots & & \ddots & 0\\ 
+    0 & 0 & \dots & 0 & 1 \\
+    \end{bmatrix}_{n \times n}\]
+    where $f \in F - \{0\}$ and 1 and 0 are the multiplicative and
+    additive identities respectively. \\
+    Since this matrices of this form are diagonal,
+    their determinants are the products of their diagonal elements,
+    which are always equal to $1 \cdot 1 ... 1 \cdot f = f$.
+    Since $f \neq 0$, the matrices are always invertible, meaning
+    they always belong to $GL_n(F)$.
+    So since $F$ is infinite, there must an infinite number of
+    such matrices.
+    This a lower limit, so the order of $GL_n(F)$ must be infinite.
+
+
+    \section*{Exercise 6}
+    Proof that if $|F| = q < \infty$,
+    then $|GL_n(F)| < q^{n^2}$ for some $n \in \Z^+$: \\
+    Since there are $q$ elements in $F$,
+    and $n \times n$ elements in a matrix in $GL_n(F)$, 
+    then we can have $q^{n^2}$ unique matrix configurations.
+    Since at least some of these matrices are singular, such as:
+    \[\begin{bmatrix}
+    0 & \dots & 0\\
+    \vdots & \ddots & \vdots \\ 
+    0 & \dots & 0 \\
+    \end{bmatrix}_{n \times n}\]
+    then $|GL_n(F)| < q^{n^2}$.
+
+
+    \section*{Exercise 7 $***$}
+    For $\F_p = \Z/p\Z$ where $p$ is prime,
+    we have $|GL_2(\F_2)| = p^4 - p^3 - p^2 + p$. \\
+    To show this, we first note that $|F_p|$ = p. 
+    So the number of unique matrices that can be generated by $F_p$
+    is $p^4$, providing us an upper limit.
+    We know that
+    \[ GL_2(\F_2) = \left\{
+        \begin{bmatrix}
+            a & b \\
+            c & d \\
+        \end{bmatrix} 
+        \; \middle\vert \;
+        a, b, c, d \in \F_2,
+        ad - bc \neq 0  
+    \right\} \] 
+    where 0 is the additive identity of $\F_2$.
+    Now we consider all the configurations that give a singular matrix: \\
+    When $a = 0$,
+    then the matrix is singular if $bc = 0$,
+    which means that $b = 0$ or $c = 0$.
+    This means there are $p$ options for both $b$ and $c$,
+    which we must add since either of them at any time is fixed as 0.
+    We also subtract the option of $b = 0$ and $c = 0$ from the sum
+    since it's repeated twice.
+    In this scenario, $d$ can be any element,
+    so $d$ has $p$ options,
+    and we multiply the result by it,
+    since the values of $b$ and $c$ are independent of $d$.
+    So we have $(2p - 1)p$ options. \\
+    When $a \neq 0$,
+    to get a singular matrix, we need $ad - bc = 0$,
+    so we have $d = a^{-1}bc$.
+    So $a$, $b$, and $c$ can have any values,
+    but $a \neq 0$,
+    and with that $d$ is always fixed.
+    So we have $p$ options for $b$ and $c$,
+    and $(p-1)$ options for $a$,
+    and no further conditions or dependecies,
+    so we use the multiplication rule to get $p^2(p-1)$ options. \\
+    The above described matrices, are singular,
+    so we must subtract their configurations from our upper limit. \\
+    We get $|GL_2(\F_2)| = p^4 - ((2p - 1)p + p^2(p-1))
+    = p^4 - (2p^2 - p + p^3 - p^2)
+    = p^4 - p^3 - p^2 + p$
+
+
+    \section*{Exercise 8 $***$}
+    Proof that $GL_n(F)$ is non-abelian for any field $F$
+    and $n \in \Z^+$ such that $n \geqslant 2$: \\
+    For $n = 2$, we've already shown $GL_2(F)$ is not abelian in exercise
+    1.1.4.3, since  
+    \[ \begin{bmatrix}
+        1 & 1 \\
+        1 & 0 \\
+    \end{bmatrix} \cdot
+    \begin{bmatrix}
+        1 & 1 \\
+        0 & 1 \\
+    \end{bmatrix}
+    = \begin{bmatrix}
+        1 & 0 \\
+        0 & 1 \\
+    \end{bmatrix} \]
+    and: 
+    \[ \begin{bmatrix}
+        1 & 1 \\
+        0 & 1 \\
+    \end{bmatrix} \cdot
+    \begin{bmatrix}
+        1 & 1 \\
+        1 & 0 \\
+    \end{bmatrix}
+    = \begin{bmatrix}
+        1 & 0 \\
+        1 & 1 \\
+    \end{bmatrix} \]
+    where 1 and 0 are the multiplicative and additive identities of
+    $F$ respectively. \\
+    Now take 
+    \[ A = \begin{bmatrix}
+        1 & 1 \\
+        1 & 0 \\
+    \end{bmatrix}\]
+    and
+    \[ B = \begin{bmatrix}
+        1 & 1 \\
+        0 & 1 \\
+    \end{bmatrix} \]
+    For any $n \geqslant 3$,
+    and any 2 matrices $C$ and $D$,
+    we know this about block matrices that contain them
+    \[ \begin{bmatrix}
+        C & 0 \\
+        0 & 1 \\
+    \end{bmatrix} \cdot
+    \begin{bmatrix}
+        D & 0 \\
+        0 & 1 \\
+    \end{bmatrix}
+    = \begin{bmatrix}
+        C \cdot D & 0 \\
+        0 & 1 \\
+    \end{bmatrix} \]
+    where $C \cdot D$ is resolved via matrix multiplication. \\
+    We also know that if $C$ and $D$ aren't singular,
+    then neither are
+    \[ \begin{bmatrix}
+        C & 0 \\
+        0 & 1 \\
+    \end{bmatrix}, 
+    \begin{bmatrix}
+        D & 0 \\
+        0 & 1 \\
+    \end{bmatrix} \]
+    since they are diagonal block matrices, where their diagonals neither
+    contain 0 nor matrices with determinant equal to 0. \\
+    We can now use induction to prove that there is at least one pair of
+    elements in each matrix group $GL_n(F)$ that don't commute: \\
+    \textbf{Basis step:}
+    We know that for $n = 3$, we can define
+    \[ A_3 =
+    \begin{bmatrix}
+    A & 0 \\
+    0 & 1 \\
+    \end{bmatrix}\]
+    and 
+    \[ B_3 =
+    \begin{bmatrix}
+    B & 0 \\
+    0 & 1 \\
+    \end{bmatrix} \]
+    We know that $AB \neq BA$,
+    so $A_3B_2 \neq B_3A_3$ because
+    \[ A_3B_3 = 
+    \begin{bmatrix}
+    AB & 0 \\
+    0 & 1 \\
+    \end{bmatrix}\]
+    and 
+    \[ B_3A_3 =
+    \begin{bmatrix}
+    BA & 0 \\
+    0 & 1 \\
+    \end{bmatrix} \]
+    \textbf{Inductive hypothesis:} Assume that for $n = k$,
+    $A_kB_k \neq B_kA_k$. \\
+    \textbf{Inductive step:} For $n = k + 1$, we have
+    \[ A_{k+1} =
+    \begin{bmatrix}
+    A_k & 0 \\
+    0 & 1 \\
+    \end{bmatrix}\]
+    and 
+    \[ B_{k+1} =
+    \begin{bmatrix}
+    B_k & 0 \\
+    0 & 1 \\
+    \end{bmatrix} \]
+    Since we assumed $A_kB_k \neq B_kA_k$,
+    then $A_{k+1}B_{k+1} \neq B_{k+1}A_{k+1}$.
+    This is the case because:
+    \[ A_{k+1}B_{k+1} = 
+    \begin{bmatrix}
+    A_kB_k & 0 \\
+    0 & 1 \\
+    \end{bmatrix}\]
+    and 
+    \[ B_{k+1}A_{k+1} =
+    \begin{bmatrix}
+    B_kA_k & 0 \\
+    0 & 1 \\
+    \end{bmatrix}\]
+    This proves that every matrix group $GL_n(F)$ has at least one
+    pair of elements (in our case, $A_n$ and $B_n$) that don't commute.
+    So no group $GL_n(F)$ can be abelian.
+
+
+    \section*{Exercise 9}
+    Proof that multiplication is associative in $GL_n(\R)$,
+    where $\R$ is the field of real numbers and $n \in \Z^+$: \\
+    For $a, b, c, d, e, f, g, h, i, j, k, l \in \R$, take
+    \[ A =
+    \begin{bmatrix}
+    a & b \\
+    c & d \\
+    \end{bmatrix}, \;
+    B =
+    \begin{bmatrix}
+    e & f \\
+    g & h \\
+    \end{bmatrix}, \;
+    C =
+    \begin{bmatrix}
+    i & j \\
+    k & l \\
+    \end{bmatrix} \]
+    We have
+    \[ (AB)C =
+    \left( \begin{bmatrix}
+    a & b \\
+    c & d \\
+    \end{bmatrix}
+    \begin{bmatrix}
+    e & f \\
+    g & h \\
+    \end{bmatrix} \right)
+    \begin{bmatrix}
+    i & j \\
+    k & l \\
+    \end{bmatrix} 
+    = \begin{bmatrix}
+    ae + fc & be + fd \\
+    ag + hc & bg + dh \\
+    \end{bmatrix}
+    \begin{bmatrix}
+    e & f \\
+    g & h \\
+    \end{bmatrix} \]
+    \[ = \begin{bmatrix}
+    iae + ifc + jag + jhc & ibe + ifd + jbg + jdh \\
+    kae + kfc + lag + lhc & kbe + kfd + lbg + ldh \\
+    \end{bmatrix} \]
+    and 
+    \[ A(BC) =
+    \begin{bmatrix}
+    a & b \\
+    c & d \\
+    \end{bmatrix}
+    \left( \begin{bmatrix}
+    e & f \\
+    g & h \\
+    \end{bmatrix}
+    \begin{bmatrix}
+    i & j \\
+    k & l \\
+    \end{bmatrix} \right)
+    = \begin{bmatrix}
+    a & b \\
+    c & d \\
+    \end{bmatrix}
+    \begin{bmatrix}
+    ei + jg & if + jh \\
+    ke + lg & kf + kh \\
+    \end{bmatrix} \]
+    \[ = \begin{bmatrix}
+    iae + ifc + jag + jhc & ibe + ifd + jbg + jdh \\
+    kae + kfc + lag + lhc & kbe + kfd + lbg + ldh \\
+    \end{bmatrix} \]
+    So $\forall A, B, C \in GL_2(\R)$, $(AB)C = A(BC)$,
+    which makes $GL_2(\R)$ associative.
+
+
+    \section*{Exercise 10}
+    For $G = \left\{ \begin{bmatrix} a & b \\ 0 & c \end{bmatrix} \;
+    \middle\vert \; a, b, c \in \R, \text{ and } a, c \neq 0 \right\}$:
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            For all $a_1, b_1, c_1, a_2, b_2, c_2 \in \R$, we have
+            \[ \begin{bmatrix}
+            a_1 & b_1 \\
+            0 & c_1 \\
+            \end{bmatrix}
+            \begin{bmatrix}
+            a_2 & b_2 \\
+            0 & c_2 \\
+            \end{bmatrix}
+            = \begin{bmatrix}
+            a_1a_2 & a_1b_2 + b1_c2 \\
+            0 & c_1c_2 \\
+            \end{bmatrix} \]
+            where $a_1a_2$, $a_1b_2 + b_1c_2$, and $c_1c_2 \in \R$.
+            So the product is in $G$,
+            which means $G$ is closed under multiplication.
+        \item
+            Since $a, c \neq 0$, $ac \neq 0$,
+            so $ac - b \cdot 0 \neq 0$.
+            Since the determinant of all matrices is not 0, that means all
+            have inverses:
+            \[ \begin{bmatrix}
+            a & b \\
+            0 & c \\
+            \end{bmatrix}^{-1}
+            = \dfrac{1}{ac}\begin{bmatrix}
+            c & -b \\
+            0 & a \\
+            \end{bmatrix}
+            = \begin{bmatrix}
+            \sfrac{1}{a} & \sfrac{-b}{ca} \\
+            0 & \sfrac{1}{c} \\
+            \end{bmatrix} \]
+            Since $\sfrac{1}{a}$, $\sfrac{-b}{ca}$,
+            and $\sfrac{1}{c} \in \R$,
+            that means the inverse is in $G$ for any matrix in $G$,
+            so $G$ is closed under inverses.
+        \item
+            We know $G$ is closed under inverses and multiplication.
+            We also know $G$ is not empty since the identity of $G$
+            and $GL_2(\R)$ is in $G$ (the identity matrix $I_2$).
+            So all we have left to show is that $G$ is a subset of $GL_2(\R)$.
+            We know from part b that the matrices $G$ are invertible,
+            so by definition their determinants are not 0.
+            So all elements in $G$ are also in $GL_2(\R)$,
+            hence $G \subseteq GL_2(\R)$,
+            which means that $G \leqslant GL_2(\R)$.
+        \item
+            Proof that the set
+            $G = \left\{ \begin{bmatrix} a & b \\ 0 & c \end{bmatrix} \;
+            \middle\vert \; a, b, c \in \R, a, c \neq 0,
+            \text{ and } a = c \right\}$
+            is also a subrgoup of $GL_2(\R)$: \\
+            We know from part a that
+            \[ \begin{bmatrix}
+            a_1 & b_1 \\
+            0 & a_1 \\
+            \end{bmatrix}
+            \begin{bmatrix}
+            a_2 & b_2 \\
+            0 & a_2 \\
+            \end{bmatrix}
+            = \begin{bmatrix}
+            a_1a_2 & a_1b_2 + b1_a2 \\
+            0 & a_1a_2 \\
+            \end{bmatrix} \]
+            so as $a_1a_2 = a_1a_2$,
+            this means that $G$ is closed under multiplication. \\
+            Moreover, we know from part b that
+            \[ \begin{bmatrix}
+            a & b \\
+            0 & a \\
+            \end{bmatrix}^{-1}
+            = \dfrac{1}{a^2}\begin{bmatrix}
+            a & -b \\
+            0 & a \\
+            \end{bmatrix}
+            = \begin{bmatrix}
+            \sfrac{1}{a} & \sfrac{-b}{a^2} \\
+            0 & \sfrac{1}{a} \\
+            \end{bmatrix} \]
+            so as $\sfrac{1}{a} = \sfrac{1}{a}$,
+            this means that $G$ is closed under inverses. \\
+            Since the identity matrix $I_2 \in G$ since $1 = 1$,
+            $G \neq \emptyset$,
+            and we know from part c that any matrices of this form are
+            subsets of $GL_2(\R)$ regardless of whether or not $a = c$.
+            So $G \subseteq GL_2(\R)$,
+            which means that $G \leqslant GL_2(\R)$.
+    \end{enumerate}  
+    
+    
+    \section*{Exercise 11}
+    For a field $F$,
+    let \[H(F) = \left\{
+    \begin{bmatrix} 1 & a & b \\ 0 & 1 & c \\ 0 & 0 & 1 \end{bmatrix}
+    \; \middle\vert \; a, b, c \in F \right\}\]
+    be the \textit{Heisenberg group over $F$} (where 0 and 1 are the
+    additive and multiplicative identities of $F$ respectively). \\
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            For
+            \[ X =
+            \begin{bmatrix}
+                1 & a & b \\
+                0 & 1 & c \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            \]
+            and
+            \[ Y =
+            \begin{bmatrix}
+                1 & d & e \\
+                0 & 1 & f \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \]
+            where $a, b, c, d, e, f \in F$,
+            we have:
+            \[ XY =
+            \begin{bmatrix}
+                1 & a & b \\
+                0 & 1 & c \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            \begin{bmatrix}
+                1 & d & e \\
+                0 & 1 & f \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            = \begin{bmatrix}
+                1 & a+d & b + af + e \\
+                0 & 1 & c+f \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \]
+            Since $F$ is a field,
+            it is closed unde multiplication and addition, 
+            so $a+d$, $b + af + e$, and $c+f \in F$,
+            which means $XY \in H(F)$,
+            so $H(F)$ is closed under multiplication. \\
+            Moreover, we have
+            \[ \begin{bmatrix}
+                1 & 2 & 3 \\
+                0 & 1 & 4 \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            \begin{bmatrix}
+                1 & 3 & 2 \\
+                0 & 1 & 4 \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            = \begin{bmatrix}
+                1 & 5 & 13 \\
+                0 & 1 & 8 \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \]
+            and 
+            \[ \begin{bmatrix}
+                1 & 3 & 2 \\
+                0 & 1 & 4 \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            \begin{bmatrix}
+                1 & 2 & 3 \\
+                0 & 1 & 4 \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            = \begin{bmatrix}
+                1 & 5 & 15 \\
+                0 & 1 & 4 \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \]
+            Since both matrices belong in $H(F)$ and don't commute,
+            it means that $H(F)$ is not abelian.
+        \item
+            For all $a, b, c \in F$,
+            \[ \begin{bmatrix}
+                1 & a & b \\
+                0 & 1 & b \\
+                0 & 0 & 1 \\
+            \end{bmatrix}^{-1}
+            = \begin{bmatrix}
+                1 & -a & ac-b \\
+                0 & 1 & -c \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \]
+            is an explicit formula for the inverse of a matrix in $H(F)$
+            which can obtain using Guass-Jordan elimination
+            ($-a$ is the additive inverse of $a$, same for $b$ and $c$).
+            Since $-a$, $ac - b$, and $-c \in F$, as the field is closed
+            under addition, multiplication, and inverses, 
+            this means that the inverse is in $H(F)$,
+            which makes $H(F)$ closed under inverses.
+        \item
+            For all $a, b, c, d, e, f, g, h, i \in F$,
+            \[ \left( \begin{bmatrix}
+                1 & a & b \\
+                0 & 1 & c \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            \begin{bmatrix}
+                1 & d & e \\
+                0 & 1 & f \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \right) \cdot
+            \begin{bmatrix}
+                1 & g & h \\
+                0 & 1 & i \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            = \begin{bmatrix}
+                1 & a + d & b + e + af \\
+                0 & 1 & c + f \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            \begin{bmatrix}
+                1 & g & h \\
+                0 & 1 & i \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \]
+            \[ = \begin{bmatrix}
+                1 & a + d + g & b + e + h + i(a + d) + af \\
+                0 & 1 & c + f + i \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \]
+            and
+            \[\begin{bmatrix}
+                1 & a & b \\
+                0 & 1 & c \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            \left( \begin{bmatrix}
+                1 & d & e \\
+                0 & 1 & f \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \cdot
+            \begin{bmatrix}
+                1 & g & h \\
+                0 & 1 & i \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \right) 
+            = \begin{bmatrix}
+                1 & a & b \\
+                0 & 1 & c \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            \begin{bmatrix}
+                1 & d + g & e + h + di \\
+                0 & 1 & f + i \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \]
+            \[ = \begin{bmatrix}
+                1 & a + d + g & b + e + h + a(f + i) + di \\
+                0 & 1 & c + f + i \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \]
+            Since addition and multiplication are associative in the field
+            $F$, 
+            we have $ b + e + h + i(a + d) + af = b + e + h + a(f + i) + di$,
+            so both products are equal for any elements in $F$,
+            which makes $H(F)$ associative. \\
+            This means that $H(F)$ is a group, as it is associative
+            under a group operation,
+            closed under that operation and inverses,
+            and has an identity,
+            which is the identity matrix $I_3$.
+            Furthermore, since for any element in $H(F)$,
+            $a_{12}$, $a_{13}$, and $a_{23}$ can be any element in $F$,
+            by the multiplication rule,
+            we have $|F|^3$ distinct matrices in $H(F)$,
+            so $|H(F)| = |F|^3$.
+        \item
+            The group $H(\Z/2\Z) = H(\F_2)$ contains the following elements:
+            \[ \begin{bmatrix}
+                \olsi{1} & \olsi{1} & \olsi{1} \\
+                \olsi{0} & \olsi{1} & \olsi{1} \\
+                \olsi{0} & \olsi{0} & \olsi{1} \\
+            \end{bmatrix},
+            \begin{bmatrix}
+                \olsi{1} & \olsi{1} & \olsi{0} \\
+                \olsi{0} & \olsi{1} & \olsi{1} \\
+                \olsi{0} & \olsi{0} & \olsi{1} \\
+            \end{bmatrix},
+            \begin{bmatrix}
+                \olsi{1} & \olsi{1} & \olsi{1} \\
+                \olsi{0} & \olsi{1} & \olsi{0} \\
+                \olsi{0} & \olsi{0} & \olsi{1} \\
+            \end{bmatrix},
+            \begin{bmatrix}
+                \olsi{1} & \olsi{0} & \olsi{1} \\
+                \olsi{0} & \olsi{1} & \olsi{1} \\
+                \olsi{0} & \olsi{0} & \olsi{1} \\
+            \end{bmatrix}, \]
+            \[ \begin{bmatrix}
+                \olsi{1} & \olsi{0} & \olsi{1} \\
+                \olsi{0} & \olsi{1} & \olsi{0} \\
+                \olsi{0} & \olsi{0} & \olsi{1} \\
+            \end{bmatrix},
+            \begin{bmatrix}
+                \olsi{1} & \olsi{1} & \olsi{0} \\
+                \olsi{0} & \olsi{1} & \olsi{0} \\
+                \olsi{0} & \olsi{0} & \olsi{1} \\
+            \end{bmatrix},
+            \begin{bmatrix}
+                \olsi{1} & \olsi{0} & \olsi{0} \\
+                \olsi{0} & \olsi{1} & \olsi{1} \\
+                \olsi{0} & \olsi{0} & \olsi{1} \\
+            \end{bmatrix},
+            \begin{bmatrix}
+                \olsi{1} & \olsi{0} & \olsi{0} \\
+                \olsi{0} & \olsi{1} & \olsi{0} \\
+                \olsi{0} & \olsi{0} & \olsi{1} \\
+            \end{bmatrix} \]
+            where $I_3$ (last element) is the identity, and where they
+            have an order of 4, 4, 2, 2, 2, 2, 2, 1 respectively.
+        \item
+            Proof that every non-identity element of $H(\R)$ has infinite
+            order: \\
+            For all $a, b, c \in \R$, we have :
+            \[ \begin{bmatrix}
+                1 & a & b \\
+                0 & 1 & b \\
+                0 & 0 & 1 \\
+            \end{bmatrix}^2
+            = \begin{bmatrix}
+                1 & a & b \\
+                0 & 1 & b \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            \begin{bmatrix}
+                1 & a & b \\
+                0 & 1 & c \\
+                0 & 0 & 1 \\
+            \end{bmatrix}
+            = \begin{bmatrix}
+                1 & 2a & 2b + ac \\
+                0 & 1 & 2c \\
+                0 & 0 & 1 \\
+            \end{bmatrix} \]
+            If we assume the matrix we started with was not the identity $I_3$,
+            then at least one of either $a$, $b$, or $c$ is not equal to 0.
+            So $2a$, $2b$, or $2c$ are not 0.
+            If however, $2b + ac = 0$,
+            then if $2b = 0$, $ac = 0$,
+            so $b = 0$ and either $a$ or $c$ are 0, but not both,
+            so one of the entries $2a$ and $2c$ is not 0.
+            If $2b \neq 0$, then neither $a$ nor $c$ are equal to 0, and
+            both entries $2a$ and $2c$ won't be 0. \\
+            We can repeat this argument and raise any matrix to any
+            arbitrary power,
+            but as long as the product produces a matrix with at least one
+            of the three entries that isn't 0, the product will have 
+            that same property. \\
+            So the matrices in $H(\R)$ have infinite order as they can't
+            be turned into the identity by raising them to a power different
+            from 0. 
+    \end{enumerate}
+\end{document}

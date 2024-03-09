@@ -1,0 +1,118 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For many columns
+\usepackage{multicol}
+% For vertical brace rcases
+\usepackage{mathtools}
+% For positioning figures
+\usepackage{float}
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+% For manipulating coordinates
+\usetikzlibrary{calc}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\rad}{\text{ rad}}
+\newcommand{\orbit}{\mathcal{O}}
+\newcommand{\Ccal}{\mathcal{C}}
+\newcommand{\Pcal}{\mathcal{P}}
+\newcommand{\Scal}{\mathcal{S}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+
+\title{%
+    \Huge Miscellaneous \\
+}
+\date{2024-01-5}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+    \section*{I. Square Root of Tangent Integral}
+    \[
+        \begin{aligned}
+        & F(x) = \int \sqrt{\tan{(x)}} \, dx \\
+        &= \begin{bmatrix}
+            u = \sqrt{\tan{(x)}} \\
+            du = \frac{\sec^2{(x)}}{2\sqrt{\tan{(x)}}} \\
+            \frac{2u}{u^4 + 1}du = dx
+        \end{bmatrix} = \int \frac{2u^2}{u^4 + 1} \, du \\
+        &= \int \frac{u^2 + u^2 + 1 - 1}{u^4 + 1} \, du \\
+        &= \int \frac{u^2 + 1}{u^4 + 1} \, du + \int \frac{u^2 - 1}{u^4 + 1} \, du \\
+        &= \int \left(\frac{1 + \frac{1}{u^2}}{u^2 + \frac{1}{u^2}} + \frac{1 - \frac{1}{u^2}}{u^2 + \frac{1}{u^2}}\right) \, du \\
+        &= \int \left(\frac{1 + \frac{1}{u^2}}{u^2 + \frac{1}{u^2} + 2 - 2} + \frac{1 - \frac{1}{u^2}}{u^2 + \frac{1}{u^2} + 2 - 2}\right) \, du \\
+        &= \int \left(\frac{1 + \frac{1}{u^2}}{(u - \frac{1}{u})^2 + 2} + \frac{1 - \frac{1}{u^2}}{(u + \frac{1}{u})^2 - 2}\right) \, du \\
+        &= \begin{bmatrix}
+            v = u - \frac{1}{u} \\
+            w = u + \frac{1}{u} \\
+            dv = (1 + \frac{1}{u^2}) \, du \\
+            dw = (1 - \frac{1}{u^2}) \, du
+        \end{bmatrix}
+        = \int \frac{dv}{v^2 + 2} + \int \frac{dw}{w^2 - 2} \\
+        &= \frac{1}{2}\int \frac{dv}{\left(\frac{v}{\sqrt{2}}\right)^2 + 1} + \frac{1}{2}\int \frac{dw}{\left(\frac{w}{\sqrt{2}}\right)^2 - 1} \\
+        &= \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} + \frac{1}{2}\int \frac{dw}{\left(\frac{w}{\sqrt{2}} - 1\right)\left(\frac{w}{\sqrt{2}} + 1\right)} \\
+        &= \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} + \frac{1}{2}\int \left(\frac{A}{\frac{w}{\sqrt{2}} - 1} + \frac{B}{\frac{w}{\sqrt{2}} + 1}\right) \, dw \\
+        &= \text{where } A = \frac{1}{2} \text{ and } B = \frac{-1}{2} \\
+        &= \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} + \frac{1}{4}\int \left(\frac{1}{\frac{w}{\sqrt{2}} - 1} - \frac{1}{\frac{w}{\sqrt{2}} + 1}\right) \, dw \\
+        &= \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} + \frac{\sqrt{2}}{4} \left(\ln{\left|\frac{w}{\sqrt{2}} - 1\right|} - \ln{\left|\frac{w}{\sqrt{2}} + 1\right|}\right) \\
+        &= \frac{\sqrt{2}}{2}\arctan{\left(\frac{u + \frac{1}{u}}{\sqrt{2}}\right)} + \frac{\sqrt{2}}{4} \left(\ln{\left|\frac{u + \frac{1}{u} - \sqrt{2}}{\sqrt{2}}\right|} - \ln{\left|\frac{u + \frac{1}{u} + \sqrt{2}}{\sqrt{2}}\right|}\right)
+        \end{aligned}
+    \]
+    \[ 
+        \begin{aligned}
+        &= \dfrac{\sqrt{2}}{2}\arctan{ 
+            \left(
+                \dfrac{ \sqrt{\tan{(x)}} 
+                - \sfrac{1}{ \sqrt{\tan{(x)}}}}{\sqrt{2}} 
+            \right)
+        }
+        + \dfrac{\sqrt{2}}{4} 
+        \ln{\left| 
+            \dfrac{\sqrt{\tan{(x)}} + \sfrac{1}{ \sqrt{\tan{(x)}}} - \sqrt{2}}
+            {\sqrt{\tan{(x)}} + \sfrac{1}{ \sqrt{\tan{(x)}}} + \sqrt{2}}
+        \right|}
+        \end{aligned}
+    \]
+        
+    
+
+\end{document}
+
+
+C:\Users\msaba\OneDrive\Documents\college\personal\SFML-2.5.1\lib
+C:\Users\msaba\OneDrive\Documents\college\personal\glew-2.2.0\lib\Release\Win32
+
+C:\Users\msaba\OneDrive\Documents\college\personal\SFML-2.5.1\include
+C:\Users\msaba\OneDrive\Documents\college\personal\glm-master\glm
+C:\Users\msaba\OneDrive\Documents\college\personal\glew-2.2.0\include

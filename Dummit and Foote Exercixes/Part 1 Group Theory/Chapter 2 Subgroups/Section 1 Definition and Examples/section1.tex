@@ -1,0 +1,739 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For vertical brace rcases
+\usepackage{mathtools}
+% For positioning figures
+\usepackage{float}
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For manipulating coordinates
+\usetikzlibrary{calc}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\rad}{\text{ rad}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+
+\title{%
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 1: Group Theory \\
+    \LARGE Chapter 2: Subgroups \\
+    \Large Section 1: Definition and Examples
+}
+\date{2023-07-14}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+
+    \section*{Exercise 1}
+    Let $G$ be a group and $S$ a subset of $G$.
+    Since we already know that $S \subseteq G$,
+    in order to show that $S$ is a subgroup of $G$,
+    we only need to show that $S$ is not empty,
+    and that it is closed under inverses and the group operation.
+    We can also show that the last two axioms hold in one step, 
+    by showing that $\forall x, y \in S$, $xy^{-1} \in S$. \\
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            For $G = (\C, +)$ and $S = \{ a + ai \mid a \in \R \}$: \\
+            We know $S$ is not empty because $0 + 0i$,
+            the identity of $G$, is in $S$.
+            And for $a + ai, b + bi \in S$,
+            where the inverse of $b + bi$ is $-b -bi$,
+            we have $a + ai + (-b -bi) = (a-b) + (a-b)i$.
+            Since $a-b = a-b$,
+            then $(a-b) + (a-b)i \in S$,
+            so $S \leqslant G$.
+        \item 
+            For $G = (\C, \times)$ and $S = \{ z \in \C \mid \|z\| = 1
+            \; (z = e^{ri\pi} \; \forall r \in \R)\}$: \\
+            We know $S$ is not empty because $1 + 0i = e^{0i\pi}$,
+            the identity of $G$, is in $S$.
+            And for $e^{ni\pi}, e^{mi\pi} \in S$,
+            where the inverse of $e^{mi\pi}$ is $e^{-mi\pi}$,
+            we have $e^{ni\pi} \times e^{-mi\pi} = e^{(n - m)i\pi}$.
+            Since $n - m \in \R$,
+            then $e^{(n - m)i\pi} \in S$,
+            so $S \leqslant G$.
+        \item 
+            For $G = (\Q, +)$ and $S = \{ q \in \Q \mid b \mid n 
+            \text{ for } q = \sfrac{a}{b} \}$
+            where $n$ is a fixed number in $\Z^+$
+            and $\sfrac{a}{b}$ is written in lowest terms: \\
+            We know $S$ is not empty because $0 = 0/1$,
+            the identity of $G$, is in $S$,
+            as $1|n$.
+            And for $\sfrac{a}{b}, \sfrac{c}{d} \in S$,
+            written in lowest terms,
+            where $n = xb = yd$ for some $x, y \in \Z$,
+            and the inverse of $\sfrac{c}{d}$ is $-\sfrac{c}{d}$,
+            we have $\sfrac{a}{b} = \sfrac{ax}{n}$
+            and $\sfrac{c}{d} = \sfrac{cy}{n}$. 
+            So \[\dfrac{a}{b} + \dfrac{c}{d} = 
+            \dfrac{ax}{n} - \dfrac{cy}{n} = \dfrac{ax - cy}{n}\]
+            Even if we reduce the fraction further, since $n \mid n$,
+            any of its remaining factors will still divide $n$.
+            So $\dfrac{ax - cy}{n} \in S$,
+            which means $S \leqslant G$.
+        \item 
+            For $G = (\Q, +)$ and $S = \{ q \in \Q \mid b \text{ is
+            relatively prime to $n$ for } q = \sfrac{a}{b} \}$
+            where $n$ is a fixed number in $\Z^+$
+            and $\sfrac{a}{b}$ is written in lowest terms: \\
+            We know $S$ is not empty because $0 = 0/1$,
+            the identity of $G$, is in $S$ since $\gcd(1, n) = 1$.
+            And for $\sfrac{a}{b}, \sfrac{c}{d} \in S$,
+            written in lowest terms,
+            where $\gcd(b, 1) = gcd (d, 1) = 1$,
+            and the inverse of $\sfrac{c}{d}$ is $-\sfrac{c}{d}$,
+            we have \[\dfrac{a}{b} - \dfrac{c}{d} = \dfrac{ad - cb}{db}\]
+            By the fundemnetal theorem of arithmetic,
+            if there are no factors in common with $n$ in $b$ and $d$
+            individually,
+            then there won't be any in their product either.
+            Even if we reduce the fraction further,
+            the amount of factors in the denominator $bd$ will reduce,
+            so the denominator will remain relatively prime to $n$.
+            So $\dfrac{ad - cb}{db} \in S$,
+            which means $S \leqslant G$. 
+        \item 
+            For $G = (\R - {0}, \times)$
+            and $S = \{r \in \R \mid r^2 \in \Q\}$: \\
+            We know $S$ is not empty because $1$,
+            the identity of $G$, is in $S$ since $1^2 = 1 = 1/1$.
+            And for any $x, y \in S$,
+            where $x^2, y^2 \in \Q$,
+            meaning that $x^2 = \sfrac{a}{b}$ and $y^2 = \sfrac{c}{d}$ for
+            $a, b, c, d \in \Z$,
+            and the inverse of $y$ is $\sfrac{1}{y}$,
+            we have \[x \cdot \dfrac{1}{y} = \dfrac{x}{y}\]
+            where \[(xy)^2 = \dfrac{x^2}{y^2}
+            = \dfrac{\sfrac{a}{b}}{\sfrac{c}{d}}
+            = \dfrac{ad}{bc}\]
+            Since $ad, bc \in \Z$, $\dfrac{ad}{bc} \in \Q$.
+            So $x \cdot \sfrac{1}{y} \in S$,
+            which means $S \leqslant G$. 
+    \end{enumerate}
+
+
+    \section*{Exercise 2}
+    Let $G$ be a group and $S$ a subset of $G$.
+    Since we already know that $S \subseteq G$,
+    in order to show that $S$ is not a subgroup of $G$,
+    we only need to show that one of the other axioms does not hold: \\
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            For $G = S_n$ where $n \geqslant 3$,
+            and $S$ the set of 2-cycles: \\
+            We have, for example, $(1\;2), (1\;3) \in S$,
+            but $(1\;2) \circ (1\;3) = (1\;3\;2)$, which is not a 2-cycle.
+            So $S$ is not closed under composition,
+            so $S$ is not a subgroup of $G$.
+        \item 
+            For $G = D_{2n}$ where $n \geqslant 3$,
+            and $S$ the set of reflections $\{s, sr, sr^2 \dots sr^{n-1}\}$: \\
+            We have, for example, $sr, sr^2 \in S$,
+            but $sr^2 \circ sr = sr^2r^{-1}s = srs = r^{-1}ss = r^{n-1}$,
+            which is not a reflection.
+            So $S$ is not closed under composition,
+            so $S$ is not a subgroup of $G$.
+        \item 
+            If $G$ contains at least one element with order $n$,
+            where $n$ is a composite integer larger than 1,
+            and $S = \{x \in G \mid |x| = n\}$: \\
+            Since $n$ is composite, $n = pq$ where $p,q > 1$.
+            So for an element $x \in S$, $|x| = n$,
+            which means that $x^n = 1$,
+            so $(x^p)^q = 1$, so $|x^p| \leqslant q < n$.
+            We have $|x^p| \neq n$,
+            hence $x^p \notin S$.
+            However, if $x^p$ isn't part of the set $S$,
+            then the set is not closed under the group operation
+            (since $x^p$ is just $x$ multiplies by itself several times).
+            So $S$ isn't a subgroup of $G$.
+        \item 
+            For $G = (\Z, +)$
+            and $S = \{n \in \Z \mid n \text{ is odd} \}:$ \\
+            We have $1, 3 \in S$, but $1 + 3 = 4$, which is even,
+            and so not in $S$.
+            So as $S$ isn't closed under addition,
+            it is not a subgroup of $G$.
+        \item 
+            For $G = (\R, +)$
+            and $S = \{r \in \R \mid r^2 \in \Q\}:$ \\
+            We have $\sqrt{2}, \sqrt{3} \in S$,
+            because $\sqrt{2}^2 = 2$ and $\sqrt{3}^2 = 3$.
+            But $(\sqrt{2} + \sqrt{3})^2
+            = \sqrt{2}^2 + \sqrt{3}^2 + 2\sqrt{3}\sqrt{2}
+            = 5 + 2\sqrt{6}$, which is irrational,
+            since $\sqrt{6}$ is irrational,
+            multiplying a rational number by an irrational number
+            gives an irrational result,
+            and adding a rational number to an irrational number also
+            gives an irrational result.
+            So $\sqrt{2} + \sqrt{3} \notin S$,
+            which means $S$ isn't closed under addition,
+            so it is not a subgroup of $G$.
+    \end{enumerate}
+
+
+    \section*{Exercise 3}
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            For $S = \{1, r^2, s, sr^2\}$,
+            we know $S \neq \emptyset$ and $S \subseteq D_{2n}$.
+            Now, to show closure, we have
+            $1r^2 = r^2$, $1s = s$, $1sr^2 = sr^2$,
+            $r^2s = sr^{-2} = sr^2$, $r^2sr^2 = sr^{-2}r^2 = s$,
+            $ssr^2 = r^2$, $sr^2r^2 = s$.
+            And we have $(r^2)^{-1} = r^{-2} = r^2$,
+            $s^{-1} = s$, $(sr^2)^{-1} = r^{-2}s^{-1} = sr^2$.
+            So $S \leqslant D_{2n}$.
+        \item
+            For $S = \{1, r^2, sr, sr^3\}$,
+            we know $S \neq \emptyset$ and $S \subseteq D_{2n}$.
+            Now, to show closure, we have
+            $1r^2 = r^2$, $1sr = sr$, $1sr^3 = sr^3$,
+            $r^2sr = sr^{-2}r = sr^2r = sr^3$, $r^2sr^3 = sr^{-2}r^3 = sr$,
+            $srsr^3 = r^{-1}ssr^3 = r^2$, $sr^3r^2 = sr^5 = sr$.
+            And we have $(r^2)^{-1} = r^{-2} = r^2$,
+            $(sr)^{-1} = r^{-1}s = sr^{-1} = sr^3$,
+            $(sr^3)^{-1} = r^{-3}s^{-1} = sr^3$.
+            So $S \leqslant D_{2n}$.
+    \end{enumerate}
+
+
+    \section*{Exercise 4}
+    To give an example of an infinite group $G$ with an infinite subset $H$
+    closed under teh group operation that isn't a subgroup,
+    we can take $G = (\Z, +)$ (including 0),
+    and $H = \Z^+$. 
+    $H$ is infinite, and closed under addition,
+    since $a + b > 0$ when $a,b > 0$,
+    but it does not contain any inverses of identity.
+
+
+    \section*{Exercise 5}
+    Proof that for a group $G$ with $|G| = n > 2$,
+    there can be no subrgoup $H$ of $G$ with $|H| = n-1$: \\
+    Assume by contradiction, that $H \leqslant G$ and $|H| = n-1$.
+    Now assume that $x \in G$ but $x \notin H$.
+    Since $H$ has order $n - 1$, then every other element in $G$ is in $H$.
+    So for $a, b \neq 1$, where $xa = b$, $x = ba^{-1}$.
+    So $ba^{-1} \notin G$.
+    But since $a, b \in H$,
+    then that means $H$ is not closed under inverses and the group operation,
+    so $H$ can't be a subgroup.
+
+
+    \section*{Exercise 6 $***$}
+    Proof that for any abelian group $G$,
+    $S = \{g \in G \mid |g| < \infty\}$ is a subgroup of $G$
+    (called the \textit{torsion subgroup of $G$}): \\
+    First we note that $S$ is by definition a subset of $G$,
+    and that $1 \in S$ since $|1| = 1$. 
+    Moreover, $\forall a, b \in S$, $|a|, |b| < \infty$,
+    and by exercises 1.1.1.20, $|b^{-1}| = |b| < \infty$,
+    so for some $n, m \in \Z$, $a^n = (b^{-1})^m = 1$.
+    So $(ab^{-1})^{nm} = a^{nm}(b^{-1})^{nm}
+    = (a^n)^m((b^{-1})^m)^n
+    = 1^m1^n
+    = 1$
+    ($(ab^{-1})^{nm} = a^{nm}(b^{-1})^{nm}$ since $G$ is abelian,
+    as proven in exercise 1.1.1.24).
+    So $|ab^{-1}| \leqslant nm < \infty$,
+    which means that $ab^{-1} \in S$.
+    Hence, $S$ is closed under inverses and the group operation,
+    so $S \leqslant G$. \\
+    To give a counterexample when $G$ is not abelian,
+    we can consider the group of bijective function $\R \to \R$
+    under composition.
+    This is a group as the identity is the identity function $h(x) = x$,
+    composition is associative,
+    the functions are bijective so they have a two-sided inverse
+    such that $\varphi^{-1}\varphi = \varphi\varphi^{-1} = 1$,
+    and any composition of two bijective functions is a bijection.
+    Now consider the two elements $f(x) = -x$ and $g(x) = 1 - x$.
+    We have $|f(x)| = |g(x)| = 2$
+    since $f(f(x)) = -(-x) = x = h(x)$,
+    and $g(g(x)) = 1 - (1 - x) = x = h(x)$.
+    So both are would be elements in the torsion subgroup,
+    but their composition, $f(g(x))$, isn't,
+    since $f(g(x)) = k(x) = x - 1$, 
+    where $k(k(x)) = (x - 1) - 1 = x - 2$,
+    and $k(k(k(x))) = ((x - 1) - 1) - 1 = x - 3 \dots$ \\
+    So the set of functions with finite order isn't closed under composition,
+    which means that this example does not have a torsion subgroup.
+
+
+    \section*{Exercise 7}
+    For a fixed $n \in \Z^+$ such that $n > 1$,
+    And the group $G = \Z \times \Z/n\Z$,
+    (the direct product of two additive groups)
+    the torsion subrgoup of $G$ is the set of elements that have finite
+    order.
+    It exists because both $\Z$ and $\Z/n\Z$ are abelian
+    (addition is commutative),
+    which means their direct product is also abelian
+    as proven in exercise 1.1.1.29.
+    So by exercise 1.2.1.7, the direct product has a torsion subgroup. \\
+    For a tuple of a direct product $A \times B$ to have finite order,
+    it stands to reason that the tuples in each ordered pair have finite
+    order in their respective groups $A$ and $B$.
+    This is because the identity of $A \times B$ is the ordered
+    pair of the identities of $A$ and $B$ by exercises 1.1.1.28. \\
+    However, besides the identity 0 of $\Z$, all integers have infinite
+    order.
+    On the other hand, all elements of $\Z/n\Z$ have finite order,
+    since the group itself is finite.
+    So the torsion subgroup of $G$ is comprosied of the set
+    $\{(0, \olsi{a}) \in G \mid \olsi{a} \in \Z/n\Z \}$. \\
+    Proof that the set $S = \{g \in G \mid |g| = \infty\} \cup \{1_G\}$,
+    which comprises of the elements in $G$ with infinite order 
+    and the identity, isn't a subgroup of $G$: \\
+    Any element in $G$ with a tuple that has infinite order
+    will also have an infinite order.
+    So $(1, \olsi{0}), (-1, \olsi(1)) \in S$,
+    but $(1, \olsi{0})(-1, \olsi(1)) = (1 - 1, \olsi{0} + \olsi{1})
+    = (0, \olsi{1})$,
+    which has finite order
+    since $(0, \olsi{1})^n = (0, \olsi{n}) = (0, \olsi{0})$.
+    So $(0, \olsi{1})$ isn't in $S$,
+    which means $S$ isn't closed
+    and is thus not a subgroup of $G$.
+
+
+    \section*{Exercise 8 $***$}
+    Proof that for $H, K \leqslant G$,
+    $H \cup K \leqslant G$
+    if and only if $H \subseteq K$ or  $K \subseteq H$: \\
+    If $H \subseteq K$ or $K \subseteq H$,
+    then trivially, we have $H \cup K = K$ or $H$, respectively,
+    which we know are subgroups of $G$ by assumption. \\
+    Conversely, if $H \cup K \leqslant G$,
+    then first consider the set $S = H \cap K$,
+    and the elements $h \in H - S$
+    (an element in $H$ that's not in $K$),
+    and $k \in K - S$.
+    This means that $h, k \in H \cup K$.
+    However $hk \notin H$,
+    as that would imply that $h^{-1}hk = k \in H$
+    (since $H$ is closed under inverses and the group opertaion).
+    However, we assumed that $k \notin H$,
+    so $hk \notin H$.
+    Moreover, for the same reason $hk \notin K$,
+    as that would imply that $hkk^{-1} = h \in K$
+    (since $K$ is closed under inverses and the group opertaion).
+    However, we assumed that $h \notin K$,
+    so $hk \notin K$.
+    Since $hk$ isn't in either subgroup,
+    then it's not part of their union, meaning that $H \cup K$
+    isn't closed under the group operation so long as
+    there exists elements in either $H - S$ or $K - S$.
+    So that must mean that for either $H$ or $K$,
+    $H - S$ or $K - S$ is the empty set,
+    which would imply that for one of them, $S = K$ or $S = H$.
+    This means that $K = H \cap K$,
+    which implies that $K \subseteq H$,
+    or $H = H \cap K$,
+    which implies that $H \subseteq K$,
+    completing the proof.
+
+
+    \section*{Exercise 9}
+    For any field $F$ and $n \in \Z^+$,
+    let $G = GL_n(F)$ and $SL_n(F) = \{A \in GL_n(F) \mid \det(A) = 1\}$.
+    Proof that $SL_n(F) \leqslant GL_n(F)$
+    (called \textit{the Special Linear group}): \\
+    First, we know that by its definiton, $SL_n(F) \subseteq GL_n(F)$.
+    We aslo know that the determinant of a diagonal matrix is the product
+    of the elements in its main diagonal,
+    so $\det(I_n) = 1$ (the identity of $GL_n(F)$).
+    Hence, $I_n \in SL_n(F)$,
+    which means that $SL_n(F) \neq \emptyset$.
+    Finally, we know that for any square matrices $A$ and $B$,
+    $\det(AB) = \det(A) \cdot \det(B)$
+    and $\det(A^{-1}) = \dfrac{1}{\det(A)}$.
+    So $\forall A, B \in GL_n(F)$,
+    \[\det(AB^{-1}) = \dfrac{\det(A)}{\det(B)} = \dfrac{1}{1} = 1\]
+    which means that $SL_n(F)$ is closed under inverses and multilication.
+    So $SL_n(F) \leqslant GL_n(F)$.
+
+
+    \section*{Exercise 10 $***$}
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            Proof that if $H$ and $K$ are subgroups of a group $G$,
+            then $H \cap K \leqslant G$: \\
+            We know the identity of $G$ is also the identity of $H$ and $K$,
+            so the identity is an element of $H \cap K$,
+            so $H \cap K \neq \emptyset$.
+            Moreover $H \cap K \subseteq H, K \subseteq G$,
+            since $H, K \leqslant G$,
+            so $H \cap K \subseteq G$.
+            Finally, for $h, k \in H \cap K$,
+            $h, k \in H$ and $K$.
+            So $hk^{-1} \in H$ and $K$
+            as both are subgroups and are therefore closed,
+            so by definition, $hk^{-1} \in H \cap K$.
+            So $H \cap K$ is closed under inverses and the group operation,
+            which means $H \cap K \leqslant G$.
+        \item
+            Proof that for any fixed $n \in \Z^+$,
+            if $H_1, H_2 ... H_n \leqslant G$,
+            then $\bigcap_{i = 1}^n H_i \leqslant G$: \\
+            We can use a similar proof to part a.
+            Take $H = \bigcap_{i = 1}^n H_i$.
+            We know the identity of $G$ is also the identity of all 
+            subgroups $H_i$,
+            so the identity is an element of their intersection $H$,
+            so $H \neq \emptyset$.
+            Moreover $H$ is the intersection of the subgroups $H_i$,
+            so it is a subset of each one of them.
+            Since each $H_i$ is a subgroup of $G$, $H_i\subseteq G$,
+            so $H \subseteq G$.
+            Finally, for $h, k \in H$,
+            $h, k$ is an element of all subgroups $H_i$.
+            So $hk^{-1}$ belongs to all $H_i$
+            as all subgroups are closed,
+            so by definition, $hk^{-1} \in H$.
+            So $H$ is closed under inverses and the group operation,
+            which means $H \leqslant G$.
+    \end{enumerate}
+
+
+    \section*{Exercise 11}
+    Let $A$ and $B$ be groups. \\
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            Proof that $H = \{(a, 1_B) \mid a \in A\}$
+            is a subgroup of $A \times B$: \\
+            We know that since $a \in A$, $H \subseteq A \times B$.
+            Moreover, since $(1_A, 1_B) \in H$, $H \neq \emptyset$.
+            Finally, $\forall (a, 1_B), (b, 1_B) \in H$,
+            we know that $(b, 1_B)^{-1} = (b^{-1}, 1_B^{-1})
+            = (b^{-1}, 1_B)$ from exercise 1.1.1.28,
+            so $(a, 1_B)(b, 1_B)^{-1} = (ab^{-1}, 1_B)$.
+            Since $A$ is closed under inverses and its group operation,
+            then $ab^{-1} \in A$,
+            so $(ab^{-1}, 1_B) \in H$,
+            which makes it closed under inverses and its group operation,
+            which means $H \leqslant A \times B$.
+        \item
+            Proof that $H = \{(1_A, b) \mid b \in B\}$
+            is a subgroup of $A \times B$: \\
+            We know that since $b \in B$, $H \subseteq A \times B$.
+            Moreover, since $(1_A, 1_B) \in H$, $H \neq \emptyset$.
+            Finally, $\forall (1_A, b), (1_A, c) \in H$,
+            we know that $(1_A, c)^{-1} = (1_A^{-1}, c^{-1})
+            = (1_A, c^{-1})$ from exercise 1.1.1.28,
+            so $ (1_A, b)(1_A, c)^{-1} = (1_A, bc^{-1})$.
+            Since $B$ is closed under inverses and its group operation,
+            then $bc^{-1} \in B$,
+            so $(1_A, bc^{-1}) \in H$,
+            which makes it closed under inverses and its group operation,
+            which means $H \leqslant A \times B$.
+        \item
+            Proof that $H = \{(a, a) \mid a \in A\}$
+            is a subgroup of $A \times A$
+            (called \textit{the diagonal subgroup}): \\
+            We know that since $a \in A$, $H \subseteq A \times A$.
+            Moreover, since $(1_A, 1_A) \in H$, $H \neq \emptyset$.
+            Finally, $\forall (a, a), (b, b) \in H$,
+            we know that $(b, b)^{-1} = (b^{-1}, b^{-1})$
+            from exercise 1.1.1.28,
+            so $(a, a)(b, b)^{-1} = (ab^{-1}, ab^{-1})$.
+            Since $A$ is closed under inverses and its group operation,
+            then $ab^{-1} \in A$,
+            so $(ab^{-1}, ab^{-1}) \in H$,
+            which makes it closed under inverses and its group operation,
+            which means $H \leqslant A \times A$.
+    \end{enumerate}
+
+
+    \section*{Exercise 12}
+    Let $A$ be an abelian group and fix some $n \in \Z$. \\
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            Proof that $H = \{a^n \mid a \in A\}$ is a subgroup of $A$: \\
+            We know that $1^n = 1$ is in $H$, so $H \neq \emptyset$.
+            Moreover, we know that since $A$ is closed under
+            the group operations,
+            then $\forall a \in A$, $a^n \in A$,
+            so $H \subseteq A$.
+            Finally, for all $a^n, b^n \in H$, $a$ and $b^{-1}$ commute,
+            since $a, b^{-1} \in A$.
+            We also know from exercise 1.1.1.19
+            that $(b^{-1})^n = (b^n)^{-1}$,
+            and from exercise 1.1.1.24 that if two elements $a$ and $b$
+            commute, then $a^nb^n = (ab)^n$.
+            So $a^n(b^n)^{-1} = a^n(b^{-1})^n = (ab^{-1})^n$
+            where $ab^{-1} \in A$,
+            so $a^n(b^n)^{-1} \in H$,
+            which means it is closed under inverses and the group operation,
+            which in turn means that $H \leqslant A$.
+        \item
+            Proof that $H = \{a \in A \mid a^n = 1\}$ is a subgroup of $A$: \\
+            We know that $1^n = 1$, so 1 is in $H$,
+            which means $H \neq \emptyset$.
+            Moreover, we know that by the deifnition of $H$,
+            $H \subseteq A$.
+            Finally, for all $a, b \in H$, $a$ and $b^{-1}$ commute,
+            since $a, b^{-1} \in A$.
+            We also know from exercise 1.1.1.20 that $|x| = |x^{-1}|$
+            is true for all inverses.
+            So $a^n = 1$ and $b^n = (b^{-1})^n = 1$.
+            We know from exercise 1.1.1.24 that if two elements $a$ and $b$
+            commute, then $a^nb^n = (ab)^n$.
+            So $(ab^{-1})^n = a^n(b^{-1})^n = 1 \cdot 1 = 1$,
+            so $ab^{-1} \in H$,
+            which means it is closed under inverses and the group operation,
+            which in turn means that $H \leqslant A$.
+    \end{enumerate}
+
+
+    \section*{Exercise 13 $***$}
+    Let $H$ be a subrgoup of $(\Q, +)$.
+    Proof that if $\sfrac{1}{x} \in H$ for every $x \in H$ other than $x = 0$,
+    then $H = \{0\}$ or $H = (\Q, +)$: \\
+    First, if $|H| = 1$, then $H = \{0\}$ (the trivial group),
+    and we can stop.
+    If however, $|H| \geqslant 2$,
+    then there must exist at least one element $x$ in $H$ that isn't the
+    identity 0.
+    If $x = 1$, then $1 \in H$,
+    Otherwise, by the definition of $H$, $\sfrac{1}{x} \in H$,
+    and $\sfrac{1}{x} \neq 1$.
+    We can construct however obtain 1,
+    by adding $\sfrac{1}{x}$ to itself $x$ times,
+    and since $H$ is a subgroup and therefore closed under addition,
+    the result, which is 1, is in $H$.
+    As shown in exercise 1.1.2.14 $(\Z, +)$ is generated by just 1,
+    so as $H$ is closed under addition,
+    ever integer $a$ is in $H$.
+    This implies that every rational $\sfrac{1}{a}$ is also in $H$.
+    Again, as $H$ is closed under addition,
+    we can form any rational $\sfrac{b}{a}$ in $H$
+    by adding $\sfrac{1}{a}$ to itself $b$ times.
+    So $H = (\Q, +)$.
+
+
+    \section*{Exercise 14}
+    Proof that $H = \{x \in D_{2n} \mid x^2 = 1\}$
+    is not a subgroup of $D_{2n}$ where $n \geqslant 3$: \\
+    Since $s^2 = 1$ and $(sr)^2 = srsr = srr^{-1}s = ss = 1$,
+    $r, s \in H$,
+    but $rs \cdot s = r$, and $r^2 \neq 1$ when $n > 2$.
+    So $H$ is not closed under composition,
+    which means it can't be a subgroup of $G$.
+
+
+    \section*{Exercise 15 $***$}
+    For a fixed $n \in Z^+$, let $H_1 \leqslant H_2 \dots$
+    be an ascending chain of subgroups of $G$.
+    Proof that $H = \bigcup_{i = 1}^{\infty}$ is a subgroup of $G$: \\
+    First, since $H_1$ is a subgroup, then $H_1 \neq \emptyset$,
+    so the union of all subsets including $H_1$ is also not empty.
+    Moreover, since $H_1$ subgroup of $H_2$, it's also a subgroup of $H_3$.
+    This is because every axiom still holds
+    and because $H_1 \leqslant H_2 \leqslant H_3$ implies
+    $H_1 \subseteq H_2 \subseteq H_3$,
+    which implies that $H_1 \subseteq H_3$,
+    which in turn means that $H_1 \leqslant H_3$.
+    We can keep applying this argument for every subgroup,
+    concluding that all groups $H_i$ are subgroups of $G$,
+    so they are all subsets of $G$.
+    This means that their union must also be a subset of $G$.
+    Finally, $\forall a, b \in H$,
+    we have for $a \in H_j$ and $b \in H_k$.
+    If we assume, with no loss of generality that $j > k$,
+    then $b \in H_j$ as we already showed that $H_k \leqslant H_j$.
+    This also means that $b^{-1} \in H_j$,
+    so $ab^{-1} \in H_j$ since it's a subgroup, meaning it is closed,
+    which means that $ab^{-1}$ is in the union of all subgroups,
+    which means that $H$ is closed under inverses and teh group operation,
+    making it a subgroup of $G$. 
+
+
+    \section*{Exercise 16 $***$}
+    For any field $F$ and fixed $n \in \Z^+$,
+    consider $H = \{ A \in GL_n(F) \mid a_{ij} = 0 \text{ when } i > j\}$
+    where $a_{ij}$ is an entry in $A$'s $i$th row and $j$th column
+    is a subgroup of $GL_n(F)$
+    (called \textit{ the group of upper triangular matrices}): \\
+    First, we note that by definition, $H \subseteq GL_n(F)$,
+    and $I_n$ is a diagonal matrix,
+    which makes it an upper triangular matrix,
+    which means $I_n \in H$,
+    so $H \neq \emptyset$. \\ 
+    Moreover, for $A, B \in H$, $a_{ij} = b_{ij} = 0$ when $i > j$.
+    So in their product $C = AB$, we have 
+    \[ c_{ij} = \sum_{k = 1}^n (a_{ik} \cdot b_{kj}) \]
+    We can show that $c_{ij} = 0$ when $i > j$.
+    This is because $a_{ik} \cdot b_{kj} = 0$
+    when either $a_{ik} = 0$, or $b_{kj} = 0$,
+    so that means that the product is 0 when $i > k$
+    or when $k > j$.
+    So either $i > k$, or $i \leqslant k$.
+    However, since we assumed that $i > j$,
+    if $i \leqslant k$, then for sure $k > j$.
+    So we always have that either $i > j$ or $k > j$,
+    so for all values of $i$ and $j$ such that $i > j$,
+    the product $a_{ik} \cdot b_{kj}$ is 0.
+    This means that $c_{ij} = 0$ when $i > j$,
+    so $C$ is an upper triangular matrix and is an element of $H$,
+    making $H$ closed under multiplication. \\ 
+    Finally, we need to show that the inverse of an upper triangular
+    matrix in $H$ is also an upper triangular matrix.
+    Let's assume the opposite is true, that for $A \in H$,
+    $C = A^{-1}$ isn't an upper triangular matrix
+    Then there must be at least one entry $c_{ij} \neq 0$
+    where $i > j$.
+    Now, we have $CA = A^{-1}A = I_n$,
+    where $I_n$ is the identity matrix:
+    \[ \begin{bmatrix}
+        1 & 0 & 0 & \dots & 0 \\
+        0 & 1 & 0 & \dots & 0 \\
+        0 & 0 & 1 & \dots & 0 \\
+        \vdots & \vdots & \vdots & \ddots & \vdots \\
+        0 & 0 & 0 & \dots & 1 \\
+    \end{bmatrix}_{n \times n} \]
+    Now consider some entry in $I_n$, $d_{ij}$, such that $i > j$
+    (in the lower triangle).
+    We know from the definiton of $I_n$ that $d_{ij} = 0$.
+    And from the multiplication of $C$ by $A$,
+    we know that 
+    \[ d_{ij} = \sum_{k = 1}^n (c_{ik} \cdot a_{kj}) \]
+    which means that it is the dot product of row $i$ in $C$
+    and column $j$ in $A$.
+    Now assume, with no loss of generality,
+    that $c_{ij}$, which we assumed is non-zero,
+    is the first non-zero element in row $i$.
+    So we have 
+    \[ d_{ij} = \begin{bmatrix}
+        0 & \dots & 0 & c_{ij} & c_{i(j+1)} & \dots
+        & c_{ii} & \dots & c_{in}  
+    \end{bmatrix}_{n}
+    \cdot 
+    \begin{bmatrix}
+        a_{1j} \\ a_{2j} \\ \vdots \\ a_{j(j - 1)} \\ a_{jj} \\ \vdots
+        \\ a{ij} \\ 0 \\ \vdots \\ 0 \\  
+    \end{bmatrix}_{n} \]
+    where $A$ is an upper triangle matrix, meaning that the last 
+    $n - i$ elements in the column $j$ are all 0,
+    and $c_{i(j + 1)}, c_{i(j + 2)}, \dots$ can be either 0 or not. \\
+    So in the sum that makes up $d_{ij}$,
+    the first $(j - 1)$ products $c_{ik} \cdot a_{kj}$ are all 0,
+    as we assumed $c_{ij}$ is the first non-zero element in the row.
+    Moreover, the last $n - i$ products are also all 0,
+    as the last $n - i$ elements in the column $j$ are all 0.
+    However the products from $j$ to $i$ are not always 0,
+    which contradicts our assumption that $d_{ij} = 0$
+    for any product of a matrix by its inverse.
+    So $C$ must also be an upper triangular matrix,
+    which means $H$ is closed under inverses. \\
+    We conclude that $H \leqslant GL_n(F)$.
+
+
+    \section*{Exercise 17 $***$}
+    For any field $F$ and fixed $n \in \Z^+$,
+    consider $H = \{ A \in GL_n(F) \mid a_{ij} = 0 \text{ when } i > j
+    \text{ and } a_{ii} = 1 \; \forall i \}$
+    where $a_{ij}$ is an entry in $A$'s $i$th row and $j$th column
+    is a subgroup of $GL_n(F)$: \\
+    First, we note that by definition, $H \subseteq GL_n(F)$,
+    and $I_n$ is a diagonal matrix,
+    which makes it an upper triangular matrix,
+    with 1s on the diagonal,
+    which means $I_n \in H$,
+    so $H \neq \emptyset$. \\ 
+    Now to prove closure under multiplication and inverses,
+    our proof will closely follow the one in exercise 1.2.1.16.
+    To start, for $A, B \in H$, $a_{ij} = b_{ij} = 0$ when $i > j$,
+    and their diagonals are filled with 1s.
+    From exercise 1.2.1.16, we know that the product
+    of two upper triangular matrices $A$ and $B$ is an upper triangular
+    matrix $C = AB$.
+    But we also need to show that the product $C$ has a diagonal of 1s.
+    So, for any diagonal entry in $C$,
+    \[ c_{ii} = \sum_{k = 1}^n (a_{ik} \cdot b_{ki}) \]
+    Where, as shown before,
+    each product $a_{ik} \cdot b_{ki}$ is zero 
+    if either $a_{ik}$ or $b_{ki}$ is 0,
+    which happens if $i > k$ or $k > i$
+    as both $A$ and $B$ are upper triangular.
+    This covers the whole range of values of $k$
+    except for $k = i$.
+    when $k = i$, $a_{ii} = b_{ii} = 1$
+    since both of $A$ and $B$'s diagonals are filled with 1s.
+    So the product $a_{ii} \cdot b_{ii} = 1$,
+    which means the sum $c_{ij} = 0 + 1 + 0 = 1$.
+    This means that the diagonal of the product of $A$ and $B$ is all 1s, 
+    making $H$ closed under multiplication. \\ 
+    Now we need to show that the inverse of an upper triangular
+    matrix in $H$ is also an upper triangular
+    matrix with a diagonal full of 1s.
+    We've already proved in exercise 1.2.1.16 that 
+    the inverse of an upper triangular matrix $A$ in $H$
+    is also an upper triangular matrix $C = A^{-1}$. 
+    But we still need to prove that the inverse of an upper triangular
+    matrix with a diagonal full of 1s has a diagonal full of 1s.
+    We know that any entry in the diagonal of $I_n$ is 1.
+    We also know that $CA = I_n$,
+    so for some entry $d_{ii}$ in the identity matrix, we have
+    \[ d_{ii} = \sum_{k = 1}^n (c_{ik} \cdot a_{ki}) \]
+    We have that each product $a_{ik} \cdot b_{ki}$ is zero 
+    if either $c_{ik}$ or $a_{ki}$ is 0,
+    which happens if $i > k$ or $k > i$
+    as both $C$ and $A$ are upper triangular
+    ($A$ by assumption, and $C$ in our last proof).
+    This covers the whole range of values of $k$
+    except for $k = i$.
+    Since all those products are 0,
+    the sum $d_{ii} = c_{ii} \cdot a_{ii}$.
+    We know by assumption that $d_{ii} = a_{ii} = 1$.
+    So $c_{ii} = \dfrac{d_{ii}}{a_{ii}} = \dfrac{1}{1} = 1$,
+    which means that the diagonal of the inverse of $A$ is all 1s.
+    Since we already showed the inverse is an upper triangle,
+    this makes $H$ closed under inverses. \\
+    We conclude that $H \leqslant GL_n(F)$.
+
+
+
+
+
+
+\end{document}
