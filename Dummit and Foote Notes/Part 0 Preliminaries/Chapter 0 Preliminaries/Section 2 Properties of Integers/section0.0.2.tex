@@ -1,0 +1,274 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For using float option H that places figures exatcly where we want them
+\usepackage{float}
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+
+\usepackage{indentfirst}
+\usetikzlibrary{shapes,positioning,fit,calc}
+
+\usepackage{changepage} % for adjustwidth environment
+
+\title{%
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 0: Preliminaries \\
+    \LARGE Chapter 0: Preliminaries \\
+    \Large Section 2: Properties of the Integers
+}
+\date{2024-03-17}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+    This section introduces properties of the integer numbers.
+    These properties will be proven later, in chapter $2.8$,
+    in the context of Ring Theory. \\
+    However, we need to know them now for Group Theory. \\
+    Of course none of the Ring Theory proofs will depend
+    on Group Theory. \\
+
+    One property of integers is the \textbf{well ordering} property.
+    Any non-empty subset $A$ of the positive integers $\Z^+$
+    will have an element $m$
+    such that $m \leqslant a$ $\forall a \in A$
+    (called the \textbf{minimal element} of $A$). \\
+
+    If $a, b \in \Z$, and $a \neq 0$,
+    then $a$ \textbf{divides} $b$ if $b = na$ for some $n \in \Z$.
+    We use $a \mid b$ to represent this fact
+    (and $a \nmid b$ if $a$ does not divide $b$).
+    In other words, $a$ divides $b$ if we can evenly divide
+    $b$ $a$ times, with no remainder. \\
+    Here, we say that $b$ is a \textbf{mutliple} of $a$,
+    as $b = a \times n$. \\
+    Note that $1$ divides all integers $a \in \Z$ (with $n = a$)
+    and all integers divide themselves (with $n = 1$). \\
+    
+
+    If $a, b \in \Z - \{0\}$,
+    then there is a unique integer $d$,
+    called the \textbf{greatest common divisor} of $a$ and $b$,
+    or $\text{gcd}(a, b)$, or sometimes just $(a, b)$.
+    It's the largest integer that divides both $a$ and $b$.
+    Another way of saying that is that:
+    \begin{itemize}[label=$\diamond$]
+        \item 
+            $d \mid a$ and $d \mid b$.
+        \item
+            If $e \mid a$ and $e \mid b$, then $e \mid d$.
+    \end{itemize}
+    The first condition trivially shows that $d$ is a common divisor
+    of $a$ and $b$.
+    The second condition clearly shows that it is the largest
+    (for now however, we will not show why $e$ divides $d$
+    necessarily). \\
+    If the greatest common divisior of $a$ and $b$ is $1$,
+    then $1$ is their only positive integer divisor, 
+    and we say $a$ and $b$ are \textbf{relatively prime}. \\
+    If $a = b$, then $\text{gcd}(a, b) = a = b$. \\
+
+    If $a, b \in \Z - \{0\}$,
+    then there is a unique integer $l$,
+    called the \textbf{least common multiple} of $a$ and $b$,
+    or $\text{lcm}(a, b)$.
+    It's the smallest integer that both $a$ and $b$ divide
+    (that is a multiple of both).
+    Another way of saying that is that:
+    \begin{itemize}[label=$\diamond$]
+        \item 
+            $a \mid l$ and $b \mid l$.
+        \item
+            If $a \mid m$ and $b \mid m$, then $l \mid m$.
+    \end{itemize}
+    The first condition trivially shows that $l$ is a common multiple
+    of $a$ and $b$.
+    The second condition shows that it is the smallest
+    (for now however, we will not show why $l$ divides $m$
+    necessarily). \\ 
+    If $a = b$, then $\text{lcm}(a, b) = a = b$. \\
+ 
+    The connection between $d = \text{gcd}(a, b)$
+    and $l = \text{lcm}(a, b)$
+    is that $ld = ab$. \\
+
+    The \textbf{division algorithm} states that
+    for $a, b \in \Z - \{0\}$,
+    there exists unique integers $q, r \in \Z$ such that
+    \[ a = qb + r \quad \text{ and } \quad 0 \leqslant r < |b| \]
+    This is reminiscent the long division algorithm,
+    in elementary math. 
+    If $b \nmid a$,
+    we ended up with a quotient $q$,
+    such that $|q|$ was the largest possible value
+    with $|qb|$ not exceeding $|a|$.
+    We also ended up with a remainder $r$,
+    which was necessarily smaller than $b$,
+    because otherwise,
+    we could have found a $q$ such that $|q|$ was larger
+    without exceeding $|a|$. \\
+    If $b \mid a$, then $r = 0$,
+    since we do have a integer $q$ for which $a = qb$. \\
+
+    The \textbf{Euclidian algorithm} allows us
+    calculate the greatest common divisor of two numbers
+    using the division algorithm.
+    Given $a, b \in \Z - \{0\}$,
+    if $a = b$, then $\text{gcd}(a, b) = a = b$,
+    and we are done. 
+    So we can assume that they aren't equal,
+    and, with no loss of generality,
+    we also assume that $a > b$.
+    Then
+    \[ a = q_0b + r_0 \qquad \text{for some $q_0$ and $r_0$} \]
+    \[ b = q_1r_0 + r_1 \qquad \text{for some $q_1$ and $r_1$} \]
+    \[ r_0 = q_2r_1 + r_2 \qquad \text{for some $q_2$ and $r_2$} \]
+    \[ \vdots \]
+    \[ r_{n-2} = q_{n}r_{n-1} + r_{n}
+    \qquad \text{for some $q_n$ and $r_n$} \]
+    \[ r_{n-1} = q_{n+1}r_n + 0
+    \qquad \text{for some $q_{n+1}$} \]
+    Once we reach a division step with no remainder,
+    we will have found our greatest common divisor,
+    which is $r_n$. \\
+    We know we will always find an answer
+    because $|r_0| > |r_1| \dots > |r_n|$
+    is a decreasing sequence of integers,
+    which cannot continue indefinitely. \\
+
+    As a consequence of this algorithm,
+    we get that for all $a, b \in \Z - \{0\}$,
+    there exists some $x, y \in \Z$ such that
+    \[ \text{gcd}(a, b) = ax + by \] 
+    which means that the greatest common divisior can be written
+    as a \textbf{linear combination} of $a$ and $b$ in $\Z$. \\
+    This is done by recursively writing $r_n$,
+    the last remainder and greatest common divisor of $a$ and $b$,
+    as a function of the previous remainder.
+    We have $ r_{n-2} = q_{n}r_{n-1} + r_{n}$,
+    so we arrive at $r_{n} = r_{n-2} - q_{n}r_{n-1}$.
+    We repeat this process until we get to the first equation
+    containing $a$ and $b$.
+    Since all coefficients $q_i$ and $r_i$ are integers,
+    we necessarily end up with $r_n = ax + by$. \\
+
+    A positive integer $p \in \Z^+$ is called \textbf{prime}
+    if the only positive divisors of $p$ are $p$ and $1$. \\
+    All non-prime positive integers are called \textbf{composite}. \\
+    An important property of primes,
+    which can even be used to define primes
+    (a number is prime if and only if it has this property)
+    is that if for a prime $p$, $p \mid ab$,
+    then $p \mid a$ or $p \mid b$. \\
+    Intuitively, this is because we can't divide $p$
+    into two integers, each of which divides either $a$ or $b$,
+    so it must be that $p$ divides one, or both of them. \\
+    Note that we do not consider $1$ to be prime. \\
+
+    \textbf{The Fundamental Theorem of Arithmetic}
+    states that for any integer $n \in \Z$ such that $n > 1$,
+    $n$ can be factored into a unique product of primes. \\
+    In other words, for any integer $n$ larger than $1$,
+    there exists distinct primes $p_1, p_2 \dots p_s$
+    and positive integers $\alpha_1, \alpha_2 \dots \alpha_s$
+    such that
+    \[ n = {p_1}^{\alpha_1}{p_2}^{\alpha_2} \dots {p_s}^{\alpha_s} \]
+    This product is unique in the sense that there is only
+    one way to factor any integer $n > 1$ into a product of primes. \\
+    We can prove the existence of the prime factorization
+    using strong induction,
+    and the uniqueness using a proof by smallest counterexample
+    (the well ordering principle). \\
+
+    Suppose that $a, b \in Z$ and $a, b > 1$.
+    Then we could write
+    \[ a = {p_1}^{\alpha_1}{p_2}^{\alpha_2} \dots {p_s}^{\alpha_s}
+    \quad \text{ and } \quad
+    b = {p_1}^{\beta_1}{p_2}^{\beta_2} \dots {p_s}^{\beta_s} \]
+    where all exponents $\alpha_i$ and $\beta_i$
+    are larger or equal to $0$.
+    This time around, we allow the exponent to be $0$
+    (in the definition of the prime factorization
+    we said it had to be positive),
+    so that we can use the same primes in the products of $a$ and $b$,
+    so that if a prime features in one and not the other,
+    we just put its exponent as $0$. \\
+    In this case
+    \[ \text{gcd}(a, b) = 
+    {p_1}^{\min(\alpha_1, \beta_1)}
+    {p_2}^{\min(\alpha_2, \beta_2)} \dots
+    {p_s}^{\min(\alpha_s, \beta_s)} \]
+    and 
+    \[ \text{lcm}(a, b) = 
+    {p_1}^{\max(\alpha_1, \beta_1)}
+    {p_2}^{\max(\alpha_2, \beta_2)} \dots
+    {p_s}^{\max(\alpha_s, \beta_s)} \]
+    This too will be proved later. \\
+
+    The \textbf{Euler phi-function} $\varphi$ is defined as follows:
+    for any non negative integer $n \in \Z^+$,
+    $\phi(n)$ is the number of positive $a \leqslant n$
+    that are relatively prime to $n$.
+    For example, $\phi(12) = 4$,
+    since $\text{gcd}(12, 11) = 1$,
+    $\text{gcd}(12, 7) = 1$,
+    $\text{gcd}(12, 5) = 1$,
+    and $\text{gcd}(12, 1) = 1$. \\
+    For primes $p$ and integers $a \geqslant 1$,
+    \[ \varphi(p^a) = p^{a} - p^{a-1} = p^{a-1}(p - 1) \]
+    The function is also multiplicative,
+    in the sense that for integers $a, b \in \Z^+$
+    \[ \varphi(a, b) = \varphi(a)\varphi(b)
+    \quad \text{ if } \quad \text{gcd}(a, b) = 1 \]
+    Using both formulas together,
+    along with the Fundamental Theorem of Arithmetic,
+    we arrive at this general formula
+    for any non-negative integer $n \in \Z^+$
+    with the prime factorization
+    ${p_1}^{\alpha_1}{p_2}^{\alpha_2} \dots {p_s}^{\alpha_s}$:
+    \[ \varphi(n) = 
+    \varphi({p_1}^{\alpha_1}{p_2}^{\alpha_2} \dots {p_s}^{\alpha_s}) =
+    \varphi({p_1}^{\alpha_1})\varphi({p_2}^{\alpha_2}) \dots 
+    \varphi({p_s}^{\alpha_s})\]
+    \[ = {p_1}^{\alpha_1 - 1}(p_1 - 1){p_2}^{\alpha_2 - 1}(p_2 - 1)
+    \dots {p_s}^{\alpha_s - 1}(p_s - 1) \]
+    This is true because all distinct powers of prime are relatively prime
+    by the defintion of a prime numbers. \\
+
+\end{document}

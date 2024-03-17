@@ -1,0 +1,243 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For using float option H that places figures exatcly where we want them
+\usepackage{float}
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+
+\usepackage{indentfirst}
+\usetikzlibrary{shapes,positioning,fit,calc}
+
+\usepackage{changepage} % for adjustwidth environment
+
+\title{%
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 0: Preliminaries \\
+    \LARGE Chapter 0: Preliminaries \\
+    \Large Section 3: The Integers Modulo n
+}
+\date{2024-03-17}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+    For a fixed positive integer $n$,
+    we will define an equivalency relation on $\Z$
+    \[ a \sim b \text{ if and only if } n \mid (b - a) \]
+    This is clearly both reflexive and symmetric.
+    It is also transitive;
+    if $a \sim b$ and $b \sim c$,
+    then $n \mid (b-a)$ and $b \mid (c-b)$.
+    If so, then $(b-a) = np$ and $(c-b) = nq$
+    for some integers $n$ and $q$.
+    Then the sum of the two terms $(b-a) + (c-b) = n(p+q)$,
+    where $p+q$ is an integer.
+    So $n \mid (b-a) + (c-b)$,
+    which means that $n \mid (c-a)$,
+    which means that $a \sim c$. \\
+    Insead of using $\sim$,
+    for the equivalence relation,
+    if $a \sim b$,
+    we write $a \equiv b \, (\text{mod }n)$,
+    and say that $a$ is congruent to $b$ modulo $n$. \\
+    The equivalence class of any integer $a$
+    using this congruence equivalence relation
+    is called the \textbf{congruence class} or \textbf{residue class}
+    of $a$ mod $n$. \\
+    We will denote this equivalence class using $\olsi{a}$
+    (note that any integer $b \in \olsi{a}$ can also be used
+    as a representative as mentioned in section 0.0.2,
+    so $\olsi{a} = \olsi{b}$). \\
+
+    The equivalence class $\olsi{a}$ is essentially the set 
+    of integers that differ from $a$ by a mutliple of $n$.
+    This is because, if we have $n \mid (b - a)$
+    for some positive integer $b$,
+    then by our defintion of division in section 0.0.2,
+    we have $(b-a) = nm$ for an integer $m$
+    determined by our choice of $b$.
+    So $a + nm = b$,
+    meaning any positive integer $b$ congruent to $a$ modulo $n$
+    must differ from $a$ by a multiple of $n$.
+    So
+    \[ \olsi{a} = \{ a, a \pm n, a \pm 2n, a \pm 3n \dots \} \]
+    Another way of thinking about this class is that it is the set
+    of integers that have the same remainder as $a$ does
+    when divided by $n$ using the division algorithm from section 0.0.2. \\
+
+    The number of distinct equivalence classes modulo $n$
+    (which partition $\Z$) is $n$.
+    This is easy to see, since each equivalence classe
+    determines the remainder of its elements when divided by $n$,
+    and the remainder $r$ has to be an integer $0 \leqslant r < n$. \\
+    
+    The $n$ congruence classes modulo $n$ are
+    \[ \{ \olsi{0}, \olsi{1}, \dots \olsi{n-1} \} \]
+    We can use any representative (element) from the class
+    to represent it,
+    but we go with the smallest element,
+    as it is the exact value of the remainder
+    when elements of the class are divided by $n$
+    (they are the integers $a$ for which $q = 0$ in $nq + r$
+    as per the division algorithm of section 0.0.2).
+    The process of finding the equivalence class of an integer $a$
+    is sometimes called reudcing $a$ modulo $n$,
+    where we attempt to find
+    the smallest integer congruent to $a$ modulo $n$,
+    the representative of the class that we most often use. \\
+    This set of equivalence classes is called $\Z/n\Z$,
+    \textbf{the integers modulo $\mathbf{\textit{n}}$}.
+    The reason we use this notation will become clear
+    in chapter 1.3.1, regarding Quotient Groups. \\
+
+    Note that the set of equivalence classes changes with
+    each positive integer $n$ we fix at the start,
+    as a new $n$ defines a new relation,
+    with new equivalence classes.
+    for instance, in the set $\Z/3\Z$
+    (when working in the relation with $n = 3$),
+    $6$ and $9$ are part of the same class $\olsi{0}$,
+    as both have remainder $0$ when divided by $3$. 
+    But in $\Z/4\Z$,
+    (when working in the relation with $n = 3$),
+    $6 \in \olsi{2}$ and $9 \in \olsi{1}$,
+    as $2$ and $1$ are the remainders of $6$ and $9$
+    when divided by $n$. \\
+
+    \textbf{Modular Arithmetic} is defined as addition and multiplication
+    performed on the elements of $\Z/n\Z$:
+    \[ \olsi{a} + \olsi{b} = \olsi{a + b} 
+    \quad \text{ and } \quad
+    \olsi{a} \cdot \olsi{b} = \olsi{a \cdot b} \]
+    This may seem strange at first,
+    to define addition and multiplication on sets,
+    however,
+    what this means is that,
+    for any element of $\olsi{a}$,
+    and any element of $\olsi{b}$,
+    the sum of the two elements will belong to $\olsi{a + b}$,
+    and the product of the two elements
+    will belong to $\olsi{a \cdot b}$.
+    Really all it means is that the remainder of the product
+    is the product of the remainder,
+    and that the sum of the remainders is the remainder of the sums,
+    when dividing by $n$. \\
+    Obviously this needs to be proven to be true,
+    as it depends not just on $a$ and $b$,
+    but on all the representatives of the sets. 
+    It requires being well-defined. \\
+
+
+    Being well-defined is a property of a function,
+    meaning that if $a = b$, $f(a) = f(b)$
+    as we saw in section 0.0.1.
+    This is easy to show when our elements are integers for example. \\
+    Binary operators themselves are functions that
+    map the association of two elements
+    (element of the cartesian product) to a third element in a set.
+    We will talk about this in detail in section 1.1.1. \\
+    For now, we will note that the addition and multiplication
+    operations on the equivalence classes can be seen as
+    functions $\Z/n\Z \times \Z/n\Z \to \Z/n\Z$. \\
+    However, we can't be sure that these functions are well defined
+    because the elements themselves $\olsi{a}$ and $\olsi{b}$ are sets. \\
+    If for instance addition is well defined,
+    it would mean that if $\olsi{a} = \olsi{b}$,
+    and $\olsi{c} = \olsi{d}$,
+    then $\olsi{a} + \olsi{c}$ is the same class as $\olsi{b} + \olsi{d}$
+    ($\olsi{a + c} = \olsi{b + d}$). \\
+    However, because our elements $\olsi{a}$ and $\olsi{b}$ are sets,
+    to be sure of this,
+    we can't just claim that $a + c$ and $b + d$ belong to the same
+    class.
+    We need to show that it is true for all elements of the classes,
+    not just $a$, $b$, $c$, and $d$.
+    In other words, it must be true regardless
+    of the choice of representatives. \\
+    If we do this for both addition and multiplication,
+    we will have shown that the operators are well defined
+    on the equivalence classes. \\
+
+    Now to prove the last statement,
+    we show that, for any $a_1, a_1, b_1, b_2 \in \Z$,
+    with $\olsi{a_1} = \olsi{b_1}$ and  $\olsi{a_2} = \olsi{b_2}$,
+    we must show that $\olsi{a_1 + a_2} = \olsi{b_1 + b_2}$
+    and  $\olsi{a_1a_2} = \olsi{b_1b_2}$
+    even when $a_1 = b_1$ and $a_2 = b_2$: \\
+    To prove this, we note that since $\olsi{a_1} = \olsi{b_1}$,
+    $a_1 \equiv b \, (\text{mod } n)$,
+    so $n \mid (b_1 - a_1)$. So $a_1 = b_1 + sn$ for some integer $s$.
+    Likewise, $a_2 = b_2 + tn$ for some integer $t$.
+    So $(a_1 + a_2) = (b_1 + b_2) + (ts)n$,
+    which means that $n \mid ((b_1 + b_2) - (a_1 + a_2))$,
+    so that $(a_1 + a_2) \equiv (b_1 + b_2) \, (\text{mod } n)$.
+    Thus, $\olsi{a_1 + a_2} = \olsi{b_1 + b_2}$ for an arbitrary
+    choice of representatives. \\
+    By the same argument,
+    $(a_1a_2) = (b_1 + sn) + (b_2 + tn) = (b_1b_2) + (b_1t+b_2s + stn)n$.
+    So $n \mid ((b_1b_2) - (a_1a_2))$,
+    which means that $(a_1a_2) \equiv (b_1b_2) \, (\text{mod } n)$,
+    so that $\olsi{a_1a_2} = \olsi{b_1b_2}$ for an arbitrary
+    choice of representatives. \\
+    This completes the proof. \\
+
+    An important subset of $\Z/n\Z$
+    is the set consisting of the collection of residue classes
+    that have a multiplicative inverse in $\Z/n\Z$:
+    \[ (\Z/n\Z)^\times
+    = \{ \olsi{a} \in \Z/n\Z \mid \text{gcd}(a, n) = 1 \} \]
+    Obviosuly, to avoid ambiguity,
+    this definition requires that for the representative $a$ of $\olsi{a}$,
+    if $\text{gcd}(a, n) = 1$,
+    then all the representatives of $\olsi{a}$ must
+    also be relatively prime to $n$.
+    This is trivial to see of course, as per the definition of
+    a congruence class. \\
+    By the Euclidian algorithm,
+    we have that $\text{gcd}(a, b) = ax + by$ for some integers $x, y$.
+    So if $\text{gcd}(a, n) = 1$,
+    then $ax + ny = 1$.
+    We know that $ny \in \olsi{0}$ since it is divisible by $n$,
+    so in modular arithmetic, $ax \equiv 1 \, (\text{mod } n)$.
+    This makes $\olsi{x}$
+    \textbf{the multiplicative inverse} of the class $\olsi{a}$
+    (again note that the set itself is the inverse, not $x$). \\
+    
+
+\end{document}
