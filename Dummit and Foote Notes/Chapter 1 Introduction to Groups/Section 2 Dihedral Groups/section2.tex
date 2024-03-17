@@ -59,14 +59,14 @@
 
 
     An important family of groups
-    is the family of \textbf{Dihedral groups},
+    is the family of Dihedral groups,
     where each group is comprised corresponds to the set of symmetries 
     that can be performed on a geometric object
     while keeping its shape intact. \\
 
     \subsection*{Dihedral Groups}
 
-    Dihedral groups afre the family of groups
+    \textbf{Dihedral groups} are the family of groups
     made up of the rigid motions that can be performed on regular polygons
     in $\R^3$ ($3$D space)
     while keeping the shape of the polygon intact,
@@ -593,11 +593,50 @@
     However, it is usually better to choose compact presentations,
     and only include necessary elements and relations. \\
 
+    Using a presentation to represent a group can be far more
+    concise than using a multiplication table,
+    while carrying the same amount of information about the group. \\
+    However, presentations have some limitations.
+    It can sometimes be hard to tell if two elements expressed
+    in terms of generators are the same or not using relations.
+    This means that the order of a group isn't always evident
+    from its presentation.
+    For instance,
+    \[ \langle x_1, y_1 \mid {x_1}^2 = {y_1}^2 = (x_1x_2)^2 = 1 \rangle \]
+    is the presentation of a group of order $4$,
+    and
+    \[ \langle x_2, y_2 \mid {x_2}^3 = {y_2}^3 = (x_2x_2)^3 = 1 \rangle \]
+    is the presentation of an infinite group. \\
     
+    Another issue that occurs when using presentations 
+    is called \textbf{collapsing}.
+    This is when relations are intertwined in some unobvious way,
+    such as having a hidden, implicit relation,
+    that can be derived from the presentation but is not present in it. \\
+    This makes it difficult to determine even a lower bound
+    for the order of a group. \\
+    Suppose we have 
+    \[ X_{2n} = \langle x, y \mid x^n = y^2 = 1, xy = yx^2 \rangle \]
+    This presentation seems similat to that of $D_{2n}$.
+    It contains a commutation relation of its own, 
+    which describes how to move x to the right of $y$,
+    meaning that we should be able to represent any element 
+    in the group as $y^kx^{m}$. \\
+    We may assume this family of groups, like $D_{2n}$,
+    have an order of $2n$,
+    However, a hidden realtion:
+    \[ x = xy^2 = (xy)y  = (yx^2)y = (yx)(xy) = (yx)(yx^2)
+    = y(xy)x^2 = y(yx^2)x^2 = y^2x^4 = x^4 \]
+    Since $x = x^4$,
+    we can multiply both sides by the inverse and get that $x^3 = 3$.
+    So $|x| \leqslant 3$,
+    and, 
+    since $|y| = 2$,
+    this means that the group has at most order $6$. \\
 
-
-    
-
+    The reason we did not experience collapsing with $D_{2n}$
+    is that we showed that $|D_{2n}| = 2n$
+    by independent geometric means. \\
 
 
 \end{document}

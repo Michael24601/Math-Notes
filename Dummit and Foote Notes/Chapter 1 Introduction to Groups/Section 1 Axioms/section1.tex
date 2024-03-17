@@ -61,95 +61,6 @@
     and derives some of their most basic properties. \\
 
     \subsection*{Binary Operators}
-
-    A \textbf{relation} between two sets $A$ and $B$ is a subset
-    of their cartesian product $A \times B$.
-    In other words, it's a set of associations between elements
-    of $A$ and $B$. \\
-
-    A \textbf{function} is a specific type of relation, 
-    where all of the elements from set $A$
-    are each associated with exatcly one element from set $B$.
-    So $\forall a \in A$,
-    a function $f$ from $A$ to $B$
-    must contain a single ordered pair $(a, b)$ for some $b \in B$.
-    Note that not every $b \in B$ has to be an image in the function.
-    We denote such a function $f: A \rightarrow B$. \\
-
-    \begin{figure}[H]
-        \centering
-
-        \begin{tikzpicture}
-            [
-            group/.style={ellipse, draw, minimum height=50pt,
-                minimum width=30pt, label=above:#1},
-            my dot/.style={circle, fill, minimum width=3pt, inner sep=0pt}
-            ]
-            \node (a) [my dot=a] {};
-            \node (b) [below= 30pt of a, my dot=b] {};
-            \node (c) [right=50pt of a, my dot=c] {};
-            \node (d) [below= 13pt of c, my dot=d] {};
-            \node (e) [right= 50pt of b, my dot=e] {};
-
-            % Replicated nodes
-            \node (a2) [right=150pt of a, my dot=a] {};
-            \node (b2) [below=30pt of a2, my dot=b] {};
-            \node (c2) [right=50pt of a2, my dot=c] {};
-            \node (d2) [below=13pt of c2, my dot=d] {};
-            \node (e2) [right=50pt of b2, my dot=e] {};
-
-            \foreach \i/\j in {a/c,a/e,b/d}
-            \draw [->, shorten >=2pt] (\i) -- (\j);
-            \node [fit=(a) (b), group=A] {};
-            \node [fit=(d) (c) (e), group=B] {};
-
-            \foreach \i/\j in {a2/c2,a2/d2,b2/d2}
-            \draw [->, shorten >=2pt] (\i) -- (\j);
-            \node [fit=(a2) (b2), group=A] {};
-            \node [fit=(d2) (c2) (e2), group=B] {};
-        \end{tikzpicture}  
-
-        \caption{\label{fig:figure1} Examples of functions.}
-    \end{figure}
-
-    \begin{figure}[H]
-        \centering
-
-        \begin{tikzpicture}
-            [
-            group/.style={ellipse, draw, minimum height=50pt, 
-                minimum width=30pt, label=above:#1},
-            my dot/.style={circle, fill, minimum width=3pt, inner sep=0pt}
-            ]
-            \node (a) [my dot=a] {};
-            \node (b) [below= 30pt of a, my dot=b] {};
-            \node (c) [right=50pt of a, my dot=c] {};
-            \node (d) [below= 13pt of c, my dot=d] {};
-            \node (e) [right= 50pt of b, my dot=e] {};
-
-            % Replicated nodes
-            \node (a2) [right=150pt of a, my dot=a] {};
-            \node (b2) [below=30pt of a2, my dot=b] {};
-            \node (c2) [right=50pt of a2, my dot=c] {};
-            \node (d2) [below=13pt of c2, my dot=d] {};
-            \node (e2) [right=50pt of b2, my dot=e] {};
-
-            \foreach \i/\j in {a/c,a/e,b/d,a/d}
-            \draw [->, shorten >=2pt] (\i) -- (\j);
-            \node [fit=(a) (b), group=A] {};
-            \node [fit=(d) (c) (e), group=B] {};
-
-            \foreach \i/\j in {a2/c2,a2/d2,a2/e2}
-            \draw [->, shorten >=2pt] (\i) -- (\j);
-            \node [fit=(a2) (b2), group=A] {};
-            \node [fit=(d2) (c2) (e2), group=B] {};
-        \end{tikzpicture}  
-
-        \caption{
-            \label{fig:figure1} Examples of relations 
-            that aren't functions.
-        }
-    \end{figure}
     
     A \textbf{binary operator} on a set $G$ is a function
     $f: G \times G \rightarrow G$.
@@ -235,7 +146,11 @@
     Note that other books sometimes also add a fourth axiom,
     stating that the binary operation must be closed under $G$.
     However, in this book, the property is built into the definition
-    of the binary operator. \\
+    of the binary operator.
+    So if it isn't clear that an operator is actually
+    closed under its set (that it is actually a binary operator),
+    we may have to also prove that
+    in order to prove that $(G, \cdot)$ is a group. \\
 
     The idea behind groups is the abstraction of objects.
     Instead of having, for instance,

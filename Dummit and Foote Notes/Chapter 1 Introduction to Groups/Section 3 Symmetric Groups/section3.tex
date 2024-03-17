@@ -1,0 +1,328 @@
+
+    
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For using float option H that places figures exatcly where we want them
+\usepackage{float}
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+
+\usepackage{indentfirst}
+\usetikzlibrary{shapes,positioning,fit,calc}
+\usetikzlibrary{arrows}
+
+\usepackage{changepage} % for adjustwidth environment
+
+\title{%
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 1: Group Theory \\
+    \LARGE Chapter 1: Introduction to Groups \\
+    \Large Section 3: Symmetric Groups
+}
+\date{2024-03-10}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+
+    Another family of groups that can be studied
+    is the family of Symmetric Groups. \\
+    These groups are both interesting in their own right,
+    and useful in motivating general theory. \\
+
+    \subsection*{Symmetric Groups}
+
+    Given a non-empty set $\Omega$,
+    let's define $S_\Omega$ to be the set of its permutations.
+    The set $S_\Omega$ will be a group under function composition,
+    and we will call it a \textbf{symmetric group}.
+    We can now show that $S_\Omega$ forms a group:
+    \begin{itemize}[label=$\diamond$]
+        \item 
+            We talked about how composition is a binary operator
+            in section 1.1.2, but we still haven't shown it to be true.
+            We know that any permutation of a set $\Omega$
+            is just a bijective function
+            that maps elements of $\Omega$ to elements of itself
+            (e.g. in a bijection,
+            each input is associated with exactly one output).
+            So if $\sigma: \Omega \rightarrow \Omega$ is bijective
+            (e.g. each input is associated with exactly one output),
+            and $\tau: \Omega \rightarrow \Omega$ is also bijective,
+            then $\sigma \circ \tau$ is necessarily also a bijection,
+            which means it is a permutation as well,
+            making $\circ$ closed under the set of permutations.
+        \item 
+            The identity of the group is clearly the identity mapping
+            that associates elements of $\Omega$ with themselves,
+            which we called $ID_\Omega$.
+        \item
+            We also know that function composition is associative in general.
+        \item
+            Finally, we know that since each permutation $\sigma$
+            is a bijective function  $\sigma: \Omega \rightarrow \Omega$, 
+            then it must have a two-sided inverse
+            $\sigma^{-1}: \Omega \rightarrow \Omega$.
+            This means that
+            $\sigma \circ \sigma^{-1} = \sigma^{-1} \circ \sigma = ID_\Omega$.
+            We can thus clearly see that a two-sided inverse
+            satisfies the role of a group inverse.
+
+    \end{itemize}
+    Thus $(S_\Omega, \circ)$ satisfies all axioms of a group. \\
+    Note that the permuattions themselves are the elements 
+    of the group,
+    not the elements of $\Omega$, which is just any arbitrary set. \\
+
+    In the special case where $\Omega = \{ 1, 2, 3 \dots n\}$,
+    the symmetric group on $\Omega$ is denoted $S_n$. \\
+
+    Note that if two sets $A$ and $B$ have equal cardinality,
+    then $S_A$ and $S_B$ are somewhat equivalent.
+    This is because the permutations themselves,
+    and the action they perform on the set (the way they permute it)
+    is independent of the set itself. \\
+    In the last two sections of the chapter,
+    we will expand on the idea of group equivalency,
+    and on the idea of the actions of groups on sets. \\
+
+    The order of $S_n$ is always $n!$ (the factorial of $n$).
+    We can show that that is the case with a simple proof: \\
+    Suppose that $\sigma \in S_n$.
+    Then $\sigma$ is a bijective function, making it also an injection.
+    This permutation can map $1$ to any other element
+    in $\{1, 2, 3 \dots n\}$,
+    for a total of $n$ mappings.
+    It can also map $2$ to any element in 
+    $\{1, 2, 3 \dots n\} - \sigma(1)$,
+    not including the mapping of $1$ as $\sigma$ must be an injection,
+    for a total of $(n-1)$ mappings.
+    We can continue with this until we get to $n$,
+    which will have only a single option for a mapping.
+    The total number of permutations $\sigma$ that can be formed
+    is thus $(n)(n-1)(n-2)\dots(2)(1) = n!$. \\
+    Another way of thinking about this;
+    every permuation in $S_n$ will turn $\{1, 2, 3 \dots n\}$
+    into a set containing the same elements, but shuffled differently.
+    The number of ways we can order $n$ elements
+    is $P_n^n = \sfrac{n!}{(n-n)!} = \sfrac{n!}{1} = n!$. \\
+
+    
+    \subsection*{Cycle Decompositions}
+
+    One way to efficiently write elements of $S_n$
+    is by using what we call a \textbf{cycle decomposition},
+    which we will define shortly. \\
+
+    A \textbf{cycle} is a string of integers representing the permutation
+    that cyclically shifts the integers.
+    Basically, a cycle $(a_1 \quad a_2 \quad a_3 \dots \quad a_k)$
+    maps $a_1$ to $a_2$, $a_2$ to $a_3$, and so on,
+    up until $a_{n-1}$ to $a_n$ and, finally, $a_n$ to $a_1$.
+    In other words,
+    a cycle is an element of $S_n$ that
+    sends every integer $a_i$ to $a_{(i \mod k) + 1}$
+    for $1 \leqslant i \leqslant k$,
+    and maps every other integer to itself
+    (as they are not part of the cycle). \\
+
+    Of course, not all permutations of $S_n$
+    necessarily permute integers in one cycle.
+    However, any permutation $\sigma \in S_n$
+    can be written as the combination of several cycles.
+    For instance, if in $S_4$, we have a permutation $\sigma$:
+    \[ \sigma(1) = 2
+    \qquad \sigma(2) = 1
+    \qquad \sigma(3) = 4
+    \qquad \sigma(4) = 3 \]
+    then we are basically cyclically permuting $1$ and $2$,
+    then $3$ and $4$,
+    so that $\sigma$ can be written as $(1 \quad 2)(3 \quad 4)$. 
+    This is a cycle decomposition of $\sigma$. \\
+    Note that each of $(1 \quad 2)$ and $(3 \quad 4)$
+    are elements of $S_n$ in their own right,
+    and that saying $\sigma = (1 \quad 2)(3 \quad 4)$
+    is equivalent to saying $\sigma = (1 \quad 2) \circ (3 \quad 4)$
+    or  $\sigma = (3 \quad 4) \circ (1 \quad 2)$.
+    We perform one cycle, then the other.
+    Note that in this case, the cycles are \textbf{disjoint},
+    meaning that no element repeats in more than once cycle.
+    This makes it easier to stack them together (composition)
+    as each one affects a disjoint set of integers,
+    and leaves all other integers intact,
+    meaning that we can perfrom their respective cycles
+    without worrying that they will intertwine.
+    This is not the case with all cycle decompositions,
+    although we can still stack non-disjoint cycles
+    in the same way; by composition. \\
+
+    Note that a cycle with its elements shifted is still the same
+    cycle since it perfroms the same cyclical permutation.
+    So for example, $(1 \quad 2 \quad 3) =
+    (3 \quad 1 \quad 2) = (2 \quad 3 \quad 1)$. \\
+    By convention, the smallest number is written first. \\
+
+    Given an element $\sigma \in S_{12}$ with all of its permutations
+    layed out like this:
+    \begin{align*}
+        & \sigma(1) = 12 & &  \sigma(2) = 2
+        & & \sigma(3) = 4   & & \sigma(4) = 5  \\
+        & \sigma(5) = 8 & & \sigma(6) = 11
+        & &\sigma(7) = 9   & & \sigma(8) = 10  \\
+        & \sigma(9) = 7 & & \sigma(10) = 1
+        & & \sigma(11) = 3   & & \sigma(12) = 6  \\
+    \end{align*}
+    The algorithm for finding the cycle decomposition is as follows:
+    \begin{enumerate}
+        \item 
+            First we pick the smallest element not yet in any cycle.
+            Suppose it's $a$.
+            We then place it in a new cycle
+            by opening a paranthesis and keeping it open.
+            If there are none, then we are done.
+        \item
+            After that, we check the value of $\sigma(a)$,
+            which we will call $b$.
+            If it's the same as $a$, we close the paranthesis
+            and end the cycle.
+            We then go back to step $1$.
+            If $b$ is a different integer,
+            we add it to the cycle
+            and keep the paranthesis open.
+        \item
+            After that we repeat the same idea with $c = \sigma(b)$.
+            If $c = a$, we close the paranthesis after $b$.
+            Otherwise we add $c$ to the cycle decomposition.
+            Note that it is impossible for $c$ to be the same as $b$
+            as we already have $\sigma(a) = b$,
+            and $\sigma$ is injective.
+            We then repeat this step with $\sigma(c)$,
+            and the one after it, until the cycle closes.
+            We then go back to step $1$.
+        \item
+            The final step is to remove all cycles
+            that contain only one element.
+            As we mentioned earlier,
+            a cycle shifts the elements inside it,
+            and leaves the rest intact.
+            So if a cycle has only one integer in it,
+            it does nothing to it (maps it to itself),
+            so we may as well omit it.
+    \end{enumerate}
+    With that, we end up with:
+    \[ \sigma = (1 \quad 12 \quad 6 \quad 11 \quad 3 \quad
+    4 \quad 5 \quad 8 \quad 10)(2)(7 \quad 9) \]
+    Note that as a consequence of the way the algorithm is done,
+    all cycles are automatically disjoint 
+    (no elements are present in more than one cycle).
+    We mentioned this in step $3$ when we noted that if $b = \sigma(a)$,
+    then $c = \sigma(b)$ can't be $b$. \\
+
+    The length of a cycle is the number of integers that appear in it.
+    A cycle with length $t$ is called a $t$-cycle. \\
+    The identity of $S_n$ can be written as a cycle decomposition
+    with $n$ disjoint $1$-cycles,
+    which by step $4$ of the algorithm is the same as
+    having no cycles (as it keeps all elements mapped to themselves). \\
+
+    Non-disjoint cycles, with elements in common,
+    can also be stacked
+    (again we are just doing function composition)
+    but they will affect each other,
+    and as such, the order in which they are performed matters.
+    If we have a composition of non-disjoint cycles,
+    like all function compositions,
+    they are read from right to left:
+    \[ (1 \quad 2) \circ (1 \quad 3) = (1 \quad 3 \quad 2)
+    \qquad (1 \quad 3) \circ (1 \quad 2) = (1 \quad 2 \quad 3) \]
+    So we can conclude that symmetric groups are not abelian. \\
+
+    If the cycles are disjoint though the order does not matter,
+    and this follows from the fact that the sets of integers
+    they affect are disjoint and unrelated.
+    This means that disjoint cycles,
+    which themselves are elements of $S_n$, commute. \\
+    
+    Any permutation can be written in many ways using cycle decompositions.
+    There is however,
+    only one unique way to write a permutation as a composition
+    of disjoint cycles
+    (this is later proven).
+    Note that changing the order of the cycles,
+    or shifting the integers inside each cycle does not constitute
+    a new disjoint decomposition. \\
+    Because disjoint cycles commute,
+    and because its is far easier to predict
+    how they permute a set of integers without any intertwining,
+    we prefer to represent permutations as disjoint cycle decompositions.
+    By default, the algorithm we described always gives us
+    the unique disjoint decomposition we want. \\
+
+    Another useful property of the disjoint cycle decompositions
+    is that,
+    due to its uniqueness, it allows to tell if two permutations
+    are the same. \\
+
+    Moreover, we can tell the order of a permutation
+    by its cycle decomposition.
+    The order is simply the least common multiple of the lengths
+    of the cycle decompositions.
+    This is proven in the exercises,
+    but we can show here why it is true. \\
+    Each cycle is disjoint,
+    so we consider them independently.
+    Each cycle shifts the integers in it,
+    and for a cycle of length $t$,
+    it will take $t$ shifts to return them in place
+    (a complete cycle).
+    However $t \times i$ shifts
+    for any positive integer $i$ will also do that
+    (it's $i$ complete cycles)
+    So for any value $m$ such that $m$ is a multiple of
+    all of the lengths of cycles,
+    repeating all the cycles $m$ times,
+    which corresponds to repeating the whole permutation $m$ times
+    (because the cycles are disjoint),
+    returns all the integers present in the set to their original place,
+    turning it to the identity.
+    The order is by definition,
+    the smallest value $m$ for which $\sigma^m = 1$,
+    so it is by definition the least common multiple
+    of the cycle lengths. \\
+
+
+\end{document}

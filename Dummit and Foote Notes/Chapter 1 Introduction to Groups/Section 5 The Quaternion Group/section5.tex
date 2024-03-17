@@ -1,0 +1,81 @@
+
+    
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For using float option H that places figures exatcly where we want them
+\usepackage{float}
+\usepackage{tcolorbox} % for framing
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+
+\usepackage{indentfirst}
+\usetikzlibrary{shapes,positioning,fit,calc}
+\usetikzlibrary{arrows}
+
+\usepackage{changepage} % for adjustwidth environment
+
+\title{%
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 1: Group Theory \\
+    \LARGE Chapter 1: Introduction to Groups \\
+    \Large Section 5: The Quaternion Group
+}
+\date{2024-03-15}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+
+    The \textbf{quaternion group}, $Q_8$, is defined as
+    \[ Q_8 = \{ 1, -1, i, -i, j, -j, k, -k \} \]
+    With a binary operator $\cdot$ such that
+    \[ 1 \cdot a = a \cdot 1 = a \qquad \forall a \in Q_8  \]
+    \[ (-1)\cdot(-1) = 1 \qquad (-1)\cdot a = a\cdot (-1) = -a
+    \qquad \forall a \in Q_8 \]
+    \[ i \cdot i = j \cdot j = k \cdot k = -1 \]
+    \[ i \cdot j = k \qquad j \cdot i = -k \]
+    \[ j \cdot k = i \qquad k \cdot j = -i \]
+    \[ k \cdot i = j \qquad i \cdot k = -j \]
+    With that,
+    it's clear $Q_8$ satisfies the axioms of a group,
+    that it is non-abelian,
+    and has order $8$. \\
+
+    
+
+
+\end{document}

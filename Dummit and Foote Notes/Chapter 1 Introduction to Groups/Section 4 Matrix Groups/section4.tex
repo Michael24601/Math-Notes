@@ -1,0 +1,181 @@
+
+    
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For using float option H that places figures exatcly where we want them
+\usepackage{float}
+\usepackage{tcolorbox} % for framing
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+
+\usepackage{indentfirst}
+\usetikzlibrary{shapes,positioning,fit,calc}
+\usetikzlibrary{arrows}
+
+\usepackage{changepage} % for adjustwidth environment
+
+\title{%
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 1: Group Theory \\
+    \LARGE Chapter 1: Introduction to Groups \\
+    \Large Section 4: Matrix Groups
+}
+\date{2024-03-11}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+
+    In the section, the notion of groups made up matrices
+    will be introduced. \\
+    The concept of fields will also have to be explained birefly. \\
+
+    \subsection*{Fields}
+
+    A \textbf{field} is the smallest mathematical structure
+    in which we cn perform
+    all of the arithmetic operations $+, -, \times, \div$ 
+    (division can only be done by non-zero elements). \\
+    A field contains both an additive and multiplicative identity,
+    and all elements have both an additive and multiplicative inverse
+    except for the additive identity,
+    which only has an additive inverse
+    (the zero element). \\
+    Examples of fields include the field of rationals $\Q$
+    which is infinite,
+    as well as $\Z/p\Z$ where $p$ is prime,
+    which is finite.
+    The latter field we denote as $\mathbb{F}_p$. \\
+
+    In order to summarize the afore mentioned properties of fields,
+    we can define it in terms of groups:
+    \begin{itemize}[label=$\diamond$]
+        \item 
+            A field is a set $F$
+            along with two binary operations $+$ and $\cdot$,
+            such that $(F, +)$ is an abelian group
+            (whose identity we will call $0$)
+            and $(F - \{0\}, \cdot)$ is also an abelian group
+            (whose identity we will call $1$).
+            The fact that $0$ is not part of the multiplicative group
+            exempts it from having to have a multiplicative inverse,
+            which corresponds to dividing by $0$. \\
+            The following distributive law must also hold: 
+            \[ a \cdot (b + c) = (a \cdot b) + (a \cdot c)
+            \qquad \forall a, b, c \in F \]
+        \item 
+            For any field $F$,
+            we will use $F^+$ to denote the additive group that forms it,
+            and $F^\times$ to denote the multiplicative group $F - \{0\}$
+            that also forms it.
+    \end{itemize}
+
+    The order of a field $F$, like that of a group,
+    is size of the set $F$, denoted by $|F|$. \\
+
+    \subsection*{Matrix Groups}
+
+    Whenever we are usually working with matrices,
+    we implicitely use the elements of the field of real numbers $\R$
+    for the entries of the matrix,
+    the scalars,
+    and the determinants of the matrices (and vectors). \\
+    However, for an arbitrary field $F$,
+    all of the rules we know to be true in Linear Algebra remain true;
+    we don't need to be working with reals
+    in vector space and matrix theory,
+    we only need a structure in which we can
+    divide, add, multiply, and subtract,
+    which can be any field. \\
+
+    Now, we can define a new family of groups.
+    For any fixed field $F$,
+    and any $n \in \Z^+$,
+    we will define
+    \textbf{the general linear group of degree $\boldsymbol{n}$}
+    denoted by $GL_n(F)$
+    to be the set of all invertible $n \times n$ matrices
+    whose entries come from $F$.
+    \[ GL_n(F) = \{ A \mid A
+    \text{ is an $n \times n$ matrix
+    with entries from $F$ and det$(A) \neq 0$} \} \]
+    The determinants can be computed with the same formula
+    we use for matrices in $\R$
+    (that's why we needed a field, doing operations in matrices
+    requires all the operations of a field). \\
+
+    We now prove this is a group, with matrix multiplication
+    as the binary operator:
+    \begin{itemize}[label=$\diamond$]
+        \item 
+            We know that the set of $n \times n$ invertible matrices
+            is closed under multiplication.
+            On one hand, the product of any two $n \times n$ matrices
+            $A$ and $B$ is an $n \times n$ matrix $AB$.
+            On the other hand, $\det(AB) = \det(A) \cdot \det(B)$.
+            Since $A$ and $B$ were assumed to be invertible,
+            neither of their determinants is $0$,
+            so $\det(AB) \neq 0$,
+            meaning $AB$ is also invertible. 
+        \item 
+            Matrix multiplication is by definition associative.
+        \item 
+            The identity of the group
+            is the $n \times n$ identity matrix $I_n$,
+            since $I_nA = AI_n = A$.
+        \item 
+            The inverse of a matrix $A \in GL_n(F)$
+            is just the inverse of the matrix $A^{-1}$,
+            which we know exists as $A$ is assumed to be invertible.
+            By definition,
+            $AA^{-1} = A^{-1}A = I_n$.
+    \end{itemize}
+    Thus, $GL_(F)$ is a group under matrix multiplication. \\
+
+    THough these properties won't be proven until Part III,
+    we will record them here for convenience:
+    \begin{itemize}[label=$\diamond$]
+        \item 
+            If $F$ is a field and $|F| < \infty$,
+            then $|F| = p^m$ for some prime $p$
+            and some integer $m$.
+        \item 
+            If $|F| = q$, then
+            $|GL_n(F)| = (q^n - 1)(q^n - q)(q^n - q^2)\dots(q^n-q^{n-1})$.
+    \end{itemize}
+    
+\end{document}
