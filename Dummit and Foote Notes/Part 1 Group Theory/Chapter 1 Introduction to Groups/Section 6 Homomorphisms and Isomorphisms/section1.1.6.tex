@@ -170,10 +170,71 @@
     meaning the two groups are isomorphic. \\
     Likewise, $GL_2(\mathbb{F}_2) \cong S_3$. \\
 
-    
-    
+    To see that two groups are not isomorphic,
+    it can usually be easier than proving they are isomorphic.
+    If two groups $G$ and $H$ are isomorphic,
+    then they have some properties in common;
+    if they don't, we can immediatly conclude they aren't isomorphic:
+    \begin{itemize}[label=$\diamond$]
+        \item 
+            $|G| = |H|$,
+            which is obviously true since the isomorphism mapping
+            must be bijective.
+        \item 
+            Either both or neither are abelian.
+            This is because they must share the same structure.
+        \item 
+            If $\varphi$ is the isomorphism,
+            then for all $g \in G$,
+            $|g| = |\varphi(g)|$.
+    \end{itemize} 
+    For example, $S_3$ and $\Z/n\Z$ are not isomorphic,
+    as the latter is abelian and the former is not. \\
 
 
+    \subsection*{Generators and Relations}
+
+    We will not prove this fact now,
+    but given the presentation of two groups,
+    we can show that they are isomorphic. \\
+    Suppose that $G$ is a finite group of order $n$
+    which has a set of generators $S = \{ s_1, s_2 \dots s_n \}$. \\
+    Suppose that $H$ is another group
+    with elements $\{ r_1, r_2 \dots r_n\}$. \\
+    If all relations in $G$ can be satisfied in $H$
+    by replacing each $s_i$ with $r_i$,
+    then there is a unique homomorphism $\varphi: G \to H$
+    which maps $s_i$ to $r_i$.
+    We only need to check the relations of the presentation,
+    as they give us all other relations. \\
+    Intuitively, this makes sense;
+    if the generators of $G$ have mappings in $H$
+    that satisfy the relations,
+    then the structure of $G$ can be found
+    in those elements of $H$,
+    so $H$ contains a copy of $G$ in it. \\
+    If the set $\{ r_1, r_2 \dots r_n\}$ generates $H$,
+    the the mapping $\varphi$ is surjective;
+    if each generator in $H$ has a pre-image in $G$,
+    then all elements in $H$ must be the image of one or more
+    elements in $G$ (this is proven later). 
+    So if we can show that $|G| = |H|$,
+    the surjection automatically becomes a bijection,
+    and $\varphi$ becomes an isomorphism. \\
+
+    This won't be proven now and is only recorded for later,
+    when we introduce the notion of vector spaces. \\
+    Suppose we a finite-dimensional vector space $V$ of dimension $n$
+    and with a basis $S$.
+    Also take another vector space $W$.
+    We can define a linear transformation from $V$ to $W$
+    by mapping the elements of $S$ to arbitrary vectors in $W$.
+    If $W$ is also of dimension $n$,
+    and the chosen vectors span $W$ (making them its basis),
+    then this linear transformation is invertible,
+    making it a vector space isomorphism. \\
+    As we can see, the method follows a very similar structure
+    to that of the generators and relations. \\
 
    
 \end{document}
