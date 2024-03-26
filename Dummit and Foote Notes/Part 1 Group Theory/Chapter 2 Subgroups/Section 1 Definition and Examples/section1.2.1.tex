@@ -1,0 +1,156 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For using float option H that places figures exatcly where we want them
+\usepackage{float}
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+
+\usepackage{indentfirst}
+\usetikzlibrary{shapes,positioning,fit,calc}
+
+\usepackage{changepage} % for adjustwidth environment
+
+\title{%
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 1: Group Theory \\
+    \LARGE Chapter 2: Subgroups \\
+    \Large Section 1: Definition and Examples 
+}
+\date{2024-03-20}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+    
+    We can better understand structures of mathematical objects
+    by studying subsets of them that satisfy some axioms.
+    Another method is studying quotients of an objects;
+    a quotient group is a way of collaping a group on a smaller group,
+    is another such way.
+    This section (and chapter) will focus on the former.
+    Chapter 1.3 will focus on the latter. \\
+    
+    If $G$ is a group, then $H$ is a \textbf{subgroup} of $G$
+    if it a non-empty subset of $G$, and it is closed under
+    inverses and the group operation
+    (so for all $x, y \in H$, $xy$ must be in $H$,
+    as well as $x^{-1}$ and $y^{-1}$). \\
+    Another way of saying this is that $H$ is a subgroup of $G$
+    if it is a subset of $G$ and a group in its own right,
+    using the same binary operation as the one used in $G$
+    (this immediatly gives us that the operation of $H$
+    must be associative, as it is associative in $G$). \\
+    For a subgroup $H$ of $G$, we write $H \leqslant G$. \\
+
+    The group operation of a subgroup $H$ of $G$ is the same as $G$'s,
+    meaning that inverses of elements in $G$
+    are the same as the inverses of those same elements in $H$.
+    By extension, the identity of $G$ is the identity of $H$. \\
+    We know for sure that $H$ will contain the identity of $G$,
+    since $H$ is closed under inverses and the group operation
+    and $H$ is non-empty;
+    the existence of any element $x \in H$ implies
+    the existence of $x^{-1} \in H$.
+    Closure under the group operation tells us that $xx^{-1} \in H$,
+    so $1 \in H$. \\
+
+    It is possible for $H$ to be a subset of $G$
+    and a group in its own right using a different operation than $G$'s,
+    but then it wouldn't necessarily be a subgroup of $G$.
+    When we say $H \leqslant G$,
+    we always mean that the binary operation of $H$ is the same as $G$'s
+    restricted to $H$. \\
+
+    Any group $G$ is a subgroup of itself,
+    since $G$ is its own subset
+    (the rest of the axioms are trivial to prove). \\
+    If a subgroup $H$ of $G$ is a proper subset of $G$
+    (e.g. is not $G$),
+    then we denote it using $H < G$. \\
+
+    When we know $G$ is a group,
+    checking that any non-empty subset $H$ is as simple as making sure
+    $H$ is closed under $G$'s binary operation and inverses.
+    However, these two conditions can be amalgamated into a single
+    condition.
+    In short, $H \subseteq G$ is a subgroup of $G$
+    if and only if
+    \begin{itemize}[label=$\diamond$]
+        \item
+            $H \neq \emptyset$.
+        \item
+            For all $x, y \in H$, $xy^{-1} \in H$
+            (which gives us closure under the group operation and inverses).
+    \end{itemize}
+    On one hand,
+    if $H \leqslant G$, then it is trivial that these equations hold.
+    On the other hand, if $H \neq \emptyset$
+    and if for all $x, y \in H$, $xy^{-1} \in H$,
+    then we can conclude that $1 \in H$;
+    we know some $h \in H$ since it is non-empty,
+    so if we take $x = h$ and $y = h$,
+    then $hh^{-1} \in H$,
+    so $H$ contains the identity.
+    Now, if we take $x = 1$ and $y = h$ for any $h \in H$,
+    we can show that $1h^{-1} \in H$,
+    making it closed under inverses.
+    Furthermore, now that we know we can take the inverse of any element,
+    for any $g, h \in H$, we can take $x = g$ and $y = h^{-1}$,
+    and we'll know that $g(h^{-1})^{-1} = gh$ is in $H$,
+    making it closed under teh group operations. \\
+    
+    If the subset $H$ of $G$ is finite
+    ($G$ need not be)
+    then it is enough to show that $H$ is not-empty,
+    and that $H$ is closed under the group operation,
+    in order to show that it is a subgroup.
+    For any element $x \in H$,
+    there are finitely many distinct elements
+    $x^1, x^2, x^3 \dots$ in $H$. \\
+    We can continue multipying $x$ by itself beyond that,
+    but then we will have to have some $x^a = x^b$
+    for some positive integers $a < b$.
+    So if $n = b-a$,
+    then $x^n = 1$ by cancellation laws,
+    such that $x^{n-1} = x^{-1}$. \\
+    Since it's an element of $H$,
+    it must be that $H$ is closed under inverses. \\
+    
+
+\end{document}

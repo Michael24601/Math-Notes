@@ -1,0 +1,285 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For using float option H that places figures exatcly where we want them
+\usepackage{float}
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+
+\usepackage{indentfirst}
+\usetikzlibrary{shapes,positioning,fit,calc}
+
+\usepackage{changepage} % for adjustwidth environment
+
+\title{
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 1: Group Theory \\
+    \LARGE Chapter 2: Subgroups \\
+    \Large Section 2: Centralizers and Normalizers, Stabilizers and Kernels
+}
+\date{2024-03-26}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+    This section will introduce important families of subgroups. \\
+
+    \subsection*{Centralizers}
+
+    Take $A$ to be a non-empty subset of a group $G$.
+    The \textbf{centralizer} of $A$ in $G$
+    is the set of all elements of in $G$ that commute with all
+    elements in $A$. \\
+    More formally, the centralizer $C_G(A)$ is the set
+    \[ \{ g \in G \mid gag^{-1} = a \text{ for all } a \in A \} \]
+    This is because, if $gag^{-1} = a$ for all elements $a \in A$,
+    then we can multiply both sides with $g$
+    and find that $ga = ag$,
+    which implies that $g$ commutes with all elements of $A$. \\
+
+    In the case where $A = \{a\}$,
+    meaning it only contains a single element,
+    we can call the centralizer of $A$ in $G$
+    $C_G(a)$ instead of $C_G(\{a\})$
+    as a shorthand. \\
+    In this case we know for a fact that all elements
+    of the form $a^n$ are in $C_G(A)$ for all $n \in \Z$. \\
+
+    For an abelian group $G$,
+    for any non-empty subset $A$ of $G$,
+    we trivially know that $C_G(A) = G$. \\
+
+    All centralizers in $G$, of any subset $A$,
+    are subgroups of $G$. \\
+    To show that $C_G(A)$ is a subgroup of $G$,
+    we first note that $C_G(A) \neq \emptyset$
+    because $1 \in C_G(A)$ as the identity
+    commutes with all elements in $G$,
+    and by extension, $A$. \\
+    Moreover, if $x, y \in A$,
+    then $xax^{-1} = yay^{-1} = a$ for all $a \in A$.
+    We can also multiply the sides by $y$ and $y^{-1}$
+    to show that $yay^{-1} = a$ as well.
+    Thus we can then show that
+    \[ xy^{-1}a(xy^{-1})^{-1} = xy^{-1}a(y^{-1})^{-1}x^{-1} \]
+    \[ = xy^{-1}ayx^{-1} \]
+    \[ = xax^{-1} \]
+    \[ = a \]
+    This tells us that $x^y{-1}$ commutes with all elements of $A$,
+    making it part of the centralizer. \\
+    Therefore $C_G(A) \leqslant G$. \\
+
+    The \textbf{centre} of the group $G$,
+    which we denote as $Z(G)$,
+    is the set of all elements in $G$
+    that commute with all elements in $G$. \\
+    Obviously, $Z(G) = C_G(G)$
+    (since $G \subseteq G$).
+    This means that $Z_(G) \leqslant G$,
+    as it is a centralizer. \\
+
+    \subsection*{Normalizers}
+
+    For a non-empty subset $A$ of $G$,
+    for any element $g \in G$,
+    we define $gAg^{-1}$ to be the set $\{ gag^{-1} \mid a \in A \}$.
+    Basically, it is an operation applied on a set (set-wise),
+    which produces a new set. \\
+    This is called the \textbf{conjugation} of the set $A$. \\
+    We also use conjugation to refer to
+    the operation $gag^{-1}$ done on elements of sets,
+    not just the operation on the set as a whole. \\
+
+    With that in mind,
+    the \textbf{normalizer} of $A$ in $G$
+    is the set
+    \[ \{ g \in G \mid gAg^{-1} = A \} \]
+    which we denote by $N_G(A)$. \\
+    Basically, it checks that the operation $gag^{-1}$
+    for each element of $A$
+    permutes $A$;
+    $gag^{-1}$ doesn't have to be $a$,
+    but there has to be an element $b$ in $A$ such that $gbg^{-1} = a$,
+    implying a surjective association.
+    Since $b \in A$ too, this also implies that
+    there exists a unique $b$ such that $gbg^{-1} = a$,
+    making the association a bijection (it permutes $A$). \\
+    
+    We will later see in chapter 3
+    that the normalizer of a subgroup $H$
+    in $G$ is a measure of how normal it is
+    (defined later). \\
+
+    Notice that if $g \in C_G(A)$,
+    $gag^{-1} = a$ for all $a \in A$.
+    So $gAg^{-1}$ is trivially $A$
+    (the permutation that keeps all elements in place),
+    which means that if $g \in N_G(A)$, then $g \in C_G(A)$. \\
+    So $N_G(A) \subseteq C_G(A)$. \\
+
+    The normalizer of any non-empty subset $A$ in $G$
+    is a subgroup of $G$.
+    The proof follows that of the centralizer being a subgroup
+    pretty closely, until the end. \\
+    We already know that $N_G(A) \neq \emptyset$
+    as $1 \in N_G(A)$. \\
+    Furthermore, we can show closure under multiplication and inverses
+    in the same way as the one we used with the centralizers.
+    Eventually we get to the point where we have that
+    for every $a \in A$,
+    $(xy)a(xy)^{-1} = xy^{-1}ayx^{-1}$. 
+    We know that $xAx^{-1}$ and $yAy^{-1}$ are bijections,
+    as they permute $A$,
+    and we will call them $\phi$ and $\varphi$ respectively.
+    We also notice that if $yay^{-1} = b$,
+    then $y^{-1}by = a$,
+    such that $y^{-1}Ay = \varphi^{-1}$,
+    the two-sided inverse of $\varphi$,
+    and a bijection in itself.
+    So $(xy)A(xy)^{-1} = \phi(\varphi^{-1}(A))$,
+    and since the composition of bijections is a bijection,
+    this means that 
+    \[ \phi(\varphi^{-1}(A)) = \phi(A) = A \]
+    which completes the proof. \\
+
+    Since $N_G(A)$ and $C_G(A)$ are subgroups of $G$,
+    and $C_G(A)$ happens to be a subset of $N_G(A)$,
+    which have that $N_G(A) \leqslant C_G(A)$. \\
+    This is because $C_G(A)$ being a subrgoup in its own right
+    means that it already satisfies the axioms of a subgroup
+    such as not being empty and being closed. \\
+
+    \subsection*{Stabilizers and Kernels}
+
+    If $G$ is a group acting on a non-empty set $S$,
+    and $s$ is a fixed element of $S$,
+    then $G_s$, the \textbf{stabilizer} of $s$ in $G$,
+    is the set $\{ g \in G \mid g \cdot s = s \}$.
+    Basically, it's the set of element's whose
+    action stabilizes the element $s$. \\
+    As we can see, the stabilizer is specific not only
+    to the group $G$ and element $s$,
+    but also to the action of $G$ on $S$. \\
+
+    We have that $G_s \leqslant G$.
+    To show that, we first note that $G_s$ is trivially
+    a non-empty subset of $G$,
+    since $1 \in G_s$. \\
+    Furthermore, we know that if $x, y \in G_s$,
+    then $x\cdot s = y\cdot s = s$,
+    which means that $(xy) \cdot s = x \cdot (y \cdot s) = x \cdot s = s$
+    by the axioms of group actions.
+    On the other hand, if $x \in G_s$,
+    then we know that $x \cdot s = s$,
+    which means that
+    $x^{-1} \cdot s = x^{-1} \cdot (x \cdot s) s = (x^{-1}x) \cdot s 
+    = 1 \cdot s = s$. \\
+    This tells us that $G_s$ is also closed under multiplication
+    and inverses,
+    which makes it a subgroup of $G$. \\
+    
+    A \textbf{kernel} of a group $G$ acting on a non-empty set $S$
+    is similat to the stabilizer;
+    it is the set of elements in $G$ whose action stabilizes
+    all elements of $S$.
+    Basically, the kernel is the set
+    $\{ g \in G \mid g \cdot s = s \text{ for all } s \in S \}$.
+    That that means that each element $g$ of the kernel
+    must stabilize each element of $S$ individually,
+    not just that the set produced by $g$ acting on $S$ is $S$ itself.
+    (which is automatically true of actions by an element of a group,
+    as they permute the set they act on). \\
+    Note that that implies that for any $s \in G$,
+    $G_s$ is a subset of the kernel
+    (and since the kernel will later be shown to be a subgroup,
+    $G_s$ is also a subgroup of the kernel). \\
+
+    We can show that the kernel $K$ of a group $G$ acting on
+    a non-empty set $S$ is a subrgoup of $G$. \\
+    The argument is the exact same as that of a stabilizer $G_s$,
+    but applied to all elements $s \in S$. \\
+
+    The fact that normalizers are subgroups
+    is a consequence of stabilizers being subgroups. \\
+    Suppose we take the powerset $\mathcal{P}(G)$
+    (the set of all subsets of $G$).
+    Then we can let $G$ act on $\mathcal{P}(G)$
+    by conjugation of its elements (which are sets).
+    So for each set $B \in \mathcal{P}(G)$,
+    and every element $g \in G$,
+    $g \cdot B = gBg^{-1}$.
+    There is no need to prove that this is a group action
+    because when we defined this operation to be one,
+    so all axioms apply by our assertion. \\
+    Then, the stabilizer of some element $B$ in $\mathcal{P}(G)$
+    is the set of elements $g \in G$ 
+    such that $gBg^{-1} = B$,
+    which means that any element $g \in G_B$ 
+    is also an element of the normalizer of $B$ in $G$,
+    meaning that $G_B \subseteq N_G(B)$.
+    Likewise, each element of $N_G(B)$ permutes $B$,
+    such that their action stabilize $B$,
+    so they all belong to $G_B$,
+    which means that $N_G(B) \subseteq G_B$.
+    So that must mean that $N_G(B) = G_B$,
+    so $N_G(B)$ is a subgroup. \\
+
+    Likewise, the fact that centralizers are subgroups
+    is a consequence of kernels being subgroups. \\
+    Now let a group $G$ act on $A$, one of its non-empty subsets,
+    by conjugation
+    such that for any elements $g \in G$ and $a \in A$,
+    $g \cdot a = gag^{-1}$.
+    Again, there is no need to prove this is an action as we defined
+    this operation to be one. \\
+    The kernel of this action is the set of elements of $G$
+    that stabilize all elements $a \in A$,
+    so it's the set of elements $g$ such that $gag^{-1} = a$.
+    This means that all elements of the stabilizer
+    are also part of the centralizer of $A$ in $G$,
+    which means that the kernel of $A$ is a subset of $C_G(A)$. \\
+    Moreover, the centralizer is the set of elements $g \in G$
+    such that $gag^{-1} = a$ for all $a \in A$,
+    so they are all part of the kernel of $A$.
+    This means that $C_G(A)$ is a subset of the kernel of $A$,
+    which in turn tells us that $C_G(A)$ is the kernel of $A$.
+    It must therefore be that $C_G(A)$ is a subgroup of $G$
+    (and by extension, that $Z(G)$ is a subrgoup when $A = G$). \\
+    
+
+\end{document}
