@@ -1,0 +1,458 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For using float option H that places figures exatcly where we want them
+\usepackage{float}
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+\newcommand{\lcm}{\text{lcm}}
+
+\usetikzlibrary{shapes,positioning,fit,calc}
+
+\usepackage{changepage} % for adjustwidth environment
+
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{ 
+    language=C++,
+    basicstyle=\ttfamily\footnotesize,
+    numbers=left,
+    numberstyle=\tiny\color{mygray},
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{white},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    rulecolor=\color{black},
+    tabsize=2,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    keywordstyle=\color{blue},
+    commentstyle=\color{mygreen},
+    stringstyle=\color{mymauve},
+    escapeinside={\%*}{*)},
+    morekeywords={*,...}
+}
+
+\title{%
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 0: Preliminaries \\
+    \LARGE Chapter 0: Preliminaries \\
+    \Large Section 2: Properties of Integers
+}
+\date{2024-03-30}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+    \section*{Exercise 1}
+    We can use the Euclidian Algorithm to find the 
+    greatest common divisor of any two integers $a$ and $b$,
+    and then find two integers $x, b \in \Z$
+    such that $\gcd(a, b) = ax + by$ by using substitution.
+    We can also find their least common multiple
+    which is defined as being $\dfrac{ab}{\gcd(a, b)}$.
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            For $a = 20$ and $b = 13$,
+            $\gcd(a, b) = 1 = 2a + -3b$
+            and $\lcm(a, b) = 260$.
+        \item 
+            For $a = 69$ and $b = 372$,
+            $\gcd(a, b) = 3 = 27a + -5b$
+            and $\lcm(a, b) = 8556$.
+        \item 
+            For $a = 792$ and $b = 275$,
+            $\gcd(a, b) = 11 = 8a + -23b$
+            and $\lcm(a, b) = 19800$.
+        \item 
+            For $a = 11391$ and $b = 5673$,
+            $\gcd(a, b) = 3 = -126a + 2533b$
+            and $\lcm(a, b) = 21540381$.
+        \item 
+            For $a = 1761$ and $b = 1567$,
+            $\gcd(a, b) = 1 = -105a + 118b$
+            and $\lcm(a, b) = 2759487$.
+        \item 
+            For $a = 507885$ and $b = 60808$,
+            $\gcd(a, b) = 691 = -17a + 142b$
+            and $\lcm(a, b) = 44693880$.            
+    \end{enumerate} 
+
+    \section*{Exercise 2}
+    Proof that if $k \in \Z$ divides the integers $a$ and $b$,
+    then it also divides $as + bt$ for any integers $s, t \in \Z$: \\
+    If $k \mid a$ and $k \mid b$,
+    then $a = nk$ and $b = mk$ for some integers $n, m \in \Z$.
+    Then $as + bt = nks + mkt = k(ns + mt)$,
+    which means that $k \mid as + bt$. \\
+
+    \section*{Exercise 3}
+    Proof that if $n \in \Z$ is composite,
+    then there are integers $a$ and $b$
+    such that $n \mid ab$ but $n \nmid a$ and $n \nmid b$: \\
+    By the Fundamental Theorem of Arithmetic, 
+    we know that $n$ can be written as a product of primes.
+    Since $n$ is composite,
+    there are at least two primes in the facttorization
+    (not necessarily unique).
+    We can take $a$ to be one of the primes,
+    and $b$ to be the rest of the number ($n/a$, which is an integer).
+    Since $n = ab$, clearly $n \mid ab$,
+    but since $a, b < n$,
+    $n \nmid a$ and $n \nmid b$. \\
+
+    \section*{Exercise 4}
+    Let's take two integers $a, b \in \Z - \{0\}$ (non-zero),
+    the integer $d$ to be $\gcd(a, b)$,
+    and $x_0$ and $y_0$ to be the solution to $ax + by = N$
+    for some $N \in \Z$.
+    Proof that for any integer $t \in \Z$,
+    \[ x = x_0 + \dfrac{bt}{d} 
+    \quad \text{ and } \quad
+    x = y_0 - \dfrac{at}{d}  \]
+    are also solutions to $ax + by = N$: \\
+    We can write $ax + by$ as
+    \[ a\left( x_0 + \dfrac{bt}{d} \right)
+    + b\left( y_0 - \dfrac{at}{d} \right) \]
+    \[ = ax_0 + \dfrac{abt}{d}
+    + by_0 - \dfrac{abt}{d} \]
+    \[ ax_0 + by_0 = N \]
+    This is true regardless of the value of $t$,
+    and regardless of the value of $d$ as well. \\
+
+    \section*{Exercise 5}
+    We need to find the value of $\varphi(n)$
+    for each integer smaller or equal to $30$,
+    so we can use this method given in the chapter,
+    which follows the formula:
+    \[ \varphi(n)
+    = {p_1}^{\alpha_1 - 1}(p_1 - 1){p_2}^{\alpha_2 - 1}(p_2 - 1)
+    \dots {p_s}^{\alpha_s - 1}(p_s - 1) \]
+    where
+    \[ \prod_{i=1}^s {p_i}^{\alpha^i} \]
+    is the prime pactorization of $n$. \\
+    With that, we arrive at these values
+    
+    \begin{figure}[H]
+        \centering
+
+        \begin{tabular}{|*{6}{c|}}
+            \hline
+            \( n \) & \( \varphi(n) \) & \( n \) & \( \varphi(n) \) 
+            & \( n \) & \( \varphi(n) \) \\
+            \hline
+            1 & 1 & 11 & 10 & 21 & 12 \\
+            2 & 1 & 12 & 4 & 22 & 10 \\
+            3 & 2 & 13 & 12 & 23 & 22 \\
+            4 & 2 & 14 & 6 & 24 & 8 \\
+            5 & 4 & 15 & 8 & 25 & 20 \\
+            6 & 2 & 16 & 8 & 26 & 12 \\
+            7 & 6 & 17 & 16 & 27 & 18 \\
+            8 & 4 & 18 & 6 & 28 & 12 \\
+            9 & 6 & 19 & 18 & 29 & 28 \\
+            10 & 4 & 20 & 8 & 30 & 8 \\
+            \hline
+        \end{tabular}
+        \caption{\label{fig:figure1} The values of $\varphi(n)$.}
+    \end{figure}
+    
+    \section*{Exercise 6}
+    Proof of the Well Ordering Principle of $\Z^+$: \\
+    We can prove it using induction
+    (note that the base case will be $1$ and $2$,
+    because using the inductive argument only works
+    when we have at least $2$ elements,
+    so to go from the base case to all other cases,
+    we need at least $2$ elements). \\
+    Suppose we have a set $A_n$
+    such that $A_n$ contains $n$ distinct numbers in $\Z^+$ . \\
+    \textbf{Basis step:}
+    For $n = 2$,
+    we know that $A$ contains $2$ distinct elements $a$ and $b$.
+    Since $a \neq b$,
+    we know that $a < b$ or $a > b$;
+    in the former case, $a$ is the unique minimal element,
+    in the latter case, $b$ is. \\
+    \textbf{Inductive hypothesis:}
+    Assume that for $n = k$,
+    any set $A_k$ contains a unique minimal element $m_k$. \\
+    \textbf{Inductive step:} 
+    Now, for $n = k+1$,
+    we have a set $A_{k+1}$,
+    which we can partition into a subset containing
+    $k$ distinct elements,
+    and a set containing the single remaining element $b$,
+    which is distinct from all those in the other subset
+    (since we have $k+1$ total elements).
+    Since the first subset has $k$ elements,
+    we know by out hypothesis that it has
+    a unique minimal element $m_k$,
+    which is distinct from $b$.
+    Thus, either $b < m_k$,
+    which would make $b$ is the unique minimal element of $A_{k+1}$,
+    or $b > m_k$,
+    which would make $m_k$ is the unique minimal element of $A_{k+1}$. \\
+
+    \section*{Exercise 7  $***$}
+    Proof that, if $p$ is prime, 
+    then there does not exist non-zero integers $a$ and $b$
+    such that $a^2 = pb^2$
+    (which means that $\sqrt{p}$ is not a rational number): \\
+    We use similar but more general reasoning,
+    to the one used in the proof that $\sqrt{2}$ is rational.
+    The type of argument used is called
+    \textit{proof by smallest counter-example},
+    where we assume a positive integer is the smallest it can be,
+    and show that we can derive an even smaller one,
+    creating a contradiction. \\
+    Let us assume that for a prime $p$,
+    there exists two non-zero integers $a, b \in \Z - \{0\}$ 
+    such that $a^2 = pb^2$.
+    If $a$ and $b$ have factors in common,
+    notice that we can divide both sides of the equations by them,
+    until we arrive at integers $a$ and $b$ that are relatively prime.
+    With that, we derive the equation $c^2 = pd^2$,
+    where $c$ and $d$ are relatively prime. \\
+    The equation implies that $p \mid c^2$,
+    and since $p$ is prime, 
+    it has to be that $p \mid c$
+    (if $p \mid hk$ where $h, k \in \Z$ and $p$ is prime,
+    then $p \mid h$ or $p \mid k$).
+    So $a$ can be written as $pn$ for some integer $n \in \Z$.
+    We thus get that $n^2p^2 = pd^2$,
+    which we can reduce to $n^2p = d^2$.
+    By the same argument, $p \mid d^2$,
+    which means that $p \mid d$.
+    But this implies that both $d$ and $c$ are divisible by $p$,
+    an integer larger than $1$,
+    which contradicts our assumption that they are relatively prime. \\
+    Since we can use this argument infinitely many times
+    to derive more reduced solutions,
+    we conclude that the integers $a$ and $b$ can't exist.
+    A more reduced $a$ and $b$ can always be derived
+    by dividing by $p$,
+    which contradicts the Well Ordering Principle,
+    since it implies that we can always get a smaller and smaller
+    $|a|$ and $|b|$, which belong to $\Z^+$. \\
+
+    \section*{Exercise 8 $***$}
+    For a prime $p$,
+    and a positive integer $n \in Z^+$,
+    we need to find a formula for the largest power of $p$
+    (including $0$)
+    such that $p$ divides $n! = (n)(n-1)\dots(2)(1)$. \\
+    We can use the \textit{Greatest Integer Function},
+    also called the \textit{Floor Function}
+    and denoted by $\lfloor x \rfloor$ for $x \in \R$,
+    which returns the greatest integer
+    smaller than the real number $x$. \\
+    We know that if $p \mid ab$ where $a, b \in \Z$ and $p$ is prime,
+    then $p \mid a$ or $p \mid b$.
+    And if $b$ is composite such that $b = cd$,
+    then $p \mid a$ or $p \mid c$ or $p \mid d$.
+    We can repeat this argument as many times as we want,
+    and what it means is that,
+    if $p \mid m_1m_2m_3\dotsm_k$ where $m_i \in \Z$,
+    then $p$ must divide at least one factor $m_i$. \\
+    So if $p \mid n!$,
+    then $p \mid n$ or $p \mid (n-1) \dots$
+    or $p \mid 2$ or $p \mid 1$.
+    The only integers smaller or equal to $n$ divisible by $p$
+    are multiples of $p$.
+    We know that between $1$ and $sp$,
+    there are exatcly $s$ integers divisible by $p$
+    (which are $p$, $2p\dots$ $(s-1)p$ and $sp$).
+    For a general positive integer $n$,
+    $n$ may not be a multiple of $p$ itself,
+    so we don't count it as one of the multiples of $p$,
+    but all the multiples of $p$ smaller than $n$ still count,
+    which means that there are
+    $\left\lfloor \dfrac{n}{p} \right\rfloor$
+    integers between $1$ and $n$ divisible by $p$. \\
+    Of these multiples, some may contain a single factor $p$,
+    while others may contain multiple factors $p$
+    (if they are divisible $p^2$, $p^3 \dots$).
+    So if we repeat the same process with multilples of $p^2$,
+    we find that we have $\left\lfloor \dfrac{n}{p^2} \right\rfloor$
+    factors of $p^2$ in $n!$,
+    which we each count once (not twice)
+    even though they contribute two factors;
+    this is because we already counted the first factor $p$
+    when we considered all the multiples of $p$.
+    We can repeat this process for any $p^k$,
+    until we get to the last power $p^k$ smaller of equal to $n$,
+    whis is $\lfloor log_p(n) \rfloor$. \\
+    So in $n!$, we have a single factor $p$
+    for all $\left\lfloor \dfrac{n}{p} \right\rfloor$ mutliples of $p$,
+    another factor for each $\left\lfloor \dfrac{n}{p^2} \right\rfloor$
+    mutliple of $p^2 \dots$
+    and finally another factor for each 
+    $\left\lfloor \dfrac{n}{p^k} \right\rfloor$ mutliple of $p^k$,
+    for a total of
+    \[ \sum_{i = 1}^{\lfloor log_p(n) \rfloor}
+    \left\lfloor \dfrac{n}{p^i} \right\rfloor \]
+
+    \section*{Exercise 9}
+    This is a C++ program that computes $\gcd(a, b)$
+    using the Euclidian Algorithm,
+    then uses substitution to find the varibales $x$ and $y$
+    such that $ax + by = \gcd(a, b)$: \\
+    \begin{lstlisting}
+        #include <iostream>
+        int main() {
+            std::cout << "Hello, world!" << std::endl;
+            return 0;
+        }
+    \end{lstlisting}
+
+    \section*{Exercise 10 $***$}
+    Proof that for any positive integer $N$,
+    there exists only a finite amount of integers $n$
+    such that $\varphi(n) = N$: \\
+    We know that 
+    \[ \varphi(n)
+    = {p_1}^{\alpha_1 - 1}(p_1 - 1){p_2}^{\alpha_2 - 1}(p_2 - 1)
+    \dots {p_s}^{\alpha_s - 1}(p_s - 1) \]
+    where 
+    \[ \prod_{i=1}^s {p_i}^{\alpha^i} \]
+    is the prime pactorization of $n$.
+    So $N = {p_1}^{\alpha_1 - 1}(p_1 - 1){p_2}^{\alpha_2 - 1}(p_2 - 1)
+    \dots {p_s}^{\alpha_s - 1}(p_s - 1)$.
+    Since $N$ is a finite integer,
+    we conclude that there are a finite number of ways that
+    $N$ can be written as 
+    a such a product,
+    since the product can't exceed $N$,
+    and each $p_i$ and $\alpha^i$ are positive integers.
+    So it must be that there are a
+    finite amount of products
+    of the form ${p_1}^{\alpha_1 - 1}(p_1 - 1){p_2}^{\alpha_2 - 1}(p_2 - 1)
+    \dots {p_s}^{\alpha_s - 1}(p_s - 1)$
+    equal to $N$.
+    Since the prime factorization is unique,
+    it follows that there are a finite amount of positive integers
+    \[ n  = \prod_{i=1}^s {p_i}^{\alpha^i} \]
+    that correspond to these products,
+    which means that there is a number of integers $n$
+    such that $\varphi(n) = N$. \\
+    From this result we can conclude
+    that $\phi(n)$ tends to infinity
+    as $n$ tends to infinity.
+    First we note that $\varphi(n)$ is never negative,
+    so the limit is either $\infty$ or some positive integer $L$.
+    Let's assume that $\lim_{n \to \infty} \varphi(n) = L$.
+    But we have an infinite number of positive integers $n$.
+    So by the pigeonhole principle,
+    there's going to be at least one positive integer $N$
+    with an infinite number of integers $n$
+    such that $\varphi(n) = N$,
+    which contradicts the proof we just made.
+    Thus, the limit of $\varphi(n)$
+    can't be bounded by a finite number $M$,
+    and must therefore be infinite. \\
+
+    \section*{Exercise 11 $***$}
+    Proof that if $d \mid n$,
+    then $\varphi(d) \mid \varphi(n)$: \\
+    If $d$ divides $n$,
+    then $n = dm$ for some integer $m \in Z$.
+    What this means is that all the factors present in $n$
+    must also be present in $d$;
+    if for instance $d$ has a factor $a$
+    then $d = ab$ form some integer $b \in Z$,
+    which would means that $n = abm$,
+    indicating that $n$ contains the factor $a$ as well. \\
+    By the Fundamental Theorem of Arithmetic,
+    we know that $n$ and $d$ can be written
+    as unique products of primes.
+    So we can write
+    \[ n = {p_1}^{\alpha_1}{p_2}^{\alpha_2}\dots{p_k}^{\alpha_k} \]
+    where each term ${p_i}^{\alpha_i}$
+    is a positive power of a distinct prime.
+    This implies that the prime factorization of $d$
+    can't contain any factors that aren't in $n$.
+    So it must contain the same primes as $n$,
+    and they must have coefficients that are at most
+    as large as the coefficients of the primes
+    in the factorization of $n$.
+    Thus
+    \[ d = {p_1}^{\beta_1}{p_2}^{\beta_2}\dots{p_k}^{\beta_k}
+    \quad \text{ where } \beta_i \leqslant \alpha_i
+    \text{ for all } i \in \{1, 2\dots k\} \]
+    where we allow $\beta_i$ to be $0$ at the lowest
+    (for the sake of having the same primes in the product of $d$
+    as the product of $n$). \\
+    This means that
+    \[ \varphi(n) = 
+    {p_1}^{\alpha_1 - 1}(p_1 - 1){p_2}^{\alpha_2 - 1}(p_2 - 1)
+    \dots {p_k}^{\alpha_k - 1}(p_k - 1) \]
+    and
+    \[ \varphi(d) = 
+    {p_1}^{\beta_1 - 1}(p_1 - 1){p_2}^{\beta_2 - 1}(p_2 - 1)
+    \dots {p_k}^{\beta_k - 1}(p_k - 1) \]
+    We can define $\gamma_i = \alpha_i - \beta_i$
+    to be a non-negative integer for each $i \in \{1, 2\dots k\}$,
+    (since $\beta_i \leqslant \alpha_i$).
+    So we can write
+    \[ \varphi(n) = 
+    {p_1}^{\alpha_1 - 1}(p_1 - 1){p_2}^{\alpha_2 - 1}(p_2 - 1)
+    \dots {p_k}^{\alpha_k - 1}(p_k - 1) \]
+    \[ \varphi(n) = {p_1}^{\beta_1 + \gamma_1 - 1}(p_1 - 1)
+    {p_2}^{\beta_2 + \gamma_2 - 1}(p_2 - 1)
+    \dots {p_k}^{\beta_k + \gamma_k - 1}(p_k - 1) \]
+    \[ \varphi(n) = ({p_1}^{\beta_1 - 1}(p_1 - 1)
+    {p_2}^{\beta_2 - 1}(p_2 - 1)
+    \dots {p_k}^{\beta_k - 1}(p_k - 1))
+    ({p_1}^{\gamma_1}{p_2}^{\gamma_2}\dots {p_k}^{\gamma_k}) \]
+    \[ \varphi(n) = \varphi(d)
+    ({p_1}^{\gamma_1}{p_2}^{\gamma_2}\dots {p_k}^{\gamma_k}) \]
+    Since ${p_1}^{\gamma_1}{p_2}^{\gamma_2}\dots {p_k}^{\gamma_k}$
+    is an integer
+    (as $\gamma_i$ is always larger or equal to $0$),
+    this means that $\varphi(d) \mid \varphi(n)$. \\
+
+
+
+
+\end{document}

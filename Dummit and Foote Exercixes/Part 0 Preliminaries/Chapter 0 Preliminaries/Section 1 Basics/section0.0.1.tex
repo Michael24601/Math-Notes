@@ -46,7 +46,7 @@
     \LARGE Chapter 0: Preliminaries \\
     \Large Section 1: Basics
 }
-\date{2024-03-17}
+\date{2024-03-30}
 \author{Michael Saba}
 
 \begin{document}
@@ -65,15 +65,284 @@
     the set of $2 \times 2$ matrices with real entries.\\
     Let's then define 
     \[ \mathcal{B} = \{ X \in \mathcal{A} \mid MX = XM \} \]
-    The matrix
+    We have
     \[\begin{bmatrix}
         1 & 1 \\
         0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & 1 \\
+        0 & 1
+    \end{bmatrix}
+    = M^2
+    = \begin{bmatrix}
+        1 & 2 \\
+        0 & 1
     \end{bmatrix} \]
-    obviosuly commutes with itself, $M$,
-    so it is part of $\mathcal{B}$. \\
+    \[ \begin{bmatrix}
+        1 & 1 \\
+        0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & 1 \\
+        1 & 1
+    \end{bmatrix}
+    = \begin{bmatrix}
+        2 & 2 \\
+        1 & 1
+    \end{bmatrix}
+    \quad \neq \quad
+    \begin{bmatrix}
+        1 & 1 \\
+        1 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & 1 \\
+        0 & 1
+    \end{bmatrix}
+    = \begin{bmatrix}
+        1 & 2 \\
+        1 & 2
+    \end{bmatrix} \]
+    \[ \begin{bmatrix}
+        1 & 1 \\
+        0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        0 & 0 \\
+        0 & 0
+    \end{bmatrix}
+    = \begin{bmatrix}
+        0 & 0 \\
+        0 & 0
+    \end{bmatrix}
+    \quad = \quad
+    \begin{bmatrix}
+        0 & 0 \\
+        0 & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & 1 \\
+        0 & 1
+    \end{bmatrix}
+    = \begin{bmatrix}
+        0 & 0 \\
+        0 & 0
+    \end{bmatrix} \]
+    \[ \begin{bmatrix}
+        1 & 1 \\
+        0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & 1 \\
+        1 & 0
+    \end{bmatrix}
+    = \begin{bmatrix}
+        1 & 2 \\
+        1 & 1
+    \end{bmatrix}
+    \quad \neq \quad
+    \begin{bmatrix}
+        1 & 1 \\
+        1 & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & 1 \\
+        0 & 1
+    \end{bmatrix}
+    = \begin{bmatrix}
+        2 & 1 \\
+        1 & 0
+    \end{bmatrix} \]
+    \[ \begin{bmatrix}
+        1 & 0 \\
+        0 & 1
+    \end{bmatrix}
+    = I_2 \text{ (the identity matrix), which means that }
+    I_2M = MI_2 = M \]
+    \[ \begin{bmatrix}
+        1 & 1 \\
+        0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        0 & 1 \\
+        1 & 0
+    \end{bmatrix}
+    = \begin{bmatrix}
+        0 & 1 \\
+        1 & 1
+    \end{bmatrix}
+    \quad \neq \quad
+    \begin{bmatrix}
+        0 & 1 \\
+        1 & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & 1 \\
+        0 & 1
+    \end{bmatrix}
+    = \begin{bmatrix}
+        1 & 1 \\
+        1 & 0
+    \end{bmatrix} \]
+    So we conclude that
+    \[
+        \begin{bmatrix}
+            1 & 1 \\
+            0 & 1
+        \end{bmatrix},
+        \begin{bmatrix}
+            0 & 0 \\
+            0 & 0
+        \end{bmatrix},
+        \begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix}
+        \in \mathcal{B}
+    \]
+    while the rest aren't. \\
 
-        
+    \section*{Exercise 2}
+    Proof that if the matrices $P, Q, \in \mathcal{B}$
+    (from exercise 0.0.1.1),
+    then $P + Q \in \mathcal{B}$: \\
+    We have $M(P + Q) = MP + MQ$, and $(P + Q)M = PM + PQ$
+    (by the ditributive law of matrix addition and multiplication). \\
+    Since $P, Q \in \mathcal{B}$,
+    we have $MP = PM$ and $MQ = QM$,
+    which means that $MP + MQ = PM + PQ$,
+    and by extension, that $M(P + Q) = (P + Q)M$.
+    Thus $P + Q \in \mathcal{B}$. \\ 
 
+    \section*{Exercise 3}
+    Proof that if the matrices $P, Q, \in \mathcal{B}$
+    (from exercise 0.0.1.1),
+    then $PQ \in \mathcal{B}$: \\
+    We have $M(PQ) = MPQ$, and $(PQ)M = PQM$
+    (by the associativity law of matrix multiplication). \\
+    Since $P, Q \in \mathcal{B}$,
+    we have $MP = PM$ and $MQ = QM$,
+    which means that $MPQ = PMQ = PQM$,
+    and by extension, that $M(PQ) = (PQ)M$.
+    Thus $PQ \in \mathcal{B}$. \\ 
+
+    \section*{Exercise 4 $***$}
+    For $p, q, r, s \in \R$,
+    \[ \begin{bmatrix}
+        p & q \\
+        r & s
+    \end{bmatrix} \in \mathcal{B} \]
+    is true if 
+    \[  \begin{bmatrix}
+        1 & 1 \\
+        0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        p & q \\
+        r & s
+    \end{bmatrix} 
+    = \begin{bmatrix}
+        p + r & q + s \\
+        r & s
+    \end{bmatrix} \]
+    is equal to
+    \[
+        \begin{bmatrix}
+        p & q \\
+        r & s
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & 1 \\
+        0 & 1
+    \end{bmatrix}
+    =  \begin{bmatrix}
+        p & p + q \\
+        r & r + s
+    \end{bmatrix} \]
+    So we need to satisfy these equations
+    \[ p = p + r \qquad p + q = q + s 
+    \qquad r = r \qquad s = r + s \]
+    The first equation implies $r = 0$,
+    and the second implies that $p = s$.
+    The third enforces no restrictions,
+    and the fourth implies again that $r = 0$.
+    So for a matrix to be part of $\mathcal{B}$,
+    it must be of the form
+    \[ \begin{bmatrix}
+        p & q \\
+        0 & p
+    \end{bmatrix} \]
+    where $p$ and $q$ can be any real numbers. \\
+
+    \section*{Exercise 5 $***$}
+    The goal is to determine which of these functions are well defined.
+    To do that, it is enough to find a value $a = b$
+    the mapping of $a$ is different from the mapping of $b$
+    (the mapping depends on more than just the value of $a$ and $b$).
+    \begin{enumerate}[label=\textbf{\alph*.}]
+        \item 
+            The function $f: \Q \to \Z$
+            defined by $f(\sfrac{a}{b}) = a$ is not well defined.
+            Consider the rationals $\sfrac{1}{2}$ and $\sfrac{2}{4}$.
+            The two are equal (both are $0.5$),
+            and yet $f(\sfrac{1}{2}) = 1$,
+            and $f(\sfrac{2}{4}) = 2$,
+            which makes the function ambiguous.
+        \item
+            The function $f: \Q \to \Q$
+            defined by $f(\sfrac{a}{b}) = \sfrac{a^2}{b^2}$
+            is well defined.
+            This is because the function's mapping only depends on
+            the value of the input,
+            not the value of its numerator and denominator
+            (which can differ for the same rational number). \\
+            To prove that,
+            we note that $\sfrac{a^2}{b^2} = (\sfrac{a}{b})^2$,
+            which implies that the mapping only depends on
+            the value of the fraction $\sfrac{a}{b}$ as a whole,
+            not $a$ or $b$.
+    \end{enumerate}
+
+    \section*{Exercise 6 $***$}
+    The function $f: \R^+ \to \Z$
+    defined as the mapping of a positive real number $r$
+    to the first digit to the right of the decimal point in its
+    decimal expansion is not well defined. \\
+    This is because,
+    for any real number $r$,
+    there may be more than one way of writing its decimal expansion.
+    For instance, although $1 = 0.\bar{9}$,
+    $f(1) = 0$ and $f(0.\bar{9}) = 9$. \\
+
+    \section*{Exercise 7 $***$}
+    Proof that, for the surjective map $f: A \to B$,
+    the relation $a \sim b$ when $f(a) = f(b)$
+    is an equivalence relation,
+    whose classes are the fibers of $f$: \\
+    We know that $f(a) = f(a)$. \\
+    We also know that if $f(a) = f(b)$,
+    then $f(b) = f(a)$ is trivially true. \\
+    Likewise,
+    if $f(a) = f(b)$ and $f(b) = f(c)$,
+    then $f(a) = f(c)$ is again trivially true. \\
+    This means that the relation is an equivalence relations
+    which follows directly from $=$
+    being an equivalence relation in $B$. \\
+    For any $b \in B$,
+    there exists a value $a \in A$ such that $f(a) = b$.
+    The set
+    \[ K = \{ a \mid a \in A \text{ and } f(a) = b \} \]
+    is by defintion the fiber of $b$ over $f$. \\
+    Since all of the elements in $K$ map to $b$,
+    they are all part of the same equivalence class. \\
+    Likewise, since all elements of an equivalence class
+    represented by $a$ map to $b$,
+    then they are all part of the fiber $K$.
+    Since the fiber is a subset of the equivalence class,
+    and the equivalence class is a subset of the fiber,
+    it must be that they are the same set. \\
+    So the fibers of the function $f$
+    are the equivalence classes of the relation. \\
 
 \end{document}

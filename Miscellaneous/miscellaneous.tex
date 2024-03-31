@@ -46,6 +46,8 @@
 
 % overline short italic
 \newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+\newcommand{\laplace}[1]{\mathcal{L}\left\{#1\right\}}
+\newcommand{\invlaplace}[1]{\mathcal{L}^{-1}\left\{#1\right\}}
 
 \title{%
     \Huge Miscellaneous \\
@@ -61,37 +63,90 @@
 
     \section*{I. Square Root of Tangent Integral}
     \[
-        \begin{aligned}
-        & F(x) = \int \sqrt{\tan{(x)}} \, dx \\
-        &= \begin{bmatrix}
+        F(x) = \int \sqrt{\tan{(x)}} \, dx 
+    \]
+    \[
+        = \begin{bmatrix}
             u = \sqrt{\tan{(x)}} \\
             du = \frac{\sec^2{(x)}}{2\sqrt{\tan{(x)}}} \\
             \frac{2u}{u^4 + 1}du = dx
-        \end{bmatrix} = \int \frac{2u^2}{u^4 + 1} \, du \\
-        &= \int \frac{u^2 + u^2 + 1 - 1}{u^4 + 1} \, du \\
-        &= \int \frac{u^2 + 1}{u^4 + 1} \, du + \int \frac{u^2 - 1}{u^4 + 1} \, du \\
-        &= \int \left(\frac{1 + \frac{1}{u^2}}{u^2 + \frac{1}{u^2}} + \frac{1 - \frac{1}{u^2}}{u^2 + \frac{1}{u^2}}\right) \, du \\
-        &= \int \left(\frac{1 + \frac{1}{u^2}}{u^2 + \frac{1}{u^2} + 2 - 2} + \frac{1 - \frac{1}{u^2}}{u^2 + \frac{1}{u^2} + 2 - 2}\right) \, du \\
-        &= \int \left(\frac{1 + \frac{1}{u^2}}{(u - \frac{1}{u})^2 + 2} + \frac{1 - \frac{1}{u^2}}{(u + \frac{1}{u})^2 - 2}\right) \, du \\
-        &= \begin{bmatrix}
+        \end{bmatrix} = \int \frac{2u^2}{u^4 + 1} \, du 
+    \]
+    \[
+        = \int \frac{u^2 + u^2 + 1 - 1}{u^4 + 1} \, du 
+    \]
+    \[
+        = \int \frac{u^2 + 1}{u^4 + 1} \, du 
+        + \int \frac{u^2 - 1}{u^4 + 1} \, du 
+    \]
+    \[
+        = \int \left(\frac{1 + \frac{1}{u^2}}{u^2 
+        + \frac{1}{u^2}} + \frac{1 - \frac{1}{u^2}}{u^2 
+        + \frac{1}{u^2}}\right) \, du 
+    \]
+    \[
+        = \int \left(\frac{1 + \frac{1}{u^2}}{u^2 
+        + \frac{1}{u^2} + 2 - 2} + \frac{1 - \frac{1}{u^2}}
+        {u^2 + \frac{1}{u^2} + 2 - 2}\right) \, du 
+    \]
+    \[
+        = \int \left(\frac{1 + \frac{1}{u^2}}
+        {(u - \frac{1}{u})^2 + 2} + \frac{1 - \frac{1}{u^2}}
+        {(u + \frac{1}{u})^2 - 2}\right) \, du 
+    \]
+    \[
+        = \begin{bmatrix}
             v = u - \frac{1}{u} \\
             w = u + \frac{1}{u} \\
             dv = (1 + \frac{1}{u^2}) \, du \\
             dw = (1 - \frac{1}{u^2}) \, du
         \end{bmatrix}
-        = \int \frac{dv}{v^2 + 2} + \int \frac{dw}{w^2 - 2} \\
-        &= \frac{1}{2}\int \frac{dv}{\left(\frac{v}{\sqrt{2}}\right)^2 + 1} + \frac{1}{2}\int \frac{dw}{\left(\frac{w}{\sqrt{2}}\right)^2 - 1} \\
-        &= \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} + \frac{1}{2}\int \frac{dw}{\left(\frac{w}{\sqrt{2}} - 1\right)\left(\frac{w}{\sqrt{2}} + 1\right)} \\
-        &= \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} + \frac{1}{2}\int \left(\frac{A}{\frac{w}{\sqrt{2}} - 1} + \frac{B}{\frac{w}{\sqrt{2}} + 1}\right) \, dw \\
-        &= \text{where } A = \frac{1}{2} \text{ and } B = \frac{-1}{2} \\
-        &= \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} + \frac{1}{4}\int \left(\frac{1}{\frac{w}{\sqrt{2}} - 1} - \frac{1}{\frac{w}{\sqrt{2}} + 1}\right) \, dw \\
-        &= \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} + \frac{\sqrt{2}}{4} \left(\ln{\left|\frac{w}{\sqrt{2}} - 1\right|} - \ln{\left|\frac{w}{\sqrt{2}} + 1\right|}\right) \\
-        &= \frac{\sqrt{2}}{2}\arctan{\left(\frac{u + \frac{1}{u}}{\sqrt{2}}\right)} + \frac{\sqrt{2}}{4} \left(\ln{\left|\frac{u + \frac{1}{u} - \sqrt{2}}{\sqrt{2}}\right|} - \ln{\left|\frac{u + \frac{1}{u} + \sqrt{2}}{\sqrt{2}}\right|}\right)
-        \end{aligned}
+        = \int \frac{dv}{v^2 + 2} + \int \frac{dw}{w^2 - 2} 
     \]
-    \[ 
-        \begin{aligned}
-        &= \dfrac{\sqrt{2}}{2}\arctan{ 
+    \[
+        = \frac{1}{2}\int \frac{dv}{\left(\frac{v}{\sqrt{2}}\right)^2 + 1} 
+        + \frac{1}{2}\int \frac{dw}{\left(\frac{w}{\sqrt{2}}\right)^2 - 1} 
+    \]
+    \[
+        = \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} 
+        + \frac{1}{2}\int \frac{dw}{\left(\frac{w}{\sqrt{2}} - 1\right)
+        \left(\frac{w}{\sqrt{2}} + 1\right)} 
+    \]
+    \[
+        = \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} 
+        + \frac{1}{2}\int \left(\frac{A}{\frac{w}{\sqrt{2}} - 1} + \frac{B}
+        {\frac{w}{\sqrt{2}} + 1}\right) \, dw 
+    \]
+    \[
+        \begin{cases}
+            \sfrac{A}{\sqrt{2}} +  \sfrac{B}{\sqrt{2}} = 0 
+            \implies A = -B \\
+            A - B = 1 \implies A = 1 + B  \\
+        \end{cases}
+    \]
+    \[
+        \text{So } -B = 1 + B
+        \text{, which means that } B = -\dfrac{1}{2}
+        \text{ and } A = \dfrac{1}{2}
+    \]
+    \[
+        = \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} 
+        + \frac{1}{4}\int \left(\frac{1}{\frac{w}{\sqrt{2}} - 1} - \frac{1}
+        {\frac{w}{\sqrt{2}} + 1}\right) \, dw 
+    \]
+    \[
+        = \frac{\sqrt{2}}{2}\arctan{\left(\frac{v}{\sqrt{2}}\right)} 
+        + \frac{\sqrt{2}}{4} \left(\ln{\left|\frac{w}{\sqrt{2}} - 1\right|} 
+        - \ln{\left|\frac{w}{\sqrt{2}} + 1\right|}\right) 
+    \]
+    \[
+        = \frac{\sqrt{2}}{2}\arctan{\left(\frac{u + \frac{1}{u}}{\sqrt{2}}
+        \right)} + \frac{\sqrt{2}}{4} \left(\ln{\left|\frac{u + \frac{1}{u} 
+        - \sqrt{2}}{\sqrt{2}}\right|} - \ln{\left|\frac{u + \frac{1}{u} 
+        + \sqrt{2}}{\sqrt{2}}\right|}\right) 
+    \]
+    \[
+        = \dfrac{\sqrt{2}}{2}\arctan{ 
             \left(
                 \dfrac{ \sqrt{\tan{(x)}} 
                 - \sfrac{1}{ \sqrt{\tan{(x)}}}}{\sqrt{2}} 
@@ -102,17 +157,72 @@
             \dfrac{\sqrt{\tan{(x)}} + \sfrac{1}{ \sqrt{\tan{(x)}}} - \sqrt{2}}
             {\sqrt{\tan{(x)}} + \sfrac{1}{ \sqrt{\tan{(x)}}} + \sqrt{2}}
         \right|}
-        \end{aligned}
     \]
-        
+
+    \newpage
+
+    \subsection*{II. Differential Equation using Laplace Transform}
+    \[
+        y'' - y' - 2y  = 2t + 1 \qquad y(0) = 1, \, y'(1) = 2
+    \]
+    \[
+        \laplace{y'' - y' - 2y} = \laplace{2t+1}
+    \]
+    \[
+        \laplace{y''} - \laplace{y'} - \laplace{2y} 
+        = 2\laplace{t} + \laplace{1}
+    \]
+    \[
+        \text{Taking } Y(s)
+        \text{ to be the laplace transform } \laplace{y(t)}
+    \]
+    \[
+        (s^2Y(s) - sy(0) - y'(0))
+        - (sY(s) - y(0)) - 2Y(s)
+        = \sfrac{2}{s^2} - \sfrac{1}{s}
+    \]
+    \[
+        (s^2-s-2)Y(s) - s - 2 - 1 = \dfrac{2}{s^2} - \dfrac{1}{s}
+    \]
+    \[
+        (s^2-s-2)Y(s) = \dfrac{2}{s^2} - \dfrac{1}{s} + s + 1
+    \]
+    \[
+        (s^2-s-2)Y(s) = \dfrac{s^3 + s^2 + s + 2}{s^2}
+    \]
+    \[
+        Y(s) = \dfrac{s^3 + s^2 + s + 2}{s^2(s^2-s-2)}
+    \]
+    \[
+        Y(s) = \dfrac{s^3 + s^2 + s + 2}{s^2(s-2)(s+1)}
+        = \dfrac{A}{s^2} + \dfrac{B}{s} + \dfrac{C}{s-2} + \dfrac{D}{s+1}
+    \]
+    \[
+        \begin{cases}
+            -2A = 2 \implies A = -1 \\
+            -A - 2B = 1 \implies -2B = (1-1) \implies B = 0 \\
+            A - B + C -2D = 1 \implies C - 2D = 2 \\
+            B + C + D = 1 \implies C + D = 1 \\
+        \end{cases}
+    \]
+    \[ \text{Subtracting the fourth line from the third, we get } \]
+    \[
+        -3D = 1 \implies D = -\dfrac{1}{3}
+        \implies C - \dfrac{1}{3} = 1 \implies C = \dfrac{4}{3}
+    \]
+    \[
+        Y(s) = -\dfrac{1}{s^2} + \dfrac{\sfrac{4}{3}}{s-2}
+        - \dfrac{\sfrac{1}{3}}{s+1}
+    \]
+    \[
+        \invlaplace{Y(s)} = -\invlaplace{\dfrac{1}{s^2}} 
+        + \dfrac{4}{3}\invlaplace{\dfrac{1}{s-2}}
+        - \dfrac{1}{3}\invlaplace{\dfrac{1}{s+1}}
+    \]
+    \[
+        y(t) = -t + \dfrac{4e^{2t}}{3} - \dfrac{e^{-t}}{3}
+    \]
+
     
 
 \end{document}
-
-
-C:\Users\msaba\OneDrive\Documents\college\personal\SFML-2.5.1\lib
-C:\Users\msaba\OneDrive\Documents\college\personal\glew-2.2.0\lib\Release\Win32
-
-C:\Users\msaba\OneDrive\Documents\college\personal\SFML-2.5.1\include
-C:\Users\msaba\OneDrive\Documents\college\personal\glm-master\glm
-C:\Users\msaba\OneDrive\Documents\college\personal\glew-2.2.0\include

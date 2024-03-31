@@ -260,9 +260,17 @@
     Formally, it is set $f(A)$, defined as
     \[ f(A) = \{ b \in B \mid b = f(a) \text{ for some } a \in A \} \]
     And it is a subset of $B$. \\
-    The element $a$ for which $f(a) = b$
+    The set of elements $a$ for which $f(a) = b$
     (which we know is unique when $f$ is well defined)
-    is called the \textbf{pre-image} or \textbf{fiber} of $b$ over $f$. \\
+    is called the \textbf{pre-image} or \textbf{fiber} of $b$ over $f$.
+    The fiber is not usually the same as $f^{-1}$,
+    (which always maps $b$ to a single pre-image $a$),
+    as the pre-image may contain no elements
+    (if the function is non-surjective)
+    or many elements
+    (if the set function is non-injective).
+    Only when it is bijective is the fiber of an element $b$
+    the same as $f^{-1}(b)$. \\
 
     If a function $f: A \to A$ maps every element of $A$ to itself,
     then it is called the \textbf{identity mapping},
