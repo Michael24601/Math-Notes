@@ -44,8 +44,8 @@
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
-\lstset{ 
-    language=C++,
+\lstset{
+    language=Python,
     basicstyle=\ttfamily\footnotesize,
     numbers=left,
     numberstyle=\tiny\color{mygray},
@@ -57,7 +57,7 @@
     showtabs=false,
     frame=single,
     rulecolor=\color{black},
-    tabsize=2,
+    tabsize=4,
     captionpos=b,
     breaklines=true,
     breakatwhitespace=false,
@@ -334,16 +334,42 @@
     \left\lfloor \dfrac{n}{p^i} \right\rfloor \]
 
     \section*{Exercise 9}
-    This is a C++ program that computes $\gcd(a, b)$
+    This is a \textit{Python} program that computes $\gcd(a, b)$
     using the Euclidian Algorithm,
     then uses substitution to find the varibales $x$ and $y$
     such that $ax + by = \gcd(a, b)$: \\
     \begin{lstlisting}
-        #include <iostream>
-        int main() {
-            std::cout << "Hello, world!" << std::endl;
-            return 0;
-        }
+        def main(a, b):
+            gcd, (y, x) = find_gcd(a,b)
+            print("gcd(%d, %d) = %d" % (a,b,gcd))
+            print("%d = %d(%d) + %d(%d)" % (gcd, a, x, b, y))
+            
+
+        def find_gcd(a,b):
+            if (b > a):
+                b,a = a,b
+
+            list_of_q = []
+            while (a % b != 0):
+                q,r = a//b, a%b
+                list_of_q.append(q)
+                a = b
+                b = r
+            return r, find_extended_gcd(list_of_q)
+
+
+        def find_extended_gcd(list_of_q):
+            a_row_values = [1,0] 
+            b_row_values = [0,1]
+
+            for i in range(2,len(list_of_q)+2):
+                a_row_values.append(a_row_values[i-2] - a_row_values[i-1] * list_of_q[i-2])
+                b_row_values.append(b_row_values[i-2] - b_row_values[i-1] * list_of_q[i-2])
+            return a_row_values[-1], b_row_values[-1]
+
+
+        if __name__ == '__main__':
+            main(6003722857, 77695236973)
     \end{lstlisting}
 
     \section*{Exercise 10 $***$}

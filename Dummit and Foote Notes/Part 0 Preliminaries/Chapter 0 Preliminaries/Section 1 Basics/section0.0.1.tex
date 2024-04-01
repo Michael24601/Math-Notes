@@ -112,8 +112,21 @@
     We denote a proper subset using $B \subset A$.
     If $B$ isn't a proper subset of $A$,
     but is a subset of $A$, then $A = B$. \\
-    Likewise if $B \subseteq A$ and $A \subseteq B$,
-    then $A = B$. \\
+
+    One way to prove that two sets $A$ and $B$
+    are equal is to show that $A \subseteq B$
+    and that $B \subseteq A$;
+    if both sets are contained in each other,
+    then they have to be the same set,
+    for the same reason that if $x \leqslant y$
+    and $y \leqslant x$, then $x = y$. \\ 
+    Another way of thinking about this is this. 
+    We know that $A = B$
+    means that $a \in A$ if and only if $a \in B$.
+    This implies that if $a \in A$ then $a \in B$,
+    and that if $a \in B$ then $a \in A$.
+    The first statement basically means that $A \subseteq B$,
+    and the second means that $B \subseteq A$. \\
 
     The \textbf{cartesian product} of two non-empty sets $A$ and $B$
     is the set $A \times B$ defined as

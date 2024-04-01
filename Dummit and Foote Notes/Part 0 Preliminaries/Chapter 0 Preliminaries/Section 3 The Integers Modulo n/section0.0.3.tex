@@ -33,7 +33,7 @@
 \newcommand{\C}{\mathbb{C}}
 
 % overline short italic
-\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+\newcommand{\olsi}[1]{\,\overline{{#1}}}
 
 \usepackage{indentfirst}
 \usetikzlibrary{shapes,positioning,fit,calc}
@@ -175,24 +175,39 @@
     For now, we will note that the addition and multiplication
     operations on the equivalence classes can be seen as
     functions $\Z/n\Z \times \Z/n\Z \to \Z/n\Z$. \\
-    However, we can't be sure that these functions are well defined
-    because the elements themselves $\olsi{a}$ and $\olsi{b}$ are sets. \\
-    If for instance addition is well defined,
-    it would mean that if $\olsi{a} = \olsi{b}$,
-    and $\olsi{c} = \olsi{d}$,
-    then $\olsi{a} + \olsi{c}$ is the same class as $\olsi{b} + \olsi{d}$
-    ($\olsi{a + c} = \olsi{b + d}$). \\
-    However, because our elements $\olsi{a}$ and $\olsi{b}$ are sets,
-    to be sure of this,
-    we can't just claim that $a + c$ and $b + d$ belong to the same
-    class.
+    If for instance addition of residue classes is well defined,
+    the function described above would also be well defined.
+    This means that that if $\olsi{a} = \olsi{b}$,
+    and $\olsi{c} = \olsi{d}$
+    (meaning $b \in \olsi{a}$ and $d \in \olsi{c}$),
+    that $f(\olsi{a}, \olsi{c}) = f(\olsi{b}, \olsi{d})$,
+    and by extension, that $\olsi{a} + \olsi{c}$
+    is the same class as $\olsi{b} + \olsi{d}$. \\
+    However, we can't be sure that this function is well defined
+    because the elements themselves
+    $\olsi{a}$ and $\olsi{b}$ are sets. \\
+    We defined $\olsi{a} + \olsi{c}$
+    as being the residue class $\olsi{a + c}$.
+    Because our elements $\olsi{a}$ and $\olsi{b}$ are sets,
+    we could have easily picked different representatives
+    $b$ and $d$,
+    and we need to make sure that the result $\olsi{b + d}$
+    remains the same as $\olsi{a+b}$,
+    otherwise addition becomes ambiguous
+    (the results depend on the representative we choose,
+    not just the class itself).
     We need to show that it is true for all elements of the classes,
-    not just $a$, $b$, $c$, and $d$.
+    not just $a$ and $c$.
     In other words, it must be true regardless
     of the choice of representatives. \\
-    If we do this for both addition and multiplication,
-    we will have shown that the operators are well defined
-    on the equivalence classes. \\
+    Note that addition will turn out to be well defined,
+    and that's because
+    $(a + c) \equiv ((a \mod n) \mod (c \mod n)) \mod n$,
+    which makes $\olsi{a} + \olsi{c} = \olsi{a + c}$
+    true for any $a$ or $c$.
+    If we had picked some other mapping,
+    such as $\olsi{a} + \olsi{c} = \olsi{a^3 + c^2 + 1}$,
+    it would not have been welld defined. \\
 
     Now to prove the last statement,
     we show that, for any $a_1, a_1, b_1, b_2 \in \Z$,
@@ -217,27 +232,38 @@
     choice of representatives. \\
     This completes the proof. \\
 
+    Whenever we define an operation on sets
+    (such as residue classes $\olsi{a}$)
+    such as addition, mutliplication, inverses...
+    we need to show that the result does not depend on which
+    representative of the set we choose,
+    meaning that the operation is well defined.
+    This is not specific to just addition and multiplication,
+    nor to binary functions (operators).
+    For instance, the inverse of $\olsi{a}$
+    and can be thought of as a unary operator,
+    or as a function $f: \Z/n\Z \to \Z/n\Z$,
+    which also needs to be shown to be well defined.
+
     An important subset of $\Z/n\Z$
     is the set consisting of the collection of residue classes
     that have a multiplicative inverse in $\Z/n\Z$:
     \[ (\Z/n\Z)^\times
     = \{ \olsi{a} \in \Z/n\Z \mid \text{gcd}(a, n) = 1 \} \]
-    Obviosuly, to avoid ambiguity,
-    this definition requires that for the representative $a$ of $\olsi{a}$,
-    if $\text{gcd}(a, n) = 1$,
-    then all the representatives of $\olsi{a}$ must
-    also be relatively prime to $n$.
-    This is trivial to see of course, as per the definition of
-    a congruence class. \\
-    By the Euclidian algorithm,
-    we have that $\text{gcd}(a, b) = ax + by$ for some integers $x, y$.
-    So if $\text{gcd}(a, n) = 1$,
-    then $ax + ny = 1$.
-    We know that $ny \in \olsi{0}$ since it is divisible by $n$,
-    so in modular arithmetic, $ax \equiv 1 \, (\text{mod } n)$.
-    This makes $\olsi{x}$
-    \textbf{the multiplicative inverse} of the class $\olsi{a}$
-    (again note that the set itself is the inverse, not $x$). \\
+    A \textbf{multiplicative inverse} of a class $\olsi{a}$
+    is a class $\olsi{x}$ such that $\olsi{a}\olsi{x} = 1$.
+    Obviously, in order for the multiplicative
+    inverse to be well defined,
+    since $\olsi{a}$ and $\olsi{x}$ are sets,
+    we need to avoid any ambiguaty.
+    This means that all representatives
+    $x$ and $a$ of $\olsi{a}$ and $\olsi{x}$
+    must satisfy $ax \equiv 1 \mod n$
+    whenever $\gcd(a, n) = 1$
+    (and vice-versa).
+    Basically this means that the definition must hold
+    for any representative $a$ of $\olsi{a}$. \\
+    This is proven in an exercise using the Euclidian Algorithm. \\
     
 
 \end{document}
