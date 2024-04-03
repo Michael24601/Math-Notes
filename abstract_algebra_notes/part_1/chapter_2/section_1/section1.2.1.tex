@@ -104,6 +104,12 @@
     (e.g. is not $G$),
     then we denote it using $H < G$. \\
 
+    The trivial group $\{1\}$ is always a subgroup of all groups;
+    this is because it is clearly closed under inverses and
+    whatever group operation we have,
+    and it is always a subset of all groups
+    (they all contain the identity). \\
+
     When we know $G$ is a group,
     checking that any non-empty subset $H$ is as simple as making sure
     $H$ is closed under $G$'s binary operation and inverses.
@@ -151,6 +157,17 @@
     such that $x^{n-1} = x^{-1}$. \\
     Since it's an element of $H$,
     it must be that $H$ is closed under inverses. \\
+
+    Subgroups of a group $G$ may
+    be subgroups of other subgroups of $G$.
+    For instance, if we have two subgrpoups $H, K \leqslant G$,
+    and $H \subseteq K$,
+    then $H \leqslant K$;
+    this is because $H$ being a subgroup of $G$
+    means it already satisfies the axioms of closure
+    (and not being empty) of a subgroup.
+    So for it to be a subgroup of $K$,
+    it only really needs to be a subset of $K$. \\
     
 
 \end{document}
