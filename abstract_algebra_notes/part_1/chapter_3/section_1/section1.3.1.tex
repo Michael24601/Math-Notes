@@ -1,0 +1,187 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+% For using float option H that places figures exatcly where we want them
+\usepackage{float}
+% makes figure font bold
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+% For text generation
+\usepackage{lipsum}
+% For drawing
+\usepackage{tikz}
+% For smaller or equal sign and not divide sign
+\usepackage{amssymb}
+% For the diagonal fraction
+\usepackage{xfrac}
+% For enumerating exercise parts with letters instead of numbers
+\usepackage{enumitem}
+% For dfrac, which forces the fraction to be in display mode (large) e
+% even in math mode (small)
+\usepackage{amsmath}
+% For degree sign
+\usepackage{gensymb}
+% For "\mathbb" macro
+\usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+% overline short italic
+\newcommand{\olsi}[1]{\,\overline{{#1}}}
+\newcommand{\ang}[1]{\langle #1 \rangle}
+
+\usepackage{indentfirst}
+\usetikzlibrary{shapes,positioning,fit,calc}
+
+\usepackage{changepage} % for adjustwidth environment
+
+\title{%
+    \Huge Abstract Algebra \\
+    \large by \\
+    \Large Dummit and Foote \\~\\
+    \huge Part 1: Group Theory \\
+    \LARGE Chapter 3: Quotient Groups and Homomorphisms \\
+    \Large Section 1: Definitions and Examples
+}
+\date{2024-04-12}
+\author{Michael Saba}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+ 
+    This section introduces the concept of a quotient group,
+    which, like a subrgoup, allows us to obtain a smaller group
+    from another group. 
+    Like subgroups, we can use quotient groups of a group to study
+    its structure.
+    We can often combine information about subgroups and quotient
+    groups in order to derive theorems about groups. \\
+
+    \subsection*{Quotient Groups}
+
+    The study of the quotient groups of some group $G$
+    is essentially the study of the homomorphisms of $G$. \\
+    Suppose that we have a homomorphism $\varphi$
+    from $G$ onto another group $H$.
+    We know that the fibers of any mapping $\varphi$
+    are the sets of elements in $G$ that map to the same element
+    in $H$.
+    We will call $X_a$ the set of elememts that map to $a$
+    where $a \in H$,
+    and we say that it is the fiber lying over $a$. \\
+    Because the elements being mapped to by $\varphi$
+    are in a group $H$,
+    the group operation $H$ provides a way of multiplying them.
+    This suggests that we can perhaps define an operation
+    on the fibers themselves (the sets) that follows
+    the group operation of $H$;
+    that means that if $a, b \in H$ such that $ab = c$,
+    then we could define $X_a \cdot X_b$ to be $X_{ab} = X_{c}$.
+    This allows us to create a group out of the fibers of $G$. \\
+    We first need to prove that this is indeed a group:
+    \begin{itemize}[label=$\diamond$]
+        \item 
+            The operation is associative because
+            the operation is associative in $H$.
+        \item
+            The identity is the fiber over the identity of $H$,
+            $X_1$.
+            This is because $X_1 \cdot X_a = X_{1 \cdot a} = X_{a}$
+            and $X_a \cdot X_1 = X_{a \cdot 1} = X_{a}$.
+        \item
+            The inverse of a fiber $X_a$ is the fiber $X_{a^{-1}}$,
+            since $X_a \cdot X_{a^{-1}} = X_{aa^{-1}} = X_1$.
+        \item
+            We know that for any two fibers $X_a$ and $X_b$,
+            $X_a \cdot X_b = X_{ab}$.
+            In order for the group to be closed under this operation,
+            we would need to guarantee that $ab$ has a fiber
+            over $\varphi$.
+            This is true because, as we know,
+            the image of a group $G$ over a homomorphism
+            $\varphi: G \to H$
+            is closed under the operation of $H$.
+            This is because the image of $G$ is itself a group
+            (since it is a subgrouo of $H$, 
+            as shown in exercise 1.1.6.13,
+            and as we will show later in this section).
+            Thus the group is closed under its operation.
+    \end{itemize}
+    The group defined by the fibers of some homomorphism $\varphi$
+    from $G$ to $H$
+    is known as a \textbf{quotient group} of $G$. \\
+    Since the mutliplication of the fibers is defined
+    from the multiplication of the elements in $H$,
+    it is clear to see that the quotient group is isomorphic
+    to the image of $G$ under the homomorphism $\varphi$
+    (the elements of $H$ which have non-empty fibers in $G$). \\
+
+    Suppose we have a homomorphism $\varphi: G \to H$.
+    The fiber $X_1$ lying over the identity is called
+    the kernel of $\varphi$.
+    Basically, it is the set
+    \[ \{ g \in G \mid \varphi(g) = 1 \} \]
+    We can denote it using $\ker \varphi$. \\
+    This is related to the idea of the kernel of a group action.
+    We can recall that if a group $G$ is acting
+    on a a subset $S$ of $G$,
+    then the kernel of the action is the set of elements
+    in $G$ that satbilize all elements in $S$:
+    \[ \{ g \in G \mid g \cdot s = g \text{ for all } s \in S \}  \]
+    We can also recall that all group actions
+    from a group $G$ onto a set $A$
+    are themselves just a homomorphism $\phi: G \to S_A$
+    called the permuation representation of the group action
+    (since each group element essentially permutes $A$).
+    The kernel of the action of $G$ on its subset $S$
+    is the set of elements that don't permute $S$,
+    and send each of its element to themsleves.
+    So if we consider the permutation representation of this action
+    $\phi: G \to S_S$,
+    then the kernel of the action is the set of elements of $G$
+    that $\phi$ maps to the identity permutation
+    (the one that doesn't permute $S$),
+    which is exactly how we defined the kernel of a homomorphism
+    such as $\phi$. \\
+    Thus the kernel of group action and the kernel of homomorphism
+    are eseentially the same idea. \\
+
+    We will now prove some properties of homomorphisms
+    and their fibers.
+    Suppose that $\varphi: G \to H$ is a homomorphism:
+    \begin{itemize}[label=$\diamond$]
+        \item 
+            $\varphi(1_G) = \varphi(1_H)$.
+            This is true because
+            $\varphi(1_G) = \varphi(1_G1_G) = \varphi(1_G)\varphi(1_G)$.
+            So by the law of cancellation,
+            it must be that $\varphi(1_G) = 1_H$
+            (we mutltiply both sides by $\varphi(1_G)^{-1}$).
+        \item     
+            $\varphi(g^{-1}) = \varphi(g)^{-1}$
+            for any $g \in G$.
+            This is true because
+            $\varphi(1_G) = \varphi(gg^{-1}) 
+            = \varphi(g)\varphi(g^{-1}) = 1_H$
+            (by the first proposition we proved).
+            Multiplying both sides by $\varphi(g)^{-1}$,
+            we get $\varphi(g^{-1}) = \varphi(g)^{-1}$.
+        \item
+            $\varphi(g^n) = \varphi(g)^n$.
+            We can prove this using induction:
+
+
+    \end{itemize}
+
+
+
+\end{document}
