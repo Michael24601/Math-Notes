@@ -1,0 +1,851 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture IV
+}
+\date{2025-05-03}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Invariance and Variance}
+
+We already saw how we can express vectors
+in a basis other than the standard basis,
+and switch between these two bases using
+a transformation matrix and its inverse. \\
+Now is the time to formalize this notion
+for any two bases $B$ and $B'$. \\
+
+A vector space is a 4-tuple:
+\[ (V, S, +, \cdot) \]
+Where $V$ is a set of vectors,
+$S$ is a set of scalars,
+the binary operation:
+\[ +:V \times V \to V \]
+defines vector addition,
+and the binary operation:
+\[ \cdot: S \times V \to V \]
+defines scalar multiplication,
+which can be thought of scaling vectors. \\
+The set of vectors $V$ is closed under
+both operations. \\
+
+A linear combination of a set of vectors
+is a sum of the vectors each scaled by
+some scalar. \\
+
+The basis of a vector space
+is a set of linearly independent vectors
+that span the entire vector space. \\
+That is to say, it is a set of vectors:
+\[ \{ e_1, e_2, \dots e_n \} \subseteq V \]
+such that every vector in $V$
+can be written as a linear combination
+of the basis vectors. Moreover,
+there can be no redundancy,
+that is to say,
+there should be a unique linear combination
+that gives each vector in $V$. \\
+
+Now to the main topic of this section.
+We will show that vectors are invariant,
+while their components are not invariant. \\
+
+A vector represents a point in $\R^n$
+space. That point is invariant,
+meaning that it does not vary depending
+on the basis in which the vector is expressed. \\
+
+However, the components of the vector,
+that is, the list of numbers used to represent
+the vector, are variant. \\
+This is because they
+depend on the basis in which the vector
+is being expressed, as the components are just
+the coefficients of the linear combination
+of the basis vectors that make up the vector. \\
+
+We will now distinguish between covariance
+and contravariance (two types of variance). \\
+
+How can we transform a basis?
+Suppose we have basis vectors of the form:
+\[ \{ e_i \} \]
+Then we can just apply a transformation 
+using a matrix $A$ such that:
+\[ e_i' = \{ Ae_i \} \]
+This gives us the new basis vectors. \\
+
+So the basis vectors are covariant;
+you just transform the basis directly
+using the transformation matrix. \\
+We call this the forward transformation. \\
+
+Now suppose we have a vector $v$. \\
+As we said, the geometric vector (arrow in space)
+is invariant, it will remain the same
+no matter the basis.
+But suppose that we want to express
+the vector $v$,
+which had previously been expressed in
+the basis:
+\[ \{e_i\} \]
+in the new basis:
+\[ \{ e_i' = Ae_i \} \]
+we got from transforming the old basis. \\
+How would we update the components
+of the vector so they represent it
+in the new basis? \\
+
+As we know, in the original basis $\{e_i\}$
+(which contains vectors $e_1, e_2, \dots e_n$),
+we can express $v$ as a linear combination
+of each old basis vector:
+\[ v = \sum_{i = 1}^{n} v^ie_i \]
+So all we have to do in order to update the
+components of $v$ to the new basis is
+express the old basis vectors $e_i$
+in the new basis. \\
+We know that:
+\[ e_i' = Ae_i \]
+Which means that:
+\[ (A\inv)e_i' = e_i \]
+So we can write:
+\[ v = \sum_{i = 1}^{n} v^ie_i
+= \sum_{i = 1}^{n} v^i (A\inv)e_i'
+= (A\inv)\sum_{i = 1}^{n}v^i e_i' \]
+So we just wrote $v$,
+this time expressed as a linear combination
+of the new basis vectors $e_i'$,
+which means that the coefficients of the
+linear combination are the components
+of $v_i'$ of $v$,
+expressed in the new basis $B'$. \\ 
+
+So in the new basis, each component of $v$
+will can be calculated using:
+\[ (v^i)' = (A\inv)^i v \]
+This is why we call the vector components
+contravariant;
+they vary inversely with the basis of choice.
+We can call it the backward transformation. \\
+
+We can thus write $v$ as:
+\[ v = \sum_{i = 1}^{n} v^ie_i \]
+in the old basis, or:
+\[ v = \sum_{i = 1}^{n} (v^i)'e_i' \]
+in the new basis. \\
+
+Note that if the original basis $B$ happened
+to be the standard basis, then the
+transformation matrix $A$
+that takes us to a new basis $B'$,
+is just the matrix with the column vectors
+as the basis vectors. \\
+We already talked about this,
+and now we've generalized the idea
+to any two bases $B$ and $B'$. \\
+
+\newpage
+
+\subsection*{Covectors and Dual Bases}
+
+Covectors are functions
+that map vectors to the real numbers
+(or any field on which the vector space
+is defined). \\
+
+We can think of covectors as just row vectors
+along with the dot product operator:
+\[ \alpha = \vecTwoTransposed{\alpha_2}{\alpha_2} \]
+This function maps a vector $v$
+to the dot product of the row vector $\alpha$
+and the column vector $v$. \\
+
+So for example, if we have a vector $v \in \R^2$,
+then the covector $\alpha$ along with the dot product
+operation form a function:
+\[ \alpha(v) =
+\vecTwoTransposed{\alpha_1}{\alpha_2}
+\vecTwo{v^1}{v^2} = \alpha_1v^1 + \alpha_2v^2 \]
+which maps the vector $v$ from $\R^2$
+to $\alpha_1v^1 + \alpha_2v^2$ in $\R$. \\
+
+More generally, we can define a covector
+as the function from the vector space
+onto the reals as:
+\[ \alpha: V \to \R \]
+where:
+\[ \alpha(v) = \sum_{i = 1}^{n} \alpha_iv^i \] \\
+
+We notice some things about covectors. \\
+First, note that for any covector $\alpha$,
+and any two vectors $v, u$:
+\[ \alpha(v + u) = \alpha(v) + \alpha(u) \]
+Moreover, for any scalar $\lambda$
+and vector $v$:
+\[ \alpha(\lambda v) = \lambda \alpha(v) \]
+This is called linearity,
+which will come in handy later. \\
+
+We can visualize vectors as arrows in space,
+but how can we visualize covectors?
+Drawing them as arrows using their components
+as the coefficients of a linear combination
+of basis vectors is deceptive,
+since a covector is a function. \\
+
+Instead, a good way to visualize
+a covector $\alpha$ is a set of parallel lines,
+all perpendicular to the vector $\alpha^T$.
+The output of the function $\alpha$
+given a vector $v$ depends on how many of
+these lines the vector $v$ pierces.
+It's a measure of how much the vector $v$ is in
+the direction of the vector $\alpha^T$. \\
+
+Now suppose we have two covectors,
+$\beta$ and $\gamma$. \\
+What would the function that combines (sums)
+these two covectors output?
+We can use the sum formula to answer that:
+\[ (\beta + \gamma)(v)
+= \sum_{i = 1}^{n} (\beta_i + \gamma_i)v^i
+= \sum_{i = 1}^{n} \beta_iv^i
++ \sum_{i = 1}^{n} \gamma_iv^i
+= \alpha(v) + \gamma(v) \]
+So it is the sum of the individual outputs. \\
+Visually, we can think of this
+as a set of parallel lines rotated sort of
+between the set of lines of $\beta$
+and $\gamma$,
+with a density equal to the sum of the
+density of the other two (density being
+how close together the lines are).
+This new set of lines will measure
+how much the vector $v$ pierces
+both directions $\beta^T$ and $\gamma^T$,
+and adds them together. \\
+
+We can also scale covectors. \\
+For a scalar $\lambda \in \R$,
+we can scale a covector $\alpha$:
+\[ (\lambda \alpha)(v)
+= \sum_{i = 1}^{n} (\lambda \alpha_i)v^i
+= \lambda \sum_{i = 1}^{n}\alpha_iv^i 
+= \lambda \alpha(v)\]
+So what a scalar does is just scale the output,
+which can be visually thought of as scaling
+the density of the lines of the covector. \\
+
+Now that we have a scaling and adding operation
+for covectors, we can define the dual vector
+space. \\
+
+Given a vector space $(V, S, +, \cdot)$,
+we can define the dual vector space to be:
+\[ (V^*, S, +, \cdot) \]
+Where $V^*$ contains all of the covectors that
+act on vectors in $V$. \\
+Note that the set of scalers $S$
+is the same as the vector space's,
+but the $+$ and $\cdot$ operators
+are distinct. \\
+
+Like vectors, covectors are invariant,
+while covector components are variant. \\
+
+The covector is a funciton represented by 
+a row vector and the dot product;
+so the effect of the function itself,
+what it does, does not depend on the basis.
+It is invariant. \\
+
+However, the components used to represent the
+covector as a row vector do depend on the
+basis the covector is in. \\
+
+However, note that when we say basis here,
+we don't mean a basis of the vector space,
+but rather, a basis in the dual vector space,
+since this is where covectors live. \\
+
+Given a basis $\{ e_i \}$ for the vector space $V$,
+we can define a special set of covectors in $V^*$:
+\[ \{ \epsilon^i \} = 
+\{ \epsilon^1, \epsilon^2, \dots, \epsilon^n \} \]
+which have a desirable property. \\
+We can define a set of covectors such that:
+\[ \epsilon^i(e_j) = 1 \iff i = j \]
+That is to say, the output of applying
+one of those covectors to the basis returns
+$1$ if the covector
+and vector share the same index,
+and $0$ otherwise. \\
+Notice then that if we apply every covector
+$\epsilon^1, \epsilon^2, \dots \epsilon^n$
+to one vector $e_i$,
+we get a whole column of scalers,
+which actually form a vector,
+with $0$s in all entries except for one. \\
+If we repeat this for every vector
+$e_1, e_2, \dots, e_n$,
+we get a set of vectors that form the
+identity matrix. \\
+Another way to write this is:
+\[ \epsilon^i(e_j) = \delta_j^i \]
+Where $\delta_j^i = 1$ if $i = j$,
+and $\delta_j^i = 0$ if $i \neq j$. \\
+
+So what happens if we apply these special
+covectors to any vector $v$
+which is expressed in the basis $\{e_i\}$?
+Well, we can express $v$
+as a linear combination of the basis vectors:
+\[ v = \sum_{i = 1}^{n} v^ie_i \]
+We can then send this sum
+as input to one of the covectors $\epsilon^k$:
+\[ \epsilon^k(v)
+= \epsilon^k\para{\sum_{i = 1}^{n} v^ie_i} \]
+And then we can decompose this into
+a linear combination using the linearity of
+the covector:
+\[ \sum_{i = 1}^{n} v^i\epsilon^k(e_i)  \]
+We already know what the output of the covector
+is when the input is a basis vector.
+The operands $\epsilon^k(e_i)$
+in this sum will be $0$ for all $i$
+except $i = k$,
+where $\epsilon^k(e_k) = 1$. \\
+So the result of the sum is:
+\[ \epsilon^k(v) = v_k \cdot \epsilon^k(e_k)
+= v^k \cdot 1 = v^k \]
+So each covector $\epsilon^k$
+just extracts the $\nth{k}$ component
+of the vector $v$ expressed in the
+basis $\{ e_i \}$. \\
+
+This is very helpful, because it means
+that we can write covectors as linear
+combinations of these special covectors. \\
+Again we have a vector $v$ expressed
+in the basis $\{ e_i \}$,
+and we have the covectors $\{\epsilon^i\}$
+derived from $\{ e_i \}$. \\
+So suppose we have an arbitrary covector
+$\alpha \in V^*$,
+which acts on some vector $v \in V$. \\
+We know we can write $v$ as a linear
+combination of basis vectors $\{e_i\}$, so:
+\[ \alpha(v) 
+= \alpha\para{\sum_{i = 1}^{n} v^ie_i} \]
+So by the linearity of covectors, we have:
+\[ \alpha(v) = \sum_{i = 1}^{n} v^i\alpha(e_i) \]
+But we know that each component
+$v_i$ can be extracted from $v$ by:
+\[ v^i = \epsilon^i(v) \]
+So the sum becomes:
+\[ \alpha(v) = \sum_{i = 1}^{n} 
+\alpha(e_i)\epsilon^i(v) \]
+Notice that each $\alpha(e_i)$
+is just a scalar,
+which means that the sum is a linear combination
+of the covectors $\{ \epsilon^i \}$. \\
+To conclude, we can write a covector
+as a linear combination of the special
+covectors $\{ \epsilon^i \}$,
+when acting on a vector expressed
+in basis $\{e_i\}$
+(using which we defined the special covectors). \\
+
+This special set of covectors $\{ \epsilon^i \}$
+is called the dual basis of the basis $\{e_i\}$. \\
+It acts similar to a basis;
+if we want to express a covector $\alpha$
+in a specific dual basis,
+then we just write it as a row vector
+whose components are the coefficients
+of the linear combination of the dual basis
+covectors that give us $\alpha$. \\
+
+Each dual basis is specific to a basis. \\
+
+So covector components are variant,
+since they depend on the dual basis
+they are in. \\
+
+However, notice what happens if we want to
+transform from an old dual basis $D$ to a
+new dual basis $D'$. \\
+First we have the original basis $B$
+with vectors $\{e_i\}$,
+which we can transform into $B'$
+using the matrix $A$.
+The dual basis $D'$ is the one we derive
+from the new basis $B'$. \\
+As we know:
+\[ e_j' = Ae_j 
+\AND e_j = (A\inv)e_j' \]
+We also know that we can derive our dual basis
+$D$ with covectors $\{\epsilon^i\}$
+from the basis $B$ using:
+\[ \epsilon^i(e_j) = \delta_j^i \]
+But this means that:
+\[ \epsilon^i((A\inv) e_j')
+= \epsilon^i(e_j) = \delta_j^i \]
+Matrix multiplication is associative, so:
+\[ \epsilon^i((A\inv) e_j')
+=  (\epsilon^i(A\inv))(e_j') 
+= \delta_j^i \]
+But as we know, if we have a set of covectors,
+that take the new basis vectors $\{ e_i' \}$
+as input, and return $\delta_j^i$,
+then these covectors form the dual basis of $B'$.
+This means that the new dual basis $D'$
+is made up of covectors:
+\[ (\epsilon^i)' = \epsilon^i(A\inv) \]
+Which means we can transform from the old
+dual basis to the new dual basis
+using the backwards (inverse) transformation. \\
+This makes the dual basis contravariant. \\
+
+We know that we can write covectors
+as linear combinations of dual basis
+covectors:
+\[ \alpha(v) = \sum_{i = 1}^{n} 
+\alpha(e_i)\epsilon^i(v) \]
+We also know that:
+\[ (\epsilon^i)' = \epsilon^i(A\inv) \]
+Which means that:
+\[ (\epsilon^i)'A = \epsilon^i \]
+So now we can write the covector $\alpha$
+in terms of the new dual basis covectors
+by just replacing $\epsilon_i$
+by $(\epsilon_i)'A$:
+\[ \alpha(v) 
+= \sum_{i = 1}^{n} (\alpha(e_i))((\epsilon_i)'A)(v) \]
+We can then use matrix associativity to do this:
+\[ \alpha(v) = 
+A\sum_{i = 1}^{n} (\alpha(e_i))(\epsilon_i)'(v) \]
+We know that if we can express a covector
+as a linear combination of dual basis covectors,
+then the coefficients of the dual basis covectors
+are the components of the covector in that dual
+basis. \\
+
+So since we can express the covector $\alpha$
+as a linear combination of the new dual basis
+covectors $\{ (\epsilon^i)' \}$,
+this means that the coefficients are the
+components $\alpha_k'$ of the covector
+expressed in the new dual basis:
+\[ \alpha_k' = \alpha A^k \]
+Which means we need to use a forward
+transformation to get the covector components
+expressed in a new dual basis. \\
+So covector components are covariant. \\
+
+So covectors and dual basis covectors
+are the opposite of vectors and basis vectors
+when it comes to which is covariant and
+which is covariant. \\
+
+Note that when we transform a covector,
+we do a matrix multiplication from
+the right, since it's a row vector:
+\[ \alpha_k' = \alpha A^k \]
+And row vectors can only be mutliplied
+by matrices from the right side. \\
+
+Also note that the same forward and backward
+transformation matrices used to transform
+the basis and vectors are used 
+on the covectors and dual basis,
+but with the backwards transform used
+on the dual basis instead of the covector. \\
+
+\newpage
+
+\subsection*{Rotations in Three Dimensions}
+
+In $\R^2$,
+the only rotation we can do is in the $xy$ plane,
+so we only have one angle of rotation $\theta$. \\
+
+In $\R^3$ however,
+we can actually rotate vectors in three planes
+(around three seperate axes):
+$R_x$ is the rotation in the $yz$ plane,
+$R_y$ is the rotation in the $xz$ plane,
+and $R_z$ is the rotation in the $xy$ plane. \\
+
+Each one can be expressed similarly to 
+a rotation in $\R^2$ (since they are a rotation
+in a single plane), but in a $3\times 3$ matrix:
+\[ R_x(\theta) = \matTwo{0}{0}{0}{R(\theta)}
+\matThree{0}{0}{0}{0}{\cos(\theta)}
+{-\sin(\theta)}{0}{\sin(\theta)}{\cos(\theta)} \]
+\[ R_y(\alpha) =
+\matThree{\cos(\alpha)}{0}{-\sin(\alpha)}{0}{0}
+{0}{\sin(\alpha)}{0}{\cos(\alpha)} \]
+\[ R_z(\beta) = \matTwo{R(\beta)}{0}{0}{0}
+\matThree{\cos(\beta)}{-\sin(\beta)}{0}
+{\sin(\beta)}{\cos(\beta)}
+{0}{0}{0}{0} \] \\
+
+We can express a full $3$-dimensional rotation
+by just composing the matrices:
+\[ R(\theta, \alpha, \beta) = 
+R_z(\beta)R_y(\alpha)R_x(\theta) \]
+Order does matter. \\
+Do note that using these angles 
+(Euler angles) can cause gimbal lock. \\
+
+For a $4$-dimensional rotation, we have $6$
+rotation matrices. 
+This is because there are $6$ plane to rotate
+around:
+\[ xy \quad xz \quad xw \quad
+yz \quad yw \quad zw \] 
+In general, for an $n$-dimensional space,
+we will have $\comb{n}{2}$ individual
+rotations in a plane. \\
+
+Rotations and reflections are both
+orthogonal, meaning that they preserve
+angles and lengths after transforming. \\
+Both rotations and reflections
+(and combinations of both)
+have determinants with absolute values
+equal to $1$ for this reason,
+with transformations that reflect
+the vector space in some way having
+determinant $-1$,
+and pure rotations having determinant $1$. \\
+
+In fact, the group of all $n \times n$
+matrices with determinants
+that have absolute value equal to $1$,
+which encompasses all rotation and reflection
+matrices, as well as their combinations,
+form a group:
+\[ O(n) = \{ M \mid M \in \R^{n \times n}
+\text{ and } |\det(M)| = 1 \} \]
+Which is called an orthogonal group. \\
+
+Each orthogonal group has a
+subgroup called the special
+orthogonal group, which only contains
+rotations:
+\[ SO(n) = \{ M \mid M \in \R^{n \times n}
+\text{ and } \det(M) = 1 \} \]
+Note that since some
+rotations in $SO(3)$
+correspond to rotations in only
+one plane $xy$, $xz$ or $yz$,
+that means that these rotations
+in $SO(3)$ form subgroups that are
+isomorphic to $SO(2)$. \\
+
+For example, if $\varphi$
+is the isomorphism from $R_x$
+to $SO(2)$:
+\[ \varphi: R_x \to SO(2) \]
+then we can map:
+\[ \varphi\para{
+\matThree{0}{0}{0}{0}{\cos(\theta)}
+{-\sin(\theta)}{0}{\sin(\theta)}
+{\cos(\theta)}}
+= \matTwo{\cos(\theta)}
+{-\sin(\theta)}{\sin(\theta)}
+{\cos(\theta)} \] \\
+
+\newpage
+
+\subsection*{Gram-Schmidt Process and
+More on Rotations}
+
+Suppose that we are in $\R^3$,
+and we want to rotate
+a vector or point $p$ around some plane
+that doesn't necessarily coincide
+with the $xy$, $xz$, or $yz$ planes. \\
+
+We can imagine that the plane in which we
+want to rotate the point is given to
+us by two linearlly independent vectors
+$f_1$ and $f_2$ that span the plane. \\
+
+The first issue we will encounter is that
+the point may not be on the plane
+since we are in $\R^3$. \\
+In order to rotate a point in this plane,
+we will first have to project the point
+onto the plane,
+then rotate it, then bring the point back up
+(undo the projection). \\
+
+A second problem we will encounter is
+that the rotation matrices we've used
+assume we have an orthonormal basis,
+with orthogonal basis vectors of length $1$. \\
+We can resolve this by using
+the Gram-Shmidt process to turn the
+two vectors $f_1$ and $f_2$ into an orthonormal
+basis. \\
+
+This is how the Gram-Shmidt process works. \\
+First we will take:
+\[ u_1 = f_1 \]
+to be the first orthonormal basis vector. \\
+Now we want the second basis vector $u_2$ to
+be orthogonal to $u_1$.
+What we can do is project $f_2$ onto $f_1$,
+then take the vector that connects
+the tip of the projection to the tip of $f_2$,
+which is orthogonal to $f_1$
+since it is a projection. \\
+To get the vector of the projection,
+we note that the dot product $f_2 \cdot f_1$
+gives us the norm of $f_1$
+multiplied by the norm of the projection
+of $f_2$ on $f_1$.
+So if we were to divide this dot product
+by the norm of $f_1$, we would
+get the norm of the projection:
+\[ \dfrac{f_1 \cdot f_2}{\|f_1\|} \]
+So if we scale $f_1$ by this length,
+we would get the projection
+of $f_2$ on $f_1$:
+\[ \dfrac{f_1 \cdot f_2}{\|f_1\|}f_1 \]
+We can then define $u_2$
+to be the vector from the tip of the projection
+to the tip of $f_2$:
+\[ u_2 = f_2 - \dfrac{f_1 \cdot f_2}{\|f_1\|}f_1 \]
+We can then normalize both $u_1$ and $u_2$,
+meaning we divide by their
+norm in order to ensure they have length $1$,
+in order to get our final orthonormal basis vectors:
+\[ e_1 = \dfrac{u_1}{\|u_1\|} \AND
+e_2 = \dfrac{u_2}{\|u_2\|} \]
+These two vectors form our orthonormal basis. 
+
+We will call $A$ the orthonormal basis formed by
+$e_1$ and $e_2$. \\
+Note that $A$ has two $3$-dimensional vectors,
+which are linearlly independent,
+and span the plane that was spanned
+by $f_1$ and $f_2$. \\
+
+Now that we have our orthonormal basis $A$,
+we can rotate $p$ around the plane
+spanned by $A$ using some $2$-dimensional
+vector $R$. \\
+First we want to find the projection
+of $p$ on the plane expressed in the basis $A$.
+This can be done by solving the normal
+form equation. The goal was to minimize 
+the distance between the $Ax$
+(a linear combination of the basis vectors, 
+which can be anywhere on the plane),
+and the point $p$. \\
+Solving
+\[ \nabla \|Ax - p\|^2 = 0 \]
+gives us the square system:
+\[ A^TAx = A^Tp \]
+Where the projection will have coordinates:
+\[ x = (A^TA)\inv A^Tp  \]
+Now, $x$ has become a $2$-dimensional vector. \\
+However, we assumed that $A$
+was orthonormal in this particular case,
+which means that $A^TA = I$,
+so we can simplify:
+\[ x = (A^TA)\inv A^Tp
+= A\inv(A^T)\inv A^Tp = 
+A\inv p = A^Tp \]
+So $x = A^Tp$. \\
+Now that the projection is expressed in
+the orthonormal basis $x$,
+we can rotate it by just applying $R$:
+\[ RA^Tp \]
+We now have the rotated point on the plane
+expressed in the basis $A$. \\
+We now need to reexpress the vector back
+in the original basis (which was the standard
+basis).
+We can do that by multiplying by $A$.
+This is because vector components are contravariant
+(as we saw earlier),
+meaning that multiplying them by a transformation,
+turns the vector back to the original basis. \\
+So the $2$-dimensional
+vector back to a $3$-dimensional vector,
+but the point still remains on the plane:
+\[ ARA^Tp \]
+Now we need to undo the projection. 
+Recall that:
+\[ x = (A^TA)\inv A^Tp = A^Tp \]
+are the coordinates of the projected
+point expressed in the basis $A$.
+To get the coordinates of the point
+in the original basis,
+but after having projected it,
+we multiply by $A$:
+\[ AA^Tp \]
+which gives us a $3$-dimensional vector
+of the projected point on the plane
+before rotation.
+This means that:
+\[ p - AA^Tp \]
+Is the vector that points from the 
+tip of the projection of $p$ to
+the tip of the original $p$. \\
+That's why we needed the projected point
+in the original basis: both points
+need to be in the same basis in order for
+it to make sense to subtract one from the other. \\
+So if we add this vector to the
+rotated point, we can undo the projection:
+\[ ARA^Tp + p - AA^Tp \]
+This should be rewritten such that
+we are performing a single matrix transformation:
+\[ (ARA^T + I - AA^T)p \] \\
+
+So to conclude:
+\begin{enumerate}
+    \item 
+    Create an orthonormal basis $A$
+    using the Gram-Schmidt process.
+    \item 
+    Project $p$ onto the plane
+    and solve the linear system to get
+    the coordinates of the projection
+    in the basis $A$.
+    \item 
+    Rotate $p$ now that it is in a $2$-dimensional
+    orthonormal basis.
+    \item
+    Multiply the rotated point by $A$
+    to send it back to the original $3$-dimensional
+    basis it was in.
+    \item 
+    Also multiply the projected point $p$
+    by $A$ to get it in the original basis,
+    which allows us to subtract the result
+    from $p$ to get the vector from
+    the projection to the original point
+    (only works if they are in the same basis).
+    \item 
+    Add the vector we got in the last step
+    to the rotated point (now also in the original
+    basis) in order to undo the projection.
+\end{enumerate}
+And this concludes the algorithm. \\
+
+There is still one small curiosity. \\
+In the general case, where $A$
+is not orthonormal,
+we would have arrived at this system:
+\[ A^TAx = A^Tp \]
+Here $A^Tp$ is the projected point. \\
+In order to get the projected point
+to be expressed in the new basis $A$,
+we can solve the system and find that:
+\[ x = (A^TA)\inv A^Tp  \]
+is the projection in the basis $A$. \\
+We also know that multiplying
+this result by $A$
+takes it back to the original basis
+since vectors are contravariant:
+\[ x = A(A^TA)\inv A^Tp \]
+But if this is the projected point
+expressed in the original basis,
+then what is:
+\[  A^Tp \]
+Yes it is $p$ projected on the plane,
+but what basis is it expressed in? \\
+
+\newpage
+
+\subsection*{Differential Equation for Rotation}
+
+Suppose we don't know that a $2$-dimensional rotation
+matrix has the format:
+\[ R(\theta) = 
+\matTwo{\cos(\theta)}{-\sin(\theta)}
+{\sin(\theta)}{\cos(\theta)} \]
+How would we find out that this is
+the formula? \\
+Assume zero knowledge of trigonometry as well. \\
+
+We are attempting to find the formula
+for a function $R(\theta)$,
+such that the function takes
+a vector $u$ as input,
+and spits out a rotated vector $R(\theta)(u)$. \\
+We can use differentials, which are infinitessimal
+values that make calculations easier
+(and allow more hand-waviness to be applied
+to small inaccuracies). \\
+
+In order to define a linear transformation,
+we generally attempt to apply it to
+the basis vectors:
+\[ \hat{\imath}  = \vecTwo{1}{0} \AND 
+\hat{\jmath} = \vecTwo{0}{1} \]
+We then take the result and use them
+as column vectors for our transformation
+matrix; this is because transforming
+from the standard basis to a new basis
+just means multiplying by the new basis
+matrix. \\
+
+So we want to define a rotation by some
+small amount $d\theta$ (infinitessimal). \\
+Notice that because the angle is small,
+the vector $\hat{\imath}$ would move almost
+purely vertically upwards,
+while the vector $\hat{\jmath}$
+would move almost purely horizontally
+to the right. \\
+This means that the rotation:
+\[ R(d\theta) 
+= \matTwo{1}{-d\theta}{d\theta}{1} \]
+We can use this matrix to define
+a differential equation,
+whose result will give us a function
+$R(\theta)$ whose output is
+the rotation matrix. \\
+
+First note that transforming $u$
+by the rotation matrix with a small angle $d\theta$,
+boils down to adding a small vector $du$
+to $u$ such that $u + du$
+is the rotated vector:
+\[ u + du = R(d\theta)u  \]
+We can thus define the differential equation:
+\[ du = R(d\theta)u - u \]
+\[ du = (R(d\theta) - I)u \]
+\[ du = R(d\theta)u - u \]
+\[ du = \para{\matTwo{1}{-d\theta}{d\theta}{1}
+- \matTwo{1}{0}{0}{1}}u \]
+\[ du = \matTwo{0}{-d\theta}{d\theta}{0}u \]
+\[ \dfrac{du}{d\theta} 
+= \matTwo{0}{-1}{1}{0}u \]
+So this is our differential equation. \\
+Solving it should give us the $R(\theta)$
+that we defined earlier. \\
+
+\end{document}

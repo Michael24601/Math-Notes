@@ -1,0 +1,153 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture VI \& VII
+}
+\date{2025-05-07}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Rotation Around Axis}
+
+First note that if a matrix has the property:
+\[ A^T = A \]
+then it is symmetric (top right triangle
+is equal to bottom left). \\
+And if we have:
+\[ A^T = -A \]
+then it is skew symmetric (top right triangle
+is the negation of the bottom left). \\
+
+Suppose we want to generate the rotation
+matrix in $\R^3$ for a rotation around some
+axis $a$ (given by a vector with length $1$). \\
+
+We can imagine that the vector we want to rotate,
+$u$, and the axis around which we want
+to rotate, $a$,
+form a triangle.
+We can then define an ODE for the trajectory
+in terms of the angle or time parameter:
+\[ \dfrac{du}{d\theta} = a \times u \]
+Which we can do by looking at the image
+and doing some trigonometry on the triangle. \\
+We can also express the cross product as a matrix:
+\[ \dfrac{du}{d\theta} = 
+\matThree{0}{-a_z}{a_y}{a_z}{0}{-a_x}{-a_y}{a_x}{0}
+u \]
+We can all the matrix $[a]_\times$
+We already know how to solve this using the
+Maclaurin series of the exponential 
+$e^{[a]_\times\theta}u(0)$,
+where $u(0)$ is the initial condition. \\
+
+Now note that $([a]_\times)^3 = -[a]_\times$,
+which means that $([a]_\times)^6 = [a]_\times$,
+which means that the matrix is cyclic. \\
+Using that to our advantage,
+we can reduce the Maclaurin series to
+a formula with $\sin$ and $\cos$:
+\[ e^{G\theta} = \sum_k^{\infty} 
+\dfrac{(G\theta)^k}{k!}
+= I + \sin(\theta)[a]_\times 
++ (1-\cos(\theta))([a]_\times)^2 \]
+So this is the rotation matrix
+that multiplies (and rotates) $u$
+around the axis $a$. \\
+
+If $\|u\| \neq 1$, then the length
+could just be factored out,
+and the formula would be more or less
+the same. \\ 
+
+Now we've defined the exponentional,
+and as we know, the logarithm is the inverse
+operation: takes as input:
+\[ I + \sin(\theta)[a]_\times 
++ (1-\cos(\theta))([a]_\times)^2 \]
+And should return $[a]_\times\theta$. \\
+
+So how to write an explicit logarithm?
+Last time, with a normal rotation matrix,
+it was easy to extract $J\theta$,
+since $J$ was always the same. \\
+
+In this case, we would need to first do:
+\[ \dfrac{R - R^T}{2} = \sin(\theta)[a]_\times \]
+
+We can then do more (divide by $\sin$)
+to access the matrix. \\
+
+We can also interpolate in the same way. \\
+Note that we don't just interpolate around
+the angle, we have to use the interpolation
+formula, since the two rotations we are
+interpolating between may be around different
+axis. \\
+
+Interpolation gives the fastest path
+between two rotations. \\
+
+The logarithm maps to the Lie Algebra from the
+Group.
+
+\newpage
+
+\subsection*{Lie Algebra of the Special
+Orthogonal Group}
+
+As we know, the general linear group:
+\[ GL_n(\F) \]
+is the group made up of invertible
+matrices in $\R^{n \times n}$. \\
+
+Formula about Lie Algebra of $SO(n)$.
+
+Note on eigendecomposition and how it helps
+take exponent to find Lie Algebra. \\
+
+Note on the Lie Algebra $so(n)$,
+and what it is. \\
+
+Note on interpolation in $O(n)$,
+and how it only works if the two
+transformations $R$ have the same determinant
+sign (no reflection between the two),
+can't go smoothly \\
+Logarithm of matrix won't work for
+a negative determinant. \\
+
+\newpage
+
+\subsection*{Quaternions}
+
+Quaternions are like complex numbers:
+\[ q = q_0 + iq_1 + jq_2 + kq_3 \]
+Where $i$, $j$ and $k$ are imaginary.
+
+We have anti-sommutativity:
+\[ ij = -ji \]
+Meaning flipping the order flips the sign. \\
+
+We also defined the quaternion inverse which
+is the same as the complex number inverse.
+
+We then use the taylor series on:
+\[ e^{\theta(u_xi + u_yj + u_zk)} \]
+To get a 3D rotation.
+
+We also do interpolation.
+
+\end{document}

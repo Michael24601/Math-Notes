@@ -1,0 +1,518 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Math Prerequisites I
+}
+\date{2025-04-14}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+    \section*{Linear Algebra}
+
+    \subsection*{Definitions}
+
+    A vector space $V$
+    over field $\F$ is the set of all vectors
+    $v$ with elements in $\F$. \\
+    It must satisfy certain axioms
+    (beyond the scope of this  lecture). \\
+    
+    The elements $f \in \F$ are called scalars
+    (motivation will be given later). \\
+    
+    A vector space is equipped with two operations:
+    \begin{enumerate}
+        \item 
+        Vector addition:
+        \[ +: V \times V \to V \qquad \text{ where }
+        w = u + v \iff
+        w_i = u_i + v_i \]
+    \item 
+        Scalar multiplication:
+        \[ \cdot: \F \times V \to V \qquad \text{ where }
+        w = \alpha \cdot u \iff
+        w_i = \alpha u_i\]
+    \end{enumerate}
+
+    The inner product is a function:
+    \[ \langle \cdot , \cdot \rangle : V \times V \to \F \]
+    It must satisfy certain axioms
+    (beyond the scope of this  lecture). \\
+
+    The norm is a function:
+    \[ \|\|  : V \to \F \]
+    It must also satisfy certain axioms
+    (beyond the scope of this  lecture). \\
+
+    \newpage
+
+    \subsection*{Euclidian Vector Spaces}
+
+    What interests us for this course are
+    Euclidian Vector Spaces.
+    These are vector spaces defines over the real
+    numbers $\R$, such as $\R^2$ (set of all 2D vectors). \\
+
+    An example of a vector in $\R^3$:
+    \[ \vecThree{1}{0}{2} \] \\
+
+    The Euclidian inner product, called the dot product,
+    is defined as:
+    \[ x \cdot y = \sum_{i = 1}^nx_iy_i \]
+    for vectors $x, y \in \R^n$. \\
+    It is the length of one of the vectors when
+    projected onto the other
+    (the measure of how much one vector is in
+    the direction of the other). \\
+    If $x \cdot y = 0$,
+    we can conclude that $x$ and $y$
+    are othogonal (perpendicular). \\
+
+    The Euclidian norm, also called the magnitude,
+    or 2-norm,
+    is defined as:
+    \[ \|x\| = \sqrt{\sum_{i = 1}^nx_i^2} 
+    = \sqrt{x \cdot x} \]
+    for a vector $x \in \R^n$. \\
+    It is the length of the vector. \\
+
+    We can define a whole family of norms,
+    where the p-norm is defined as
+    \[ \| x \|_p = 
+    \left( \sum_{i = 1}^n|x_i|^p  \right)^{\sfrac{1}{p}} \]
+    for a vector $x \in R^n$. \\
+
+    These include the 1-norm:
+    \[ \| x \|_1 = \sum_{i = 1}^n|x_i| \]
+    the sum of the absolute value of the entries in $x$. \\
+
+    As well as the infinity norm:
+    \[ \| x \|_\infty = \max_{1 \leq i \leq n} |x_i| \]
+    the absolute value 
+    of the entry with the largest absolute value. \\
+
+    We can also define matrices over the real numbers.
+    Such as this matrix in $\R^{2 \times 3}$:
+    \[ \begin{bmatrix}
+        1 & 0 & 3 \\
+        2 & 1 & 0
+    \end{bmatrix} \] \\
+
+    The trace product
+    (also called the Frobenius inner product)
+    for two matrices
+    $A, B \in \R^{m \times n}$ is defined as:
+    \[ \langle A, B \rangle_F = 
+    \sum_{i=1}^m\sum_{j=1}^n A_{ij}B_{ij} \]
+    which is just the sum of the element-wise
+    product of entries in $A$ and $B$. \\
+
+    This also gives us the Frobenius norm:
+    \[ \| A \|_F = = 
+    \sqrt{\sum_{i=1}^m\sum_{j=1}^n A_{ij}^2}
+    = \sqrt{\langle A, A \rangle_F } \]
+    for a matrix $A \in \R^{m \times n}$. \\
+
+    We can also define operator norms on matrices:
+    \[ \|A\|_p = \max_{\|x\|_p = 1}\|Ax\|_p \]
+    
+    The 2-norm, or spectral norm,
+    is defined as:
+    \[ \|A\|_2 = \max_{\|x\|_2 = 1}\|Ax\|_2
+    = \sigma_{\max}(A) \]
+    the largest singular value of A
+    (we're trying to maximize the amount by which
+    $A$ scales $x$, a unit vector). \\
+
+    The 1-norm is define as:
+    \[ \|A\|_1 = \max_{1 \leq j \leq n} \sum_{i = 1}^m |a_{ij}| \]
+    which is essentially the column
+    with the largest absolute sum.
+     
+    The infinity norm is defined as:
+    \[ \|A\|_\infty = \max_{1 \leq i \leq m} 
+    \sum_{j = 1}^n |a_{ij}| \]
+    which is essentially the row
+    with the largest absolute sum. \\
+
+    The Cauchy-Schwarz inequality states that 
+    for any vectors $x, y \in \R^n$
+    \[|x \cdot y| \leq \|x\|\|y\|\]
+
+    \newpage
+
+    \subsection*{Linear Transformations}
+
+    Given a vector space $V$ over $\R$,
+    a subset $B$ of $V$
+    \[ B = \{v_1, v_2, \dots v_n \} \]
+    is called a basis of $V$ as long as the
+    vectors $v_1, v_2, \dots v_n$ are linearly independent,
+    and if every vector in $V$ could be written
+    as a linear combination of the vectors in $B$. \\
+
+    We can think of the basis as the coordinate
+    system of the vector space.
+    For instance, when we have a vector
+    \[ \vecThree{1}{5}{6} \]
+    The entries refer to the scalar factors
+    that have to be applied to the basis vectors
+    such that their linear combinaton produces
+    the vector. \\
+    The basis vectors are essentially the reference
+    point using which we define all other vectors. \\ 
+
+    The first rule implies that if
+    \[ a_1v_1 + a_2v_2 + \dots + a_nv_n = 0 \]
+    then 
+    \[a_1 = a_2 = \dots = a_n = 0\]
+    This ensures no two vectors are colinear,
+    which is important as colinear vectors
+    cause redundant information,
+    and allow us to get to the same point
+    using different linear combinations
+    (so two vectors with different entries could
+    be equal). \\
+
+    The second rule states that any vector $v \in V$,
+    for some setting $a_1, a_2, \dots a_n$:
+    \[ v = a_1v_1 + a_2v_2 + \dots + a_nv_n \]
+    This ensures that any vector in $V$
+    can be written as the linear combination
+    of the basis vectors. \\
+
+    For example, for $\R^2$,
+    we have the standard basis:
+    \[ \vecTwo{1}{0} \qquad
+    \text{ and } \qquad \vecTwo{0}{1} \]
+    This satisfies both properties. \\
+    For instance, for any two scalars $a$ and $b$,
+    \[ a\vecTwo{1}{0} + b\vecTwo{0}{1} = \vecTwo{0}{0} \]
+    implies that 
+    \[ \vecTwo{a}{b} = \vecTwo{0}{0}  \]
+    which means that $a = b = 0$. \\
+    Moroever, we can write any vector
+    \[ \vecTwo{x}{y} = x\vecTwo{1}{0} + y\vecTwo{0}{1} \]
+
+    We can now define the notion of a linear
+    mapping.
+    A linear mapping is a function
+    \[ f: E \to F \]
+    from vector space $E$ to vector space $F$
+    if for any $x, y \in E$ and $a \in \R$:
+    \[ f(x+y) = f(x) + f(y) \]
+    \[ f(ax) = af(x) \]
+    which are called additivity and homogeneity. \\
+    Intuitively, a linear mapping or transformation
+    is a function that transforms the vectors
+    in a vector space $V$ while keeping
+    every straight line between two vectors $u$ and $v$
+    straight, and keeping the origin $(0, 0)$
+    in place. \\
+    I
+    Examples of linear mappings include rotations,
+    which map each vector to the point it would 
+    be pointing at had the space been rotated. \\
+
+    If
+    \[ u_1, u_2, \dots u_m \]
+    and
+    \[ v_1, v_2, \dots v_n \]
+    are the basis vectors of $E$ and $F$
+    respectively,
+    then we can define linear mappings using 
+    a matrix $A$ of dimension $m \times n$,
+    such that 
+    \[ A (u_j) = \sum_{i=1}^{n} a_{ij}v_i \qquad
+    1 \leq j \leq m \]
+    which gives us how the transformed basis
+    vectors can be described using
+    the basis vectors of the new vector space $V$. \\
+    This is useful, because, as we know,
+    the vectors in $E$,
+    which were expressed as linear combinations
+    of its basis,
+    once transformed by $f$,
+    can be expressed as the same linear combination
+    of the new (transformed) basis. \\
+
+    The identity matrix $I$:
+    \[ \matThree{1}{0}{0}{0}{1}{0}{0}{0}{1} \]
+    is a linear transformation that keeps
+    every vector in place
+    (can be defined for any vector space $\R^n$). \\
+
+    The inverse $A^{-1}$ of a matrix $A$
+    does the opposite transformation. \\
+    For example, the inverse of
+    a matrix that rotates the space by $90^o$
+    is a matrix that rotates the space by $-90^o$. \\
+
+    The determinant of matrix is a function
+    \[ \det: \R^{n \times n} \to \R \]
+    that describes the scaling factor of the
+    linear mapping the matrix represents
+    (e.g., it is the area of a 1 by 1 square
+    in the original vector space once
+    transformed by the matrix). \\
+
+    The determinant is only defined for square matrices. \\
+    
+    If $\det(A) = 0$,
+    then the matrix is called singular
+    (has no inverse). \\
+
+    The determinant is multiplicative,
+    meaning that
+    \[ \det(AB) = \det(A)\det(B) \]
+    This makes sense;
+    the linear transformation $AB$
+    cn be thought of as applying $A$
+    first, then $B$.
+    So we've essentially scaled the area/volume
+    by $\det(A)$ first, then by $\det(B)$,
+    which is the same as scaling it by $\det(A)\det(B)$. \\
+
+    The determinant of a $2 \times 2$ matrix
+    can be computed as follows:
+    \[ \det\left( \matTwo{a}{b}{c}{d} \right) 
+    = ad - bc \]
+    As for $3 \times 3$ matrices:
+     \[ \det\left( \matThree{a}{b}{c}{d}{e}{f}{g}{h}{i} \right) 
+    = aei + bfg + cdh - gec - hfa - idb \]
+    It can be calculated by summing
+    the products main diagonals starting at each entry in
+    the first row,
+    and them subtracting the products
+    of the secondary diagonals starting at each
+    entry in the bottom row. \\
+
+    \newpage
+
+    \subsection*{Eigen Vectors}
+
+    Given a matrix $A$, linear combination
+    \[f: E \to E \]
+    we call a vector $v \in E$ an eigen vector
+    if the transformation keeps the vector
+    on the same span
+    (scales it but does not change its direction). \\
+    In particular, if
+    \[ f(v) = \lambda v \]
+    or 
+    \[ Av = \lambda v \]
+    then we call $v$ an eigen vector,
+    and $\lambda$ an eigen value. \\
+    
+    Now, to find the eigen vectors,
+    we need to find the vectors $v$ such that 
+    \[ Av = \lambda v \]
+    So
+    \[ Av - \lambda v = 0 \]
+    \[ Av - \lambda I v = 0 \]
+    \[ (A - \lambda I)v = 0 \]
+    where $I$ is the identity matrix. \\
+
+    The solution to a linear system $Ax = 0$
+    is always trivial (the 0 vector)
+    if the matrix $A$ is invertible (non-singular). \\
+    So, to find non-trivial solutions,
+    we want to find the values of $\lambda$
+    such that 
+    \[ \det(A - \lambda I) = 0\]
+    This will lead to some polynomial that we
+    can solve (in $\R^2$ it's a quadratic). \\
+    
+    Once we have the eigen values,
+    we can plug them into 
+    the original formula $(A - \lambda I)v = 0$
+    each in turn, 
+    which will give us our eigen vectors. \\
+    
+    Eigen vectors are very useful because
+    they allow us to very quickly and efficiently
+    compute the power of a matrix. \\
+    Eigen vectors are only defined for square
+    matrices however,
+    and many of the matrices that we need to use them
+    for are rectangular. \\
+    We can use SVD to extend them to non-square matrices. \\
+
+    Any matrix $A \in \R^{m \times n}$
+    can be expressed as:
+    \[ A = U\Sigma V^T \]
+    where $U$ is an orthogonal $m \times m$ matrix,
+    $\Sigma$ is an $m \times n$ diagonal matrix,
+    and $V$ is an orthogonal $n \times n$ matrix. \\
+
+    If a matrix $M$ is orthogonal, then
+    \[ M^{-1} = M^T \]
+    its inverse is just its transpose. \\
+    So $M^TM = I$. \\
+
+    The matrix $A^TA$ is square, 
+    and can be written as:
+    \[A^TA =  (U\Sigma V^T)^T(U\Sigma V^T)\]
+    \[A^TA =  ((V^T)^T\Sigma^TU^T)(U\Sigma V^T)\]
+    \[A^TA =  V\Sigma^TU^TU\Sigma V^T \]
+    \[A^TA =  V\Sigma^T\Sigma V^T\]
+    Now, the columns of $V$
+    will be the eigen vectors of $A^TA$,
+    and the diagonal entries of $\Sigma$
+    will be the square root of the eigen values. \\
+ 
+    \newpage
+
+    \section*{Calculus}
+
+    \subsection*{Limits and Continuity}
+
+    For vector spaces $E$ and $F$,
+    we can define a function
+    \[ f: X \to F \]
+    where $X \subseteq E$
+    (basically vector input and output). \\
+
+    We say $f$ is continuous at a point $x_0$
+    if
+    \[ \limit{x}{x_0}{f(x)} = f(x_0) \]
+    We say $f$ is continuous on $X$
+    if $f(x)$ is continuous on all $x_0 \in X$. \\
+
+    We say $f$ is Lipschitz continuous on $X$
+    with Lipschitz constant $L \geq 0$ if: 
+    \[ \| f(x) - f(y) \| \leq L \| x - y \| \]
+    for any $x, y \in X$. \\
+
+    Now, if $X$ is an open interval on $R$,
+    we say that the function
+    \[ f: X \to \R \]
+    is differentiable at $x_0 \in X$ if the limit
+    \[ f'(x_0) = \limit{\epsilon}{0}{
+        \dfrac{f(x_0+\epsilon) - f(x_0)}{\epsilon}
+    }\]
+    exists. \\
+    If so, we call $f'(x_0)$
+    the derivative of $f$ at $x_0$. \\
+    We say $f$ is differentiable on $X$
+    if it is differentiable on all $x_0 \in X$. \\
+
+    If
+    \[f': X \to \R \]
+    is itself differentiable on $X$,
+    then we say $f$ is twice differentiable,
+    and call $f"(x_0)$ the second derivative
+    of $f$ at $x_0$. \\
+
+    We can also write
+    \[ \dd{f}{x} \qquad \text{ and } \qquad \dfrac{d^2f}{dx^2} \]
+    for the first and second derivatives. \\
+
+    \newpage
+
+    \subsection*{Differentiation}
+
+    Instead of using the limit definition each time,
+    we can use these rules to find the derivative
+    of a function: \\
+    Power rule: \[ (x^n)' = nx^{n-1} \]
+    Constant rule: \[ (c)' = 0  \]
+    Sum rule: \[ (f(x) + g(x))' = f'(x) + g'(x) \]
+    Product rule: \[ (f(x)g(x))' = f'(x)g(x) + f(x)g'(x) \]
+    Quotient rule: \[ \left(\dfrac{f(x)}{g(x)}\right)' =
+    \dfrac{f'(x)g(x) - f(x)g'(x)}{g(x)^2} \]
+    Chain rule: \[ (f(g(x)))' = f'(g(x))g'(x) \]
+
+    If we have a function
+    \[ f: E \to \R \]
+    where $E$ is some vector space,
+    then teh directional derivative of $f$
+    at $x_0$ in the direction $d \in E$
+    exists if the limit
+    \[ f'(x_0; d) = \limit{\epsilon}{0}{
+        \dfrac{f(x_0+\epsilon d) - f(x_0)}{\epsilon}
+    }\]
+    exists. \\
+    If so, we say $f$ is directionally differentiable
+    at $x_0$ in the direction of $d$. \\
+    We say $f$ id directionally differentiable
+    in the direction of $d$
+    if $f'(x_0)$ exists for all $x_0 \in E$. \\
+
+    The most well known and used directional
+    derivatives are the partial derivatives of a
+    multivariable function. \\
+    Suppose that we have a function:
+    \[ f: E \to \R \]
+    then the directional derivative in the direction 
+    of $e_i$,
+    the unit vector in the direction of the $i$th
+    coordinate axis,
+    is known as the partial derivative:
+    \[ \partialdd{f}{x_i}(x)\]
+    For example, for a function:
+    \[ z = f(x, y) \]
+    the partial derivatives are
+    \[ \partialdd{f}{x}(x, y) \qquad \text{ and } 
+    \qquad \partialdd{f}{y}(x, y) \]
+
+    The gradient of a function
+    \[ f: E \to \R \]
+    is a vector field
+    that defines the direction in which
+    $f$ varies the most.
+    For any point $x \in E$:
+    \[ \nabla f(x) =
+    \left( \partialdd{f}{x_1}(x)
+    \partialdd{f}{x_2}(x) 
+    \dots \partialdd{f}{x_n}(x) \right) \]
+
+    We can use the gradient to calculate any
+    directional derivative (using the inner product):
+    \[ f'(x, d) = \langle \nabla f(x), d \rangle \]
+
+    The Jacobian matris of a vector valued function
+    \[ f: \R^n \to R^m \]
+    is defined as:
+    \[   J_f =
+        \matThree{\partialdd{f_1}{x_1}}
+        {\dots}
+        {\partialdd{f_1}{x_n}}
+        {\vdots}
+        {\ddots}
+        {\vdots}
+        {\partialdd{f_m}{x_1}}
+        {\dots}
+        {\partialdd{f_m}{x_n}}
+    \] \\
+
+    We can use the Jacobian to calculate
+    the multivariable chain rule.
+    Suppose that
+    \[ g: \R^n \to \R^m \]
+    Then
+    \[ \nabla(f \circ g)(x) = \nabla f(g(x))J_g(x) \]
+    where $x \in \R^n$ is a vector. \\ 
+    For example, for 
+    \[ f(u(x, y), v(x, y)) \]
+    We have
+    \[ \partialdd{f}{x} = \partialdd{f}{u}\partialdd{u}{x}
+    + \partialdd{f}{v}\partialdd{v}{x} 
+    \qquad \text{ and } \qquad   
+    \partialdd{f}{y} = \partialdd{f}{u}\partialdd{u}{y}
+    + \partialdd{f}{v}\partialdd{v}{y} 
+    \]
+
+\end{document}

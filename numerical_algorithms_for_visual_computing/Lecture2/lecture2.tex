@@ -1,0 +1,513 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{
+    \Huge Numerical Algorithms \\
+    \Large Lecture II
+}
+\date{2025-04-16}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Vector Space Bases}
+
+Given a vector space $V$ over $\R$,
+a subset $B$ of $V$
+\[ B = \{v_1, v_2, \dots v_n \} \]
+is called a basis of $V$ as long as the
+vectors $v_1, v_2, \dots v_n$
+are linearly independent,
+and if every vector in $V$ could be written
+as a linear combination of the vectors in $B$. \\
+These two properties allow that each vector
+can be expressed
+in terms of the basis vector uniquely,
+giving us both a uniqueness
+and an existence property. \\
+
+A set of vectors who do not form a basis are
+called a frame (if existence is not fulfilled),
+or $k-$frames (if uniqueness is not fulfilled). \\
+
+We can think of the basis as the coordinate
+system of the vector space. \\
+So the entries of a vector expressed in a
+certain basis refer to the scalar factors
+that have to be applied to the basis vectors
+such that their linear combinaton produces
+the vector. \\
+By default, all vectors are written in the standard
+basis, which in $\R^2$ means the vectors:
+\[ \hat{i} = \vecTwo{1}{0} \qquad \text{ and }
+\qquad \hat{j} = \vecTwo{0}{1} \]
+So, when we have a vector:
+\[ \vecTwo{2}{5} \]
+it can be reached using the linear combination:
+\[ \vecTwo{2}{5} = 2 \vecTwo{1}{0} + 5 \vecTwo{0}{1} \]
+The basis vectors are essentially the reference
+point using which we define all other vectors. \\
+
+More compactly, we can express a basis using
+a matrix (where the columns are basis vectors). \\
+This is useful as it allows us to express
+vectors in a basis using matrix multiplication:
+\[ \vecTwo{2}{5} = 2 \vecTwo{1}{0} + 5 \vecTwo{0}{1}
+= \matTwo{1}{0}{0}{1}\vecTwo{5}{2} \] \\
+
+Now suppose we have a new basis
+\[ A = \matTwo{a_1^1}{a_2^1}{a_1^2}{a_2^2} \]
+If we have a vector 
+\[ v = \vecTwo{5}{2} \]
+expressed in the basis $A$,
+then the vector can be formed using
+\[ \vecTwo{5}{2} = 5 \vecTwo{a_1^1}{a_1^2}
++ 2 \vecTwo{a_2^1}{a_2^2} \]
+which gives us the coordinates of the 
+vector in the standard basis. \\
+In other words, multiplying a vector
+by a basis matrix
+gives us the coordinates of the vector
+expressed in the standard basis
+has the original vector been
+expressed in said basis. \\
+
+Now, here is what happens if we multiply by 
+the basis, then multiply by its inverse 
+(which we know exists since basis column vectors
+are by definition linearly independent):
+\[ A\inv Av = 
+\matTwo{a_1^1}{a_2^1}{a_1^2}{a_2^2}\inv
+\para{\matTwo{a_1^1}{a_2^1}{a_1^2}{a_2^2}
+\vecTwo{5}{2}}
+= \vecTwo{5}{2} \]
+We know that $v$ is the vector
+expressed in the standard basis,
+and that $Av$ is the value of the vector
+expressed in the standard basis,
+has $v$ been expressed in the basis $A$. \\
+We know that multiplying the vector $Av$ by $A\inv$
+returns its value to $v$. \\ 
+So multiplying by the inverse $A\inv$
+has the effect of taking a vector
+in the standard basis,
+and giving us the value that same vector
+would need to have to point to the same coordinate
+it did, but expressed in the new basis. \\
+
+Another way to think about this is that
+multiplying by an inverse $A\inv v$
+is the same as solving $Ax = v$,
+and as we know,
+solving a linear system
+means finding a linear combination 
+of the columns of $A$ that match $v$. \\
+This is the same as finding the coordinates
+a vector would need to have in the new basis
+in order to reach the same coordinate $v$
+does in the standard basis, which is $A\inv v$. \\
+
+So, to conclude:
+\[ Av \]
+is a vector expressed in the standard basis
+that points to the same coordinate as $v$
+would if it had been a vector of basis $A$. \\
+On the other hand,
+\[ A\inv v \]
+is the value a vector would need to have
+in the new basis $A$ in order to point to the same
+coordinate as $v$ does in the standard basis. \\
+
+Determinants represent the scaling factor
+of a linear transformation. \\
+It thus makes sense why a singular matrix,
+with determinant 0,
+can't form a basis.
+Having a scaling factor of 0 implies
+the space is flattened onto a lower dimension,
+like a plane being turned into a line. \\
+
+As mentioned in the first lecture,
+we can think of linear systems as
+itersections of hyperplanes or linear
+combinations of vectors. \\
+The latter of the two can now be formalized
+within the context of bases. \\
+Solving a linear system $Ax = b$ entails finding
+the coordinates vector $b$
+in the basis $A$. \\
+So if $A$ is invertible (linearly independent
+column vectors),
+then $A$ is a basis proper, with uniqueness
+and existence properties for any vector in $\R^n$,
+which means we will have on unique solution. \\
+On the other hand, if the $A$ is not a basis proper,
+then the matrix flattens the original span
+onto a lower dimension 
+(like flattening $\R^2$ onto a line).
+It's possible then that $b$ is not in the new
+span, which means no solution exists,
+or that $b$ is in that space, but reachable
+in more than one way (since we have colinear
+or coplanar vectors). \\
+
+\newpage
+
+\subsection*{More Plane Intersections}
+
+We've seen planes expressed as implicit
+functions. \\
+Now to express a plane as a parametric function,
+we can mimic the parametric line formula. \\
+First, we note that a plane is two-dimensional,
+so we need to linearlly combine two vectors
+in order to span all of it
+and reach each point on it
+(as explained in the Basis section):
+\[ \bv{r}(\alpha, \beta) 
+= \alpha \bv{f_1} + \beta \bv{f_2} \]
+where $\bv{f_1}$ and $\bv{f_2}$
+are any two linearlly independent vectors
+on the plane. \\
+This gives us the orientation of the plane,
+but we still need a point $\bv{q}$ on the plane
+in order to fix the plane in space.
+We can call this point the offset
+(similar to the line equation):
+\[ \bv{r}(\alpha, \beta) 
+= \alpha \bv{f_1} + \beta \bv{f_2} + \bv{q} \]
+This equation defined a plane using
+two parameters $\alpha$ and $\beta$
+which can be any real value. \\
+
+We already saw the case where we intersect
+a line by plane using the implicit plane
+equation. \\
+Now, if we have a parametric plane equation
+and a parametric line equation,
+how can we check where and if they intersect? \\
+If we have two parametric equations:
+\[ \bv{r_1}(t_1) \qquad \text{ and }
+\qquad \bv{r_2}(t_2) \]
+all we would need to do to find the intersection
+is set
+\[ \bv{r_1}(t_1) = \bv{r_2}(t_2) \]
+and solve for $t_1$ and $t_1$. \\
+So, for a plane and a line, we solve
+\[ \alpha \bv{f_1} + \beta \bv{f_2} + \bv{q}
+= \bv{o} + t\bv{d} \]
+for $\alpha$, $\beta$, and $t$. \\
+We can do the following:
+\[ \alpha \bv{f_1} + \beta \bv{f_2} - t\bv{d}
+= \bv{o} - \bv{q} \]
+which turns the equation into a linear system:
+\[ 
+    \matThree{f_1^1}{f_2^1}{-d^1}
+    {f_1^2 }{f_2^2}{-d^2}
+    {f_1^3}{f_2^3}{-d^3}
+    \vecThree{\alpha}{\beta}{t}
+    = \vecThree{o^1 - q^1}{o^2 - q^2}{o^3 - q^3} 
+\]
+Solving this entails finding
+$\alpha$, $\beta$, and $t$. \\
+
+Recall that when we had a list of implicit equations
+hyperplanes,
+finding an intersection also entailed
+solving a linear system.
+This will always be the case when we have
+an intersection of linear shapes. \\
+On the other hand, inetrsecting a linear shape
+(line) with a quadratic shape (sphere)
+entailed solving a quadratic equation
+(degree 1 $\times$ degree 2). \\
+If we had two quadratic shapes we wanted to 
+find the intersection of (e.g. parabola and sphere),
+we would then need to solve a quartic equation
+(degree 2 $\times$ degree 2). \\
+
+\newpage
+
+\subsection*{Triangle Intersection}
+
+All polygons in computer graphics are
+rendered using triangles,
+as they are simple,
+and as any polygon can be divided into triangles. \\
+
+We will now look at how to check if a line
+intersects a triangle in $\R^3$. \\
+
+A triangle resides on a plane,
+and can be defined by three points
+which we will call $\bv{v_0}$, $\bv{v_1}$,
+and $\bv{v_3}$. \\
+The check for a line intersection,
+we can first find the plane on which the triangle
+resides,
+and check for an intersection between the line
+and the plane. \\
+If such a point $\bv{p_0}$ exists,
+we can then check to see if the point is
+inside the triangle. \\
+
+First, given the points $\bv{v_0}$, $\bv{v_1}$,
+and $\bv{v_3}$,
+we want to define a plane. \\
+
+First, for a parametric equation. \\
+We know the parametric equation of a plane is:
+\[ \bv{r}(\alpha, \beta) 
+= \alpha \bv{f_1} + \beta \bv{f_2} + \bv{q} \]
+where $\bv{f_1}$ and $\bv{f_2}$
+are any two linearlly independent vectors
+on the plane,
+and $\bv{q}$ is a point on the plane. \\
+If we were to set
+\[ \bv{q} = \bv{v_0} \] 
+and 
+\[ \bv{f_1} = \bv{v_1} - \bv{v_0}   \]
+\[ \bv{f_2} = \bv{v_2} - \bv{v_0}   \]
+then we will have fulfilled the conditions
+(here, $\bv{f_1}$ and $\bv{f_2}$ 
+are the vector jutting out of $\bv{v_0}$
+towards $\bv{v_1}$ and $\bv{v_2}$). \\
+We can thus define
+\[ \bv{r}(\alpha, \beta) 
+= \alpha (\bv{v_1} - \bv{v_0})
++ \beta (\bv{v_2} - \bv{v_0}) + \bv{v_0} \]
+as parametric equation of the plane
+on which the triangle resides. \\
+
+Now for an implicit equation. \\
+We know a plane can be written as the implicit
+equation 
+\[ \bv{n} \cdot (\bv{p} - \bv{q}) = 0 \]
+where $\bv{n}$ is the normal
+and $\bv{q}$ is any point on the plane. \\
+We can use the parametric equation as a starting
+point:
+to get the normal, we can use the cross
+product of any two non-colinear vectors
+on the plane (only works in $\R^3$),
+which returns a vector orthogonal to the plane
+defined by the two vectors.
+We can use $\bv{f_1} \times \bv{f_2}$
+for this purpose. \\
+Then we can use $\bv{v_0}$ for the point $q$. \\
+Thus:
+\[ ((\bv{v_1} - \bv{v_0}) \times (\bv{v_2} - \bv{v_0}))
+\cdot (\bv{p} - \bv{v_0}) = 0 \]
+is the implicit plane equation on which the
+triangle resides. \\
+
+Once we have checked for an intersection with the
+plane,
+and gotten an intersection point $\bv{p_0}$
+on the plane,
+we need to check to see if the point is in the
+triangle. \\
+Fortunately, this is not so hard to do. \\
+Since $\bv{f_1}$ and $\bv{f_2}$
+are linearlly independent,
+they form a basis that spans the whole plane,
+with an origin at $\bv{q}$. \\
+We can thus express $\bv{p_0}$ in this
+new basis (as a linear combination
+of $\bv{f_1}$ and $\bv{f_2}$). \\
+The four points
+\[ \vecTwo{0}{0} \qquad
+\vecTwo{0}{1} \qquad
+\vecTwo{1}{1} \qquad
+\vecTwo{1}{0} \qquad \]
+expressed in this new basis
+define a parallelogram
+(whose area is the determinant of the basis).
+As we know, the vectors
+\[ \vecTwo{0}{0} \qquad
+\vecTwo{0}{1} \qquad
+\vecTwo{1}{0} \qquad \]
+in the new basis correspond to
+$\bv{v_0}$, $\bv{v_1}$, and $\bv{v_3}$.
+So in the parametric equation
+\[ \bv{r}(\alpha, \beta) 
+= \alpha (\bv{v_1} - \bv{v_0})
++ \beta (\bv{v_2} - \bv{v_0}) + \bv{v_0} \]
+we would need
+\[ \alpha + \beta < 1 \]
+in order to for a point to be inside the triangle. \\
+
+So in short, we intersect the plane by a line
+using the technique highlighted in the last section
+(parametric equation of line and plane),
+and then check tho make sure that our solution
+satisfies $\alpha + \beta < 1$. \\
+
+We still need to clarify one thing:
+how can we express the point $\bv{p_0}$
+that we get from the intersection
+in the basis defined by $\bv{f_1}$ and $\bv{f_2}$? \\
+As we said earlier,
+multiplying a vector $v$ by the inverse 
+of the matrix
+whose columns are basis vectors
+gives us the coordinates
+of that same vector in said basis:
+\[ \vecTwoTransposed{\bv{f_1}}{\bv{f_2}}\inv
+\bv{p_0} = \vecTwo{\alpha}{\beta} \]
+which is the same as saying we need to 
+solve the linear system
+\[ \vecTwoTransposed{\bv{f_1}}{\bv{f_2}}
+\vecTwo{\alpha}{\beta}
+= \bv{p_0} \]
+The only issue here is that
+\[\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}\]
+is not square.
+It is a $3 \times 2$ matrix. \\
+One solution to that is to multiply both sides
+by the transpose:
+\[ \vecTwo{\bv{f_1}}{\bv{f_2}}
+ \vecTwoTransposed{\bv{f_1}}{\bv{f_2}}
+\vecTwo{\alpha}{\beta}
+= \vecTwo{\bv{f_1}}{\bv{f_2}}\bv{p_0} \]
+This gives us a linear system with a $2 \times 2$
+square matrix that we can solve. \\
+
+While we assume that $\bv{p_0}$ is on the plane,
+since it is the result of intersecting a line
+and plane,
+it is worth noting that the equation still yields
+a solution even if $\bv{p_0}$ were not on the plane
+(since the matrix is not singular). \\
+In that case, the coordinates we get are those
+of the projection of $\bv{p_0}$ onto the plane,
+expressed in the new basis. \\
+
+This happening makes sense when you consider
+what the matrix
+$\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}$
+does when it transform $\bv{p_0}$:
+\[ \begin{bmatrix}
+    f_1^1 & f_1^2 & f_1^3 \\
+    f_2^1 & f_2^2 & 2_1^3
+\end{bmatrix} \vecThree{p_0^1}{p_0^2}{p_0^3} \]
+It is a $2 \times 3$ matrix,
+meaning that it flattens $\R^3$
+space onto a plane. \\
+In this case in particular,
+it projects $\bv{p_0}$ onto the plane
+defined by the basis
+$\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}$. \\
+
+As we know, solving a linear system
+is the equivalent of multiplying by the inverse
+of a matrix. \\
+In order to get the coordinates of $\bv{p_0}$
+in the basis $\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}$,
+we can just multiply iy by the inverse
+of that basis. \\
+However, $\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}$
+is not square, so instead, we do the following:
+\[ \vecTwo{\bv{f_1}}{\bv{f_2}}
+ \vecTwoTransposed{\bv{f_1}}{\bv{f_2}}
+\vecTwo{\alpha}{\beta}
+= \vecTwo{\bv{f_1}}{\bv{f_2}}\bv{p_0} \]
+\[ \vecTwo{\alpha}{\beta}
+= \para{\vecTwo{\bv{f_1}}{\bv{f_2}}
+\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}}\inv
+\vecTwo{\bv{f_1}}{\bv{f_2}}\bv{p_0} \]
+and solve to get $\alpha$ and $\beta$,
+the coordinates of $\bv{p_0}$
+in the new basis. \\
+
+\newpage
+
+\subsection*{Intersection with a Quadric}
+
+Quadrics are the $\R^3$ analogue of conics in $\R^2$. \\
+Conics form the family of curves you get if you intersect
+a cone by a plane.
+That includes circles, ellipses, parabolae,
+and hyperbolae. \\
+In $\R^2$, the general formula for a conic curve is
+\[ Ax^2 + By^2 + Cxy + Dx + Ey + F = 0 \]
+This formula can be extended to $R^3$:
+\[ Ax^2 + By^2 + Cz^2 + Dxy + Exz + Fyz +
+Gx + Hy + Iz + J = 0 \]
+where it can represent spheres, ellipsoids,
+paraboloids, and hyperboloids, saddles... \\
+
+We can rewrite this formula using vector notation:
+\[ (\bv{p})^T \boldsymbol{Q}\bv{p} 
++ (\bv{b})^T\bv{p} + J = 0 \]
+where
+\[ 
+    \boldsymbol{Q} = 
+    \matThree{A}{\sfrac{D}{2}}{\sfrac{E}{2}}
+    {\sfrac{D}{2}}{B}{\sfrac{F}
+    {2}}{\sfrac{E}{2}}{\sfrac{F}{2}}{C}
+    \qquad b = \vecThree{G}{H}{I}
+\]
+Expanding the formula shows it is the same. \\
+
+To check if a ray intersects a quadric,
+we can solve this equation for $t$:
+\[ (\bv{o} + t\bv{d})^T \boldsymbol{Q} (\bv{o} + t\bv{d})
+    + \bv{b}^T\bv{p} + J = 0 \]
+It will also lead to a quadratic, 
+where having one or more positive solution
+means the ray intersects the quadric. \\
+
+For example,
+suppose we have the quadric surface:
+\[ 3(x-5)^2 - 2(y-1)^2 -z^2 + 1 = 0 \]
+and a ray
+\[ \vecThree{1}{0}{-1}t \]
+Then we can first develop the formula of the quadric:
+\[ 3x^2 - 30x - 2y^2 +4y -z^2 + 74 = 0 \]
+where
+\[ 
+    A = 3 \qquad B = -2 \qquad C = -1 \qquad G = -30
+    \qquad H = 4  \qquad J = 74
+\]
+This can then be written in vector notation:
+\[
+    (\bv{p})^T
+    \matThree{3}{0}{0}{0}{-2}{0}{0}{0}{-30}
+    \bv{p}
+    + \vecThreeTranposed{-39}{4}{0}
+    \bv{p}
+    + 74 = 0
+\]
+Then, we can replace $\bv{p}$ by the ray:
+\[
+    \vecThreeTranposed{t}{0}{-t}
+    \matThree{3}{0}{0}{0}{-2}{0}{0}{0}{-30}
+    \vecThree{t}{0}{-t}
+    + \vecThreeTranposed{-30}{4}{0}
+    \vecThree{t}{0}{-t}
+    + 74 = 0
+\]
+\[
+    \vecThreeTranposed{t}{0}{-t}
+    \vecThree{3t}{0}{30t}
+    - 30t + 74 = 0
+\]
+\[
+    -27t^2 - 30t + 74 = 0                                                                                                                                                                                                                                               
+\]
+We can then solve for $t$:
+\[ t = -\dfrac{30 \pm \sqrt{900 + 7992}}{60} \]
+
+
+ 
+\end{document}

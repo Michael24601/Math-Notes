@@ -1,0 +1,472 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture V
+}
+\date{2025-05-03}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Complex Numbers}
+
+We will now introduce complex numbers. \\
+As we know, a complex number $z \in \C$
+can be written as:
+\[ z = a + ib \]
+for some $a, b \in \R$. \\
+We can define addition and multiplication:
+\[ z_1 = a + ib \qquad z_2 = c + id \]
+where:
+\[ z_1 + z_2 = (a + c) + i(b + d) \]
+and:
+\[ z_1 \cdot z_2 = 
+(a + ib)(c + id) = 
+(ac - bd) + i(ad + cd) \]
+Recall that $i^2 = -1$. \\
+
+We can image complex numbers as living
+in a two dimensional coordinate space
+where the $y$-coordinate is the imaginary
+part of the number. \\
+We can thus define the norm or length
+of the complex number to 
+be $\|z\|$, where:
+\[ \|z\|^2 = z \cdot \olsi{z}
+= (a + ib)(a - ib) = a^2 + b^2 \]
+We call $\olsi{z}$ the complement of $z$. \\
+
+Finally, we want to define an inverse
+$z\inv$ for a complex number, such that
+$z \cdot z\inv = 1$. \\
+First note that since $z \cdot \olsi{z}$
+is the length squared of $z$, then:
+\[ \dfrac{z \cdot \olsi{z}}{\|z\|^2} = 1 \]
+Which means that:
+\[ z \cdot z\inv = 
+\dfrac{z \cdot \olsi{z}}{\|z\|^2} \]
+Then dividing both sides by $z$:
+\[ z\inv = 
+\dfrac{\olsi{z}}{\|z\|^2} \]
+Which is our inverse. \\
+
+\newpage
+
+\subsection*{Ordinary Differential Equations}
+
+Last lecture we arrived at:
+\[ \dd{u}{\theta} = Ju \]
+where $J$ is a rotation matrix:
+\[ J = \matTwo{0}{1}{-1}{0} \]
+which rotates by $90$ degrees. \\
+We will now see how to solve this. \\
+
+First let us note that $J$,
+despite being a matrix, is actually
+just a constant. \\
+We can build up to solving this ODE
+by first solving the same ODE without
+the matrix. \\
+
+If we have:
+\[ \dd{y}{x} = \alpha y \]
+where $\alpha$ is just a constant number,
+then the solution to the ODE is just:
+\[ y = e^{\alpha x}y(0) \]
+where $y(0)$ is the initial condition. \\
+This makes sense, since a function
+that equals a scaled version of its derivative
+is just the exponential. \\
+
+Now we want to solve this equation:
+\[ \dd{z}{\theta} = i \theta \]
+Again, $i$ here is just a constant,
+so the solution is:
+\[ y = e^{i\theta}z(0) \]
+So what is $e{i\theta}$? \\
+
+We can use the Macluarin series of the
+exponential to solve that. \\
+We know that:
+\[ e^x = \sum_{k = 0}^{\infty} \dfrac{x^k}{k!} \]
+Which means that:
+\[ e^{i\theta} = \sum_{k}^{\infty} 
+\dfrac{(i\theta)^k}{k!} 
+= 1 + ix + \dfrac{i^2\theta^2}{2!}
++ \dfrac{i^3\theta^3}{3!} + \dfrac{i^4\theta^4}{4!}
++ \dfrac{i^5\theta^5}{5!} \dots \]
+\[ e^{i\theta}
+= 1 + i\theta + -\dfrac{\theta^2}{2!}
++ -i\dfrac{\theta^3}{3!} + \dfrac{\theta^4}{4!}
++ i\dfrac{\theta^5}{5!} \dots \]
+We can then split the even and odd
+terms since only odd terms have the $i$ factor:
+\[ e^{i\theta}
+= 1 -\dfrac{\theta^2}{2!}
++ \dfrac{\theta^4}{4!} - \dfrac{\theta^6}{6!} + \dots
++ i \para{\theta - \dfrac{\theta^3}{3!}
++ \dfrac{\theta^5}{5!} - \dfrac{\theta^7}{7!} + \dots} \]
+\[ e^{i\theta}
+= \sum_{k = 0}^{\infty}
+(-1)^{k}\dfrac{\theta^{2k}}{(2k)!}
++ i\sum_{k = 0}^{\infty} (-1)^{k}
+\dfrac{\theta^{2k + 1}}{(2k + 1)!} \]
+Notice that these are just the Maclaurin
+series of $\cos$ and $\sin$:
+\[ e^{i\theta} = \cos(\theta) + i\sin(\theta) \]
+Which is Euler's identity. \\
+
+Since we imagines the imaginary part as being
+the $y$-axis and the real part as being
+the $x$-axis,
+then $e^{i\theta} = \cos(\theta) + i\sin(\theta)$
+is just the parametric definition of a circle,
+where $e^{i\theta}$ is just the point
+you'd get by rotating $\theta$ degrees
+on the unit circle starting at $1 + i0$. \\
+
+In fact, we can define a group:
+\[ S = \{ z \mid \|z\| = 1 \} \]
+Which is the set of all complex numbers
+on the unit circle. \\
+It is a Lie group. \\
+Notice that every element
+in $S$ if of the form $e^{i\theta}$. \\
+It can be easy to check that this forms a group.
+The group operation is complex number multiplication.
+The inverses are just complex number inverses,
+and the identity is the real number $1$. \\
+
+Now we are ready to solve the ODE:
+\[ \dd{u}{\theta} = J\theta \]
+We already know the solution will be:
+\[ e^{J\theta}u(0) \]
+where $u(0)$ is just the starting condition. \\
+But what does it mean to take the power of a
+matrix? 
+We again use the Taylor Series:
+\[ e^{J\theta} = \sum_{k}^{\infty} 
+\dfrac{(J\theta)^k}{k!} 
+= J^0 + Jx + \dfrac{J^2\theta^2}{2!}
++ \dfrac{J^3\theta^3}{3!} + \dfrac{J^4\theta^4}{4!}
++ \dfrac{J^5\theta^5}{5!} \dots \]
+Now notice that as we take the power of the
+matrix, it cycles:
+\[ J^0 = \matTwo{1}{0}{0}{1} = I \qquad
+J = \matTwo{0}{1}{-1}{0}
+\qquad J^2 = \matTwo{-1}{0}{0}{-1} = -I \]
+\[ J^3 = \matTwo{0}{-1}{1}{0}
+\qquad J^4 = \matTwo{1}{0}{0}{1} = I \]
+So as we can see, $J$ cycles;
+every $4$ powers, it goes back to $J$,
+which means that $J^4 = I$ is the identity.
+So:
+\[ e^{J\theta} =
+= I + Jx -I\dfrac{\theta^2}{2!}
+- IJ\dfrac{\theta^3}{3!} + I\dfrac{J^4\theta^4}{4!}
++ IJ\dfrac{J^5\theta^5}{5!} \dots \]
+We can then group the odd and even powers
+together (since only the odd powers have $J$
+as a factor):
+\[ e^{J\theta}
+= I\sum_{k = 0}^{\infty} 
+(-1)^{k} \dfrac{\theta^{2k}}{(2k)!}
++ J\sum_{k = 0}^{\infty} (-1)^{k}
+\dfrac{\theta^{2k + 1}}{(2k + 1)!} \]
+\[ e^{J\theta} = I\cos(\theta) + J\sin(\theta)
+= \matTwo{\cos(\theta)}{\sin(\theta)}
+{-\sin(\theta)}{\cos(\theta)} \]
+So the result is just a rotation matrix
+by angle $\theta$. \\
+
+Notice that the result we got is functionally
+the same as the one we got when solving the
+ODE with $i$ in it,
+as both the rotation matrix $R(\theta)$
+and $e^{i\theta}$ represent rotations. \\
+In fact, the matrix $J$ and $i$
+both represent rotations by $90$ degrees. \\
+
+We can conclude that there exists
+an isomorphism between the group $S$
+of complex numbers $e^{i\theta}$
+on the unit circle, and the group of
+all rotation matrices $R(\theta)$
+in $\R^2$ (the special orthogonal group):
+\[ \phi: S \to SO(2) \]
+It's easy to see why this is an isomorphism.
+It's also clearly a homomorphism,
+since:
+\[ \phi(e^{i\theta}e^{i\gamma})
+= \phi(e^{i\theta \gamma})
+= R(\theta \gamma) = R(\theta)R(\gamma) \]
+It's also clearly a bijection. \\
+
+\newpage
+
+\subsection*{Interpolation}
+
+Given two points $z_0$ and $z_1$ in $S$,
+on the unit circle, how can we interpolate
+between the two (find a general formula
+for a point between $z_0$ and $z_1$)? \\
+
+First we note that both can be written as:
+\[ z_0 = e^{i\theta_0} \AND
+z_1 = e^{i\theta_1} \]
+We can interpolate between the two
+by interpolating between their angles,
+which we can get by doing:
+\[ \ln(z_0) = \theta_0 \AND 
+\ln(z_1) = \theta_1 \]
+Then to interpolate between them:
+\[ (1-t)\ln(z_0) + t\ln(z_1)
+= \ln(z_0) -t\ln(z_0) + t\ln(z_1) 
+= \ln(z_0) + t\ln\para{\dfrac{z_1}{z_0}} \]
+where $t \in [0, 1]$. \\
+Note that:
+\[ \dfrac{z_1}{z_0} = z_1z_0\inv \]
+Now that we have an interpolated angle,
+we can go back to our point:
+\[ \exp\para{\ln(z_0) + t\ln\para{z_1z_0\inv}}
+= \exp(\ln(z_0))
+\exp\para{{t\ln\para{z_1z_0\inv}} }
+= e^{{z_0t\ln\para{z_1z_0\inv}}} \]
+Which is our interpolated point. \\
+
+We can do the exact same interpolation
+given two rotations $R_0$ and $R_1$:
+\[ e^{{R_0t\ln\para{{R_1}{R_0}\inv}}} \]
+Here we define:
+\[ \ln(R(\theta)) = \theta \]
+which is the natural result from having
+defined the exponential as the
+rotation by $\theta$. \\
+
+\newpage
+
+\subsection*{Tangent Spaces}
+
+Imagine for a second the line $i\R$,
+which is the line that sits tangent
+to the unit circle at $(1 + i0)$. \\
+We can imagine that the exponential map
+maps reals $\theta \in \R$ which live on this
+tangent line, to the unit circle using
+$e^{i\theta}$,
+and the logarithmic map maps points on the
+unit circle back to the tangent line. \\
+The tangent line $i\R$ is the Lie alegbra
+of the Lie group $S$. \\
+
+Note that when we interpolated,
+we had a formula:
+\[ e^{{z_0t\ln\para{z_1z_0\inv}}} \]
+Here, the first $z_0$ is the offset.
+Because we are interpolating between $z_0$
+and $z_1$, and $z_0$
+does not necessarily coincide with the
+identity of the rotation/group $S$,
+which is at $(1 + i0)$,
+then we need to offset the interpolated point
+by $z_0$. \\
+Couldn't we intsead just take $z_0$ to
+be the the reference point?
+Starting from which everything rotates?
+The answer is yes, but then the tangent
+space of the unit circle at $z_0$
+is no longer the Lie alegbra. \\
+Calcilations done in the tangent space 
+on the angles will be harder. \\
+The only advantage is that we would no longer
+have an offset by $z_0$,
+but it isn't worth the hassle. \\
+
+We can now formalize the idea of a tangent space.
+Given an $n$-dimensional manifold $C$
+($n$ dimensional
+generalization of a curve or surface),
+we can define a tangent space
+$T_pC$ of the manifold at a point $p$. \\
+The tangent space to a point is the space spanned
+by the hyperplane $\R^{n}$
+tangent to that point. \\
+For example, when we have a curve,
+which is a one dimensional manifold,
+the tangent at any point is a line.
+and the tangent space is the span
+of that line. \\
+
+The tangent space is a vector space. \\
+
+We can define a manifold as such:
+\[ C(t) = \{\gamma_1(t),\gamma_2(t), 
+\dots\gamma_n(t) \mid
+t \in (\alpha, \beta, \dots) \in \R^m \} \]
+So $t$ is a set of parameters,
+and $x_1(t),\gamma_2(t), \dots,\gamma_n(t)$
+are the coordinates of the manifold at
+a point $t$. \\
+
+So the number of parameters $t$ is the number
+of dimensions of the manifold,
+and the number of coordinates of the
+vector $\gamma(t)$ is the space
+the manifold lives in. \\
+
+We can for now focus on having a simple
+curve, which is a one dimensional manifold
+in $\R^n$ space:
+\[ C(t) = \{\gamma(t) \in \R^n \mid t \in \R \} \]
+Where:
+\[ \gamma(t) = \vecThree{\gamma_1(t)}
+{\vdots}{\gamma_n(t)} \]
+is any point $p$ on the curve. \\
+
+Since we have a curve, the tangent will be a line. \\
+Now, as we know from calculus,
+the direction of the tangent at a point $p$
+is given by the derivative,
+which is then anchored using the coordinates
+of the function at $p$
+(the direction doesn't tell us where the tangent
+line is). \\
+
+First we can take the derivative of the curve:
+\[ \dd{\gamma}{t} = \curl{\dd{\gamma_1}{t},
+\dd{\gamma_2}{t}, \dots
+\dd{\gamma_n}{t} } \]
+Which gives us our direction. \\
+
+Now to find the tangent line at a point
+\[ p = C(t_0) = \gamma(t_0) \]
+The tangent line direction is just the vector:
+\[ \dd{C}{t} = \curl{\dd{\gamma_1}{t},
+\dd{\gamma_2}{t}, \dots
+\dd{\gamma_n}{t} } \]
+We can then start at the origin $\gamma(t_0)$,
+and span the entirity of the vector $\dd{\gamma}{t}$,
+which gives us the parametric equation of a line:
+\[ \lambda \dd{\gamma}{t}(t_0) +
+\gamma(t_0) \qquad \lambda \in \R \]
+Which is our tangent. \\
+
+If we ignore the origin and just focus
+on the space spanned by the direction:
+\[ T_pC = \curl{ \lambda \dd{\gamma}{t}(t_0)
+\mid \lambda \in \R } \]
+We have our tangent space,
+which is just a vector space. \\
+
+We can generalize this for any manifold
+by having $t$ be more than one parameter,
+and using partial derivatives. \\
+
+For example:
+\[ C(\alpha, \beta) =
+\{\gamma(\alpha, \beta) \in \R^n 
+\mid (\alpha, \beta) \in \R^2 \} \]
+the following manifold is a two dimensional
+surface in $n$-dimensional space. \\
+The tangent space of this surface would be a
+plane. \\
+In order to find the tangent at 
+$(\alpha_0, \beta_0)$, we again need the origin
+$\gamma(\alpha_0, \beta_0)$,
+as well as two direction vectors:
+\[ \partialdd{\gamma}{\alpha}
+\AND \partialdd{\gamma}{\beta} \]
+Both of which can be found using the Jacobian. \\
+We need two direction vectors because the
+tangent is a plane, and the tangent
+must span the direction vector or vectors
+(the span of two vectors is a plane). \\
+So the tangent plane will be:
+\[
+\lambda \partialdd{\gamma}{\alpha}(\alpha_0, \beta_0) +
+\mu \partialdd{\gamma}{\beta}(\alpha_0, \beta_0) +
+\gamma(\alpha_0, \beta_0) \qquad
+\lambda, \mu \in \R \]
+And the tangent space is the
+span of this plane, which means we
+can ignore the origin and just focus
+on the set of all vectors in the plane
+that have the form:
+\[ T_pC = \curl{ 
+\lambda \partialdd{\gamma}{\alpha}(\alpha_0, \beta_0)
++ \mu \partialdd{\gamma}{\beta}(\alpha_0, \beta_0) 
+\mid \lambda, \mu \in \R } \]
+Which is again a vector space. \\
+
+Sometimes we may include the point
+$\gamma(\alpha_0, \beta_0)$ to indicate 
+where the tangent space lies, and to reinforce
+the idea that vectors in seperate tangent spaces
+can't be operated on at the same time. \\
+
+We know that for a function $\gamma$
+with an output in $\R^n$,
+and inputs $(\alpha, \beta) \in \R^2$,
+then the Jacobian is the $n \times 2$ matrix:
+\[ J_\gamma = \begin{bmatrix}
+{\partialdd{\gamma^1}{\alpha}} & 
+{\partialdd{\gamma^1}{\beta}} \vspace{10pt} \\
+{\vdots} & {\vdots} \vspace{10pt} \\
+{\partialdd{\gamma^n}{\alpha}} & 
+{\partialdd{\gamma^n}{\beta}}
+\end{bmatrix} \]
+However, instead of thinking of each
+output variables $\gamma^1, \gamma^2, \dots$
+individually, it's best to think of it
+as a single output that happes to be a vector:
+\[ \gamma(\alpha, \beta) = 
+\vecThree{\gamma^1(\alpha, \beta)}
+{\vdots}{\gamma^n (\alpha, \beta)} \]
+So instead, we can think of the Jacobian
+as the block component matrix:
+\[ J_\gamma = \vecTwoTransposed
+{\partialdd{\gamma}{\alpha}}
+{\partialdd{\gamma}{\beta}} \]
+Where $\partialdd{\gamma}{\alpha}$
+and $\partialdd{\gamma}{\beta}$
+are just the derivatives of the $\gamma$ vector. \\
+As we can see from the previous jacobian definition,
+the derivative of the vector $\gamma$
+is just the vector of derivatives of each component
+of $\gamma$. \\
+
+We can then express the tangent space as:
+\[ T_pC = \curl{ 
+J_g \vecTwo{\lambda}{\mu}
+\mid \lambda, \mu \in \R } \]
+Which we know is just a linear combination of each
+column in the Jacobian, which are each
+a direction vector in the tangent space. \\
+
+So we can get the derivatives of vectors
+the same way we do any scalar-output functions. \\
+It's easier to just think of it as a vector
+than to think of each output individually. \\
+
+The same applies for matrices;
+if the output of a function is a matrix,
+then the derivatives is also a matrix. 
+In that case, the Jacobian will have a row
+with matrix block elements (same as vectors). \\
+A matrix-output function does have a tangent space;
+it's easier to think of an $n \times m$ matrix
+as a $nm$-dimensional vector in order to visualize
+matrix vector spaces. \\
+
+\end{document}

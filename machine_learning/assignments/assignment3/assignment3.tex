@@ -1,0 +1,586 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Assignment III
+}
+\date{2025-04-22}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Ex 1}
+\begin{enumerate}[label = \alph*)]
+\item 
+We know that Baye's optimal risk is:
+\[ \rscr_\ell^*
+= \inf_{f(x)} \; \E[\ell(f(X), Y)] 
+= \inf_{f(x)} \; 
+\E[\E[\ell(f(X), Y) \mid X]] \]
+which is the minimization of 
+a sum over $X$ first (outer sum)
+and then $Y$ (inner sum):
+\[ \rscr_\ell(f)
+= \sum_{x_i} \Pb(X = x_i)
+\sum_{y_i} \Pb(Y = y_i \mid X = x_i)
+\cdot \ell(f(x_i), y_i) \]
+In the lecture, we showed that the
+optimal risk (best possible learning rule)
+can be achieved by optimizing the
+learning rule for each individual
+input $x \in \xcal$:
+\[ \rscr_\ell^* = \rscr_\ell(f^*) \]
+That is
+the global optimum is achieved
+by making a series of locally optimal
+choices. \\
+Even though $X$ is continuous,
+the marginal and conditional probabilities
+both have a constant value in each
+of the three intervals,
+so we focus on making one choice in each. \\
+We can optimize $f(x)$
+by choosing the output $y \in \ycal$
+with the highest conditional
+probability:
+\[ f^*(x)
+= \piecewiseThree
+{-1 \; \text{ if } x \in [0, 0.25]}
+{1 \quad \text{ if } x \in [0.25, 0.75]}
+{-1 \; \text{ if } x \in [0.75, 1]} \]
+As we know,
+since we are using the 0-1 loss function,
+in the risk of the learning rule,
+only the marginal distribution
+of the outcomes we didn't choose
+will appear (which is only
+one in this case, as $Y$ it is binary):
+\[ \rscr_\ell(f^)
+= \sum_{x_i} \Pb(X = x_i)
+\Pb(Y = \olsi{f(x_i)} \mid X = x_i) \]
+where $\olsi{f(x_i)}$
+is the outcome we did not choose. \\
+Since $X$ is uniform on $[0, 1]$,
+the probability that we have
+$x$ in an interval of length $a$
+is just $a$. \\
+So:
+\[ \rscr_\ell(f^*) = 
+0.25 \cdot 0.2 + 0.5 \cdot 0.1
++ 0.25 \cdot 0.2 = 0.15 \]
+So $\rscr_\ell^* = 0.15$.
+\item 
+If we look at our optimal classifier 
+$f^*(x)$, we would see that it is
+a step function, that is $-1$
+from $0$ to $0.25$,
+$1$ from $0.25$ to $0.75$,
+and then $-1$ from $0.75$ to $1$. \\
+However, this means we have two
+decision boundaries (where $f(x)$
+changes),
+one at $0.25$ and the other at $0.75$. \\
+We want to use a continuous
+surrogate classifier,
+which is then wrapped in the sign function
+(in order to output $-1$ or $1$):
+\[ f_{(w, b)}(x) = \text{sign}(wx + b) \]
+However notice that the function is
+linear, meaning that it can at most
+intersect the $x$-axis one time,
+which means it can change its decision
+once;
+but since we have $2$ decision boundaries,
+this means that $f_{(w, b)}(x)$
+can never be the optimal classifier,
+but we can find the parameters that
+optimize it. \\
+Notice that if we have 
+an increasing function that intersects
+the $x$-axis at $0.25$,
+or a descreasing function
+that intersects
+the $x$-axis at $0.75$,
+the function will match the optimal
+learning rule from $0$ to $0.75$
+and $0.25$ to $1$ respectively. \\
+If we calculate the risk of these
+two functions, we get that they are
+both optimal (but with a higher risk
+than $\rscr_\ell^*$). \\
+Each of these functions will have the
+following formulas
+(we only care about the $x$
+intercept, not the slope,
+which can be anything so long
+as the monotonicity is preserved):
+\[ f_1(x) = \dfrac{x-0.25}{a} \qquad
+f_2(x) = \dfrac{0.75 - x}{a} \]
+for any $a \in \R$ where $a > 0$. \\
+We can then extract the optimal
+parameters:
+\[ (w^*, b^*) \in
+\curl{\para{\dfrac{1}{a}, \dfrac{-0.25}{a}}}
+\cup
+\curl{\para{\dfrac{-1}{a}, \dfrac{0.75}{a}}}
+\qquad \forall a \in \R, a > 0 \]
+Now we note that:
+\[ f_1(x)
+= \piecewiseThree
+{-1 \; \text{ if } x \in [0, 0.25]}
+{1 \quad \text{ if } x \in [0.25, 0.75]}
+{1 \quad \text{ if } x \in [0.75, 1]} \]
+And:
+\[ f_2(x)
+= \piecewiseThree
+{1 \quad \text{ if } x \in [0, 0.25]}
+{1 \quad \text{ if } x \in [0.25, 0.75]}
+{-1 \; \text{ if } x \in [0.75, 1]} \]
+We can then plug these into
+the risk formula,
+which gives us that:
+\[ \rscr_\ell(f_1)
+= 0.25 \cdot 0.2 + 0.5 \cdot 0.1
++ 0.25 \cdot 0.8 = 0.3 \]
+And
+\[ \rscr_\ell(f_2)
+= 0.25 \cdot 0.8 + 0.5 \cdot 0.1
++ 0.25 \cdot 0.2 = 0.3 \]
+Which are both optimal
+for $f_{(w, b)}$,
+but have a higher risk than
+Baye's optimal classifier. \\
+One small note to keep in mind is that
+in this case, it coincided that the
+optimal functions $f_1$
+and $f_2$ have the most
+in common with Baye's optimal
+classifier $f^*$
+on the interval (75\% of it each). \\
+However, it might not always be the case
+that the optimal function
+$f_{(w, b)}$
+is the one that has the most
+outputs in common,
+since the outputs are each
+weighted by the conditional and marginal
+probabilities;
+so we need to calculate the risk
+(which takes into account
+the weight of these probabilities),
+and not just look for the function
+$f_{(w, b)}$ where the most outputs
+matc h $f^*$. 
+\end{enumerate}
+
+\begingroup
+\color{red}
+\subsection*{Correction}
+\begin{enumerate}[label=\alph*)]
+    \item
+    Since $X$ is continuous,
+    we could have instead used:
+    \[ \int_{[0, 1]} 
+    \Pb(Y = \olsi{f^*(x)} \mid X = x) \Pb(dx) \]
+    If $X$ is uniform on $[a, b]$, the probability that
+    $x$ is in some interval $[c, d] \in [a, b]$ is
+    \[ \dfrac{d-c}{b-a} \]
+    Basically, the proportion of the interval itself
+    (so if $X$ is uniform on $[0, 2]$,
+    the probability that it is in $[1, 2]$
+    is $0.5$). \\
+    Note that since $X$ is uniform on $[0, 1]$,
+    then $\Pb(dx) = dx$.
+    The probability that $X$ is in some small interval $dx$
+    is just $\dfrac{dx}{1} = dx$. \\
+    So:
+    \[ \int_{[0, 1]} 
+    \Pb(Y = f^*(x) \mid X = x) dx =
+    \int_0^{0.25} 0.2 dx
+    + \int_{0.25}^{0.75} 0.1 dx
+    +\int_{0.75}^{0.1} 0.2 dx \]
+    Note how the integrals contains
+    only the conditional probability,
+    and not the marginal probability of $x$,
+    since it is uniformally distributed
+    on $[0, 1]$:
+    \[ \int_0^{0.25} 0.2 dx = 0.2 \cdot 0.25 \]
+    Which is the same as:
+    \[ \Pb(Y = -1 \mid X \in [0, 0.25]) 
+    \cdot \Pb(X \in [0, 0.25]) \]
+    This is the same result we got,
+    but we used the integral, which is more accurate
+    (in this case, it doesn't matter,
+    since $x$ is uniform on the interval,
+    so it acts as if it's discrete,
+    but we usually need the intgeral). \\
+    We can do the same for each other interval
+    and then sum the results. \\
+    However my method is fine for this exercise. \\
+    Note that if $X$ was not uniform,
+    we would have needed to include the marginal
+    probability function in the integral
+    as well. \\
+    This can be done using
+    the density function. Recall that:
+    \[ E[f(X)] = \int f(x)\Pb_X(dx) 
+    = \int f(x) p(x)dx \]
+    for any measurable function $f(x)$. \\
+    Note that this is actually why $\Pb(dx) = dx$;
+    because $p(x) = 1$ when the distribution
+    is uniform (on $[0, 1]$). \\
+    \item 
+    The solution is correct. \\
+    Just make sure you recall that the
+    classifier could have been optimal if it
+    was quadratic (two decision boundaries
+    match two x-intercepts). \\
+    An easier way to write the boundaries:
+    \[ b_1 = 0.25w_1 \]
+    \[ b_2 = -0.25w_2 \]
+    Don't forget that if the probabilities were
+    different,
+    the optimal line would differ;
+    we can't just look at the largest interval
+    we can match $f^*$; we have the consider
+    the probability weight.
+\end{enumerate}
+\endgroup
+
+\newpage
+
+\subsection*{Ex2}
+\begin{enumerate}[label=\alph*)]
+    \item 
+    We have an output space
+    $\ycal = \{ 1, 2, \dots K \}$
+    and a loss function
+    \[ \ell: \R^k \times \ycal \to \R \]
+    where
+    \[ \ell(z, y)
+    = -z_y + \log\para{\sum_{j=1}^K e^{z_j} } \]
+    meaning that the classifer will output
+    a $K$ dimensional vector,
+    which is then compared to the class $y$
+    by the loss function. \\
+    We want to find the value of
+    the conditional risk for some 
+    $x \in \xcal$: \\
+    \[ \E[\ell(z, Y) \mid X = x] \]
+    The expected value here is just a sum
+    over $Y$ weighetd by the conditional
+    probability:
+    \[ \sum_{k = 1}^K \ell(z, Y \mid X = x)
+    \cdot \Pb(Y = k \mid X = x) \]
+    \[ \sum_{k = 1}^K
+    \para{-z_y + \log\para{\sum_{j=1}^K e^{z_j}}}
+    \cdot \Pb(Y = k \mid X = x) \]
+    \[ \sum_{k = 1}^K \para{-z_y
+    \cdot \Pb(Y = k \mid X = x)}
+    + \sum_{k = 1}^K
+    \para{\log\para{\sum_{j=1}^K e^{z_j}}
+    \cdot \Pb(Y = k \mid X = x)} \]
+    \[ \sum_{k = 1}^K \para{-z_y
+    \cdot \Pb(Y = k \mid X = x)}
+    + \log\para{\sum_{j=1}^K e^{z_j}}
+    \cdot
+    \sum_{k = 1}^K \Pb(Y = k \mid X = x) \]
+    Now we know that:
+    \[ \sum_{k = 1}^K
+    \Pb(Y = k \mid X = x) = 1 \]
+    because $Y = 1$, $Y = 2$,
+    $\dots$ $Y = K$
+    partition the $Y$ space $\ycal$. \\
+    So we now have :
+    \[ \sum_{k = 1}^K \para{-z_y
+    \cdot \Pb(Y = k \mid X = x)}
+    + \log\para{\sum_{j=1}^K e^{z_j}} \]
+    \item 
+    We want to minimize the conditional
+    risk, which means finding the gradient
+    with respect to $z$
+    (since $z \in \R^K$ is continuous)
+    and then setting it to 0
+    \[ \nabla \E[\ell(z, Y \mid X = x)] = 0 \]
+    This will give us the optimal
+    output $z^*$ for the input $x$. \\
+    We can focus on each partial
+    derivative individually:
+    \[\partialdd{}{z_k}
+    \para{ \sum_{k = 1}^K \para{-z_y
+    \cdot \Pb(Y = k \mid X = x)}
+    + \log\para{\sum_{j=1}^K e^{z_j}}} \]
+    \[\partialdd{}{z_k}
+    \para{ \sum_{k = 1}^K \para{-z_y
+    \cdot \Pb(Y = k \mid X = x)}} 
+    + \partialdd{}{z_k}
+    \para{\log\para{\sum_{j=1}^K e^{z_j}}} \]
+    \[ \dfrac{e^{z_k}}
+    {\log\para{\sum_{j=1}^K e^{z_j}}}
+    - \Pb(Y = k \mid X = x) \]
+    We then set the gradient to $0$,
+    which gives us:
+    \[ \dfrac{e^{z_k}}
+    {\log\para{\sum_{j=1}^K e^{z_j}}}
+    - \Pb(Y = k \mid X = x) = 0 \]
+    \[ \dfrac{e^{z_k}}
+    {\log\para{\sum_{j=1}^K e^{z_j}}}
+    = \Pb(Y = k \mid X = x) \]
+    \[ e^{z_k}
+    = \log\para{\sum_{j=1}^K e^{z_j}}
+    \Pb(Y = k \mid X = x) \]
+    \[ z_k
+    = \log\para{\log\para{\sum_{j=1}^K e^{z_j}}
+    \Pb(Y = k \mid X = x)} \]
+    So:
+    \[ z^*_k = \log\para{
+    \alpha \Pb(Y = k \mid X = x)} \]
+    where we have:
+    \[ \alpha = \log\para{\sum_{j=1}^K e^{z_j}} \]
+    Note that $\alpha > 0$,
+    and that $\alpha$ is independent
+    of our index $k$;
+    it is the constant for all entries
+    in $z^*$
+    (so it's a constant in terms of the index $k$,
+    but not $z$ as a whole). \\
+    \item 
+    We saw that for a fixed input $x$,
+    the optimal output is given by:
+    \[ g^*_k(x) = z^*_k = \log\para{
+    \alpha \Pb(Y = k \mid X = x)} \]
+    which is just a $\log$
+    and scaling of $z^*_k$. \\
+    Now we want to show that:
+    \[ \arg \max_k g^*_k(x)
+    =  \arg \max_k \Pb(Y = k \mid X = x) \]
+    That is to say,
+    the choice of $k$
+    that gives us the largest
+    entry $z^*_k$ of the optimal prediction,
+    is the same $k$ as the one that
+    maximizes the probability
+    $\Pb(Y = k \mid X = x)$. \\
+    Now, we have:
+    \[ g^*(x)
+    = \begin{bmatrix}
+        \log\para{\alpha
+        \Pb(Y = 1 \mid X = x)} \\
+        \log\para{\alpha
+        \Pb(Y = 2 \mid X = x)} \\ 
+        \vdots \\
+        \log\para{\alpha
+        \Pb(Y = k \mid X = x)} \\ 
+        \vdots \\
+        \log\para{\alpha
+        \Pb(Y = K \mid X = x)} \\ 
+    \end{bmatrix} \]
+    Notice that as we mentioned earlier,
+    $\alpha$ is independent of the index $k$,
+    so its value has no bearing on
+    which entry is the largest. \\
+    And since $\log$ is a monotonic
+    increasing function,
+    and since $\alpha > 0$
+    (multiplying by it won't 
+    flip the monotonicity),
+    this means that the largest entry
+    is the one that has index $k$ such that
+    $\Pb(Y = k \mid X = x)$
+    is the largest. \\
+    Note that this is just $f^*(x)$,
+    since by definition $f^*(x)$
+    chooses $Y = k$ such that $\Pb(Y = k \mid X = x)$
+    is the largest (in order to minimize risk,
+    which has $1 -  \Pb(Y = k \mid X = x)$
+    in it). \\
+    This completes our proof. \\
+    
+    Notice why this makes sense. \\
+    Our classifier usually output a single value,
+    the predicted class label,
+    which is then compared to the real label $y$
+    by a loss function such as the 0-1 loss. \\
+    However, in this case,
+    if we have $K$ possible classes for $y$,
+    we output a vector with $K$
+    entries.
+    The idea behind it is that each
+    entry at inded $k$ in the vector would be
+    some number that represents the confidence
+    of the classifier that the index $k$
+    is the correct label. \\
+    The loss function we have takes as input 
+    this vector, and checks the performance
+    of the classifier;
+    if the entry that has the largest value
+    is the correct label, then the classifier
+    did well. \\
+    Now, in part $c)$,
+    we needed to show that the largest entry
+    in the optimal prediction $g^*(x)$,
+    has the same index $k$
+    as the $k$ that maximizes
+    $\Pb(Y = k \mid X = x)$. \\
+    And that makes perfect sense!
+    It just means that the best classifier,
+    when given an input $x$,
+    outputs a vector
+    where the entry with the highest
+    confidence of being true corresponds
+    the class with the highest probability
+    of being true given $X = x$. \\
+\end{enumerate}
+
+
+\begingroup
+\color{red}
+\subsection*{Correction}
+\begin{enumerate}[label=\alph*)]
+    \item
+    \item 
+    The result is correct, but you should have
+    taken the second derivative as well,
+    to ensure that at this point, we do have a
+    global minimizer, and not a global maximizer!
+    Since both happen at $\nabla f = 0$. \\
+    Basically, we find $\nabla^2 f$,
+    the second derivative,
+    and check its value at the minimzer;
+    if it is positive $\nabla^2 f > 0$,
+    it means that $\nabla f$
+    is increasing, so it is a cup shape,
+    which means convex (minimzer). \\
+    If it is negative, then the result
+    we found is a maximizer, not minimizer,
+    since $\nabla f$ is descreasing,
+    meaning it is a cap shape. \\
+    Or we could mention the function is
+    convex (if we know it is). \\
+    Also, I was right,
+    $\alpha$ being constant just means it doesn'take
+    vary depending on the entry $k$.
+\end{enumerate}
+\endgroup
+
+\newpage
+
+\subsection*{Ex3}
+
+\begin{enumerate}[label=\alph*)]
+    \item 
+    We want to optimize
+    Baye's optimal predictor for
+    some $x \in \xcal$:
+    \[ f^*(x) = \min_{z \in \R^n}
+    \E[\ell(z, Y) \mid X = x] \]
+    where $\ell(z, y) = \| z - y\|^2$. \\
+    We can use the gradient
+    since $z \in \R^n$ is continuous. \\
+    \[ f^*(x)
+    = \E[ \| z - Y\|^2 \mid X = x] \]
+    \[ f^*(x)
+    = \E[z^2 + Y^2 -2zY \mid X = x] \]
+    \[ f^*(x)
+    = z^2 + \E[Y^2 \mid X = x]
+    + -2z\E[Y \mid X = x] \]
+    We can factor out $z$ because the expected
+    value is that of the $Y$ random variable. \\
+    We can then find the gradient
+    (with respect to $z$)
+    \[ \nabla z = 2z - 2\E[Y \mid X = x] \]
+    Then setting it to $0$:
+    \[ 2z - 2\E[Y \mid X = x] = 0\]
+    \[ z = \E[Y \mid X = x] \]
+    So the value of $z$,
+    (which is the output of the classifier
+    given $x$)
+    that optimizes the conditional risk
+    is $\E[Y \mid X = x]$.
+    \item 
+    Now we want to optimize
+    Baye's optimal predictor for
+    some $x \in \xcal$:
+    \[ f^*(x) = \min_{c \in \R^+}
+    \E[\ell(z, Y) \mid X = x] \]
+    where $\ell(c, y) = \log(f(x)) + \dfrac{Y}{f(x)}$. \\
+    We can use the derivative
+    since $c \in \R^+$ is continuous. \\
+    \[ f^*(x)
+    = \E[ \log(c) + \dfrac{Y}{c} \mid X = x] \]
+    \[ f^*(x)
+    = \log(c) + \dfrac{1}{c}\E[Y \mid X = x] \]
+    We can factor out $c$ because the expected
+    value is that of the $Y$ random variable. \\
+    We can then find the derivative
+    (with respect to $c$):
+    \[ \dd{f}{c} = \dfrac{1}{c} - 
+    \dfrac{1}{c^2}\E[Y \mid X = x] \]
+    Then setting it to $0$:
+    \[ \dfrac{1}{c} - 
+    \dfrac{1}{c^2}\E[Y \mid X = x] = 0 \]
+    \[ c = \E[Y \mid X = x] \]
+    So the value of $c$,
+    (which is the output of the classifier
+    given $x$)
+    that optimizes the conditional risk
+    is $\E[Y \mid X = x]$.
+\end{enumerate}
+
+\begingroup
+\color{red}
+\subsection*{Correction}
+\begin{enumerate}[label=\alph*)]
+    \item
+    Again, you should either mention that
+    the function is convex
+    (sum of convex functions),
+    or do the second derivative and show it
+    is positive. \\
+    Also don't forget that $z^2$
+    in this case just means dot product of $z$
+    with itself,
+    and $zY$ means dot product too $\ang{z, Y}$.
+    \item
+    This wasn't really in the lecture,
+    but we have additive noise
+    and multiplicative noise:
+    \[ Y = f(x) + \varepsilon \AND Y = \varepsilon f(x) \]
+    As $f(x)$ is optimized,
+    it usually tends to try to offset this noise,
+    by cancelling it out.
+    So again, $z$,
+    our prediction, will include the optimal
+    classificatin as well as either multiplicative
+    or additive noises:
+    \[ z = f^*(x) + \varepsilon
+    \AND z = \varepsilon f^*(x) \]
+    (Or $c$ for part b.). \\
+    Note how in the additive case,
+    if we use mean squared loss, the two noises
+    ($Y$'s noise and $z$'s)
+    would cancel out (since both are being added,
+    and we have the minus). \\
+    On the other hand, if we have multiplicative
+    noise, and we use the
+    second loss function (part b.),
+    then the two noises would cancel out 
+    since we have $Y$ divided by $c$. \\
+
+\end{enumerate}
+\endgroup
+
+\newpage
+
+\end{document}
+

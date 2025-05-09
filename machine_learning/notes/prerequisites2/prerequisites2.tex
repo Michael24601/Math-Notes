@@ -1,0 +1,1165 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Math Prerequisites II
+}
+\date{2025-04-14}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+    \section*{Probability}
+
+    \subsection*{Introduction}
+
+    Several fields in math are concerned with
+    formalizing subjects that up to one point
+    had been taken for granted.
+    For instance, Analysis can be thought of as
+    the theory that allows Calculus to work,
+    and a natural evolution of the field. \\
+    
+    Formalizing not only offers precise definitions
+    that can be used to prove theorems and
+    advance the field,
+    but also carries the benefit of 
+    allowing generalizations by abstracting
+    lower level details and focusing on the core
+    properties of a particular subject. \\
+    A pertinent example of this is Abstract Algebra,
+    which abstracts away the details of which specific
+    set is being worked on,
+    and instead focuses on the abstract idea of
+    algebraic structures being worked on using binary
+    operators. \\
+
+    The field of Measure Theory,
+    which will serve as a launchpad for the study
+    of Probability Theory,
+    if a formalization and generalization of the
+    notion of measuring things. \\
+
+    \newpage
+
+    \subsection*{Measure Theory}
+
+    Measure Theory is about formalizing,
+    abstracting, and generalizing the idea of
+    measurements, however, we will be using 
+    applied and common examples of measurements
+    in order to motivate axioms and definitions. \\
+
+    A common measurement everyone should be
+    familiar with is the measurement of length.
+    Given some segment, 
+    we can measure its length,
+    which is represented by a positive real number. \\
+    This notion can be extended to two dimensions,
+    and three dimensions,
+    measuring areas and volumes respectively. \\
+    
+    As mentioned earlier,
+    formalization and generalization
+    requires us to standardize what we mean by measure,
+    and to focus on the core of measurement
+    while abstracting away details of any specific
+    measurement. \\
+
+    For instance,
+    we can formalize the notion of measurements
+    by noting that the length,
+    area, and volume are no more than functions
+    \[ L:\pcal{\R} \to [0, \infty) \]    
+    \[ A:\pcal{\R^2} \to [0, \infty) \]
+    \[ V:\pcal{\R^3} \to [0, \infty) \]
+    that map subsets of some global space
+    to a non-negative real number. \\
+    Here $\pcal{A}$ is the powerset 
+    (set of all subsets) of $A$. \\
+    So, for example,
+    the area of a unit square
+    with the bottom left corner at the origin
+    is $A(S)$ where 
+    \[ S = \{ (x, y) \in \R^2 \mid 
+    0 \leq x, y \leq 1  \} \]
+    We can think of this as taking a subset cotaining
+    every point $(x, y)$ within the square,
+    (which is just a section on the plane $\R^2$)
+    and inputting it into the are function. \\
+
+    We can now start stripping away details
+    and focusing on the core of measurements:
+    For instance, we can have any set act
+    as our global space.
+    We can call this set $\xcal$. \\
+    Moreover, the set of elements that we can
+    assign a measuremet to does not have to be
+    the powerset of $\xcal$ (every subset)
+    It can be a subset of the powerset
+    (some subsets). \\
+
+    However, we do expect some restrictions
+    on which subsets can actually be measured.
+    For instance, if we can measure some
+    subset $A$, and some disjoint subset $B$,
+    then it makes sense to be able to measure
+    their union, as it is the joining of two
+    measurable subsets.
+    We should likewise be able to measure the whole,
+    $\xcal$ (as a reference point for
+    other measurements),
+    as well as any complements of measurable subsets. \\
+
+    Moreover, we expect some restrictions on the
+    measurements we make. \\
+    For instance, if we take the measurement $\mu$
+    of some subset $A$, and the measurement
+    of some disjoint subset $B$,
+    the measurement of their union should
+    be the sum of their measurement:
+    \[ \mu(A \cup B) = \mu(A) + \mu(B) \]
+    this rule also ensures are measurements
+    have internal consistency. \\
+    We also expect that for instance,
+    the empty set has measure 0. \\
+
+    Now, we can define measurable space. \\
+
+    Suppose we have a set $\xcal$.
+    A $\sigma$-algebra $X$ on that set $\xcal$
+    is a collection of subsets of $\xcal$
+    (in other words, $X \subseteq \pcal{\xcal}$)
+    that satisfies three axioms:
+    \begin{enumerate}
+        \item 
+        $\xcal \in X$
+        \item 
+        Closure under complements:
+        \[A \in X \implies \olsi{A} \in X
+        \text{ where } \olsi{A} = (\xcal - A) \]
+        \item 
+        Closure under countable unions:
+        \[A, B \in X \text{ such that }
+        A \cap B = \emptyset
+        \implies A \cup B \in X \]
+    \end{enumerate}
+    We call the tuple $(\xcal, X)$ a measurable space.
+    The set $\xcal$ contains the global sample space,
+    and the set $X$ is the set of all measurable
+    subsets (sections) of $\xcal$. \\
+    Note that it matches our expectations regarding
+    measuring sets. \\
+
+    Notice that our axioms imply that
+    for any measurable space $(\xcal, X)$
+    \[ \emptyset \in X \]
+    this is because
+    \[ \xcal \in X \implies \olsi{\xcal} \in X 
+    \implies \emptyset \in X\]
+    Moreover, the $\sigma$-algebra is closed
+    under countable intersections as well as unions:
+    \[ A, B \in X \implies A \cap B \in X \]
+    this is because
+    \[ A, B \in X \implies \olsi{A}, \olsi{B} \in X 
+    \implies \olsi{A} \cup \olsi{B} \in X \] 
+    \[ \olsi{A} \cup \olsi{B} \in X
+    \implies \olsi{(\olsi{A} \cup \olsi{B})} \in X
+    \implies \olsi{(\olsi{A})} 
+    \cap \olsi{(\olsi{B})} \in X 
+    \implies A \cap B \in X \]
+    With that, our axioms allow us to measure
+    unions, intersections, and complements
+    of measurable sets. \\
+
+    Now, to rigorously define a measure.
+    A measure on a measurable space $(\xcal, X)$
+    is a function
+    \[ \mu: \xcal \to [0, \infty) \]
+    that satisfies the following axioms:     
+    \begin{enumerate}
+        \item 
+        $\mu(\emptyset) = 0$
+        \item 
+        Countable additivity states that if
+        $(A_n)_{n \in \N} \in X$ are disjoint subsets:
+        \[ (A_n)_{n \in \N} \in X \implies 
+        \mu\para{\bigcup_{n \in \N}A_n} 
+        = \sum_{n \in N} \mu(A_n) \]
+    \end{enumerate}
+    These axioms basically ensure that the measure
+    is internally consistent;
+    if we measure two subsets (with no commonoalities),
+    we expect the measure of their union
+    (the set containing both subsets)
+    to be the sum of their individual measures. \\
+
+    Note that this implies that if a subset $A$
+    contains another subset $B$,
+    then $A$ must have a measure larger
+    or equal to that of $B$. \\
+    This is because $A$ can be expressed
+    as the union of two disjoint sets:
+    \[ A = B \cup (A-B) \]
+    which implies that
+    \[ \mu(A) = \mu(B) \cup \mu(A-B) \]
+    And, since the measure is a non-negative
+    real $x \in [0, \infty)$,
+    this must mean that:
+    \[ \mu(A) = \mu(B) + x 
+    \implies \mu(A) \geq \mu(B) \]
+    This is an important property of measures,
+    and it shows how countable additivity
+    ensures monotonicity. \\
+
+    We call a triplet $(\xcal, X, \mu)$
+    a measure space.
+    It's a measurable space equipped with a measure. \\
+
+    Another concept that can be introduced is that
+    of measurable functios. \\
+    Given two measurable spaces 
+    $(\xcal, X)$ and $(\ycal, Y)$,
+    we call
+    \[ f: \xcal \to \ycal \]
+    a measurable function if
+    for any measurable subset $A \in Y$
+    \[ f^{-1}(A) \in X \]
+    we know already that $f^{-1}(A) \subseteq \xcal$,
+    but we need to ensure that if $A$ is measurable
+    in $\ycal$,
+    its preimage is as measurable as well,
+    but in $\xcal$. \\eq
+    This operation corresponds to converting
+    between measurable spaces,
+    and will be useful for defining
+    random variables rigorously. \\
+
+    Another concept that needs introduction
+    is that of a push-forward measure. \\
+    Suppose we have a measure space
+    $(\xcal, X, \mu)$
+    and a measurable space $(\ycal, Y)$
+    such that
+    \[ f: \xcal \to \ycal \]
+    is a measurable function. \\
+    Then we can define the function
+    \[ \mu \circ f\inv \{S\} = \mu(f\inv (S)) 
+    = \mu(f \in S) \]
+    where $S \in \ycal$ to be the push-forward
+    measure of $\mu$ under $f$. \\
+    Let's actually examine what it does.
+    First, we take a measurable subset $S$
+    in the space of $\ycal$.
+    We then use the inverse $f\inv$ to convert
+    this subset back to $\xcal$,
+    where we can take its measurement using $\mu$
+    (which is guaranteed to work by the fact
+    that $f$ is measurable). \\
+    In other words, if we have a measurable
+    mapping from one measurable space to another,
+    then we can use the measure of the first
+    space to assign measurements to subsets
+    in the second space. \\
+    As we mentioned earlier,
+    we can use measurable functions to define
+    random variables.
+    So a push-forward measure is a way to assign
+    probabilities to random variable events
+    as if they were part of the probability 
+    space (which is what we call the distribution
+    of the random variable). \\
+
+    We call a subset of the real numbers $\R$
+    open if we can move a little bit in the
+    positive and negative directions and still
+    be inside the subset. \\
+    More formally, a set $S \subseteq \R$
+    is open if there exists some $\epsilon > 0$
+    such that for each element $s \in S$,
+    the range of numbers
+    $(s - \epsilon, s + \epsilon)$
+    (not including the endpoints) is in $S$:
+    \[
+    S \text{ is open } \iff 
+    \forall s \in S\; \exists \varepsilon > 0 
+    \text{ such that } 
+    (s - \varepsilon, s + \varepsilon) 
+    \subseteq S \] \\
+
+    The Borel $\sigma$-algebra $\bscr$
+    is the smallest $\sigma$-algebra
+    on $\R$ that contains
+    all of the open subsets of $\R$. \\
+    As we know, a $\sigma$-algebra has to be closed
+    under complements and finite unions. 
+    We can thus form $\bscr$ by taking all
+    of the open subsets on $\R$,
+    their complements,
+    and finite unions. \\
+    
+    Suppose that $(\xcal, X)$ is a measurable
+    space,
+    and that $A \in X$ is a measurable subset. \\
+    Then the indicator function of $A$ is a function:
+    \[ \mathbbm{1}_A: \xcal \to \{0, 1\} \]
+    where
+    \[
+        \mathbbm{1}_A(x) = 
+        \piecewise
+        {1, \quad \text{ if } x \in S }
+        {0, \text{ if } x \notin S}
+    \]
+
+    As mentioned earlier,
+    the length, area, and volume are commonly
+    used measures. \\
+    When formalized, they are called
+    the Lebesgue Measures,
+    a family of measures that for $\R$,
+    $\R^2$, and $\R^3$,
+    represent the length, are and volume,
+    but which can be extended to higher
+    dimensions. \\
+    We denote the Lebesgue measure using
+    $\lambda$. \\
+
+    If we have two measures $\mu$ and $\gamma$
+    defined on some measurable space
+    $(\xcal, \X)$, then we say
+    $\mu$ is absolutely continuous with respect
+    to $\gamma$ if
+    \[ \gamma(A) = 0 \implies \mu(A) = 0 \]
+    for all $A \in \X$. \\
+    This is the case if
+    \[ \mu(A) = \int_{A}p(x)d\gamma(x) \]
+    for some measurable function 
+    \[ p: \xcal \to [0, \infty) \]
+    Notice that all this is saying is that
+    if the measurable set $A$
+    measures 0 according to one measure,
+    it must also do so according to
+    the other measure. \\
+
+    Given a measurable space
+    $(\xcal, \X)$
+    equipped with some measure $\mu$
+    (measure space  $(\xcal, \X, \mu)$),
+    we want to define a function
+    \[f:\xcal \to [0, \infty) \]
+    such that the measure of some subset
+    $A \in \X$ is equal to the area
+    under $f$ within the range of values $A$
+    \[ \mu(A) = \int_{A}f(x)dx \]
+    We can call this a density function. \\
+    Of course, note here that
+    we don't know what set $\xcal$ is,
+    and integrals are usually tied closely
+    to the notion of lengths and real numbers
+    ($dx$ is a small length in $\R$). \\
+    Instead, we define an integral in terms
+    of some measure $v$ that is actually
+    defined on $(\xcal, \X)$:
+    \[ \mu(A) = \int_{A}f(x)dv(x) \]
+    Note that in the original integral
+    we showed, the measure that was (implicitely)
+    used was the Lebesgue measure $\lambda$
+    defined on vector spaces $\R^n$. \\
+    Finally, we note that for $f$
+    to be a density function,
+    it needs to be measurable. \\
+    Measurability ensures that the preimage of
+    $f$ is measurable in its original space.
+    If we want the area under $f$ to refer
+    to the measure $\mu$ of any subset $A$,
+    then its preimage needs to be measurable
+    in $\xcal$,
+    so it can be measured by $\mu$. \\
+
+    Here, we can write the density function
+    \[ f = \dd{\mu}{v} \]
+    called the Radon-Nikodym derivative. \\
+
+    Notice that the existence of a 
+    density function implies that the measure
+    $\mu$ is absolutely continuous
+    with regards to $\gamma$. \\
+
+    The final theorem we will look
+    at is Fubini's Theorem. \\
+    Suppose we have two $\sigma$-finite
+    measure spaces:
+    \[ (\xcal, \X, \mu)
+    \AND (\ycal, \Y, v) \]
+    then there exists a joint measure
+    space:
+    \[ (\xcal \times \ycal, 
+    \X \otimes \Y) \]
+    where $\xcal \times \ycal$
+    is the cartesian product containing
+    all ordered pairs with one element
+    from $\xcal$ and one element from $\ycal$.
+    This means that the list of outcomes
+    of this measurable space contains
+    every possibile combination of outcomes
+    from $\xcal$ and $\ycal$. \\
+    The term $\X \otimes \Y$,
+    called the $\sigma$-algebra product,
+    is the smallest $\sigma$-algebra
+    containing the cartesian product
+    $\X \times \Y$. \\
+    When we take this cartesian product,
+    there is no guarantee that the resulting
+    set will fulfill the closure requirements
+    of a $\sigma$-algebra.
+    So if we were to take every element in
+    $\X \times \Y$, their complements,
+    and their finite unions,
+    we would end up with the smallest $\sigma$-algebra
+    that contains $\X \times \Y$. \\
+    To conclude 
+    \[ (\xcal \times \ycal, \X \otimes \Y) \]
+    is a measurable space that allows us
+    to measure every combination of outcomes
+    in $\xcal$ and $\ycal$. \\
+    In order to make this measure,
+    we use a unique measure $\mu \otimes v$
+    called the product measure,
+    where for any $A \in \X$ and
+    $B \in \Y$
+    \[ \mu \otimes v(A, B) =
+    \mu(A) \cdot v(B)  \]
+    Similarly to any other measure space,
+    we should be able to integrate
+    over this space with respect to
+    the product measure. \\
+    So for any integrable function:
+    \[ f:\xcal \times \ycal
+    \to \R \]
+    we can evaluate this integral
+    over the joint measure space
+    as a double integral
+    over each measure space individually:
+    \[ \int_{\xcal \times \ycal}
+    f(x,y)(\mu \otimes v)(dx, dy)
+    = \int_{\xcal}  \int_{\ycal}
+    f(x,y)v(dy)\mu(dx) \]
+    We can also flip the other:
+    \[ \int_{\xcal \times \ycal}
+    f(x,y)(\mu \otimes v)(dx, dy)
+    = \int_{\ycal}  \int_{\xcal}
+    f(x,y)\mu(dx)v(dy) \] \\
+
+    \newpage
+
+    \subsection*{Probability Theory}
+
+    Our goal is to study the theory behind
+    probability,
+    but in order to motivate this theory,
+    as well as the previously discussed
+    Measure Theory,
+    we need to anchor it to a tangible example. \\
+    
+    Suppose we roll a fair six-sided die. \\
+    There are 6 possible outcomes:
+    \[ \{ 1, 2, 3, 4, 5, 6 \} \]
+    This is called our sample space. \\
+    In that sample space,
+    we can measure the probability of any
+    outcome or event.
+    Here an event is an outcome or collection of
+    outcomes, and the probability of that event
+    taking place is the probability that any 
+    outcome in that event takes place.
+    Each event can be thought of as a subset of
+    this sample space. \\
+    For example, the event that we roll
+    an even number is represented by the subset
+    \[ \{2, 4, 6\} \]
+    In this case, every subset of the sample
+    space can easily be assigned a probability.
+    Since the probability of each outcome
+    taking place is $\sfrac{1}{6}$,
+    the probability that any event will transpire
+    is just the that probability multiplied
+    by the number of outcomes present in an event. \\
+
+    As expected, we can model this using a measure
+    space. \\
+    For instance, the sample space will be our
+    global set, which we denote $\Omega$. \\
+    The set of all events whose probability
+    we want to measure is the set of 
+    measurable subsets of $\Omega$,
+    the $\sigma$-algebra which we will
+    denote $\fscr$. \\
+    Finally, the probability is a measure
+    $\Pb$ defined on the measurable
+    space $(\Omega, \fscr)$,
+    with $\Pb\{\Omega\} = 1$
+    (It is certain that one outcome
+    in the sample space will take place,
+    so the probability that that will transpire
+    has to be 1). \\
+    
+    This measure space:
+    \[ (\Omega, \fscr, \Pb) \]
+    is then called a probability space. \\
+
+    In fact, any measure space
+    $ (\xcal, X, \mu) $
+    is a probability space,
+    so long as $\mu\{\xcal\} = 1$. \\
+
+    Now, as we know a random variable
+    assigns a number to outcomes
+    in our probability space. \\
+    For example, take the random
+    variable whose value is $0$
+    if the roll is even, and $1$
+    if the roll is odd. \\
+    In probability, we usually
+    want to be able to measure the probability
+    that a random variable has
+    some value or range of values. \\
+    Notice that in order for that to happen,
+    the space in which the random variable
+    is defined needs to be measurable 
+    as well. \\
+    We also need to a way to convert from
+    events in the space of the random variable
+    back to the probability space in order to
+    measure the probability of said events. \\
+
+    A measurable function
+    \[ X: \Omega \to \xcal \]
+    from the probability space to the measurable
+    space $(\xcal, \X)$
+    is called a random element.
+    If the set $\xcal$ contains numbers,
+    then $X$ is more specifically a random variable. \\
+    Notice that measurable functions are ideal
+    because they can convert our probability
+    space to another measurable space. \\
+    Moreover, they guarantee that the inverse
+    of a measurable event in this space
+    is also measurable in the original probability
+    space. \\
+
+    Now, as we know, the distribution of a
+    random element is no more than an assignment
+    of a probability to each outcome $x$
+    in the random elements's space. \\
+    In order to get this probability,
+    we need to convert back to the probability
+    space using the inverse of the random element's
+    function $X$.
+    We then use the probability measure $\Pb$
+    on the preimage to get the probability
+    of the random variable's outcome:
+    \[ \Pb \circ X\inv \{x\} 
+    = \Pb(X\inv (x)) \]
+    Notice that this is no more than the
+    push-forward measure of $\Pb$ on $X$. \\
+    In fact, $\Pb_X$ can be thought of
+    as a measure defined on the measurable
+    space $(\xcal, \X)$
+    (since it assigns a measure to elements
+    in $\xcal$). \\
+
+    Recall that when we defined
+    push-forward measures,
+    we wrote
+    \[ \mu \circ f\inv \{S\} = \mu(f\inv (S)) 
+    = \mu(f \in S) \]
+    and 
+    $\mu(f \in S)$
+    did not make much sense at the time.
+    However, in the context of random variables,
+    what we are saying is that:
+    \[ \Pb_X(A) = \Pb(X \in A) \]
+    which is notation we have seen before
+    for random variables. \\
+
+    In fact, we have a name for the
+    function that describes the distribution
+    of a random element $X$.
+    It is denoted by 
+    \[ \Pb_X = \Pb \circ X\inv \]
+    which is called the probability
+    distribution of $X$. \\
+
+    If two random elements $X$ and $Y$
+    on a probabilty space
+    have the same distribution
+    \[ \Pb_X = \Pb_Y \]
+    then $X$ and $Y$ are equally
+    distributed. \\
+
+    Now, what if we have two random elements
+    defined on the same probability space,
+    describing different outcomes. \\
+    This means we have two measurable
+    space $(\xcal, \X)$
+    and $(\ycal, \Y)$,
+    and two random elements:
+    \[ X: \Omega \to \xcal \qquad 
+    Y: \Omega \to \ycal \]
+    Then we can define a new measurable space:
+    \[ (\xcal \times \ycal, \X \otimes \Y) \]
+    Called the joint space of $X$
+    and $Y$. \\
+    We can map to this joint space using
+    a random element:
+    \[ (X, Y): \Omega \to \xcal \times \ycal  \]
+    where for each $\omega \in \Omega$
+    \[ (X, Y)(\omega) = (X(\omega), Y(\omega)) \]
+    which can be shown to be a measurable
+    function. \\
+    If we were to then measure the probabilities
+    of outcomes in this new joint random variable,
+    we would get a distribution:
+    \[ \Pb_{X, Y} = \Pb \circ (X, Y)\inv \]
+    called the joint probability distribution
+    of $X$ and $Y$,
+    which describes the probability that 
+    two events, one from $\xcal$
+    and one from $\ycal$,
+    would occur at the same time.
+    It does so by taking the measure of all
+    combinations of outcomes in
+    $\xcal$ and $\ycal$ that make up
+    said events. \\
+
+    When we have a joint distribution
+    of two random elements $X$ and $Y$,
+    there is nothing stopping us from measuring
+    the distributions $\Pb_X$ and $\Pb_Y$
+    regardless. \\
+    As expected, this measures the probability
+    that events take place in each of
+    $\xcal$ and $\ycal$,
+    with no regard to events in the other. \\
+    We call these distributions marginal. \\
+
+    We know that there are continuous
+    and discrete random variables. \\
+    We also know that in the case of continuous
+    random variables, the distribution follows
+    what's called a probability density 
+    function $f$,
+    where the area under $f$ gives the
+    distribution of the random variable. \\
+    Now is the time to formalize that notion. \\
+
+    For a random variable $X$
+    defined on a measurable space $(\xcal, \X)$,
+    equipped with a probability measure $\Pb_X$,
+    we can create density functions using
+    a measurable function:
+    \[ f:\xcal \to [0, \infty) \]
+    where
+    \[ \Pb_X(A) = \int_{A}f(x)dv(x) \]
+    for some measure $v$ on $\xcal$,
+    commonly the Lebesgue measure
+    if $\xcal = \R^n$. \\
+    
+    Notice that this implies that the 
+    measure $\Pb_X$ is absolutely
+    continuous with regards to the measure $v$.
+    (the space we are integrating over). \\
+    Notice that this implies that
+    \[ v(A) = 0 \implies \Pb_X(A) = 0 \]
+    which means that if a section $A$
+    has a measure $v(A) = 0$,
+    the probability that $A$ would happen in $0$
+    as well. \\
+    When we are dealing with real numbers,
+    in $\R$ for example,
+    this is easier to understand.
+    The measure $v$ is the Lebesgue
+    measure $\lambda$,
+    which describes the length along $\xcal$.
+    So what we are saying is that,
+    if the length is so short that it equals
+    to 0 (for example, a single point on $\R$),
+    then the probability this outcome will take
+    place is also 0,
+    which makes sense since the area above a point
+    is a line with area 0. \\
+
+    We will be working with densities in $\R$
+    for the most part,
+    so if $\xcal = \R$,
+    then we can define a density function $f$
+    of a random variable $X$ as just:
+    \[ \Pb(X \in A) = \Pb(A) = 
+    \int_Af(x)dx \]
+    which is to say, the probability
+    that an event in $A$ occurs is the area
+    under $f$ constrained to the $A$ interval
+    (in this case measured with the Lebesgue measure,
+    length). \\
+
+    A famous example of a continuous
+    distribution is the normal distribution,
+    which has a density function:
+    \[ f(x) = \dfrac{1}{2\sqrt{2\pi \sigma^2}}
+    e^{\para{-\dfrac{(x-\mu)^2}{2\sigma^2}}} \]
+    for any $x \in \R$. \\
+    The normal, or Guassian distribution,
+    is denoted $\mathcal{N}(\mu, \sigma)$,
+    with mean $\mu$ and standard
+    deviation $\sigma$. \\
+
+    The joint distribution $\Pb_{(X, Y)}$
+    is also accompanied by a joint density
+    $p_{(X, Y)}$. \\ 
+
+    The transformation law
+    gives us a way to get the density function
+    of a random variable $Y$ in $\R^n$
+    given the density
+    function of another $\R^n$ valued
+    random variable $X$,
+    and a measurable function $f: X \to Y$
+    that maps $X$ to $Y$. \\
+    So, given the density $p_X$ of $X$,
+    we have
+    \[ p_Y(y) = p_X(g\inv(y))\cdot|\det(J_{g\inv})| \]
+    where $J_{g\inv}$ is the Jacobian
+    of the inverse.
+
+    \newpage
+
+    \subsection*{Expected Value and Variance}
+    
+    If we define an integrable random varibale:
+    \[ X: \Omega \to \R \]
+    from the probability space
+    $(\Omega, \fscr, \Pb)$,
+    then the expected value
+    of that random variable is:
+    \[ \E[X] = \int_{\Omega}X(\omega)
+    \Pb(d\omega) \]
+    That is to say,
+    it is the sum of all events
+    in $X$ weighted by the probability
+    of their happenning. \\
+    We can think of the expected value
+    as the average of the distribution
+    of $X$. \\
+
+    Now suppose we have a function
+    \[ f: \xcal \to \R \]
+    we want to try and find
+    the expected value of $f(X)$. \\
+    As such:
+    \[ \E[f(X)]
+    = \int_{\Omega}(f \circ X)(\omega)
+    \Pb(d\omega) \]
+    Here, note that $x = X(\omega)$,
+    which means that $\omega = X\inv(x)$.
+    So if we switch our variable to $x$:
+    \[\int_{\xcal}f(x)(\Pb \circ X\inv)(dx) \]
+    Then we notice that we have $\Pb \circ X\inv$,
+    which is the push-forward measure of $\Pb$
+    under $X$, also called $\Pb_X$,
+    the probability measure on $\xcal$:
+    So we have
+    \[ \int_{\xcal}f(x)\Pb_X(dx) \]
+    Notice here that in the result,
+    the integral is basically just the expected
+    value inetgral, but evaluated
+    in $\xcal$ using its own probability
+    measure $\Pb_X$,
+    instead of $\Omega$ and the probability
+    measure $\Pb$. \\
+    So we can say:
+    \[ \E[f(X)] 
+    = \int_{\xcal}f(x)\Pb_X(dx) 
+    = \E_X[f] \]
+    where $\E_X$ is just the expected value,
+    evaulated in $\xcal$,
+    using $\Pb_X$. \\
+
+    If we have a discrete (non integrable)
+    random variable
+    \[ X: \Omega \to \R \]
+    then the expected value is a sum:
+    \[ \sum_{i}x_i\Pb(X = x_i) \]
+    This clearly has the same meaning
+    of "average" of $X$. \\
+
+    Likewise, we can generalize this idea
+    to any measuable function of the random variable,
+    such as $f(X)$, where
+    \[ f: \R \to \R \]
+    Here, we can see that
+    \[ \E[f(X)] = \sum_{i}f(x_i)\Pb(X = x_i) \]
+    which is the discrete analogue to
+    integrating with respect to the law
+    $\Pb_X$ instead of $\Pb$. \\
+
+    If we have the probability
+    density function $P_X$ of a continuous
+    random variable
+    \[ X: \Omega \to \R \]
+    then the expected value of $X$
+    can instead be given by:
+    \[ \E[X] = \int_{\R} x P_X(x) dx \]
+    which again clearly describes the average
+    of the values of $X$. \\
+    
+    And, for any measurable function
+    \[ f: \R \to \R \]
+    we have
+    \[ \E[f(X)] = \int_{\R} f(x)P_X(x) dx \]
+    which corresponds to
+    integrating with respect to the law
+    $\Pb_X$ instead of $\Pb$. \\
+
+    For integrable random variables $X$ and $Y$,
+    and some numbers $a, b \in \R$,
+    here are some properties of expected values:
+    \begin{enumerate}
+        \item 
+        Linearity:
+        \[ \E[aX + bY] = a\E[X] + b\E[Y] \]
+        \item 
+        Monotonicity: If $X \leq Y$, then 
+        \[ \E[X] \leq \E[Y] \]
+        \item
+        Non-negativity: If $X \geq 0$, then
+        \[ \E[X] \geq 0 \]
+        \item
+        Constant rule: For any constant $c \in R$,
+        \[ \E[c] = c \]
+        which makes sense since the average value
+        of a constant is its own value.
+        \item
+        Indicator function:
+        for any measurable subset $A \in \fscr$
+        \[ \E[1_A] = \Pb(A) \]
+        this makes sense, since
+        we are taking every event $a \in A$,
+        multiplying it by the probability
+        it will take place, and summing the total,
+        which is exactly the probability that
+        some event in $A$ will take place. \\
+    \end{enumerate}
+
+    While the expected value gives us the average,
+    the variance of a square-integrable
+    random variable
+    \[ X: \Omega \to \R \]
+    gives us the spreadness:
+    \[ \var(X) = \E[(X - \E[X])^2] \]
+    it basically calculates the distance
+    between each point in $X$
+    and the average of $X$,
+    giving us how spread out the
+    distribution is. \\
+    The standard deviation is defined as:
+    \[ \std(X) = \sqrt{\var(X)} \]
+    which calculates the average
+    from any element to the mean of the
+    distribution. \\
+    Both the variance and standard devation
+    are always positive. \\
+
+    We can also relate the distribution
+    of two random variables
+    \[ X, Y: \Omega \to \R \]
+    using the covariance:
+    \[ \cov(X, Y) = 
+    \E[(X - \E[X])(Y - \E[Y])] \]
+    Note that $\cov(X, X)$
+    is just the variance $\var(X)$. \\
+
+    We can go further and define
+    the correlation coefficient
+    \[ \corr(X, Y) = \dfrac{\cov(X, Y)}
+    {\sqrt{\var(X)\var(Y)}} \]
+    which measure linear correlation
+    between random variables. \\
+    The correlation is a value in $[-1, 1]$,
+    where $-1$ means there is an inverse
+    correlation, $1$ means there is a
+    strong correlation, and $0$
+    means the events are independent,
+    not correlated. \\
+
+    If two random variables $X$ and $Y$
+    are independent of each other,
+    then their covariance is $\cov(X, Y)$
+    is $0$. \\
+    
+    We can also extend the idea of variance
+    to random variables in $\R^n$:
+    \[ X: \Omega \to \R^n \]
+    which we call the covariance matrix
+    of $X$:
+    \[ \cov(X) = 
+    \E[(X - \E[X])(X - \E[X])^T] \]
+    expanding this outer product,
+    we get a matrix where each entry is
+    \[ (\cov(X))_{ij} = \cov(X_i, X_j) \]
+    Moreover, the covariance matrix
+    is positive semi definite. \\
+
+    We can also get the covariance
+    matrix for a vector that has
+    block elements. \\
+    Suppose that we have the random vectors
+    \[ X: \Omega \to \R^n
+    \qquad Y: \Omega \to \R^d \]
+    If we have a vector
+    \[ \vecTwo{X}{Y} \]
+    then its covariance matrix is
+    \[ \cov\para{\vecTwo{X}{Y}}
+    = \matTwo{\cov(X, X)}{\cov(X, Y)}
+    {\cov(Y, X)}{\cov(Y, Y)}
+    = \matTwo{\cov(X)}{\cov(X, Y)}
+    {\cov(Y, X)}{\cov(Y)} \]
+    Here, every entry of the covariance
+    matrix is itself a matrix,
+    since we treated the entries
+    $X$ and $Y$ as block elements. \\
+    We have $\cov(X)$ and $\cov(Y)$,
+    which are just the covariance 
+    matrices of $X$ and $Y$
+    (basically the variance in
+    multidimensional space). \\
+    We have $\cov(X, Y)$
+    and $\cov(Y, X)$,
+    which can be calculated
+    using:
+    \[ \cov(X, Y) = 
+    \E[(X - \E[X])(Y - \E[Y])^T] \]
+    We note that
+    \[ \cov(X, Y) = 
+    \cov(Y, X)^T \]
+    Also note that
+    \[ \cov(X, Y) \neq 
+    \cov\para{\vecTwo{X}{Y}} \]
+    One is the covariance comparing
+    $X$ to $Y$,
+    the other is the covariance of the
+    vector containing $X$ and $Y$,
+    which is like teh variance but in
+    $\R^{n + d}$ space. \\
+
+    Some properties of variances include:
+    \begin{enumerate}
+        \item 
+        \[ \cov(X, Y) = \E[XY] - \E[X]\E[Y] \]
+        \item
+        \[ \var(aX + bY)
+        = a^2\var(X) + b^2\var(Y)
+        + 2ab\cov(X, Y) \]
+        \item
+        The variance of the sum
+        of random variables
+        \[ X_1, X_2, \dots X_n \]
+        is:
+        \[ \var\para{\sum_{i=1}^{n}X_i}
+        = \sum_{i=1}^{n}\sum_{j}^{n}
+        \cov(X_i, X_j) \]
+        \item
+        The variance of the sum of
+        independent random variables is
+        just the sum of the variances:
+        \[ \var\para{\sum_{i=1}^{n}X_i}
+        = \sum_{i=1}^{n} \var(X_i) \] \\
+    \end{enumerate}
+
+    We can show why the last two
+    properties are true. \\
+    If we have a set of random 
+    variables:
+    \[ \{ X_1, X_2, \dots X_n \} \]
+    then
+    \[ \var\para{\sum_{i=1}^{n}X_i}
+        = \E\brac{\para{\sum_{i=1}^{n}X_i 
+    - \E\brac{\sum_{i=1}^{n}X_i}}^2}\]
+    We then use the linearity of expected values:
+    \[ \var\para{\sum_{i=1}^{n}X_i}
+    = \E\brac{\para{\sum_{i=1}^{n}X_i 
+    - \sum_{i=1}^{n}\E[X_i]}^2}\]
+    \[ \var\para{\sum_{i=1}^{n}X_i}
+    = \E\brac{\para{\sum_{i=1}^{n} (X_i 
+    - \E[X_i])}^2}\]
+    The square of a sum
+    is the sum of the product 
+    of every pair in the sum:
+    \[ \var\para{\sum_{i=1}^{n}X_i}
+    = \E\brac{\sum_{i=1}^{n}\sum_{j=1}^{n}
+    (X_i - \E[X_i])(X_j - \E[X_j])}\]
+    Again using the linearity of expected values:
+    \[ \var\para{\sum_{i=1}^{n}X_i}
+    = \sum_{i=1}^{n}\sum_{j=1}^{n}
+    \E[X_i - \E[X_i])(X_j - \E[X_j])
+    = \sum_{i=1}^{n}\sum_{j=1}^{n}\cov(X_i, X_j) \]
+    However, if the variables are mutually
+    independent, then
+    \[ \cov(X_i, X_j) = 0 \text{ if } i \neq j\]
+    \[ \cov(X_i, X_j) = \var(X_i) 
+    \text{ if } i = j\]
+    So in that case
+    \[ \var\para{\sum_{i=1}^{n}X_i} = 
+    \sum_{i=1}^{n} \var(X_i) \] \\
+
+    \newpage
+
+    \subsection*{Probability Fundamentals}
+
+    Given a probability space
+    $(\Omega, \fscr, \Pb)$,
+    and two measurable subsets
+    $A, B \in \fscr$,
+    then $A$ and $B$
+    are independent if
+    \[ \Pb(A \cap B) 
+    = \Pb(A) \cdot \Pb(B) \]
+    where $ \Pb(A \cap B)$
+    is the event where both $A$
+    and $B$ take place. \\
+
+    We can do the same thing
+    with random elements. \\
+    Suppose we have random elements
+    \[ X: \Omega \to \xcal \qquad
+    Y: \Omega \to \ycal \]
+    then we say that $X$ and $Y$
+    are independent if
+    \[ \Pb_{(X, Y)}
+    = \Pb_X \otimes \Pb_Y \]
+    their joint distribution is the
+    product of their marginal distributions. \\
+    Note that the same applies
+    for their densities.
+    If the variables are independent,
+    then 
+    \[ p_{(X, Y)} = p_X \cdot p_Y \]
+    holds. \\
+
+    If we have the following random
+    variables
+    \[ X_1, X_2, \dots X_n \]
+    such that they are all independent,
+    then the expected value of their
+    product is just the product
+    of their expected value:
+    \[ \E\brac{\prod_{i=1}^{n}
+    X_i} = \prod_{i=1}^{n}\E[X_i] \]
+    This can be proven by 
+    using the integral or sum
+    forumla for the expected
+    value, coupled with the fact that
+    $ \Pb_{(X, Y)}
+    = \Pb_X \otimes \Pb_Y $. \\
+    
+    Recall that we know that
+    \[ \cov(X, Y) = \E[XY] - \E[X]\E[Y] \]
+    However, if $X, Y$
+    are independent,
+    then that implies that 
+    \[ \E[XY] = \E[X]\E[Y] \]
+    which means that $\cov(X, Y) = 0$. \\
+    This is how we can derive the
+    result that $\cov(X, Y) = 0$
+    when $X$ and $Y$
+    are independent. \\
+
+    Given a probability space
+    $(\Omega, \fscr, \Pb)$,
+    and two events $A, B \in \fscr$,
+    if $\Pb(A) \neq 0$,
+    then we can define the conditional
+    probability:
+    \[ \Pb(B \mid A)
+    = \dfrac{\Pb(A \cap B)}{\Pb(A)} \]
+    where $\Pb(B \mid A)$
+    means the probability of $B$
+    happening given that we know $A$
+    has happened. \\
+    We can calculate it by restricting
+    our sample space to just $A$,
+    and then calculating the probability
+    that the outcomes in $B$
+    take place. \\
+
+    Note that if we fix $A$,
+    then the function
+    \[ \Pb_{(\cdot \mid A)}: \fscr \to
+    [0, 1] \]
+    is a measure,
+    specifically the measure of some
+    event $B$ taking place given
+    that $A$ has taken place. \\
+    This measure is only well defined
+    for $\Pb(A) \neq 0$
+    (since the conditional probability
+    divides by $\Pb(A)$). \\
+
+    We know that
+    \[ \Pb(B \mid A)
+    = \dfrac{\Pb(A \cap B)}{\Pb(A)} 
+    \quad \text{ and } \quad 
+    \Pb(A \mid B)
+    = \dfrac{\Pb(A \cap B)}{\Pb(B)} \]
+    we can combine them to form:
+    \[ \Pb(B \mid A)
+    = \dfrac{\Pb(A \mid B) \cdot \Pb(B)}
+    {\Pb(A)} \]
+    which is called Baye's rule and allows
+    the reversal of conditional
+    probabilities. \\
+
+    The law of total probability states that
+    \[ \Pb(B)
+    = \sum_{i \in I}\Pb(B \mid A_i)
+    \cdot \Pb(A_i) \]
+    if ${A_i}_{i \in I}$
+    is a countable partition of $\fscr$
+    (partition means the union of the subsets
+    forms $\fscr$, and that they are all
+    disjoint). \\
+    This makes intuitive sense:
+    If we sum the probabilities that $B$
+    will take place knowing
+    that every event possible in $\fscr$,
+    weighted by the probability
+    that each of these events takes place,
+    then the result is just the probability
+    that $B$ takes place (since we conditioned
+    on the entirity of the 
+    measurable space). \\
+
+    On the other hand, if we also have 
+    $\{A_i\}_{i \in I}$
+    as a countable partition of $\fscr$,
+    then
+    \[ \sum_{i \in I}\Pb(A_i \mid B)
+    = 1 \]
+    This is because we are taking
+    the probability that all events
+    $A_i$ (which partition $\fscr$)
+    will take place, knowing $B$
+    has taken place.
+    Surely one of them has to take place,
+    so the probability is $1$. \\
+
+\end{document}

@@ -1,0 +1,467 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture III
+}
+\date{2025-05-05}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Learning in Practice}
+
+\subsection*{Datasets}
+
+In theory, we have an underlying
+probability space:
+\[ (\Omega, \acal, \Pb) \]
+And a data space:
+\[(\xcal\times \ycal, \xscr \otimes \yscr, 
+\Pb_{X, Y})\]
+Where $\Pb_{X, Y}$ is the joint distribution 
+and $\xcal, \ycal$
+are the input and output spaces. \\
+
+In practice though, we don't have access
+to the entire distribution. \\
+
+Instead, what we have is a random dataset
+from the data space,
+which is a random variable
+\[ S: \Omega \to (\xcal, \ycal)^n \ \]
+Which is composed of $n$ data points:
+\[ S_i: \Omega \to \xcal, \ycal\ \]
+Each data point is just a pair
+of input and output from the random
+variables $X$ and $Y$:
+\[ S_i = (X_i, Y_i)\]
+For $1 \leq i \leq n$. \\
+
+Note that the random variable is
+a random variable of datasets of size $n$,
+meaning that each element of this
+random variable (each output $S(\omega)$)
+is a dataset with $n$ elements. \\
+
+So $S_i$ can be thought of as the random
+variable of one data point
+(not the datapoint itself). \\
+
+Note that this induces a probability
+measure for sample points $\Pb_S$,
+with the $\sigma$-algebra
+\[ \sscr = (\xscr \otimes \yscr)^{\otimes n} \]
+and sample space:
+\[ \scal = (\xcal \times \ycal)^n \]
+Which form a measure space:
+\[ ((\xcal, \ycal)^n,
+(\xscr \otimes \yscr)^{\otimes n}, \Pb_S) \]
+for $S$, the random variable. \\
+
+Note that one instance of the random variable $S$
+is an actual dataset:
+\[ B = (x_i, y_i)^n 
+\in (\xcal\times \ycal)^n \]
+Recall that $S$ is not a dataset,
+but a random variable of datasets,
+with elements that are datasets. \\
+Then $B_i$ is just one data point $(x_i, y_i)$,
+which comes from the random variable
+$S_i$ (a random variable for one data point). \\
+
+We will always assume that the random variables
+$S_i$ of $S$
+(the random variables of each data point)
+are independently and identity distributed.
+This works out surprisingly well. \\
+
+For example,
+if we have a dataset that includes images
+of dogs with labels of their breed,
+we epect that each image (data point)
+is identically distributed to the others,
+but is also completely independently
+distributed. \\
+The frames of a video for example would not
+be considered independent,
+as they have temporal dependence. \\
+
+\newpage
+
+\subsection*{Empirical Performance Measure}
+
+We can't use Baye's risk to measure the performance
+of a classifier in practice since
+it requires full knowledge of the distribution. \\
+
+Instead, given a loss function:
+\[ \ell: \ycal\times \ycal\to \R^+ \]
+And a classifier:
+\[ f: \xcal\to \ycal\]
+And a dataset:
+\[ B = (x_i, y_i)^n \in (\xcal\times \ycal)^n \]
+Then what we actually use to measure the performance
+of the classifier is the empirical risk:
+\[ \hat{\rscr}_\ell^n(f)
+= \dfrac{1}{n}\sum_{i = 1}^{n}\ell(f(x_i), y_i) \]
+Note that this is just the mean (average) of the
+dataset,
+which really is just the empirical analogue
+of the expected value, which is also just
+an average value of the distribution. \\
+
+The empirical risk $\hat{\rscr}_\ell^n(f)$
+is deterministic for a fixed dataset
+$B \in S$,
+outputting one number. \\
+
+The empirical risk $\hat{\rscr}_\ell^n(f)$
+is that of a fixed dataset $B \in S$. \\
+If instead we learn $f$
+from some random dataset in $S$
+(the random variable of all datasets),
+then $f_S$ depends not only on the dataset,
+but also on the randomness of $S$.
+So the empirical risk:
+\[ \hat{\rscr}_\ell^S(f_S) \]
+is not deterministic (one number),
+but is itself a random variable
+(a function $h(S)$ of the random 
+variable $S$). \\
+We mentioned this briefly in the first
+lecture, saying that the risk
+in practice also depends on the randomness
+(choice) of the dataset. \\
+
+When we are done training our classifier
+on dataset $B$ from the random dataset variable $S$,
+we have a function $f_S$. \\
+We then have to evaulate the performance of $S$
+on the testing data instead of the new training data,
+which means we calculate the empirical risk,
+but this time over the testing dataset,
+which we get from another random dataset variable $S'$:
+\[ \hat{\rscr}_\ell^{S'}(f_S)
+= \dfrac{1}{n}\sum_{i = 1}^{n}\ell(f_S(X_i'), Y_i') \]
+which depends on both the randomeness in $S$
+and $S'$
+(choice of training and testing data). \\
+
+Given a fixed dataset $B \in S$,
+a loss function $\ell: \ycal \times \ycal \to \R^+$,
+and a hypothesis class $\ffrak$,
+we can find a classifier $f: \xcal \to \ycal$
+in $\ffrak$ that minimizes the empirical risk:
+\[ \hat{f}_n = 
+\min_{f \in \ffrak} \hat{\rscr}_\ell^n(f) \]
+Which we call the empirical risk minimizer. \\
+
+Note that like the empirical risk,
+if we don't have a fixed dataset,
+the empirical risk minimizer will also
+depend on the randomness of the
+random variable $S$ (the choice of dataset).
+We can then use $\hat{f}_S$ to denote it,
+and define it as:
+\[ \hat{f}_S = 
+\min_{f \in \ffrak} \hat{\rscr}_\ell^{S}(f) \] \\
+
+We mentioned earlier that given a full
+distribution, a machine learning algorithm
+takes in a dataset and spits out
+a classifier from a hypothesis class:
+\[ \ascr: (\xcal \times \ycal)^n \to \ffrak \]
+We can also write as:
+\[ \ascr: \scal \to \ffrak \]
+where $\scal$ is the sample space of
+the random dataset $S$
+($S$ is the random variable
+of all datasets,
+it is not a dataset itself).
+The machine learning algorithm maps 
+an element in the random dataset space $\scal$,
+which is a dataset,
+to a classifier $f \in \ffrak$. \\
+
+The machine learning algorithm should,
+in theory, spit out the empirical
+risk minimizer, which is the best
+classifier $\hat{f}_S$ (depending on the
+choice of dataset). \\
+So we can write:
+\[ \ascr(\scal) = \hat{f}_S \]
+That is to say,
+given some dataset $B$ from the
+space of datasets $\scal = (\xcal \times \ycal)^n$
+($B$ a random dataset from $S$),
+the machine learning algorithm 
+returns the empirical risk minimizer,
+depending of course on the choice
+of dataset from $S$. \\
+
+Recall that $\ffrak$ is a hypothesis class;
+a family of functions with a similar structure,
+and a set of parameters that themselves
+get optimized for a specific task. \\
+
+But why do we restrict $f$
+to a hypothesis class when attempting
+to minimize it? \\
+
+In the last chapter, when we had a full distribution,
+we just found the optimal classifier $f^*$
+without focusing on one family or class
+of functions $\ffrak$. \\
+The reason why we did that is that we had the
+full distribution and data space.
+So what we ended up doing was finding the
+optimal prediction $f^*(x)$
+for each individual input $x$,
+by using the marginal distribution 
+$\Pb_{Y \mid X = x}$ and attempting to maximize
+it for each point $x$. \\
+
+However, if we do that in practice,
+given one dataset of size $n$,
+we would only have a function defined
+for those $n$ data points.
+It would not actually generalize to new
+data, including the testing data. \\
+
+So instead, we restrict $f$
+to be part of some hypothesis class
+with some structure imposed on the function,
+and a set of parameters that tune the
+function (for example, a class of line functions
+with parameters including the slope 
+and $y$ intercept). \\
+So finding the optimal parameters that make
+the function fit the training dataset best
+is very likely to generalize well
+to data outside the training dataset. \\
+
+Note that as the number of data points $n$
+in the dataset tends to infinity $n \to \infty$,
+the dataset approximates the distribution
+better and better,
+and the empirical risk approaches Baye's risk
+\[ \hat{\rscr}_\ell^n \to \rscr_\ell  
+\qquad \text{ as } \qquad n \to \infty \]
+This is called the law of large numbers. \\
+
+\newpage
+
+\subsection*{Hypothesis Classes and Error Types}
+
+Now we can formalize what we mean
+by a hypothesis class. \\
+
+A hypothesis class $\ffrak_\Theta$
+is a family of functions
+with a parameter space $\Theta \subset \R^d$:
+\[ \ffrak_\Theta = 
+\{ f_\theta \mid \theta \in \Theta \} \]
+The set of functions $f_\theta$ in $\ffrak_\Theta$
+includes all functions that have these parameters,
+for any combination of values. \\
+
+For example, one family of functions is the
+family of lines:
+\[ \ffrak(x) = \{ wx + b \mid w, b \in \R \} \]
+Which includes every linear function
+$f: \R \to \R$. \\
+
+The hypothesis classes are essentially
+the models we use while doing machine learning,
+such as SVM, Linear Regression... \\
+
+However, not all hypothesis
+classes are a good fit for a given dataset. \\
+For example, if we have data that is curved
+in space,
+a linear hypothesis class is likely not
+going to learn the data very well. \\
+We can minimize the empirical risk 
+$\hat{\rscr}_\ell^n(f)$ and find the
+empirical risk minimizer $\hat{f}_n$,
+however, while the result would be the line
+of best fit (best classifier
+from this hypothesis class for the given dataset),
+it might not be good in general,
+compared to the best classifiers from more
+suitable hypothesis classes. \\
+
+This motivates the next idea:
+decomposing the excess risk
+of a classifier into two parts. \\
+
+As we know,
+if we had a full distribution,
+the excess risk for a classifier $f$
+given some loss function $\ell$
+would be the difference between
+Baye's risk of $f$ and Baye's optimal
+risk:
+\[ \rscr_\ell(f) - \rscr_\ell^* \]
+It is a measure of how far off
+$f$ is from being an optimal classifier. \\
+
+Now we can calculate this excess risk
+for the empirical risk minimizer
+$\hat{f}_S \in \ffrak$
+which is the best classifier
+from some hypothesis class that we can get
+given some random dataset: 
+\[ \rscr_\ell(\hat{f}_S) - \rscr_\ell^* \]
+This value measures how far off
+empirical risk minimizer is from
+the optimal classifier for the whole distribution
+(had it been known). \\
+This isn't a very useful measure on its
+own however; for one,
+the optimal classifier $f^*$
+that gives us Baye's optimal risk
+is likely not a function from the
+same hypothesis class $\ffrak$ as $\hat{f}_S$,
+so it's not attainable. \\
+
+Instead, what we can do is decompose this excess
+risk into two parts:
+\[ \rscr_\ell(\hat{f}_S) - \rscr_\ell^*
+= \rscr_\ell(\hat{f}_S)
++ (\inf_{f' \in \ffrak} \rscr_\ell(f')
+- \inf_{f' \in \ffrak} \rscr_\ell(f')) 
+- \rscr_\ell^* \]
+\[ \rscr_\ell(\hat{f}_S) - \rscr_\ell^*
+= \underbrace{\para{\rscr_\ell(\hat{f}_S)
+- \inf_{f' \in \ffrak} \rscr_\ell(f')}}_
+{\text{Estimation error}}
++ \underbrace{\para{\inf_{f' \in \ffrak} \rscr_\ell(f')
+- \rscr_\ell^*}}_{\text{Approximation error}} \]
+The left term is the estimation error,
+and the right term is the approximation error. \\
+These are far better measures
+for how far off we are,
+and we will see why. \\
+
+First note that the term 
+$\inf_{f' \in \ffrak} \rscr_\ell(f')$
+represents the optimal classifier 
+in the hypothesis class $\ffrak$
+that we can get had we the full distribution. \\
+It isn't necessarily the optimal classifier,
+but the optimal classifier restricted
+to the hypothesis class $\ffrak$. \\
+
+The estimation error is the difference
+between the risk of the empirical risk
+minimizer
+and the theoretical optimal classifier
+we could have found if we had the full
+distribution
+(restricted to the same hypothesis class). \\
+It tells us how far off we are
+from the best classifier whithin the hypothesis
+class of $\hat{f}_S$.
+So this is a good measure of how well
+our machine learning algorithm learned
+the data and generated a classifier $\hat{f}_S$.
+This is because the optimal classifier
+we compare it to is part of the same
+family of function, so the distance
+between it and the classifier $\hat{f}_S$
+is more meaningful,
+knowing that it is technically attainable
+given enough data
+(since it's the same function structure
+and family). \\
+
+On the other hand, the approximation error
+is the difference between Baye's optimal risk,
+and the risk of the theoretical
+optimal classifier
+restricted to the hypothesis class $\ffrak$. \\
+In other words, both of these
+risks are only attainable given the full
+distribution,
+but one of them is the best risk of all,
+for any function, and the other is best
+risk attained for a function in the family $\ffrak$. \\
+We can thus think of this as a measure
+of how much of a good fit the hypothesis
+class $\ffrak$ for this distribution. \\
+This measure,
+unlike the estimation error,
+ does not depend on the dataset at all,
+it is just a way for us to evaluate the fit
+of the hypothesis class for the given 
+distribution.
+For example, if we have a distribution
+that is curved, and a hypothesis class
+of linear functions, 
+we expected the approximation error to be
+quite high. \\
+
+Note that both of these measure require
+full access to the distribution,
+which we don't have in practice,
+so we can't calculate them. \\
+So in practice, if a classifier is performing
+poorly, we have no way of knowing 
+if it's because we trained it badly
+(estimation error)
+or if it's because the class of functions 
+we chose is a bad fit (approximation error). \\
+
+The tradeoff between these two types of
+error, which will be explored in more detail
+at a later point,
+gives rise to the tension between under and
+over-fitting. \\
+
+Under-fitting happens when the hypothesis class
+chosen isn't complex enough to capture the
+nuances of the data. \\
+
+Over-fitting happens when the hypothesis
+class is too complex, when it has too many 
+degrees of freedom,
+it would not only learn the data,
+but would also learn some of the random noise
+you'd get in a real dataset,
+causing it to become very good at classifying
+training data, but generalizing badly to 
+unseen data. \\
+
+There are two remedies to overfitting:
+\begin{enumerate}
+    \item 
+    Constraining: Restricting $\ffrak$
+    to a less complex class (that is nonetheless
+    not so simple it can't fit the data properly). 
+    \item 
+    Regularization: Adding a cost penalty
+    for predictions that go against our 
+    prior assumptions about the data. \\
+\end{enumerate}
+
+\newpage
+
+\subsection*{Regularization}
+
+
+
+\newpage
+
+\end{document}

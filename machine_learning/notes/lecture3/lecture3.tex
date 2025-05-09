@@ -1,0 +1,495 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture III
+}
+\date{2025-05-05}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Bayesian Learning Theory}
+
+\subsection*{Proof of Classification Calibration}
+
+This section is optional. \\
+It focuses on a proof that $\Phi$
+is classification calibrated
+if and only if $\Phi'(0)$ exists
+and $\Phi'(0) < 0$. \\
+
+In the last lecture we
+talked about classification calibrated
+loss functions $\Phi$,
+in the context of a binary classification
+of $\ycal = \{-1, 1\}$,
+and real valued surrogate prediction
+functions. \\
+
+First we define a regression:
+\[ \eta: \xcal \to [0, 1] \]
+Which is given by:
+\[ \eta(x) = \Pb_{Y \mid X = x}(1)
+= \Pb(Y = 1 \mid X = x) \]
+Which is essentially the probability
+that $Y$ is the label $1$
+given $x$. \\
+
+We can write the expected risk over $Y$ as:
+\[ E[Y \mid X = x]
+= \Pb(Y = 1\mid X = x)(1)
++ \Pb(Y = -1 \mid X = x)(-1) \]
+\[ E[Y \mid X = x] 
+= \Pb(Y = 1\mid X = x)
+- \Pb(Y = -1 \mid X = x) \]
+\[  E[Y \mid X = x] 
+= \Pb(Y = 1\mid X = x)
+- (1 - \Pb(Y = 1\mid X = x)) \]
+\[ E[Y \mid X = x] 
+= 2\eta(x) - 1  \]
+As we know, we have outputs
+$-1$ and $1$ which multiply the
+probabilities that each label $-1$
+and $1$ will take place. \\
+So if the result of the expected
+value is larger than $0$
+then: 
+\[ \Pb(Y = 1 \mid X = x) >
+\Pb(Y = -1 \mid X = x) \]
+Which means that best possible
+classification $f^*(x)$
+for $x$
+that we can output
+is going to be $1$ if $2\eta(x) - 1 > 1$,
+and the best output is $-1$ 
+if $2\eta(x) - 1 < 1$. \\
+
+So $f^*(x) = \sign(2\eta(x) - 1)$,
+which means that the optimal prediction
+is just $\eta(x)$ threshholded
+at $0.5$. \\
+Note that these numbers would change
+if the labels of $\ycal$
+weren't $1$ and $-1$,
+but the general idea is the same;
+we could threshold the regression
+to get the optimal prediction $f^*(x)$,
+which just depends on the probability
+$\Pb(Y \mid X = x)$. \\
+
+We can use the regression function
+to prove that a loss function $\Phi$
+is classification-calibrarted
+if it is differentiable at $0$
+and $\Phi(0)' < 0$. \\
+
+First note that:
+\[ \rscr_\Phi(g)
+= \E[\Phi(Yg(X))]
+= \E[\E[\Phi(Yg(X))] \mid X ] \]
+We can then unfurl the expected value
+over $Y$
+(recall that $\ycal = \{-1, 1\}$):
+\[ \E[\Pb(Y = -1 \mid X)\Phi(-g(X))
++ \Pb(Y = 1 \mid X)\Phi(g(X))] \]
+\[ \E[(1-\eta(X))\Phi(-g(X))
++ \eta(X)\Phi(g(X))] \]
+If we take $\xi = \eta(x)$,
+then we can write:
+\[ r_\Phi(z \mid \xi)
+= (1-\xi)\Phi(-z) + \xi\Phi(z) \]
+Which is the conditional risk for
+a single prediction $z$
+on one fixed output $x$. \\
+
+Similarly to before, the problem of optimizing
+$\rscr_\Phi(g)$ reduces to optimizing
+$r_\Phi(z \mid \xi)$ for each point $x$
+(pointwise optimization). \\
+This is because we can just sum over
+every conditional risk weighted by the probability
+that $x$ will take place,
+and get the total risk,
+which means that:
+\[ \rscr_\Phi(g) = E[r_\Phi(z \mid \xi)]
+= E[r_\Phi(g(X) \mid \eta(X))] \]
+which is just one expected value over $X$. \\
+
+Now, finally, to optimize $r_\Phi(z \mid \xi)$. \\
+We want to prove that 
+the minimal value of $r_\Phi(z \mid \xi)$
+matches that of Baye's classifier $f^*$
+if and only if $\Phi$
+is differentiable at $0$
+and $\Phi(0)' < 0$. \\
+
+Recall that:
+\[ f^*(x) = \piecewise{1 \quad \;\;\; \text{ if }
+\Pb(Y = 1 \mid X) >
+\Pb(Y = -1 \mid X)}
+{-1 \quad \text{ otherwise }} \]
+is the optimal classifier. \\
+
+Here, $\Pb(Y = 1 \mid X) > \Pb(Y = -1 \mid X)$
+means that $\Pb(Y = 1 \mid X) > 0.5$,
+which means that $\xi > 0.5$,
+which means that $2\xi - 1 > 0$. \\
+So in short, 
+the minimal value of $r_\Phi(z \mid \xi)$
+matches that of Baye's classifier $f^*$ when
+these hold:
+\[ 2\xi - 1 > 0 \iff 
+\arg \min_z r_\Phi(z \mid \xi) \in (0, \infty) \]
+\[ 2\xi - 1 < 0 \iff 
+\arg \min_z r_\Phi(z \mid \xi) \in (-\infty, 0) \]
+Meaning that the values that minimize the
+conditional risk
+should be the same as the outputs of Baye's
+optimal classifier $f^*$. \\
+
+Since $\Phi$ was assumed to be convex,
+then so is $r_\Phi(z \mid \xi)$. \\
+We can define $c_\xi(z) = r_\Phi(z \mid \xi)$
+for simplicty. \\
+
+Now note that:
+\[ \arg \min_z r_\Phi(z \mid \xi) \in (0, \infty)
+\iff c_\xi'(0; +1) < 0 \]
+Where the derivative is:
+\[ c_\xi'(0; +1) 
+= (1-\xi)\Phi'(0; -1) + \xi\Phi'(0; +1)\] 
+This is true because $c$ is convex. \\
+Since $c_\xi$ is convex,
+if the global minimizer lies after the point $0$
+(in $(0, \infty)$),
+then the function must be descreasing
+up to that point,
+which means that the derivatie of the function
+at $0$ is negative.
+So this means that:
+\[ c_\xi'(0; +1) < 0\iff 
+\arg \min_z r_\Phi(z \mid \xi) \in (0, \infty) \]
+As well as (for the same reason):
+\[ c_\xi'(0; +1) > 0 \iff 
+\arg \min_z r_\Phi(z \mid \xi) \in (-\infty, 0) \]
+So we can now say that $\Phi$ is classification
+calibrated:
+\[ 2\xi - 1 > 0 \iff 
+\arg \min_z r_\Phi(z \mid \xi) \in (0, \infty)
+\iff c_\xi'(0; +1) < 0 \]
+\[ 2\xi - 1 < 0 \iff 
+\arg \min_z r_\Phi(z \mid \xi) \in (-\infty, 0)
+\iff c_\xi'(0; +1) > 0 \]
+when these statements hold. \\
+
+So now, let's prove that:
+\[ \Phi'(0) \text{ exists and } \Phi'(0) < 0
+\iff z \text{ that minimizes } r_\Phi 
+\text{ matches } f^* \]
+The right hand side of this equation can be
+shown to be true using the equations we defined previously:
+\[ 2\xi - 1 > 0 \iff 
+\arg \min_z r_\Phi(z \mid \xi) \in (0, \infty)
+\iff c_\xi'(0; +1) < 0 \]
+\[ 2\xi - 1 < 0 \iff 
+\arg \min_z r_\Phi(z \mid \xi) \in (-\infty, 0)
+\iff c_\xi'(0; +1) > 0 \]
+So with that we can prove this statement. \\
+
+For the $\impliedby$ direction of the statement,
+we will assume the right hand side is true,
+and we will try to show that this implies 
+the left hand side. \\
+First notice that
+if we approach $\xi \to \sfrac{1}{2}$
+from the positive side:
+\[ \limit{\xi}{\sfrac{1}{2}}{c_\xi'(0; +1) = 
+\dfrac{1}{2}(\Phi'(0; +1) - \Phi'(0; -1))} \leq 0 \]
+It's smaller than $0$ because as mentioned
+earlier, $c_\xi'(0; +1) \leq 0$ for $\xi \geq 0$,
+and we are approaching from the positive side. \\
+Moreover, this implies that:
+\[\Phi'(0; +1) \leq \Phi'(0; -1)\]
+However, also note that because $\Phi$
+is convex, then it's derivative must be increasing
+(cup shape), then by definition:
+\[\Phi'(0; +1) \geq \Phi'(0; -1)\]
+So that must mean that:
+\[\Phi'(0; +1) = \Phi'(0; -1)\]
+which means that $\Phi$ is differentiable at $0$. \\
+Now that we know it exists, we have that:
+\[ c_\xi'(0) = (2\xi - 1)\Phi'(0) \] 
+If $\xi > 0.5$,
+then $c_\xi'(0) < 0$
+(which we proved earlier and now assume is true).
+This means that the sign of $c_\xi'(0; +1) $
+is negative, 
+and the sign of $(2\xi - 1)$ is positive,
+which means that $\Phi'(0)$ must have a 
+negative sign. \\
+Likewise, if $\xi < 0.5$,
+then $c_\xi'(0) > 0$
+(which we proved earlier and now assume is true).
+This means that the sign of $c_\xi'(0; +1) $
+is positive, 
+and the sign of $(2\xi - 1)$ is negative,
+which means that $\Phi'(0)$ must have a negative sign. \\
+So either way, $\Phi'(0) < 0$. \\
+
+Now to prove the converse direction $\implies$,
+we assume that $\Phi'(0)$ exists
+and that $\Phi'(0) < 0$. \\
+Since we have that:
+\[ c_\xi'(0) = (2\xi - 1)\Phi'(0) \] 
+If $\xi > 0.5$,
+then $(2\xi - 1)$ is positive,
+which means that $c_\xi'(0)$ will be negative.
+This implies that the solution is to to
+the positive side of $0$ in a convex function,
+since we are descreasing in the positive direction.
+So:
+\[ \arg \min_z r_\Phi(z \mid \xi) \in (0, \infty)\]
+Moreover, if $\xi < 0.5$,
+then $(2\xi - 1)$ is negative,
+which means that $c_\xi'(0)$ will be positive.
+This implies that the solution is to to
+the negative side of $0$ in a convex function,
+since we are increasing in the positive direction.
+So:
+\[ \arg \min_z r_\Phi(z \mid \xi) \in (-\infty, 0) \]
+This shows that $\Phi$
+will lead to the optimal output $z = f^*$. \\
+
+\newpage
+
+\subsection*{Multi-Class Classification}
+
+We can often decompose multiclass classifications
+into multiple binary class classifications;
+this makes working with them easier,
+especially when most theorems we have derived 
+are for binary classifications. \\
+
+A multiclass prediciton is one where we have:
+\[ \ycal = \{1, 2, 3, \dots K\} \]
+many classes, and where the classifier is
+a function:
+\[ f: \xcal \to \{1, 2, 3, \dots K\} \]
+returning one of these classes. \\
+
+If we decompose the classification into multiple
+binary classifiactions,
+we would have several classifiers $f$,
+as we will see soon. \\
+
+The first approach is called One vs All. \\
+If we have $K$ classes in $\ycal$,
+then we can create $K$ binary classifiers,
+one for each class. \\
+Then the binary classifier of class $l$
+would take $x$ as input and return
+not a label, but the probability of $x$
+having label $l$: 
+\[ f_l: \xcal \to \R^+ \]
+We can then form our multiclass classifier
+$f_{\text{OVA}}(x)$ as such:
+\[ f_{\text{OVA}}(x) = 
+\arg \max_l f_l(x)  \]
+Which is just the classifier that 
+has the largest confidence in its class. \\
+
+The other strategy is called One vs One. \\
+We create $\comb{n}{2}$
+binary classifiers, 
+one for each combination of labels,
+where $f_{lm}(x)$
+returns either label $l$ or $m$
+(represented by $-1$ and $1$)
+depending on which has a higher probability
+given $x$:
+\[ f_{lm}: \xcal \to \{-1, 1\} \]
+We can then form our multiclass classifier
+$f_{\text{OVO}}(x)$ as such:
+\[ f_{\text{OVO}}(x) = 
+\arg \max_l \sum_{m=1, \; m \neq l}^{K} 
+\indicator_{f_{lm}(x) > 0}  \]
+So basically the indicator function
+is $1$ when the probability of $l$
+is larger than that of $m$. \\
+So the idea of the sum is that it counts
+the number of classifiers from $m=1$
+to $m=K$ that favour label $l$
+over the label $m$. \\
+That classifier that is the most favored
+(has the largest number of binary classifiers
+where it was chosen instead of the other class)
+is then chosen. \\
+
+Both of these strategies lead to Baye's
+optimal classifier of the multiclass classification,
+as long as the individual binary classifiers
+are strictly monotonically increasing
+functions of the conditinonal
+ditribution (if the probability that $Y = l$
+increases, so does $f_l$). \\
+
+If we don't use of these methods with a binary
+classification, we could go directly
+to multiclass classification with a surrogate
+function $g$. \\
+
+If we have $K$ classes, then $g$
+outputs a vector of $K$ values:
+\[ g: \xcal \to \R^K \]
+where each value gives the confidence
+of $g$ that the class that corresponds to this
+entry in the vector is the correct class. \\
+
+For this classifier we can use the softmax loss:
+\[ \ell: \R^K \ycal \to \R^+ \]
+\[ \ell(g(x), y) = -\log\para{\dfrac{e^{g_y(x)}}
+{\sum_{k = 1}^K e^{g_k(x)}}} \]
+Which will have low cost if the $\nth(y)$
+entry where $y$ is the correct label
+has a high (confidence) value. \\
+
+We intuitively expect that a good classifier
+$g(x)$ must scale the outputs of each entry $k$
+in the vector with the probability
+that $Y = k$ given $x$. \\
+
+In one of the exercises in assignment 3,
+we differentiate the conditional risk for an input $x$,
+and set it to $0$,
+and then derive the optimal classifier,
+which will have a format:
+\[ g^*(x)
+    = \begin{bmatrix}
+    \log\para{\alpha
+    \Pb(Y = 1 \mid X = x)} \\
+    \log\para{\alpha
+    \Pb(Y = 2 \mid X = x)} \\ 
+    \vdots \\
+    \log\para{\alpha
+    \Pb(Y = K \mid X = x)} \\ 
+\end{bmatrix} \]
+where $\log$ is strictly increasing
+and $\alpha$ is a positive value
+that does not change between entries. \\
+In other words,
+this means that the maximal entry
+is the one that corresponds to the
+highest probability:
+\[ \arg\max_k g^*_k(x) = \arg \max_k
+\Pb(Y = k \mid X = x) \]
+So since the entry with the highest value
+in the output of $g^*(x)$
+is the optimal output (the one with the
+highest probability), $f^*(x)$:
+\[ \arg\max_k g^*_k(x) = f^*(x) \]
+Which makes the optimal surrogate
+classifier $g^*$ the same as $f^*$
+while using softmax loss. \\
+
+\newpage
+
+\subsection*{Regression}
+
+In regression, the output is continuous,
+instead of discrete. \\
+
+So, we would have a data space:
+\[ \xcal  \AND \ycal = \R^{d_y}\]
+where $d_y$ is the dimension of
+the output for that specific output point. \\
+
+Every single formula regarding risk
+and conditional risk and expected value
+is the same. \\
+
+The classifier:
+\[ f: \xcal \to \ycal \]
+is now called the regressor. \\
+
+However, the loss used is not usually
+the 0-1 loss, because it is too strict
+for a regression problem;
+if the expected output $y$
+and the predicted value $f(x)$
+are very close, but not exactly the same,
+we still want the cost to be low. \\
+
+In fact, there is no one best loss function;
+it will depend on the problem at hand. \\
+
+One example of a loss function used in regression
+is the euclidian squared norm,
+which calculates the distance squared
+between the expected output $y$
+and the predicted ouput $f(x)$:
+\[ \ell(f(x), y) = \|f(x) - y\|^2 \]
+Note that this loss yields the following
+result:
+\[ \E[\ell(f(x), Y) \mid X = x]
+= \E[\|f(x) - Y\|^2  \mid X = x]
+= \E[Y \mid X = x] \]
+which was proven in the exerices. \\
+Minimizing this value (which is
+just the conditional risk at a single
+input $X = x$)
+gives us the optimal output for $x$:
+\[ f^*(x) = \arg\min_{f(x)}
+\E[\|f(x) - Y\|^2  \mid X = x]
+= \E[Y \mid X = x] = \text{mean}_{X=x}(Y) \]
+Which is just the mean since that is
+what the expected value is. \\
+
+In fact, the result is just the expected
+value of $Y$ given $X = x$,
+which is the average value of $Y$
+for the fixed input $x$. \\
+This makes sense, to get a prediction that minimizes
+the distance between several other points,
+you just find the average (center of mass)
+of the points. \\
+
+Another loss function we can use is the
+$L_1$ norm,
+which uses the $1$-norm
+(sum of absolute value of entries):
+\[ \ell(f(x), y) = \|f(x) - y\|_1 \]
+Again, minimizing the expected value of the
+loss given $X = x$
+gives us the optimal prediction $f^*(x)$
+for a fixed $x$:
+\[ f^*(x) = \arg\min_{f(x)}
+\E[\|f(x) - Y\|_1  \mid X = x]
+= \text{median}_{X=x}(Y) \]
+This is again a well known value, but it 
+is the median. \\
+
+Note that $L_1$ loss having the optimal classifier
+return the median of the $Y$ distribution given $x$,
+instead of the mean,
+tells us that it is more robust towards outliers,
+since by definition the median
+is less sensitive to outliers. \\
+
+The final part of the lecture discusses
+noise-sensitive loss functions,
+which train the classifiers to offset noise. \\
+
+\newpage
+
+\end{document}

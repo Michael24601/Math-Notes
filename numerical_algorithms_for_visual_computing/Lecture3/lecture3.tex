@@ -1,0 +1,884 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture III
+}
+\date{2025-04-16}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Normal Equation
+and Linear Least Square}
+
+Last lecture we saw that given a non-square
+system (one that is tall and skinny):
+\[ Ax = b \]
+we won't be able to solve it directly. \\
+Intead, what we do is
+multiply both sides by $A^T$. \\
+This has the effect of turning the matrix
+square, which allows solving the
+problem. \\
+Now we have $A^TA$, which is square,
+and if $A$ has linearlly independent
+columns, is also invertible,
+which means there will be a unique
+solution. \\
+But how does that work? \\
+We know that because $A$
+is tall and skinny, we have less
+vectors than we do dimensions. 
+For example, we may have a matrix
+whose columns span a plane in $\R^3$.
+But since $b$ is in $\R^3$,
+isn't it possible for $b$ to just not
+be on said plane? \\
+The answer is yes, but
+recall that the new system solves
+for $A^Tb$,
+which is equal to $b$
+if $b$ were on the plane,
+and the projection of $b$
+on the plane otherwise. \\
+So the system either solves
+for $b$ or the projection of $b$. \\
+
+How can we prove this actually works
+and yields the solution described? \\
+The answer is that we can use a numerical
+method called linear least square,
+which is good for solving problems
+where we have more equations (requirements)
+than vairables. \\
+The idea behind it is to try and minimize
+the distance between the solution
+of $x$ and the target $b$. \\
+In other words, we want to minimize
+the distance:
+\[ \min_x \| Ax - b \|^2 \]
+we choose the square because we want
+the absolute value of the distance
+(we don't care about direction),
+and because we want it to be differentiable. \\
+
+So we have the norm squared:
+\[ E(x) = \|Ax - b\|^2 \]
+This is a positive convex function
+\[ E : \R^n \to \R \]
+which means it will have a minimum
+at the point $x$ where:
+\[ \nabla E(x) = 0 \]
+We can calculate:
+\[ \nabla \ang{Ax - b, (Ax - b)} 
+= \nabla (Ax - b)(Ax - b)^T\]
+which we can do by expanding the dot product,
+and calculating each partial derivative
+\[ \partialdd{E}{x_i} \]
+individually,
+which eventually tells us that
+\[ \nabla E(x) = 
+\nabla (Ax - b)(Ax - b)^T
+= 2A^T(Ax - b)
+= 2A^TAx - 2A^Tb \]
+where $\nabla E(x) = 0$
+at $x$ that minimized $E(x)$. \\
+
+Notice that when we minimize $E(x)$,
+we set the gradient to be $0$, so:
+\[ 2A^TAx - 2A^Tb = 0 \]
+\[ A^TAx = A^Tb \]
+which is the system we said
+solves our problem (multiplying by the
+transpose). \\
+
+So what happens when we minimize the distance
+between $Ax$ and $b$? \\
+As we know $Ax$ only spans the plane
+defined by the columns of $A$.
+If $b$ is on the plane, then $Ax$ can reach $b$,
+and that is the minimal distance.
+But if $b$ is not on the plane,
+then $Ax$ can't reach $b$;
+instead, the closest it can get to $b$
+is the point directly under $b$
+on the plane, which is the projection. \\
+So when we minimize $\|Ax - b\|^2$,
+we either solve for $Ax$ being $b$,
+or $Ax$ being $b$'s projection,
+which we will recall is exactly what
+we described should happen
+when we multiply by the transpose. \\
+
+\newpage
+
+\subsection*{Directional Derivative}
+
+While $\nabla E(x)$ gives 
+a vector containing the partial derivatives
+in the directions of the standard basis vectors:
+\[ x_1 = 
+\begin{bmatrix}1 \\ 0 \\ 0 \\ \vdots \\  0\end{bmatrix}
+\quad x_2 = 
+\begin{bmatrix}0 \\ 1 \\ 0 \\ \vdots \\ 0\end{bmatrix}
+\quad \dots \quad x_n = 
+\begin{bmatrix}0 \\ \vdots \\ 0 \\ 0 \\ 1\end{bmatrix}\] 
+we can actually calculate the derivative in
+any arbitrary direction vector $y$:
+\[ \partial_yE(x) \]
+which is a scalar that we can show evaluates to:
+\[ \partial_yE(x) = \ang{y, \nabla E(x)} \]
+This is always true,
+as long as $E(x)$ is differentiable. \\
+
+While this is true in general, we will show
+that it is true in the case of
+\[ E(x) = \|Ax - b\|^2 \]
+First we write the limit definition:
+\[ \partial_yE(x) = \limit{\varepsilon}{0}
+{\dfrac{E(x + \varepsilon y) - {E(x)}}{\varepsilon}}  \]
+\[ \partial_yE(x) = \limit{\varepsilon}{0}
+{\dfrac{\|A(x+\varepsilon y) - b\|^2 - \|Ax - b\|^2}
+{\varepsilon}} \]
+\[\partial_yE(x) = \limit{\varepsilon}{0}
+{\dfrac{\|Ax+ \varepsilon Ay - b\|^2 - \|Ax - b\|^2}
+{\varepsilon}} \]
+\[\partial_yE(x) = \limit{\varepsilon}{0}
+{\dfrac{(Ax+ \varepsilon Ay - b)^T
+(Ax+ \varepsilon Ay - b)
+ - (Ax - b)^T(Ax - b)}
+{\varepsilon}} \]
+We then distribute the dot product:
+\begin{align*}
+\partial_yE(x) &= \lim_{\varepsilon \to 0} 
+\frac{1}{\varepsilon} \Bigg[ 
+(Ax)^T(Ax) + (\varepsilon Ay)^T(\varepsilon Ay) 
++ b^Tb \\
+&\quad + 2(Ax)^T(\varepsilon Ay) 
+- 2(Ax)^T(b) - 2(\varepsilon Ay)^T(b) \\
+&\quad - (Ax)^T(Ax) - b^Tb + 2(Ax)^T(b)
+\Bigg]
+\end{align*}
+\[\partial_yE(x) = \limit{\varepsilon}{0}
+{\dfrac{ (\varepsilon Ay)^T(\varepsilon Ay)
++ 2(Ax)^T(\varepsilon Ay) - 2(\varepsilon Ay)^T(b)}
+{\varepsilon}} \]
+\[\partial_yE(x) = \limit{\varepsilon}{0}
+{\dfrac{ \|\varepsilon Ay\|^2
++ 2(\varepsilon Ay)^T(Ax - b)}
+{\varepsilon}} \]
+\[\partial_yE(x) = \limit{\varepsilon}{0}
+{\dfrac{ \varepsilon^2\|Ay\|^2
++ 2\varepsilon(Ay)^T(Ax - b)}
+{\varepsilon}} \]
+\[\partial_yE(x) = \limit{\varepsilon}{0} 
+\varepsilon\|Ay\|^2 + 2(Ay)^T(Ax - b) \]
+\[\partial_yE(x) = 2(Ay)^T(Ax - b) \]
+\[\partial_yE(x) = 2(y^TA^T)(Ax - b) \]
+Then, using the commutativity of scalar multiplication,
+and the associativity of matrix multiplication,
+we can write:
+\[\partial_yE(x) = (y^T2A^T)(Ax - b) \]
+\[\partial_yE(x) = (y^T)(2A^T(Ax - b)) \]
+\[\partial_yE(x) = \ang{y, \nabla E(x)} \]
+
+\newpage
+
+\subsection*{Determinant Solution to a Linear System}
+
+The other method that we can discuss is 
+one that uses determinants. \\
+To solve
+\[ Ax = b \]
+we can just write
+\[ x = A\inv b \]
+which is true as long as $A$ is invertible. \\
+To find the inverse of $A$,
+we can either use Guass-Jordan (elimination),
+or determinants (connected to Cramer's rule). \\
+We will show how to do it using determinants. \\
+
+As we know, we can calculate the determinant
+of a square matrix using a cofactor expansion:
+\[ \det \para{ \matThree{a_1^1}{a_2^1}{a_3^1}
+{a_1^2}{a_2^2}{a_3^2}{a_1^3}{a_2^3}{a_3^3} }
+= a_1^1 \det\para{\matTwo{a_2^2}{a_3^2}
+{a_2^3}{a_3^3}}
+- a_2^1 \det\para{\matTwo{a_1^2}{a_3^2}
+{a_1^3}{a_3^3}}
++ a_3^1 \det\para{\matTwo{a_1^2}{a_2^2}
+{a_1^3}{a_2^3}} \]
+We don't need to use coefficients from the top
+row, it can from any row:
+\[ \det \para{ \matThree{a_1^1}{a_2^1}{a_3^1}
+{a_1^2}{a_2^2}{a_3^2}{a_1^3}{a_2^3}{a_3^3} }
+= -a_1^2 \det\para{\matTwo{a_2^1}{a_3^1}
+{a_2^3}{a_3^3}}
++ a_2^2 \det\para{\matTwo{a_1^1}{a_3^1}
+{a_1^3}{a_3^3}}
+- a_3^2 \det\para{\matTwo{a_1^1}{a_2^1}
+{a_1^3}{a_2^3}} \]
+\[ \det \para{ \matThree{a_1^1}{a_2^1}{a_3^1}
+{a_1^2}{a_2^2}{a_3^2}{a_1^3}{a_2^3}{a_3^3} }
+= a_1^3 \det\para{\matTwo{a_2^1}{a_3^1}
+{a_2^2}{a_3^2}}
+- a_2^3 \det\para{\matTwo{a_1^1}{a_3^1}
+{a_1^2}{a_3^2}}
++ a_3^3 \det\para{\matTwo{a_1^1}{a_2^1}
+{a_1^2}{a_2^2}} \]
+We can use any row we want for the coefficients
+so long as we multiply it by the determinant
+of the $2 \times 2$ matrix that we get from
+removing the row and column of the coefficient. \\
+Also, each coefficient is multiplied
+by $-1$ if $i+j$ is odd,
+meaning that each coefficient is multiplied
+by $-1^{i+j}$. \\
+
+We can extend this notion to any number of dimensions.
+We can also make it easier by defining
+cofactor matrices. \\
+An $(n-1)\times (n-1)$ matrix $C_{ij}$
+is a minor matrix of the $n \times n$ matrix $A$
+if $C_{ij}$ is the same as $A$ with 
+the $\nth{i}$ row and $\nth{j}$ column removed. \\
+Notice that
+\[ \det(A) = a_1^1 \det(C_{11})
+- a_2^1 \det(C_{21}) + a_3^1 \det(C_{31}) \]
+\[ \det(A) = -a_1^2 \det(C_{12})
++ a_2^2 \det(C_{22}) - a_3^2 \det(C_{32}) \]
+\[ \det(A) = a_1^3 \det(C_{13})
+- a_2^3 \det(C_{23}) + a_3^3 \det(C_{33}) \]
+So, if we were to define a matrix $M$
+such that the $\nth{i}$ and $\nth{j}$
+entry is the determinant of $C_{ij}$
+multiplied by $-1^{i+j}$,
+we would call $M$ a cofactor matrix:
+\[ M = \cof(A) = 
+\matThree{\det(C_{11})}{-\det(C_{12})}{\det(C_{12})}
+{-\det(C_{21})}{\det(C_{22})}{-\det(C_{23})}
+{\det(C_{31})}{-\det(C_{32})}{\det(C_{33})} \]
+
+The adjugate matrix $\adj(A)$
+is just $\cof(A)^T$. \\
+We know that the determinant of $A$
+is the dot product of the $\nth{i}$
+row of $A$ and the $\nth{i}$ row of $\cof(A)$. \\
+But if we were to transpose the matrix,
+then the determinant would just be the dot
+product of the $\nth{i}$ row of $A$
+and the $\nth{i}$ column of $\adj(A)$. \\
+This means that
+\[ A (\adj(A)) = \matThree{\det(A)}{}{}
+{}{\det(A)}{}{}{}{\det(A)} \]
+As for the other elements,
+notice that when we have the dot product of the
+$\nth{i}$ row of $A$
+and the $\nth{j}$ column of $\adj(A)$
+where $i \neq j$,
+then this represents the determinant of some
+singular matrix. \\
+For example, the dot product of the first row
+and second column is:
+\[ A_1(\adj(A))^2 =
+a_1^1 \det(C_{12})
+- a_2^1 \det(C_{22}) + a_3^1 \det(C_{32}) \]
+which is the formula for the determinant of
+\[ \matThree{a_1^1}{a_2^1}{a_3^1}
+{a_1^1}{a_2^1}{a_3^1}{a_3^1}{a_3^2}{a_3^3} \]
+which has two identical rows and is therefore
+singular. \\
+This means that $A_1(\adj(A))^2 = 0$,
+which tells us that:
+\[ A (\adj(A)) = \matThree{\det(A)}{0}{0}
+{0}{\det(A)}{0}{0}{0}{\det(A)} 
+= \det(A)I \]
+
+Now, to calculate the inverse, we just need
+to get:
+\[ A (\adj(A)) = \det(A)I  \]
+\[ A\inv A (\adj(A)) = A\inv \det(A)I \]
+\[ \adj(A) \dfrac{1}{\det(A)} = A\inv \]
+So we can use the determinant and adjugate matrix
+to calculate the inverse. \\
+This method is actually
+is being done when we solve the linear
+system:
+\[ Ax = b \]
+using Cramer's rule.
+Solving a linear system indirectly
+calculates the inverse of the matrix. \\
+
+While the method is easy, it is extremely
+inefficient. \\
+Suppose $f(n)$ were the time to calculate the
+the determinant of an $n \times n$ matrix. \\
+We know that it requires the addition of $10$
+terms, where each term uses the determinant
+of an $(n-1) \times (n-1)$ minor matrix. \\
+So
+\[ f(n) = nf(n-1) \]
+which means that $f(n) = n!$ is the time
+complexity of the cofactor expansion. \\
+
+Note that the cofactor expansion is also
+called the Laplacian expansion. \\
+
+\newpage
+
+\subsection*{Outer Product}
+
+We know that the inner product of two vectors 
+\[ u \dot v = u^Tv = v^Tu = \sum_i u_iv_i \]
+is a scalar value. \\
+
+The outer product on the other hand,
+the product of two vectors
+\[ uv^T \quad \text{ or } \quad vu^T \]
+is a matrix, and unlike the inner product
+it is not commutative. \\
+The matrix we get from $uv^T$
+contains in each entry $(i, j)$
+the value $u_iv_j$. \\
+
+Earlier we said we can think of vector matrix
+multiplication as the dot product
+of the vector and the rows or the linear combination
+of the columns.
+This idea can then be extended to
+matrix multiplication (for each row or column
+of the matrix). \\
+
+Now, we have two new ways of thinking about matrix
+multiplication $AB$. \\
+Each entry can be the inner (dot) product of
+a row in $A$ and a column in $B$. \\
+Or instead, we can think about
+calculating every outer product possible
+between columns in $A$ and rows in $B$,
+and then summing the resulting matrices. \\
+The outer product interpretation is slower. \\
+
+\newpage
+
+\subsection*{Translation}
+
+An affine transformation is a non-linear
+transformation that looks like:
+\[ q = Ap + t \]
+where $A$ is a square matrix
+(linear transformation) that first transforms $p$,
+which is followed by an addition (translation) of $t$. \\
+Affine transformations include
+some linear Transformations
+like rotations, scaling, as well as non-linear
+trasnformations such as shears and translations. \\
+
+We can apply the linear transformation
+by using block element multiplication:
+\[ \vecTwoTransposed{A}{t}\vecTwo{p}{1} \] \\
+
+A linear transformation $L$ must satisfy the
+property that, for any two vectors $u$ and $v$,
+and scalars $a$ and $b$:
+\[ L(au + vb) = aL(u) + bL(v) \]
+One way to check that a transformation is not linear
+is to check if it moves the origin (linear
+transformations don't). \\
+
+In rendering, one of the most common transformations
+that we can apply to a point is a translation
+by a vector $t$:
+\[ q = p + t \]
+Note that this is not a linear transformation however,
+since the origin is moved. \\
+It cannot be represented by a matrix
+(at least not one that has the same dimensionality
+as $p$ and $q$). \\
+
+We can model the translation as an affine
+transformation:
+\[ \vecTwoTransposed{I_n}{t}\vecTwo{p}{1} \]
+using the idendity matrix for $A$
+so that the affine transformation only translates
+$p$. \\
+
+However, we can use homogeneous coordinates
+(going up one dimension)
+in order to model the transformation using a 
+square matrix. \\
+So suppose we have $p, q \in \R^2$,
+then notice that:
+\[ \vecTwo{q_1}{q_2} = \vecTwo{p_1 + t_1}{p_2 + t_2} \]
+If we were to add a padding to the vector
+(a third entry, with value $1$, 
+which we know can be discarded),
+Then we can write:
+\[ \matThree{1}{0}{t_1}{0}{1}{t_2}{0}{0}{1}
+\vecThree{p_1}{p_2}{1} = \vecThree{p_1 + t_1}{p_2 + t_2}{1}
+= \vecThree{q_1}{q_2}{1} \]
+So the linear transformation gave us the translated vector,
+but in homoegenous coordinates. \\
+We can more generally write a translation of
+vectors in $\R^n$ as the homogeneous matrix in
+$\R^{(n+1) \times (n+1)}$ with the format:
+\[ \matTwo{I}{t}{0}{1} \]
+where $I$ is the identity matrix in $\R^{n \times n}$
+and $t \in \R^n$. \\
+
+Now, it will also be useful to have the inverse of this
+transformation.
+As we know, the inverse of applying a translation
+\[ q = p + t \]
+is to translate by the opposite direction vector of $t$:
+\[ p = q - t \]
+So, the inverse transformation must be:
+\[ \matTwo{I}{-t}{0}{1} \]
+And if we were to try and calculate the inverse of the
+matrix, we would find the same answer. \\
+
+The combination of two translation matrices
+is their product:
+\[ \matTwo{I}{t_2}{0}{1}\matTwo{I}{t_1}{0}{1} \]
+Appropriately, the result of this product is
+just:
+\[ \matTwo{I}{t_2 + t_1}{0}{1} \]
+since we are just applying one translation
+after the other,
+which is to say, adding $t_1$ then $t_2$. \\
+
+\newpage
+
+\subsection*{Rotation and Reflection}
+
+Another useful transformation is the rotation. \\
+It preserves lengths and angles,
+meaning that the transformation of a square object
+for example would hold its size and shape, but be rotated
+around (with the origin as the point being rotated around). \\
+
+Suppose we have two vectors $u$ and $v$
+such that the angle between $u$ and the $x$-axis
+is $\phi$ and the angle between $v$ and $u$
+is $\theta$ (so the angle between $v$
+and $x$-axis is $\theta + \phi$). \\
+We want the transformation $R$
+that rotates $u$ to $v$,
+meaning that it rotates by an angle $\theta$:
+\[ Ru = v \]
+\[ R\vecTwo{\cos(\phi)}{\sin(\phi)}
+= \vecTwo{\cos(\phi + \theta)}{\sin(\phi + \theta)} \]
+We can then use the identities for
+$\cos(a + b)$ and $\sin(a+b)$:
+\[ R\vecTwo{\cos(\phi)}{\sin(\phi)}
+= \vecTwo{\cos(\phi)\cos(\theta) - \sin(\phi)\sin(\theta)}
+{\sin(\phi)\cos(\theta) + \cos(\phi)\sin(\theta)} \]
+Notice that this means that
+\[R = \matTwo{\cos(\theta)}{-\sin(\theta)}
+{\sin(\theta)}{\cos(\theta)} \]
+We can extend this to any dimension $\R^n$. \\
+We can write $R(\theta)$ to indicate
+a rotation of angle $\theta$. \\
+
+The inverse of a rotation is a rotation
+in the opposite direction:
+\[ (R(\theta))\inv = R(-\theta) \]
+which is the result we would get should we
+actually calculate the inverse. \\
+Note however that:
+\[ (R(\theta))\inv = R(-\theta) 
+= \matTwo{\cos(-\theta)}{-\sin(-\theta)}
+{\sin(-\theta)}{\cos(-\theta)}
+= \matTwo{\cos(\theta)}{\sin(\theta)}
+{-\sin(\theta)}{\cos(\theta)} = R(\theta)^T \]
+The reason the inverse is the transpose 
+is because a rotation is orthogonal,
+meaning that the inverse is the transpose. \\
+
+The combination of two rotation patrices
+is th product of the rotation matrices:
+\[ R(\theta)R(\alpha) = R(\theta + \alpha) \]
+which appropriately enough, is just the rotation
+matrix of the sum of the rotation angles. \\
+
+An orthogonal matrix $R$ preserves lengths and angles
+(like rotation and reflection). \\
+So that means that if we have $Ru = v$,
+\[ \|u\|^2 = \|v\|^2 \]
+This means that:
+\[ \|Ru\|^2 = \|u\|^2 \]
+\[ (Ru)^T(Ru) = u^Tu \]
+\[ u^TR^TRu = u^Tu \]
+\[ R^TR = I \]
+So $R\inv = R^T$. \\
+
+The determinant of a rotation matrix
+is $1$.
+This is because a rotation does not scale
+shapes when it transforms them.
+The basis is orthonormal. \\
+
+A reflection matrix by comparison has a determinant
+of $-1$. 
+Like a rotation, the reflection doesn't scale objects,
+but it does flip them, so that's where the negative
+sign comes from. \\
+
+The determinant of any orthogonal matrix
+has absolute value $1$. \\
+
+with the exception of $k\pi$ rotations,
+rotation matrices have no eigenvectors. \\
+
+A reflection matrix is similar to the identity
+matrix, in that it is a diagonal matrix
+with determinant that has an absolute
+value of $1$. \\
+However some of the entries can be $-1$
+instead of $1$:
+\[ \matTwo{1}{0}{0}{-1} \]
+The transformation reflects the space $\R^n$
+around basis vectors of the $-1$ entries.
+
+\newpage
+
+\subsection*{Scaling}
+
+The matrix:
+\[ S = \matThree{\alpha_1}{0}{0}
+{0}{\alpha_2}{0}{0}{0}{\alpha_3} \]
+scales vectors in $\R^3$
+by $\alpha_1$, $\alpha_2$, and $\alpha_3$
+in the directions
+\[ \vecThree{1}{0}{0}
+\qquad \vecThree{0}{1}{0}
+\qquad \vecThree{0}{0}{1} \]
+We thus call it a scaling matrix. \\
+
+A scaling matrix in $\R^n$ has a determinant equal 
+to the product of its main diagonal:
+\[ \sum_{i=1}^{n}\alpha_i\]
+This is because the total amount of scaling
+the matrix does is mad eup of the individual
+scalings in each direction. \\
+It's also clear this is the determinant if the cofactor
+expansion is used. \\
+
+The inverse of the scaling matrix
+is clearly just the scaling matrix
+with inverse scaling factors:
+\[ S\inv = \matThree{\sfrac{1}{\alpha_1}}{0}{0}
+{0}{\sfrac{1}{\alpha_2}}{0}
+{0}{0}{\sfrac{1}{\alpha_3}} \] \\
+
+Moreover, the product of two scaling
+matrices is just the scaling matrix
+that applies both scales:
+\[ \matThree{\alpha_1}{0}{0}
+{0}{\alpha_2}{0}{0}{0}{\alpha_3}
+\matThree{\beta_1}{0}{0}
+{0}{\beta_2}{0}{0}{0}{\beta_3}
+= \matThree{\alpha_1 \cdot \beta_1}{0}{0}
+{0}{\alpha_2 \cdot \beta_2}{0}
+{0}{0}{\alpha_3 \cdot \beta_3} \] \\
+
+We can write $S(s)$
+as a shorthand for a scaling matrix:
+\[ S(s) = \matThree{s_1}{0}{0}
+{0}{s_2}{0}{0}{0}{s_3} \]
+that scales in each direction by 
+the entry $s_i$ in the $s$ vector. \\
+
+\newpage
+
+\subsection*{Transformations}
+
+Generally speaking, we want to apply
+translations, rotation, and scaling to an object
+in one operation. \\
+
+In order to apply the operations, all transformations
+need to be square matrices with the same dimensionality
+as the point/vector they are being applied to. \\
+Translations are only linear in homogeneous coordinates. \\
+So since the vector will be written in homoegenous
+coordinates,
+this forces the other matrices to also be written as such. \\
+So if we have a rotation $A$ and scaling matrix $B$,
+then we would replace them with
+\[ R = \matTwo{A}{0}{0}{1}
+\qquad S = \matTwo{B}{0}{0}{1} \]
+which are homoegenous. \\
+
+We apply scaling and rotation first,
+because rotating an object centered is simple,
+while rotating an object translated by some 
+translation $T$ would move the object in an orbit. \\
+So our transformation looks like:
+\[ Mv = (TSR)v \]
+where $v$ is any point. \\
+Matrix multiplication is not commutative so
+the order does matter and can't be flipped. \\
+Note that $M$ is an affine transformation since:
+\[ M = \matTwo{SR}{t}{0}{1} \]
+which just applies $SR$ to $v$,
+then adds the translation $t$. \\
+
+Matrix-matrix multiplication is $O(n^3)$,
+while matrix vector multiplication is $O(n^2)$. \\
+So it is more efficient to multiply the vector
+by each matrix indidividually:
+\[ T(S(Rv)) \]
+However, if we have more than one vector
+that we want to transform,
+then it would obviously become more efficient
+to calcualte the product $M$:
+\[ M = TSR \]
+and then apply the transformation to the vectors. \\
+
+If we want the inverse of the transformation $M$:
+\[ M\inv = (T(t)S(s)R(\theta))\inv
+= R(\theta)\inv S(s)\inv T(t)\inv 
+= R(-\theta)S(\sfrac{1}{s})T(-t) \]
+Recall that $(AB)\inv = B\inv A\inv$. \\
+
+If we instead have just a a homoegenous matris $M$,
+then the inverse is also homogeneous:
+\[ \matTwo{A}{t}{0}{1}\inv
+= \matTwo{A\inv}{-A\inv t}{0}{1} \]
+This is because the matrix works by applying $A$
+first to the vector, then adding $t$:
+\[ q = Ap + t \]
+which means inverting it first requires:
+\[ p = A\inv(q - t) = A\inv q -A\inv t \]
+which is the same as applying the inverse. \\
+
+Transforming a surface or object just means Transforming
+every single point on the object using the tranformation. \\
+
+For instance, suppose we have
+a parametrically defined set (surface):
+\[ \mathcal{M}_\varphi = 
+\{ \varphi(s) \in \R^n \mid 
+s \in \mathcal{D} \subseteq \R^k \} \]
+In order to transform this set (surface),
+we just transform every point in it. \\
+As we know, parametric equations are great at
+generating the points of the surface,
+so this is as simple as just transforming the
+generated points. \\
+We will apply some affine transformation $Ap + t$
+(which is usually encoded in a square
+homogeneous matrix):
+\[ A\mathcal{M}_\varphi + t
+= \{ A\varphi(s) + t\in \R^n \mid 
+s \in \mathcal{D} \subseteq \R^k \} \]
+So we just apply the transformation
+to each point on the set.
+We denote the transformed set or surface
+$\mathcal{M}_{A\varphi + t}$. \\
+
+Now, if we want to intersect the resulting
+transformed surface with a line,
+we would solve:
+\[ o + \tau d = A\mathcal{M}_\varphi + t \]
+Another way we could have solved the same
+equation was apply the inverse transformation
+to the line $o + \tau d$
+and intersect it with the original surface:
+\[ A\inv(o + \tau d - t)
+= A\inv(o - t) A\inv \tau d 
+= \mathcal{M}_\varphi \]
+Notice that because $d$ is a direction,
+it does not get translated (unlike $o$),
+but only gets transformed by $A\inv$. \\
+This is a commonly seen phenomenon.
+For example, if we have some object in
+local coordinates, we could 
+transform it to world coordinates
+in order to intersect a line with it,
+or we could transform the line to the local
+coordinates of the object itself. \\
+
+On the other hand, suppose we have an implicitely
+defined surface:
+\[ \mathcal{M}_{f\inv(0)}
+= \{ p \in \R^n \mid f(p) =0 \} \]
+which is just the set of points $p$
+such that $f(p) = 0$ is satisfied. \\
+This makes it easy to check for membership,
+but harder to generate points,
+which makes transforming it slightly more
+complicated:
+\[ A\mathcal{M}_{f\inv(0)} + t
+= \{ Ap + t \in \R^n \mid f(p) =0 \} \]
+Basically it is the set of transformed points 
+$Ap + t$ from the original surface definition,
+so the condition to satisfy is still $f(p)$. \\
+If we define $q = Ap + t$
+and $p = A\inv(q - t)$ can thus rewrite
+the set in the original format of
+an implicit surface:
+\[ A\mathcal{M}_{f\inv(0)} + t
+= \{ q \in \R^n \mid f(A\inv(q - t)) = 0 \} \]
+but this time with a new function,
+which is the composition of $f$ and the inverse of the
+affine transformation into one function:
+\[ f \circ A\inv \circ T(-t) \]
+which means that:
+\[ A\mathcal{M}_{f\inv(0)} + t
+= \{ q \in \R^n \mid 
+(f \circ A\inv \circ T(-t))(q) = 0 \} \]
+We can thus denote the transformed set or surface
+$\mathcal{M}_{(f \circ A\inv \circ T(-t))\inv(0)}$. \\
+
+The same thing applies regarding the
+light intersection. \\
+We could just replace $p$
+by $o + \tau d$
+inside of the transformed set 
+$A\mathcal{M}_{f\inv(0)} + t$. \\
+Or we could use the original set
+$\mathcal{M}_{f\inv(0)}$
+and replace $p$
+by the line transformed by the inverse of
+the affine transformation:
+\[A\inv(o + \tau d - t)\] \\
+
+\newpage
+
+\subsection*{Determinant and Volume}
+
+As we know, the determinant of a matrix represents
+the scaling factor of its linear transformation. \\
+For instance, if $A$ transforms
+some box $c$,
+then we expect that the volume of the box
+would scale by the determinant of $A$. \\
+
+For a matrix in $\R^2$,
+it is the area of the parallelogram formed
+by the column vectors of the matrix (basis vectors
+of the matrix). \\
+In $\R^3$, it is the volume of the parallelepiped. \\
+In $\R^n$, it is the measure of an $n$-parallelotope. \\
+
+So if we have some basis in $\R^n$,
+calculating the measure of the
+parallelotope is as simple as finding the
+determinant. \\
+
+But what happens if we have a basis in $\R^3$
+that is made up of two $3$-dimensional vectors $f_1$
+and $f_2$. \\
+We thus have a $2$-dimensional basis,
+since $f_1$ and $f_2$ span a plane
+(if they are colinear). \\
+But how can we calculate the parallelogram
+formed by these basis vectors in $\R^3$?
+We don't have a square matrix. \\
+
+The first method is to use the cross product.
+The cross product
+\[ f_1 \times f_2 \]
+returns a vector orthogonal to the plane
+spanned by $f_1$ and $f_2$
+with a magnitude (norm) equal to
+the parallelogram formed by $f_1$ and $f_2$.
+The direction of the cross product
+depends on whether $f_1$ or $f_2$
+comes first. \\
+So we can calculate the parallelogram's
+area as $\|f_1 \times f_2\|$. \\
+
+This method does not generalize however
+as it only works in $\R^3$. \\
+As we saw earlier,
+multiplying a vector by:
+\[ \vecTwoTransposed{f_1}{f_2}^T \]
+has the effect of projecting it
+onto the plane spanned by $f_1$ and $f_2$. \\
+On the other hand,
+multiplying the vectors together:
+\[ F^TF = \vecTwo{f_1}{f_2}
+\vecTwoTransposed{f_1}{f_2} \]
+returns a matrix in $\R^2$
+that represents the same basis
+as the one defined by $f_1$ and $f_2$,
+but in $\R^2$ (on the plane). \\
+So we can use this basis to calcualte
+the area of the parallelogram;
+since it is square,
+we can just use the determinant:
+\[ \sqrt{\det(F^TF)} \]
+Here we use the square root because we have
+$F^TF$,
+the product causes the area of the parallelogram
+to square. \\
+This method generalizes to any dimensions. \\
+
+Note that this implies that
+\[ \det(F^TF) = \|F_1 \times F_2\|^2 \]
+in $\R^3$. \\
+
+\newpage
+
+\subsection*{Active and Passive Transformations}
+
+In rendering, it's usually enough to transform the vertices
+of the object. \\
+For example, if we are rendering a triangle,
+it's enough to transform $v0$, $v1$, and $v2$,
+which defines the vertices of the transformed triangle.
+
+This is called an active transformation. \\
+When we use the linear transformation:
+\[ Au = v \]
+we intuitively think of $v$ as a different
+point from $u$; it's $u$ transformed (rotated, shifted...). \\
+
+A passive transformation on the other hand is
+when we interpret $v$ as the same point as $u$,
+but imagine the entire space having moved. \\
+In other words, we image that $v$ is the same
+point as $u$ but in the coordinates of this new,
+moved space. \\
+We will recall that this idea is similar to that
+of expressing vectors in the coordinates of some new basis.
+It can be done by multiplying by the inverse:
+\[ A\inv u = v \]
+So if we multiply some point $u$ by the inverse,
+we image that it is the same point as $v$,
+but in the coordinates of a space that had been transformed
+by $A$. \\
+So applying a transformation to an object
+can be thought of as the inverse transformation
+being applied to the space around it instead. \\
+
+This makes intuitive sense.
+For instance, applying a scaling matrix
+(with a positive determinant) to an object
+can be interpreted in two ways:
+We are either expanding the object
+(active),
+or we are zooming in on the object,
+which is to say,
+we are making the space around the object smaller,
+which means applying the inverse transform to
+the space around the object. \\
+
+Active transformations are used in rasterization. \\
+Passive transformations are used in ray tracing. \\
+
+\end{document}

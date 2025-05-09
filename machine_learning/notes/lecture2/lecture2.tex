@@ -1,0 +1,726 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture II
+}
+\date{2025-04-28}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Bayesian Learning Theory}
+
+\subsection*{Recap}
+
+There is an underlying probability space. \\
+
+The data space is the joint distribution of
+inputs and output.
+We assume it exists for now
+(in practice we have a sample). \\
+
+We assume the distribution is given by a density
+function that we wish to use. \\
+
+There is a marginal and conditional distribution,
+as well as a marginal and conditional density. \\
+
+We can find the conditinonal using the joint
+and marginal. \\
+
+The performance criteria is evaluated
+by a loss function, which could be
+discrete, continuous, multivariate... \\
+
+The risk is the expected value of the loss
+function; it is a performance measure for all
+the points (teh expcted value is an integral).
+It is deterministic for a learning rule.
+It must be integrable however. \\
+
+The training data and testing data must
+be independent so we ensure the classifier
+generalizes. \\
+
+Baye's optimal risk gives us the best possible
+risk that a learning rule can have.
+Our goal is to have a classifier with a risk
+close to the optimal risk. \\
+
+The total law of expectation gives us a way
+to transform an expected value of a joint
+distribution in terms of the expected value
+of the joint distribution. \\
+
+\newpage
+
+\subsection*{More on Risk}
+
+We can caluclate the risk by
+using the total expectation law to decompose
+the expectation of the joint distribution
+into the expectation of the marginal:
+\[ \rscr_\ell(f)
+= \E[\ell(f(X), Y)]
+= \E[\E[\ell(f(X), Y) \mid X]] \]
+This will be important. \\
+
+Here
+\[ \E[\ell(f(X), Y)]
+= \E[\E[\ell(f(X), Y) \mid X]] \]
+The inner expectation is a sum over
+all the values of $Y$ (the output),
+while the outer expectation is a sum over
+all the values of $X$. \\
+The initial expectation we saw was an expectation
+over a joint distribution,
+which is a sum over the joint space
+meaning over both $x$ and $y$ at once.
+Decomposing simplifies it since we now
+have two distinct sums each over one variable. \\
+
+For instance, the conditional risk,
+which is like the risk
+but for a single input $x$,
+can be written as:
+\[ r(f(x) \mid x)
+= \E[\ell(f(x), Y) \mid X = x] \]
+which makes sense, since this is a sum
+over all values of $Y$,
+for one input $x$,
+that evaluates how well we predicted
+the output with $f(x)$.
+We want to find the output $f(x)$
+that minimizes the conditional
+risk in order to have an optimal
+prediction for $x$ (just this input). \\
+
+And the risk if just the sum of all individual
+losses (over $X$)
+times the probability that they take place:
+\[ \rscr_\ell(f) = 
+\sum_{x} r(f(x) \mid x)\cdot \Pb(X = x) \]
+which makes:
+The total risk is the risk of each 
+indidividual input,
+weighted by the probability that we get this input.
+If we are very bad at predicting some input,
+then the risk is high,
+but if that input rarely every shows up,
+then the total risk $\rscr_\ell(f)$
+won't necessarily be affected much. \\ 
+
+Note that
+\[ \rscr_\ell(f) = \E[\ell(f(X), Y)] \]
+And
+\[ \rscr_\ell(f) = \E[\E[\ell(f(X), Y) \mid X]] 
+= \E[r(f(x) \mid x)] \]
+which seems to imply that the conditional
+risk $r(f(x) \mid x)$
+is equal to the loss $\ell(f(X), Y)$. \\
+However this is NOT case! \\
+The first expected value:
+\[ \E[\ell(f(X), Y)] \] 
+is a sum of the joint distribution
+over the joint space,
+which means a sum over both $x$ and $y$
+(basically a double integral). \\
+On the other hand:
+\[ \E[r(f(x) \mid x)] \]
+Here the expected value is the outer
+expected value,
+which a sum over $x$ only (the inner expected
+value was the sum over $y$). \\
+So these two expected values are
+different sums,
+and the value inside each is therefore distinct. \\
+
+In other words, just because we can decompose
+this integral like this:
+\[\int_{\xcal \times \ycal} f(x, y)
+\cdot \Pb_{(X, Y)}(dx, dy) 
+= \int_{\xcal} \int_{\ycal} f(x, y)
+\cdot \Pb_{Y \mid X = x}(dy)
+\Pb_X(dx) \]
+does not mean that the contents of the left integral
+is equal to the contents of the outer integral
+on the right:
+\[\int_{\xcal \times \ycal} 
+(\text{function of $x$ and $y$}) dxdy 
+= \int_{\xcal} (\text{function of only $x$}) dx \]
+Clearly the contents of the sums are not equal! \\
+If two sums are equal, we can only say
+that what they are summing is equal if they are
+summing over the same space! \\
+
+We can actually think of the risk in two ways:
+A single sum over the joint space (weighted joint
+distribution) for all pairs $(x, y)$,
+or a double sum over $y$ and $x$,
+one weighted by the conditional,
+and another by the marginal. \\
+We can see it more clearly with sums:
+The first has every combination of $x$
+and $y$ weighted by the joint probability:
+\[ \E[\ell(f(X), Y)]
+= \sum_x \sum_y \ell(f(x), y) \Pb(X = x, Y = y) \]
+The second has the same formula but decomposed:
+\[ \E[\E[\ell(f(X), Y) \mid X = x]]
+= \sum_x \Pb(X = x) \sum_y \ell(f(x), y) 
+\Pb(Y = y \mid X = x) \] \\
+
+We know that the optimal risk is:
+\[ \rscr_\ell^*
+= \inf_f \E[\E[\ell(f(X), Y) \mid X]] \]
+first we try to find the optimal
+output $f(x)$ for each input $x$
+(by summing over all outputs $Y$ for the fixed $x$),
+then we do the same for all inputs $x$,
+so we can get the best predictor for
+all inputs $x$. \\
+
+Notice that if we just want the optimal
+prediction for just one input $x$,
+we can skip the outer summation,
+and just do the inner one with that $x$
+(the optimal conditional risk):
+\[ f^*(x) = \text{min}_{f(x)} \;
+\E[\ell(f(x), Y) \mid X = x] \]
+which means that the optimal output $f^*(x)$
+is the one that minimizes the expected value
+of the loss knowing $X = x$
+(which is just one sum over all $Y$). \\
+
+In fact, if we find Baye's optimal classifier
+$f*$,
+then we can prove that it satisfies this optimization
+\[ f^*(x) = \text{min}_{f(x)} \;
+\E[\ell(f(x), Y) \mid X = x] \]
+for all $x$ over the distribution $\Pb_x$.
+On the other hand, if we prove it only
+for a specific $x$ (using only the conditional
+probabilities given that $x$),
+then we would only have the optimal
+prediction for one input. \\
+
+We can prove that the optimal classifier
+$f^*(x)$,
+that gives us Baye's optimal risk $\rscr_\ell^*$,
+which minimizes the total risk,
+also minimizes each inidividual conditional risk. \\
+First we know that Baye's optimal risk is:
+\[ \rscr_\ell^* = \inf_f 
+\E[\E[(\ell(f(X), Y) \mid X)]]
+= \inf_f \int_{\xcal} r(f(x) \mid x) \cdot
+\Pb_X(dx) \]
+Here, the infimum means the largest lower bound
+of the intgeral. \\
+However, notice that if we took the sum of the
+infimum of each individual conditional risk
+(the optimal risk at each $x$)
+then we would have to have a value smaller
+or equal to the infimum of the sum at large:
+\[ \inf_f \int_{\xcal} r(f(x) \mid x) \cdot
+\Pb_X(dx)
+\geq \int_{\xcal} \inf_{fx} r(f(x) \mid x) \cdot
+\Pb_X(dx) = \rscr_\ell(f^*) \]
+This is a general result;
+the minimum (or infimum) of the sum
+of a function is larger or equal to the
+sum of the minimum values attained
+by the function at each individual input. \\
+So that means that:
+\[ \rscr_\ell^* \geq \rscr_\ell(f^*) \]
+But we defined Baye's optimal risk
+to be the infimum (largest value
+smaller than all others),
+so it can't be larger, which means that:
+\[ \rscr_\ell^* = \rscr_\ell(f^*) \]
+So we conclude that Baye's optimal classifier,
+which has the lowest overall risk,
+must also be the most optimal learning rule
+that minimizes each individual conditional
+risk. \\
+
+This makes machine learning seem trivial;
+finding the optimal classifier boilds
+down to finding the best output for each
+indidividual input. \\
+However, in practice, we usually don't have
+the entire distribution $\Pb_{X, Y}$.
+We only have some samples, such as the training
+and testing data. \\
+
+\newpage
+
+\subsection*{Binary Classification}
+
+We can calculate the risk of a binary
+classification as follows:
+\[ \rscr_\ell(f)
+= \E[\E[\ell(f(X), Y) \mid X]] \]
+\[ \rscr_\ell(f)
+=  \sum_x \Pb(X = x)
+\sum_y \ell(f(x), y) \cdot
+\Pb(Y = y \mid X = x) \]
+\[ \rscr_\ell(f)
+= \sum_x \Pb(X = x)
+\sum_y \indicator_{f(x) \neq y}\cdot
+\Pb(Y = y \mid X = x) \]
+Notice that we only have two possible
+values for $Y$, so:
+\[ \rscr_\ell(f)
+= \E[ \indicator_{f(X) \neq y_1}\cdot
+\Pb(Y = y_1 \mid X) +
+\indicator_{f(X) \neq y_2}\cdot
+\Pb(Y = y_2 \mid X)] \]
+The conditional probability of the one
+that equals our prediction $f(x)$
+will be mutliplied by $0$ as per the loss,
+and the other other will be mutliplied
+by $1$,
+so only one of them will contribute
+to the risk. \\
+
+Notice what this means.
+In order to optimize $f(x)$
+for each $x \in \xcal$,
+we want to pick $f(x)$
+such that the risk is as small as possible.
+And since:
+\[ \rscr_\ell(f)
+= \E[ \Pb(Y = y_1 \mid X)] \]
+when $f(x) = y_2$,
+that means we want to pick $y_1$
+over $y_2$ if:
+\[ \Pb(Y = y_1 \mid X) >
+\Pb(Y = y_2 \mid X)  \]
+which makes intuitive sense, both in terms 
+of minimizing the risk,
+and choosing the more likely output.
+So we will have:
+\[ f^*(x) = \piecewise{y_1 \quad \text{ if }
+\Pb(Y = y_1 \mid X) >
+\Pb(Y = y_2 \mid X)}
+{y_2 \quad \text{ otherwise }} \]
+for the optimal classifier. \\
+
+Note that we can actually bound the error
+on Baye's optimal classifier. \\
+We already know that:
+\[ \rscr_\ell(f)
+= \E[ \indicator_{f(X) \neq y_1}\cdot
+\Pb(Y = y_1 \mid X) +
+\indicator_{f(X) \neq y_2}\cdot
+\Pb(Y = y_2 \mid X)] \]
+where one of the two probabilities
+will be multiplies by $0$,
+and the other by $1$,
+depending on the output of the classifier. \\
+In the optimal classifier, we have:
+\[ f^*(x) = \piecewise{y_1 \quad \text{ if }
+\Pb(Y = y_1 \mid X = x) >
+\Pb(Y = y_2 \mid X = x)}
+{y_2 \quad \text{ otherwise }} \]
+So that means that we can write the
+optimal risk as:
+\[ \rscr_\ell^*
+= \E[ \min(
+\Pb(Y = y_1 \mid X), \,
+\Pb(Y = y_2 \mid X))] \]
+Now, a general result that we can use
+is the fact that the expected value of the
+minimum is less than or equal to the minimum
+of the expected value:
+\[ \rscr_\ell^* \leq \min(
+\E[\Pb(Y = y_1 \mid X)], \,
+\E[\Pb(Y = y_2 \mid X)]) \]
+Then, we can unfurl the expected value
+by multiplying the contents by the
+marginal probability of $X = x$
+for each $x$,
+which when summed over all values of $x$
+just gives us the marginal probability of $Y$:
+\[ \rscr_\ell^* \leq \min(
+\Pb_Y(y_1), \, \Pb_Y(y_2)) \]
+Which gives us a bound on the best-case error
+(optimal risk). \\
+
+This bound tells us that
+if the probability that the base class even
+take place is low,
+then the risk will be (deceptively) low
+as well,
+even if they classifier is bad. \\
+
+This can be resolved by using
+cost sensitive cost. \\
+
+\newpage
+
+\subsection*{Cost Senstitive Classification}
+
+Any classification or regression can be
+made cost sensitive,
+not just binary classification. \\
+
+The idea of cost is to assign an extra penalty
+to making certain mistakes in classification,
+which are supposedly more costly than other
+mistakes. \\
+For example, in a binary classification,
+we can create a $2 \times 2$ confusion matrix
+that shows every possible outcome:
+true positive, true negative, false positive,
+and false negative. \\
+In cancer detection software for example,
+it is far worse for an AI to not detect cancer
+that is there than to detect cancer that is not
+there. \\
+
+We can assign new costs
+by modyfing our loss function:
+\[ \ell_C(f(x), y) = 
+C_{ij}\indicator_{f(y = i, f(x) = j)} \]
+where $C_{ij}$
+is the cost for predicting
+the $\nth{j}$ outcome
+when the real output is $\nth{i}$. \\
+This value can be more or less than $1$,
+unlike our old loss function which always
+assigned $1$ to false predictions. \\
+The cost for true predictions $C_{ii}$
+should remain $0$. \\
+
+This change cascades and affects
+every other outcome we have derived. \\
+For example,
+the risk can be written as:
+\[ \rscr_\ell(f)
+= \sum_{x} \Pb(X = x)
+\sum_{y} C_{ij}\indicator_{y = i, f(x) = j}\cdot
+\Pb(Y = y \mid X = x) \]
+And the bound on the optimal risk can be
+written as:
+\[ \rscr_\ell^* \leq \min(
+C_{y_1y_2}\Pb_Y(y_1), \, 
+C_{y_2y_1}\Pb_Y(y_2)) \] \\
+
+\newpage
+
+\subsection*{Multi-class Classification}
+
+When we have more than two values that
+our output $y$ can have,
+then we are doing multi-class classification. \\
+
+Since the output is still given by a discrete
+random variable, most formulas
+are hardly changed. \\
+
+Baye's risk formula is
+unchanged:
+\[ \rscr_\ell(f)
+= \E\brac{\sum_y \indicator_{f(X) \neq y}
+\Pb(Y = y \mid X)} \]
+However, note that only one
+of the values in the sum will go to 0
+(when $f(X) = y$),
+the rest will all remain,
+so when we simplify by removing
+$\Pb(Y = y \mid X)$
+where $y = f(X)$,
+we end up with:
+\[ \rscr_\ell^*
+= \E\brac{
+\olsi{\Pb(Y = y \mid X)}}
+= \E\brac{
+1 - \Pb(Y = y \mid X)} \]
+where $y$ is the output
+equal to the choice that was made
+$y = f(X)$ (for each $x$). \\
+This is the same formula as before,
+though before, $\olsi{\Pb(Y = y \mid X)}$
+was just one event's probability
+(when $y \neq f(X)$),
+but now it's several. \\
+
+The formulas derived from this one,
+such as the optimal risk and optimal
+classifier, are all unchaged. \\
+
+\newpage
+
+\subsection*{Convex Functions}
+
+Intuitively, we know that a convex function
+is a real valued function that has a
+global minimum. \\
+In this section we will formalize this notion. \\
+
+A function:
+\[ f: \R^d \to \R \]
+is called convex if and only if
+for every pair
+$x, y \in \R^d$,
+and $\lambda \in [0, 1]$,
+the following equation holds:
+\[ f((1-\lambda)x + \lambda y)
+\leq (1-\lambda)f(x) + \lambda f(x) \]
+Here, $\lambda$ is a parameter,
+which goes from $0$ to $1$. \\
+This means that 
+$(1-\lambda)f(x) + \lambda f(x)$
+goes from $f(x)$ to $f(y)$
+(defines the line that connects these
+two points). \\
+It also means that $(1-\lambda)x + \lambda y$
+defines the line that goes from $x$ to $y$. \\
+therefore, what the equation is saying
+is that for any two points $x$ and $y$,
+if we have a point $z \in [x, y]$,
+then $f(z)$ is lower than the
+line connecting $f(x)$ to $f(y)$. \\
+In other words,
+the curve or surface of $f$
+is always below a line segments
+that connects any two points
+on said curve. \\
+
+This property of always being
+below a line segment connecting
+two points on the curve is what ensures
+that any local minimum on the function
+is also a global minimum. \\
+That is to say, there are no local
+minima,
+only one global minimum. \\
+
+Some other useful properties of convex
+functions:
+\begin{enumerate}
+    \item
+    The sum of convex functions is
+    convex.
+    \item 
+    The pointwise supremum of a collection
+    of convex functions is a convex function.
+    This means that if we take a collection
+    of convex functions $\{f_1, f_2, \dots f_n\}$,
+    and create a new function $f$ such that
+    and for each point $x$,
+    $f(x) = f_k(x)$ for the function $f_k$
+    such that $f_k(x)$ is the largest,
+    $f$ will be convex.
+    \item 
+    If we multiply a convex function by a 
+    non-negative scalar, it remains convex. \\
+\end{enumerate}
+
+A function is convex if and only if it is
+convex on every line segment. \\
+We already saw that that was the case
+when we averred that convex functions
+should always be below a line
+that connects two points on it. \\
+In other words, if we have a convex function:
+\[ f: \R^d \to \R \],
+and we slice it with any plane,
+the slice of $f$ on that plane,
+which is a one dimensional function,
+must also be convex. \\
+
+If a function $f$ defined on $C$ is
+differentiable,
+then it is convex if:
+\[ \ang{x_1 - x_0, 
+\nabla f(x_1) - \nabla f(x_0)} \geq 0 \qquad
+\forall x_0, x_1 \in C \]
+What this means is that for any interval
+between $x_0$ and $x_1$,
+we expect the gradient (or derivative)
+of $f$ to increase if the input $x$
+is increasing,
+and decrease if the input $x$ is decreasing
+(they have the same sign). \\
+It is very easy to see why this is so
+in a function $\R \to \R$
+(just a curve). \\
+We expect a convex function to look like a cup,
+which means that its rate of change must
+always be increasing as $x$ moves in the
+positive direction. \\
+We can apply the same logic for higher
+dimensional functions
+by just ensuring the property holds
+for all variables. \\
+That is, that $\nabla f$
+increases in the positive direction
+of any variable. \\
+
+Alternatively,
+if $f$ defined on $C$ is twice differentiable,
+we can just check that the Hessian
+$\nabla^2 f(x)$ is positive semi-definite
+for all $x \in C$. \\
+
+The directional derivative of a convex
+function $f$ is monotone (either increasing
+or decreasing). \\
+This is similar to the last theorem
+we postulated with the derivative of $f(x)$
+always being increasing in the positive
+direction of any variable,
+but gets extended to any direction,
+even those that don't coincide
+with the axis of a variables. \\
+
+For a convex function:
+\[ f:\R \to \R \]
+we also have that:
+\[ x \in \arg \min f \iff 
+0 \in [f'(x; -1), f'(x; +1)] \]
+Here $f'(x; -1)$ is the derivative from
+the left (negative side),
+and $f'(x; +1)$ is the derivative
+from the right (positive side). \\
+What this says is that if $x$ minimizes $f$,
+the the derivative at $x$
+must be $0$,
+which is a well known result in calculus. \\
+
+\newpage
+
+\subsection*{Real Valued Predictions}
+
+It can be incredibly difficult (NP-Hard)
+to solve optimization problems with
+discrete vairables. \\
+On the other hand, continuous (real-valued)
+convex functions are very easy to optimize;
+all we have to do is find the critical
+points of the function on an interval. \\
+
+If we want to create a discerete
+(binary for example)
+classifier $f(x)$:
+\[ f: \xcal \to \ycal \]
+where $\ycal = \{-1, 1\}$,
+we can instead create
+a continuous,
+surrogate prediction function $g(x)$:
+\[ g: \xcal \to \R \]
+Then, to map to $\ycal$ (our final output),
+we can use threshholding 
+(pick certain intervals to map to certain
+discrete outputs). \\
+The most natural mapping we can choose 
+(and design $g(x)$ around)
+is mapping all negatives values of $g(x)$
+to $-1$,
+and all positive values of $g(x)$ to $1$:
+\[ \sign(g(x))
+= \piecewiseThree{-1 \hspace{146pt} \IF g(x) < 0}
+{1 \hspace{155pt} \IF g(x) > 1}
+{\text{Sample uniformly from } \{-1, 1\}
+\IF g(x) = 0} \]
+The decision boundaries are the points
+in the interval where the sign switches.
+For example, if at $x = x_0$
+the sign goes from positive to negative,
+then that is a decision boundary.
+They are just the $x$-axis intercepts
+of $g(x)$ where the sign changes. \\
+
+We now need to define a new, margin-based
+loss function for our surrogate
+classifier $g(x)$; this is what will allow
+us to optimize $g(x)$. \\
+Intuitively, if $g(x) = y$,
+then the classifier did a very good job,
+and the loss function should add little to
+no cost at all. \\
+If $g(x)$ and $y$ share a sign
+(both are positive or negative),
+then $g(x)$ did a decent job at least,
+so only a little cost is added. \\
+If on the other hand $g(x)$ and $y$
+have opposite signs, a lot of cost must be
+added, as $g(x)$ made a bas predicion. \\
+We can do that using the margin $yg(x)$.
+We can define a function $\Phi$:
+\[ \Phi: \R \to \R \]
+which gives us the loss function:
+\[ \ell(g(x), y) = \Phi(yg(x)) \]
+such that $\Phi$
+assigns high cost if $yg(x) < 0$,
+low cost if $yg(x) \geq 0$,
+and little to no cost if $g(x) = y$. \\
+
+Many such loss functions exist;
+the slides have several examples:
+\begin{enumerate}
+    \item 
+    0-1 loss: $\Phi(z) = \indicator_{z<0}$
+    \item
+    Exponential loss: $\Phi(z) = e^{-z}$
+    \item
+    Hinge loss
+    (not differentiable at $z = 1$):
+    $\Phi(z) = \max{0, 1-z}$
+    \item
+    Trunctated Squared loss:
+    $\Phi(z) \piecewise{(1-z)^2 \IF z < 1}
+    {0 \hspace{35pt} \IF z \geq 1}$
+    \item 
+    Logistic loss:
+    $\Phi(z) = \ln(1 + e^{-z})$ \\
+\end{enumerate}
+
+From here we can define Baye's risk for a
+surrogate classifier $g$,
+which is the ecpected value of the loss:
+\[ \rscr_\Phi(g) = \E[\ell(g(x), y)]
+= \E[\Phi(yg(x))] \]
+We can refer to it as the $\Phi$-risk. \\
+
+Our goal again will be to minimize the
+$\Phi$-risk.
+That is why we expect that $\Phi$ be convex. \\
+There will be an optimal surrogate classifier
+$g^*$ that gives us this minimal risk. \\
+The question is whether:
+\[ \sign(g^*(x)) = f^*(x) \]
+where $f^*(x)$ is Baye's optimal classifier.
+Will the optimal surrogate classifier give
+us the same predictions
+(once mapped to $\ycal$) as the optimal
+classifier? \\
+
+This all depends on the margin-based 
+loss function $\Phi$ that we choose. \\
+We call $\Phi$ classification-calibrated
+if $\sign(g^*(x)) = f^*(x)$ holds. \\
+
+In fact, $\Phi$ is calibration calibrated
+if and only if $\Phi$ is differentiable at $0$
+and $\Phi'(0) < 0$. \\
+Every single loss function we proposed
+is classification calibrated,
+and optimizing their risk gives us a surrogate
+classifier that yields the same predictions
+as Baye's classifier would have
+if we had remained in the discrete space. \\
+
+\end{document}

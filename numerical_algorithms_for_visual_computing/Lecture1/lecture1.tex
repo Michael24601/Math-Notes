@@ -1,0 +1,461 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture I
+}
+\date{2025-04-13}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+    \subsection*{Introduction}
+
+    The dot product of two vectors is defined As
+    \[ \bv{u} \cdot \bv{v} = \sum u_iv_i \]
+    and can be thought of as the measure of how much
+    one vector travels in the direction of the other
+    (the length of the projection of one vector
+    on the other). \\
+
+    Moreover, 
+    \[ \bv{u} \cdot \bv{v} = \|u\|\|v\|\cos(\theta) \]
+    where $\theta$ is the angle between the two vectors. \\
+    We can use this definition to calculate the
+    angle between vectors. \\
+
+    The norm, or magnitude, of a vector,
+    is its length.
+    We can calculate it using the Pythagorean Theorem:
+    \[ \| \bv{u} \| = \sqrt{\sum {u_i}^2 } \]
+    which can also be expressed as: 
+    \[ \| \bv{u} \| = \sqrt{u \cdot u} \] \\
+
+    We can define surfaces in $\R^n$ as 
+    implicit vector functions
+    \[ f(\bv{p}) = 0 \]
+    where $\bv{p}$ represents any point in $\R^n$
+    and $f(\bv{p}) = 0$ if $\bv{p}$ is on the surface
+    described by $f$. \\  
+    
+    This kind of function $ f(\bv{p}) = 0$
+    is called implicit.
+    An implicit function is characterized by the fact
+    that it can be very easy to check for
+    membership on $f$. \\
+    It is relatively simple to check if a point 
+    $\bv{p}$ is on the surface defined by $f$.
+    We just plug $\bv{p}$ into $f$
+    and check to see if the equation holds. \\
+    However, it can be hard to use it to generate
+    a point on $f$. \\
+
+    The gradient of a function $f(\bv{p}) = 0$
+    is a vector $\nabla f$ field defined as:
+    \[
+        F(\bv{p}) = \left(
+            \partialdd{f}{p_1},
+            \partialdd{f}{p_2},
+            \dots
+            \partialdd{f}{p_n}
+        \right)
+    \]
+    This vector represents the normal of the surface,
+    which is a vector orthogonal to the surface of $f$
+    at $\bv{p}$. \\
+    
+    We can define a line using a paramtetric
+    vector function:
+    \[ \bv{r}(t) = \bv{o} + t\bv{d} \]
+    where $\bv{o}$ is the point the vector originates from,
+    $\bv{d}$ is the normalized direction of the line,
+    and $t$ is a time parameter.
+    As $t$ increases, the point $\bv{p}$ moves along the
+    line starting at the origin $\bv{o}$. \\
+
+    This kind of function is called parametric.
+    It makes very easy to generate a new point
+    on the surface of $\bv{r}$,
+    by simply choosing any argument $t$. \\
+    However, it can be hard to check for membership
+    into $\bv{r}$. \\
+
+    We can combine these two approaches to writing
+    vector functions in order to 
+    determine if and where a line intersects
+    a surface $f(\bv{p}) = 0$.
+    We just need to replace
+    $\bv{p}$ by the line function $\bv{o} + t\bv{d}$:
+    \[ f(\bv{o} + t\bv{d}) = 0 \]
+    We can then solve for $t$. \\
+
+    If we have one or more real solutions,
+    we can conclude that at those times $t$,
+    the line $\bv{r}(t)$ intersects the surface. \
+    If we have no real solutions,
+    the line does not intersect the surface. \\
+    
+    Later on, when chekcing if rays intersect surfaces,
+    we will also require that $t$ be positive.
+    This is because rays only travel in the forward
+    direction
+    (if a negative solution exists,
+    the ray would have intersected if it were traveling
+    backwards in the opposite direction).
+
+    \newpage
+
+    \subsection*{Intersection with a Plane}
+
+    In $\R^2$, the implicit equation of a line is:
+    \[
+        Ax + By + C = 0
+    \]
+    We can express this line in vector
+    notation:
+    \[ \vecTwo{A}{B} \cdot \vecTwo{x}{y} 
+    + \vecTwo{A}{B}  \cdot \vecTwo{q_1}{q_2} = 0 \]
+    \[ \vecTwo{A}{B}  \cdot \left( \vecTwo{x}{y}
+    + \vecTwo{q_1}{q_2} \right) = 0 \]
+    where
+    \[ \vecTwo{A}{B} \cdot \vecTwo{q_1}{q_2} = c \]
+    Notice that
+    \[ \vecTwo{A}{B} \]
+    is the gradient $\nabla f$ of the function,
+    meaning that it represents the normal $\bv{n}$
+    to the surface.
+    (which is constant since this is a line). \\
+    Moreover, the equation 
+    \[ \vecTwo{A}{B} \cdot \vecTwo{q_1}{q_2} = c \]
+    can be satisfied by many points $\bv{q}$,
+    as long as they are on the line. \\
+    To conclude, we can define a line
+    using an implicit vector function
+    \[ \bv{n}(\bv{p} - \bv{q}) = 0 \]
+    where the equation holds if $\bv{p}$
+    is on the line. \\
+    
+    This defintion can easily be extended
+    to higher dimensional planes and hyperplanes. \\
+
+    Now, to analyze the function itself:
+    \[
+        \bv{n} \cdot (\bv{p} - \bv{q}) = 0
+    \]
+    As we know, each hyperplane has a normal vector that
+    defines its orientation in space.
+    This gives us the orientation, but not its position
+    in space.
+    If however we also include one point that we know
+    is on the hyperplane, we are able to lock its position 
+    in space. \\
+    This definition does just that,
+    by including the normal $\bv{n}$
+    and a point $\bv{q}$ on the plane. \\
+    The vector $(\bv{p} - \bv{q})$
+    is the one connecting $\bv{q}$ to $\bv{p}$. \\
+    If $\bv{n} \cdot (\bv{p} - \bv{q}) = 0$,
+    then the normal of the hyperplane
+    is perpendicular (orthogonal) to the vector
+    $\bv{p} - \bv{q}$,
+    meaning that $\bv{p}$ has to be on the plane. \\
+
+    So to determine if and where a line intersects 
+    any hyperplane,
+    we replace the parametric equation of a line
+    in the implicit equation of the hyperplane,
+    and solve for $t$:
+    \[
+        \bv{n} \cdot ((\bv{o} + t\bv{d}) - \bv{q}) = 0
+    \]
+    which we can do as such
+    \[
+        t(\bv{n} \cdot \bv{d}) 
+        + \bv{n} \cdot (\bv{o} - \bv{q}) = 0
+    \]
+    \[
+        t(\bv{n} \cdot \bv{d}) =
+        \bv{n} \cdot (\bv{q} - \bv{o})
+    \]
+    \[
+        t = \dfrac  {\bv{n} \cdot (\bv{q} - \bv{o})}
+                    {(\bv{n} \cdot \bv{d})}
+    \]
+    If $t$ exists, we have our intersection. \\
+    If the denominator $(\bv{n} \cdot \bv{d}) = 0$,
+    then there is no $t$ that satisfies the equation.
+    This is because when the normal of the plane $\bv{n}$
+    is orthogonal to the direction of the ray $\bv{d}$,
+    the ray is parallel to the plane,
+    and thus does not intersect it. \\
+    However, it is possible that the numerator
+    \[\bv{n} \cdot (\bv{q} - \bv{o})\]
+    is also $0$,
+    in which case the line is on the hyperplane
+    and there are thus infinite solutions. \\
+
+    \newpage
+
+    \subsection*{Intersection with a Sphere}
+    
+    The implicit definition of a sphere
+    using a scalar function $f(x, y, z) = 0$ is the following:
+    \[
+        (x - c_x)^2 +  (y - c_y)^2 +  (z - c_z)^2 = r^2 
+    \]
+    where the point $(c_x, c_y, c_z)$
+    is the center of the sphere,
+    and $r$ is its radius. \\
+
+    We can rewrite this definition using an
+    implicit vector function:
+    \[ \| \bv{p} - \bv{c} \|^2 - r^2 = 0 \]
+    where $\bv{c}$
+    is the center $(c_x, c_y, c_z)$ of the sphere
+    and $\|\bv{p} - \bv{c} \|^2$ is the magnitude (length)
+    of the vector $\bv{p} - \bv{c}$.
+    Writing $\bv{p} - \bv{c}$ is a way of expressing
+    the vector pointing from $\bv{c}$ to $\bv{p}$. \\
+    So, the equation 
+    $\| \bv{p} - \bv{c} \|^2 - r^2 = 0$
+    indicates that the point $\bv{p}$ is
+    on the surface of the sphere
+    if length of the vector
+    from the center $\bv{c}$ of the sphere
+    to $\bv{p}$ macthes the radius $r$. \\
+    Note that the vector function
+    is the same as the scaler function:
+    \[ 
+        \| \bv{p} - \bv{c} \|^2
+        = (x - c_x)^2 
+        + (y - c_y)^2 +  (z - c_z)^2
+    \]
+    only written using vector notation. \\
+
+    In order to determine if a ray intersects a sphere,
+    we solve the following equation for $t$:
+    \[ 
+        \| (\bv{o} + t\bv{d}) - \bv{c} \|^2 - r^2 = 0
+    \]
+    Which can be done by reducing it to a quadratic
+    and solving for $t$. \\
+    If the quadratic has one or more real solutions,
+    the ray intersects the sphere. \\
+    Otherwise, if the solutions are complex,
+    the ray does not intersect the sphere. \\
+
+    This can be done as such:
+    \[ 
+        \| (\bv{o} + t\bv{d}) - \bv{c} \|^2 - r^2 = 0
+    \]
+    \[ 
+        \| t\bv{d} + (\bv{o} - \bv{c}) \|^2 - r^2 = 0
+    \]
+    \[ 
+        (t\bv{d} + (\bv{o} - \bv{c})) \cdot
+        (t\bv{d} + (\bv{o} - \bv{c})) - r^2 = 0
+    \]
+    \[ 
+        t^2(\bv{d} \cdot \bv{d}) 
+        + 2t\bv{d} \cdot (\bv{o} - \bv{c})
+        + (\bv{o} - \bv{c})\cdot(\bv{o} - \bv{c}) - r^2 = 0
+    \]
+    where 
+    \[ A = \bv{d} \cdot \bv{d} \]
+    \[ B = 2\bv{d} \cdot (\bv{o} - \bv{c}) \]
+    \[ C = (\bv{o} - \bv{c})\cdot(\bv{o} - \bv{c}) - r^2 \]
+    Then, depending on whether the discriminant
+    $B^2  -4AC$
+    is smaller to, equal, or larger than 0,
+    we may have no solutions, one solution, or two:
+    \[ t = \dfrac{-B \pm \sqrt{B^2 - 4AC} }{2A} \]
+
+    \newpage
+
+    \subsection*{Linear System of Equations}
+
+    Suppose we have two line
+    (or any $n+1$ $n$-dimensional hyperplane)
+    equations in the implicit form.
+    How could we check where they intersect?
+    This is not as easy as having one of the two
+    in the parametric format. \\
+    The answer is that we have to solve a linear
+    system to find a point where they all meet.
+    A point $p$ that satisfies the implicit
+    equation
+    \[ f(\bv{p}) = 0 \]
+    for all of the lines. \\
+
+    Suppose we have two line equations:
+    \[ a_1^1x^1 + a_1^2x^2 = b^1 \]
+    \[ a_2^1x^1 + a_2^2x^2 = b^2 \]
+    To find a soltuion $(x^1, x^2)$ 
+    that satisfies both linear equations
+    means finding the point where they intersect. \\
+
+    One way to solve them is by using substitution.
+    Using the first equation, we can write:
+    \[ x^1 = \dfrac{b^1 - a_1^2x^2}{a_1^1} \]
+    and then substitute it in the second equation,
+    and solve for $x^2$:
+    \[ a_2^1\dfrac{b^1 - a_1^2x^2}{a_1^1} + a_2^2x^2 = b^2 \]
+    \[ \dfrac{a_2^1b^1 - a_2^1a_1^2x^2 
+    + a_1^1a_2^2x^2}{a_1^1} = b^2 \]
+    \[ \dfrac{a_1^1a_2^2x^2 - a_2^1a_1^2x^2}{a_1^1} = 
+    \dfrac{a_1^1b^2 - a_2^1b^1}{a_1^1} \]
+    We now assume that $a_1^1 \neq 0$ and simplify:
+    \[ a_1^1a_2^2x^2 - a_2^1a_1^2x^2 = 
+    a_1^1b^2 - a_2^1b^1 \]
+    \[ x^2(a_1^1a_2^2 - a_2^1a_1^2) = 
+    a_1^1b^2 - a_2^1b^1 \]
+    \[ x^2 = 
+    \dfrac{a_1^1b^2 - a_2^1b^1}{a_1^1a_2^2 - a_2^1a_1^2} \]
+    We can then replace $x^2$ in the first equation
+    and solve for $x^1$, giving us:
+    \[ x^1 = 
+    \dfrac{a_2^2b^1 - a_1^2b^2}{a_1^1a_2^2 - a_2^1a_1^2} \]
+    This approach motivates Cramer's Rule. \\
+
+    Another approach is elimination. \\
+    We can multiply the first row by $\dfrac{1}{a_1^1}$:
+    \[ x^1 + \dfrac{a_1^2}{a_1^1}x^2 = \dfrac{b_1}{a_1^1} \]
+    this assumes, like first method, that $a_1^1 \neq 0$. \\
+    We then substitute $-a_2^1$ the first equation
+    from the second, eliminating the first variable $x_1$:
+    \[ (a_2^2 - \dfrac{a_1^2a_2^1}{a_1^1}) x^2 = 
+    b^2 - \dfrac{a_2^1b_1}{a_1^1} \]
+    We can then solve for $x^2$,
+    and use it to get $x^1$. \\
+    This approach motivates Guassian elimination,
+    a much more efficient algorithm for solving
+    linear systems. \\
+
+    Cramer's rule in general is by far the slowest.
+    This is because calculating the determinant of
+    a matrix has time complexity $O(n!)$. \\
+    Guassian-elimination is faster. \\
+    Cramer's rule is however fine to use
+    for a small number of entries,
+    such as for 3 by 3 and 4 by 4 matrices,
+    where its performance actually beats
+    that of elimination, which is only asymptotically
+    better (as the size grows). \\
+    However, the fastest technique is using
+    a numerical method, which gives an approximation
+    of the solution. \\
+
+    We can think of linear systems in two ways. \\
+
+    The first way is to think of it as two lines
+    \[ a_1^1x^1 + a_1^2x^2 = b^1 \]
+    \[ a_2^1x^1 + a_2^2x^2 = b^2 \]
+    intersecting each other (or $n+1$ $n$-dimensional hyperplanes)
+    at the solution. \\
+    We can compactly write this using dot products:
+    \[ \vecTwo{a_1^1}{a_1^2} \cdot \vecTwo{x^1}{x^2}
+    = b^1 \]
+    \[ \vecTwo{a_2^1}{a_2^2} \cdot \vecTwo{x^1}{x^2}
+    = b^2 \]
+    Notice how each row is turned into a vector.
+    This is the row major approach. \\
+    If the two lines are parallel, we have no solutions,
+    unless the two lines are the same, then we have
+    infinite solutions. \\
+
+    The second way to think of it is as two vectors
+    \[ \vecTwo{a_1^1}{a_2^1} \qquad \vecTwo{a_1^2}{a_2^2} \]
+    and we need to find some linear combination of them
+    equal to the point $b$: 
+    \[ x^1\vecTwo{a_1^1}{a_2^1} + x^2\vecTwo{a_1^2}{a_2^2}
+    = \vecTwo{b^1}{b^2} \]
+    Notice how each column in the system is a vector.
+    This is the column major approach. \\
+    If the two vectors are colinear,
+    we call them linearly dependent.
+    Instead of being able to span all of $\R^2$
+    by linearly combining them, we can only span one line,
+    so we most likley won't be able to each $b$,
+    and we thus have no solution. \\
+    Unless $b$ is on the line they span,
+    then we have infinit ways to combine the two vectors
+    to get to $b$, giving us infinite solutions. \\
+
+    Notice that the linear system is uniquely
+    defined by 6 numbers:
+    \[ a_1^1 \quad a_1^2 \quad a_2^1 \quad a_2^2
+    \quad b^1 \quad b^2 \]
+    We can compactly write these using matrix notation:
+    \[ \matTwo{a_1^1}{a_1^2}{a_2^1}{a_2^2}
+    \vecTwo{x^1}{x^2} = \vecTwo{b^1}{b^2} \]
+    Now we motivate matrix multiplication.
+    Matrix multiplication of a vector needs
+    to yield the original system:
+    \[ \matTwo{a_1^1}{a_1^2}{a_2^1}{a_2^2}
+    \vecTwo{x^1}{x^2}
+    = \vecTwo{a_1^1x^1 + a_2^1x^2}{a_1^2x^1 + a_2^2x^2}
+    = \vecTwo{b^1}{b^2} \]
+    Notice how we can still think of matrix multiplication
+    in two ways.
+    The row major approach:
+    \[ \vecTwo{a_1^1x^1 + a_2^1x^2}{a_1^2x^1 + a_2^2x^2}
+    = \vecTwo{\vecTwo{a_1^1}{a_1^2} \cdot \vecTwo{x^1}{x^2}}
+    {\vecTwo{a_2^1}{a_2^2} \cdot \vecTwo{x^1}{x^2}}
+    = \vecTwo{b^1}{b^2} \]
+    And the column major approach:
+    \[ \vecTwo{a_1^1x^1 + a_2^1x^2}{a_1^2x^1 + a_2^2x^2}
+    = x^1\vecTwo{a_1^1}{a_2^1} + x^2\vecTwo{a_1^2}{a_2^2}
+    = \vecTwo{b^1}{b^2} \]
+    \\
+
+    More generally however, we can multiply
+    any $m \times k$ matrix with a $k \times n$
+    matrix, and get an $m\times n$ matrix as a result
+    (here we think of vectors as $n \times 1$ matrices,
+    or $1 \times n$ matrices when transposed).
+    So for $A \times B = C$:
+    \[ c_{ij} = \sum_{i}^{k}a_{ik}b_{kj} \]
+    is the formula for any entry in the result matrix. \\
+
+    We can formalize Cramer's rule,
+    where:
+    \[ x^1 = \dfrac{
+        \det{\matTwo{b^1}{a_1^2}{b^2}{a_2^2}}
+    }{\det{\matTwo{a_1^1}{a_2^1}{a_1^2}{a_2^2}}} \]
+    \[ x^2 = \dfrac{
+        \det{\matTwo{a_1^1}{b^1}{a_1^2}{b^2}}
+    }{\det{\matTwo{a_1^1}{a_2^1}{a_1^2}{a_2^2}}} \]
+    If teh determinant is 0, 
+    the system has no unique solution. \\
+
+    The determinant represents the scaling
+    factor of a linear transformation. \\
+    If a linear transformation has determinant 0,
+    that means it flattens the entire $\R^2$
+    vector space onto a line (making the are 0). \\
+    This happens if instead of 2 linearly
+    independent column vectors, we have two colinear
+    vectors, causing the entire space
+    to flatten onto that line. \\
+    We call a matrix with determinant 0 singular,
+    or non-invertible (has no inverse). \\
+    It has no inverse because the inverse
+    of a linear transformation reverses the effects
+    of the original transformation.
+    However, given a line that we get from
+    applying a singular matrix to $\R^2$,
+    there's no well defined (unique) way to get 
+    from one dimensional vector space $\R$ to $\R^2$. \\
+
+ 
+\end{document}7

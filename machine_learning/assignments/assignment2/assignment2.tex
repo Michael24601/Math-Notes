@@ -1,0 +1,349 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Assignment II
+}
+\date{2025-04-22}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Ex 1}
+
+Given random vector $X, Y \in \R^d$ where
+\[ Y = g(X) \]
+then the transformation law tells us that
+the density function of $Y$ can be calculated
+using
+\[ p_Y(y) = p_X(g\inv (y)) \cdot 
+| \det(J_{g\inv}) | \]
+where $p_X$ is the density function of $X$. \\
+We need to find the desnity function $p_{X_1, X_2}$,
+where
+\[ X = g(U) \]
+\[ \vecTwo{X_1}{X_2} = g\para{\vecTwo{U_1}{U_2}}
+= \vecTwo
+{\sqrt{-2\ln(U_2)}\sin(2\pi U_1) \vspace{10pt}}
+{\sqrt{-2\ln(U_2)}\cos(2\pi U_1)}\]
+Note that the joint desnity $p_{X_1, X_2}$
+is the same as the density of the vector $p_X$.
+Likewise, $p_{U_1, U_2} = p_U$. \\ 
+To start, we know that $U_1$ and $U_2$
+are uniform random variables over $[0, 1]$. \\
+Given a random variable $D$ uniform over $[a, b]$,
+we know that its density is given by:
+\[ p_A(d) = \piecewise{\dfrac{1}{b-a},
+\qquad \text{ for } d \in [a, b]}
+{ 0, \qquad \qquad \text{ for } d \notin [a, b]} \]
+This means that 
+\[ p_{U_1}(u) = p_{U_2}(u) = 
+\piecewise{1, \qquad \text{ for } d \in [0, 1]}
+{ 0, \qquad \text{ for } d \notin [0, 1]} \]
+Since the two random variables are independent,
+their joint density is just the product
+of their densities:
+\[ p_U(u) = p_{U_1, U_2}(u_1, u_2) =
+p_{U_1}(u_1) \cdot p_{U_2}(u_2) = 
+\piecewise{1, \qquad \text{ for } u \in [0, 1]^2}
+{ 0, \qquad \text{ for } u \notin [0, 1]^2} \]
+Now, we need to find $g\inv$. \\
+First, note that:
+\[ X_1 = \sqrt{-2\ln(U_2)}\sin(2\pi U_1)
+\qquad X_2 = \sqrt{-2\ln(U_2)}\cos(2\pi U_1) \]
+\[ \dfrac{X_1}{X_2} = 
+\dfrac{\sin(2\pi U_1)}{\sin(2\pi U_1)}
+= \tan(2\pi U_1) \]
+\[ \arctan\para{\dfrac{X_1}{X_2}} = 2\pi U_1 \]
+\[ \dfrac{1}{2\pi}\arctan\para{\dfrac{X_1}{X_2}} 
+= U_1 \]
+and
+\[ X_1 = \sqrt{-2\ln(U_2)}\sin(2\pi U_1)
+\qquad X_2 = \sqrt{-2\ln(U_2)}\cos(2\pi U_1) \]
+\[ X_1^2 + X_2^2 = 
+-2\ln(U_2)\sin^2(2\pi U_1) 
+-2\ln(U_2)\cos^2(2\pi U_1)
+= -2\ln(U_2) \]
+\[ -\dfrac{1}{2}(X_1^2 + X_2^2) = \ln(U_2) \]
+\[ \exp\para{-\dfrac{X_1^2 + X_2^2}{2}} = U_2 \]
+which means that
+\[ g\inv(x) = \vecTwo
+{\dfrac{1}{2\pi}\arctan\para{\dfrac{X_1}{X_2}}}
+{\exp\para{-\dfrac{X_1^2 + X_2^2}{2}} } \]
+We know that:
+\[ J_{g\inv} = \matTwo
+{\partialdd{(g\inv)_1}{x_1} \hspace{10pt}}
+{\partialdd{(g\inv)_1}{x_2} \vspace{10pt}}
+{\partialdd{(g\inv)_2}{x_1} \hspace{10pt}}
+{\partialdd{(g\inv)_2}{x_2}} \]
+\[ J_{g\inv} = \matTwo
+{-\dfrac{X_2}{2\pi(X_1^2 + X_2^2)} \hspace{30pt}
+\vspace{10pt}}
+{\dfrac{X_1}{2\pi(X_1^2 + X_2^2)}}
+{-X_1\exp\para{-\dfrac{X_1^2 + X_2^2}{2}} 
+\hspace{10pt}}
+{-X_2\exp\para{-\dfrac{X_1^2 + X_2^2}{2}}} \]
+Now we can find:
+\[ \det(J_{g\inv}) = 
+\dfrac{X_2^2 \exp\para{-\dfrac{X_1^2 + X_2^2}{2}}}
+{2\pi(X_1^2 + X_2^2)}
++ \dfrac{X_1^2 \exp\para{-\dfrac{X_1^2 + X_2^2}{2}}}
+{2\pi(X_1^2 + X_2^2)}\]
+\[ \det(J_{g\inv}) = 
+\dfrac{\para{X_1^2 + X_2^2 }
+\exp\para{-\dfrac{X_1^2 + X_2^2}{2}}}
+{2\pi(X_1^2 + X_2^2)} \]
+\[ \det(J_{g\inv}) = 
+\dfrac{\exp\para{-\dfrac{X_1^2 + X_2^2}{2}}}{2\pi} \]
+\[ |\det(J_{g\inv})| = \det(J_{g\inv}) \]
+since it's an exponential,
+and thus always positive. \\
+So to conclude
+\[ p_X(x_1, x_2) =
+\piecewise{
+\dfrac{\exp\para{-\dfrac{x_1^2 + x_2^2}{2}}}{2\pi}, 
+\qquad \text{ for } u \in [0, 1]^2}
+{ 0, \qquad \qquad \qquad \qquad \quad 
+\text{ for } u \notin [0, 1]^2} \]
+
+\myColor{red}{
+\subsection*{Correction}
+The answer is correct, but there are two details
+worth mentioning if we want to dot our is
+and cross our ts. \\
+First, we can only invert the function $g$
+if it is bijective (injective and surjective). \\
+Notice however that because $\sin$
+and $\cos$ are periodic every $2\pi$: 
+\[ g(0, u_2) = \vecTwo{0}{\sqrt{-2\ln(u_2)}} \]
+\[ g(1, u_2) = \vecTwo{0}{\sqrt{-2\ln(u_2)}} \]
+So we can't have $U_1=1$ and $U_1 = 0$
+in the domain, we have to choose one only. \\
+Also whenever $U_2 = 1$,
+the entire output is always $0$ regardless
+of $U_1$, which means it is also not
+bijective (or injective in this case):
+\[ g(u_1, 1) = \vecTwo{0}{0} \]
+So we remove $U_2 = 1$. \\
+We also remove $U_2 = 0$ since the logarithm
+is not defined or differential there. \\
+We thus get the domain:
+\[ (0, 1] \times (0, 1) \to \R^2 - \{0\} \]
+Because we only removed a finite subset of the
+domain (only 1 or 2 points really),
+the density function is not affected and remains $1$. \\
+Another detail worth mentionining is that the function
+$\arctan$ only maps values to outputs 
+between $-\dfrac{\pi}{2}$ and $\dfrac{\pi}{2}$. \\
+This is because $\tan$
+is periodic every $\pi$ inputs,
+so we restrict its domain to just 
+$-\dfrac{\pi}{2}$ and $\dfrac{\pi}{2}$
+to ensure bijectivity before inverting
+with $\arctan$. \\
+But the output we get from $\arctan$
+needs to span all of $2\pi$
+(since we have $2\pi U_1$
+and $U_1 \in (0, 1]$). \\
+This is actually a very common problem with
+$\arctan$, which manifests when we have
+\[ \arctan\para{\dfrac{X}{Y}} \]
+which is a result we get when transforming from
+cartesian to polar coordinates. \\
+So to solve it, we notice that in our $[0, 2\pi]$
+domain, we have 4 quadrants, 
+and of those 4, the first $(0, \dfrac{\pi}{2})$
+and fourth $(\dfrac{3\pi}{2}, 2\pi)$ which can also
+be written $(-\dfrac{\pi}{2}, 0)$
+will be correct (since they are between 
+$-\dfrac{\pi}{2}$ and $\dfrac{\pi}{2}$,
+where $\arctan$ is correct). \\
+However for the second quadrant,
+we need to add $\pi$ in order to end up back
+in the correct range. \\
+We can check for which quadrant we are in
+using the sign of $X$ and $Y$:
+\[ \arctan\para{\dfrac{X}{Y}}
+= \piecewise{
+\arctan\para{\dfrac{X}{Y}} \text{ if } X > 0
+\vspace{10pt}}
+{\arctan\para{\dfrac{X}{Y}} + \pi \text{ if } X < 0 } \]
+In our case we have $X = X_2$
+and $Y = X_1$ (because $X_1$ has $\sin$,
+the y-coordinate, and $X_2$ has $\cos$,
+the x-coordinate). \\
+This also won't affect the result because the
+offset by $\pi$ just vanishes when we differentiate. \\
+}
+
+\newpage
+
+\subsection*{Ex 2}
+
+\begin{enumerate}[label=\alph*)]
+    \item 
+    The probability that the prediction is correct
+    includes the event where the prediction
+    and flip are head, and the event where
+    the prediction and flip are tails:
+    \[(H, H) \qquad  (T, T) \]
+    Each corresponds to the following propabilities:
+    \[ pq \qquad (1-p)(1-q) \]
+    since predicting and flipping are independent
+    events. \\
+    So the total probability of predicting
+    the correct coin flip is:
+    \[  pq + (1-p)(1-q) \]
+    \item 
+    The probability of getting the right flip
+    for a fixed bias $p$ is given by the function:
+    \[ f(p) = pq + (1-p)(1-q) = q(2p-1) + p - 1 \]
+    This is a line with slope $2p-1$,
+    constrained to the domain $[0, 1]$
+    (since $q$ is a probability). \\
+    A line in some domain $[a, b]$
+    has a maximum and minimum, one at
+    $a$ and the other at $b$, depending on
+    whether it is ascending or descending. \\
+    So
+    \[ 2p-1 > 0 \implies p > 0.5 \implies
+    \text{ the line is ascending } \implies
+    \text{ the maximum is at } q = 1 \]
+    \[ 2p-1 < 0 \implies p < 0.5 \implies
+    \text{ the line is descending } \implies
+    \text{ the maximum is at } q = 0 \]
+    \[ 2p-1 = 0 \implies p = 0.5 \implies
+    \text{ the line is horizontal } \implies
+    \text{ the distribution is uniform } \]
+    So, to conclude, the best strategy for predicting
+    the correct coin flip result is to
+    always choose heads if the bias is
+    in favor of heads, and to always choose tails
+    if the bias is in favor of tails. \\
+    If the coin flip is fair,
+    then our choice doesn't matter;
+    we can predict heads or tails
+    following any distribution we want,
+    the probability we will succeed is uniform. \\
+\end{enumerate}
+
+\newpage
+
+\subsection*{Ex 3}
+
+\begin{enumerate}[label=\alph*)]
+    \item 
+    The probability that "Free" is in the text:
+    \[\Pb(F) = \Pb(F \mid S) \cdot \Pb(S)
+    +  \Pb(F \mid \olsi{S}) \cdot \Pb(\olsi{S})
+    = 0.8 * 0.7 + 0.2 * 0.3 = 0.62 \]
+    We can now calculate the posterior
+    probabilities:
+    \[ \Pb(S \mid F)
+    = \dfrac{\Pb(F \mid S) \cdot \Pb(S)}{\Pb(F)}
+    = \dfrac{0.8 \cdot 0.7}{0.62}
+    \sim 0.90 \]
+    \[ \Pb(\olsi{S} \mid F)
+    = \dfrac{\Pb(F \mid \olsi{S}) \cdot \Pb(\olsi{S})}
+    {\Pb(F)}
+    = \dfrac{0.2 \cdot 0.3}{0.62}
+    \sim 0.1 \]
+    \item 
+    We have a loss function:
+    \[ \ell(a, b)
+    = \piecewise{0, \quad \text{ if $a = b$}}
+    {1, \quad \text{ if $a \neq b$}} \]
+    which is just the indicator function
+    $\indicator_{a \neq b}$. \\ 
+    Let us assume that $f(X)$
+    is our prediction.
+    Where $X = F$ is the input (contains
+    the word free).
+    We know that the risk is the total
+    expected value of the loss over
+    all inputs $x$
+    (which is a sum over all of $X$
+    of a sum over all of $Y$):
+    \[ \rscr_\ell(f) = \E[\ell(f(X), Y)]
+    = \E[\E[\ell(f(X), Y) \mid X]] \]
+    If we remove the outer sum (over $X$),
+    we get the conditional risk for a 
+    single input $x$, which is
+    what we want to minimize:
+    \[ \E[\ell(f(x), Y) \mid X = x] \]
+    It is just a sum over all $Y$. \\
+    Our goal is to minimize this value,
+    meaning we need to find the value of $x$
+    for which the expected value 
+    of the conditional loss is minimal:
+    \[ f^*(x) = \min_{f(x)} \\E[\ell(f(x), Y) \mid X = x]  \]
+    We have:
+    \[ \E[\ell(f(x), Y) \mid X = x]
+    = \ell(f(x), S)\Pb(Y = S \mid X = x)
+    + \ell(f(x), \olsi{S})\Pb(Y = \olsi{S} \mid X = x) \]
+    \[ \E[\ell(f(F), Y) \mid F]
+    = \indicator_{f(F) \neq \olsi{S}}
+    \Pb(\olsi{S} \mid F) +
+    \indicator_{f(F) \neq S}
+    \Pb(S \mid X)  \]
+    Now, suppose we predict that
+    the email is spam $f(S)$:
+    \[ \E[\ell(S, Y) \mid F]
+    = \indicator_{S \neq \olsi{S}}
+    \Pb(\olsi{S} \mid F) +
+    \indicator_{S \neq S}
+    \Pb(S \mid X) 
+    \sim 1 \cdot 0.1 + 0 \cdot 0.9 = 0.1 \]
+    If we predict that the email is not spam:
+    \[ \E[\ell(\olsi{S}, Y) \mid F]
+    = \indicator_{\olsi{S} \neq \olsi{S}}
+    \Pb(\olsi{S} \mid F) +
+    \indicator_{\olsi{S} \neq S}
+    \Pb(S \mid F) 
+    \sim 1 \cdot 0.9 + 0 \cdot 0.1 = 0.9 \]
+    We need to minimize the expected value,
+    which means
+    choosing the inputs for which the output
+    is the smallest.
+    The output is smallest when we choose
+    $a$ to be the case where the email is spam. \\
+    So we should consider the email spam.
+    \item 
+    If we now have
+    \[ \Pb(S) = 0.4 \qquad 
+    \Pb(\olsi{S}) = 0.6 \]
+    then we can recalculate:
+    \[\Pb(F) = \Pb(F \mid S) \cdot \Pb(S)
+    +  \Pb(F \mid \olsi{S}) \cdot \Pb(\olsi{S})
+    = 0.8 * 0.4 + 0.2 * 0.6 = 0.44 \]
+    \[ \Pb(S \mid F)
+    = \dfrac{\Pb(F \mid S) \cdot \Pb(S)}{\Pb(F)}
+    = \dfrac{0.8 \cdot 0.4}{0.44}
+    \sim 0.73 \]
+    \[ \Pb(\olsi{S} \mid F)
+    = \dfrac{\Pb(F \mid \olsi{S}) \cdot \Pb(\olsi{S})}
+    {\Pb(F)}
+    = \dfrac{0.2 \cdot 0.6}{0.44}
+    \sim 0.27 \]
+    We can then find the expected value again. \\
+    If we predict spam:
+    \[ \sim 1 \cdot 0.27 + 0 \cdot 0.73 = 0.27  \]
+    If we predict not spam:
+    \[ \sim 1 \cdot 0.73 + 0 \cdot 0.27 = 0.73  \]
+    So the expected value of the loss is minimized
+    when we predict that the email is spam. \\
+    Our decision should therefore not change. \\
+\end{enumerate}
+
+\end{document}
+

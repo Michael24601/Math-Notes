@@ -1,0 +1,596 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Assignment I
+}
+\date{2025-04-14}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+    \subsection*{Ex 1}
+
+    \begin{enumerate}[label=\alph*)]
+        \item 
+        We know that if $v$ is an eigenvector of $A$,
+        and $\lambda$ is its eigenvalue,
+        then
+        \[ Av = \lambda v \]
+        Now, to find the eigenvectors of $A^k$
+        with eigenvalues $\gamma$,
+        we can solve
+        \[ A^k v = \gamma v \]
+        Note that by using the associativity
+        of matrix multiplication to our advantage,
+        we can write
+        \[ A^kv = (A^{k-1}A)v = A^{k-1}(Av) 
+        = A^{k-1}\lambda v \]
+        Since scalar multiplication
+        is commutative, we can then
+        move the scalar $\lambda$:
+        \[  A^kv = A^{k-1}\lambda v
+        = \lambda(A^{k-1} v) \]
+        We can repeat this process:
+        \[ A^kv = \lambda(A^{k-1} v)
+        = \lambda(\lambda(A^{k-2} v))
+        = \dots \lambda^{n-1}(Av)
+        = \lambda^n v  \]
+        So now that we have
+        \[ A^kv = \lambda^n v \]
+        we conclude that for each eigenvector $v$
+        and eigenvalue $\lambda$
+        of $A$,
+        the eigenvectors of $A^k$
+        are the eigenvectors $v$ of $A$,
+        and the eigenvalues of $A^k$
+        are the eigenvalues of $A$ 
+        raised to the $\nth{n}$ power $\lambda^n$.
+        \item
+        Given a vector $x$,
+        we know that its 2-norm squared is
+        $x^Tx = \|x\|^2$. \\
+        An Orthonormal basis $U$ is a new basis
+        in which we can express vectors such that
+        their lengths (2-norm) remain unchanged. \\
+        In other words,
+        if $y$ expressed where the vector $x$ 
+        would point to had $x$ been in the
+        orthonormal basis $U$, then 
+        \[ x = Uy \]
+        And since the basis is orthonormal,
+        the 2-norm of both vectors is the same:
+        \[ x^Tx = y^Ty \]
+        but we also know that
+        \[ x^Tx = (Uy)^TUy = y^TU^TUy \]
+        Since $y^TU^TUy = y^Ty$,
+        we can conclude that $UU^T = I$. \\
+        Now, we need to show that
+        \[ \dfrac{x^TAx}{x^Tx} 
+        \leq \lambda_{\text{max}} \]
+        We can rewrite the numerator using the
+        decomposition:
+        \[ \dfrac{x^TU\Sigma U^Tx}{x^Tx} \]
+        Since $UU^T = I$,
+        we can rewrite the denominator as:
+         \[ \dfrac{x^TU\Sigma U^Tx}{x^TIx} 
+        = \dfrac{x^TU\Sigma U^Tx}{x^TUU^Tx}
+        = \dfrac{y^T\Sigma y}{y^Ty} \]
+        where $y = U^Tx$. \\
+        Now, since $\Sigma$ is a diagonal matrix
+        containing the eigenvalues $\lambda_i$,
+        this means that
+        \[ \Sigma y = \sum_{i = 1}^{n}\lambda_i y_i \]
+        Which means that:
+        \[ \dfrac{y^T\Sigma y}{y^Ty} 
+        = \dfrac{y^T \sum_{i = 1}^{n}\lambda_i y_i}{y^Ty} 
+        =  \dfrac{\sum_{i = 1}^{n}\lambda_i {y_i}^2}
+        {\sum_{i=1}^{n}{y_i}^2} \]
+        Now, there must be at least one value
+        $\lambda_\text{max} \geq \lambda_i$
+        for all $i \in \{1, 2, \dots n\}$. \\
+        This means that:
+        \[ \dfrac{\sum_{i = 1}^{n}\lambda_\text{max} {y_i}^2}
+        {\sum_{i=1}^{n}{y_i}^2} \geq
+        \dfrac{\sum_{i = 1}^{n}\lambda_i {y_i}^2}
+        {\sum_{i=1}^{n}{y_i}^2} \]
+        where
+        \[ \dfrac{\sum_{i = 1}^{n}\lambda_\text{max} {y_i}^2}
+        {\sum_{i=1}^{n}{y_i}^2} = 
+        \dfrac{\lambda_\text{max}\sum_{i = 1}^{n}{y_i}^2}
+        {\sum_{i=1}^{n}{y_i}^2} = 
+        \lambda_\text{max} \]
+        So $\lambda_\text{max} \geq 
+        \dfrac{x^TAx}{x^Tx}$. \\
+    \end{enumerate}
+
+    \newpage
+
+    \subsection*{Ex 2}
+
+    \begin{enumerate}[label=\alph*)]
+        \item 
+        Given a $d \times n$ matrix
+        \[ X = \begin{bmatrix}
+            x_1 & x_2 & \dots & x_n
+        \end{bmatrix} \]
+        where each $x_i$ is a column vector,
+        and a function
+        \[ f:\R^d \to \R \]
+        \[ f(c) = \sum_{i=1}^{n}\|x_i - c\|^2 \]
+        that descibres the mean squared
+        error (average difference between $c$
+        and each column in $X$),
+        we want to find the value $c^*$
+        such that $f(c^*)$ is minimal. \\
+        We can use calculus.
+        We know that that gradient $\nabla f$
+        describes the direction of most change
+        in $f$,
+        and that
+        \[\nabla f = 0\]
+        is an extremum (minimum or maximum).
+        In this case it is a minimum since
+        $f$ can grow arbitrarily large. \\
+        We know that
+        \[ \nabla f = \para{\partialdd{f}{c_1},
+        \partialdd{f}{c_2}, \dots, \partialdd{f}{c_d}} \]
+        To calculate the gradient,
+        we can rewrite the function by expanding
+        the 2-norm squared:
+        \[ f(c) = \sum_{i=1}^{n}\|x_i - c\|^2
+        = \sum_{i=1}^{n}\sum_{j=1}^{d}(x_{ij} - c_j)^2 \]
+        Then we can differentiate.
+        For each $\partialdd{f}{c_j}$,
+        only the terms containing $c_j$
+        have to be considered:
+        \[ \partialdd{f}{c_j} = 
+        \partialdd{}{c_j}\sum_{i=1}^{n}(x_{ij} - c_j)^2
+        = 2\sum_{i=1}^{n}(x_{ij} - c_j)
+        =  2\para{\sum_{i=1}^{n}x_{ij}} - 2n(c_j) \]
+        Which means that
+        \[ (\nabla f)_j
+        = 2\para{\sum_{i=1}^{n}x_{ij}} - 2n(c_j) \]
+        \[ \nabla f
+        = 2\para{\sum_{i=1}^{n}x_{i}} - 2n(c) \]
+        So we can now solve
+        \[ \nabla f = 0 \]
+        \[ 2\para{\sum_{i=1}^{n}x_{i}} - 2n(c) = 0 \]
+        \[ 2\sum_{i=1}^{n}x_{i} = 2n(c) \]
+        \[ \dfrac{1}{n}\sum_{i=1}^{n}x_{i} = c \]
+        So the minimum of $f$ is reached at
+        \[ c^* = \dfrac{1}{n}\sum_{i=1}^{n}x_{i} \]
+        which is the mean of the column vector $x_i$
+        (average). \\
+        Intuitively this makes sense.
+        Minimizing the mean squared error $f(c)$
+        reduces to making $c$ as close as possible
+        in value to each of $x_i$,
+        which can be achieved by making it their average
+        value. 
+        \item
+        The empirical covariance matrix for $X$
+        is an $n \times n$ square matrix that
+        encodes the empirical covariance of every pair
+        of variables $x_i$ in $X$. \\
+        As we know, the covariance of $X_i$ and $X_j$
+        is:
+        \[ \text{Cov}(x_i, x_j) =  
+        \dfrac{1}{n}\E(x_i - \E(x_i))\E(x_j - \E(x_j)) \]
+        where $\E(x_i)$ and $\E(x_j)$
+        are the means of each distribution. \\
+        The empirical covariance $\Sigma_X$
+        is the same,
+        but applies to some sample of points
+        instead of the whole distribution:
+        \[ \sum_{i = 1}^{n}(x_i - \mu)(x_i-\mu)^T \]
+        Here $(x_i - \mu)(x_i-\mu)^T$
+        is the outer product,
+        which produces an $n \times n$ square matrix,
+        and
+        \[\mu = \dfrac{1}{n}\sum_{i=1}^{n}x_i \]
+        is the vector encoding the empirical
+        means of each vector $x_i$. \\
+        We need to prove that $\Sigma_X$
+        is positive semi-definite,
+        meaning that for any vector $w \in \R^d$:
+        \[ w^T\Sigma w \geq 0 \]
+        Notice that:
+        \[ w^T\Sigma w = w^T \para{
+            \dfrac{1}{n}\sum_{i = 1}^{n}(x_i - \mu)
+            (x_i-\mu)^T } w
+        =  \dfrac{1}{n}\sum_{i = 1}^{n} \para{
+        w^T (x_i - \mu)(x_i-\mu)^T w } \]
+        Here, the two terms
+        \[ w^T (x_i - \mu) \qquad (x_i-\mu)^T w \]
+        Are the matrix multiplication
+        of a transposed vector and a vector,
+        which corresponds to the inner product
+        (or more specifically, the dot product):
+        \[ w^T (x_i - \mu) = w \cdot (x_i - \mu)
+        \qquad (x_i-\mu)^T w = (x_i - \mu) \cdot w \]
+        Since the dot product is commutative,
+        the two terms are equal,
+        which means that 
+        \[ \dfrac{1}{n}\sum_{i = 1}^{n} \para{
+            w^T (x_i - \mu)(x_i-\mu)^T w }
+        =  \dfrac{1}{n}\sum_{i = 1}^{n}
+            (w\cdot(x_i - \mu))^2 \]
+        which is the sum of square scalar terms,
+        meaning that it has to be non-negative. \\
+        Therefore, 
+        $\Sigma_X$ is positive semi-definite. \\
+
+    \end{enumerate}
+
+    \begingroup
+    \color{red}
+    \subsection*{Correction}
+    \begin{enumerate}[label=\alph*)]
+        \item
+        The answer is correct,
+        but an easier way we can do this is using
+        vector and matrix differentials:
+        \[ f(c) = \sum_{i=1}^{n}\|x_i - c\|^2 \]
+        \[ f(c) = \sum_{i=1}^{n}(x_i - c)^T(x_i - c) \]
+        \[ f(c) = \sum_{i=1}^{n}(x_i^Tx_i - 2cx_i + c^2) \]
+        \[ \nabla f(c) 
+        = \sum_{i=1}^{n}(- 2x_i + 2c) \]
+        Which means that:
+        \[ \nabla f(c) = 0 \]
+        \[ \sum_{i=1}^{n}(2x_i) = \sum_{i=1}^{n}(2c) \]
+        \[ \sum_{i=1}^{n}x_i = nc \]
+        \[ \dfrac{1}{n}\sum_{i=1}^{n}x_i = c \]
+        Here we can use the rules:
+        \[ \nabla x = 1 \]
+        \[ \nabla \| x \|^2 = 2x \]
+        \[ \nabla \| Ax \|^2 = 2A^TAx \]
+        \[ \nabla \| Ax -b \|^2 = 2A^T(Ax-b) \]
+        \[ \nabla x^TAx = (A + A^T)x \]
+        \[ (u + v)^T(u + v) 
+        = u^Tu + u^Tv + v^Tu + v^Tv 
+        = u^2 + 2u^Tv + v^2 \]
+        where $x, u, v \in \R^n$. \\
+        Another small remark is that $u^Tv = v^Tu$,
+        both being the dot product,
+        but neither is equal to $uv^T$,
+        or $vu^T$,
+        the outer product, which is a matrix.
+    \end{enumerate}
+    \endgroup
+
+    \newpage
+
+    \subsection*{Ex 3}
+
+    \begin{enumerate}[label=\alph*)]
+        \item 
+        Now, we have the random variable
+        \[ \sum_{i = 1}^{n} X_i \]
+        where 
+        \[ X_i \sim \normal(0, \Sigma_i) \]
+        The sum will follow a Guassian Distribution
+        with density function:
+        \[ f(x) = (2\pi)^{-\sfrac{d}{2}}
+        \det(\Sigma)^{\sfrac{1}{2}}
+        \exp\para{-\dfrac{1}{2}(x-\mu)^T
+        \Sigma\inv (x - \mu)} \]
+        where $\Sigma$ is the variance
+        and $\mu$ is the mean. \\
+        As we know, the mean $\mu$
+        is the expected value of the
+        random variable:
+        \[ \E\brac{\sum_{i = 1}^{n} X_i} \]
+        By the linearity of the expected value:
+        \[ \E\brac{\sum_{i = 1}^{n} X_i} =
+        \sum_{i = 1}^{n} \E(X_i) = 0 \]
+        since $\E(X_i) = 0$ for all $X_i$
+        (since $X_i \sim \normal(0, \Sigma_i)$). \\
+        As for the variance of the random
+        variable (or covariance matrix),
+        we know that since all $X_i$
+        are independent,
+        then 
+        \[ \var\para{\sum_{i=1}^{n}X_i} = 
+        \sum_{i=1}^{n} \var(X_i)
+        = \sum_{i=1}^{n} \Sigma_i \]
+        So the random variable follows
+        the distribution 
+        $\normal\para{0, \sum_{i=1}^{n} \Sigma_i}$,
+        which means its desnity function is:
+         \[ f(x) = (2\pi)^{-\sfrac{d}{2}}
+        \det\para{\sum_{i=1}^{n} \Sigma_i}^{\sfrac{1}{2}}
+        \exp\para{-\dfrac{1}{2}x^T
+        \para{\sum_{i=1}^{n} \Sigma_i}\inv x} \]
+        \item 
+        We know that for a random vector
+        in $\R^{2d}$
+        \[ X = \vecTwo{X_1}{X_2} \]
+        (where each of $X_1$ and $X_2$
+        are themselves vectors, though we
+        can treat them as block components),
+        the variance is just
+        the covariance matrix
+        containing the covariances of each
+        pair of entries in the vector
+        (if the entry itself is a vector
+        we can treat its covariance like 
+        a block element):
+        \[ \cov\para{\vecTwo{X_1}{X_2}}
+        = \matTwo{\var(X_1)}{\cov(X_1X_2)}
+        {\cov(X_2X_1)}{\var(X_2)} 
+        = \matTwo{\Sigma_1}{C}
+        {C^{T}}{\Sigma_2} = M \]
+        (Here $C$ is not a scalar,
+        but a matrix, since both $X_1$
+        and $X_2$ are random vectors,
+        so we need to transpose it when the order
+        changes). \\
+        As for the mean of this random variable,
+        it is just 
+        \[ \E\brac{ \vecTwo{X_1}{X_2}}
+        = \vecTwo{\E(X_1)}{\E(X_2)}
+        = \vecTwo{0}{0} \]
+        So the random variable follows the
+        distribution
+        \[ X \sim \normal(0, M) \]
+        which means that its density function is
+        \[ f(x) = (2\pi)^{-\sfrac{d}{2}}
+        \det(M)^{\sfrac{1}{2}}
+        \exp\para{-\dfrac{1}{2}x^T
+        M\inv x} \]
+    \end{enumerate}
+
+    \newpage
+
+    \subsection*{Ex 4}
+
+    \begin{enumerate}[label=\alph*)]
+        \item 
+        We have a function $f$:
+        \[ f:\R^n \to \R \]
+        \[ f(u) 
+        = \dfrac{1}{2}\sum_{i=1}^{n}(u_i - c_i)^2
+        + \dfrac{\mu}{2}\sum_{i=1}^{n-1}(u_{i+1} - u_i)^2
+        \]
+        defined for some $c \in \R^n$
+        and scalar $\mu \in \R^+$. \\
+        In order to write it using vector notation,
+        we not ethat the first sum is just
+        the 2-norm squared of $u - c$:
+        \[ \dfrac{1}{2}\sum_{i=1}^{n}(u_i - c_i)^2
+        = \dfrac{1}{2}\| u - c \|^2 \]
+        Moreover, the second term:
+        \[ \dfrac{\mu}{2}
+        \sum_{i=1}^{n-1}(u_{i+1} - u_i)^2 \]
+        is the sum of differences squared between
+        consecutive entries in $u$. \\
+        This can be thought of as the 2-norm squared
+        of an $(n-1)$-dimensional vector $w$
+        that encodes the difference of consecutive
+        entries in $u$:
+        \[ w = \begin{bmatrix}
+            u_2 - u_1 \\
+            u_3 - u_2 \\
+            \vdots \\
+            u_n - u_{n-1}
+        \end{bmatrix} \]
+        We know that given an $m \times n$
+        matrix $A$,
+        the result of matrix-vector
+        multiplication $Av$ is
+        an $m$-dimensional vector:
+        \[ Av = \begin{bmatrix}
+            A_{11}v_1 + A_{12}v_2 + \dots A_{1n}v_n \\
+            A_{21}v_1 + A_{22}v_2 + \dots A_{2n}v_n \\
+            \vdots \\
+            A_{m1}v_1 + A_{m2}v_2 + \dots A_{mn}v_n
+        \end{bmatrix} \]
+        Where each entry of the resulting
+        vector is the sum of all entries
+        in $v$ multiplied by some entry
+        in the matrix. \\
+        The vector $w$ of differences in $u$
+        can be rewritten as such:
+        \[ w = \begin{bmatrix}
+            (-1)u_1 + (1)u_2 + (0)u_3 + (0)u_4 
+            + \dots + (0)u_n \\
+            (0)u_1 + (-1)u_2 + (1)u_3 + (0)u_4 
+            + \dots + (0)u_n \\
+            \vdots \\
+            (0)u_1 + \dots + (0)u_{n-3} + (0)u_{n-2} 
+            + (-1)u_{n-1} + (1)u_n \\
+        \end{bmatrix} \]
+        where each entry in $w$ is the sum
+        of entries in $u$ multiplied by some scalar,
+        which can be encoded in a matrix $M$:
+        \[ w = Mu =
+        \begin{bmatrix}
+            -1 & 1 & 0 & \dots & 0 \\
+            0 & -1 & 1 & \dots & 0 \\
+            \vdots & 0 & \ddots & \ddots & 0\\
+            0 & 0 & \dots & -1 & 1 \\
+        \end{bmatrix}
+        \begin{bmatrix}
+           u_1 \\ u_2 \\ \vdots \\ u_n
+        \end{bmatrix} \]
+        So, the second term can be written as
+         \[ \dfrac{\mu}{2}
+        \sum_{i=1}^{n-1}(u_{i+1} - u_i)^2
+         = \dfrac{\mu}{2}\| Mu \|^2 \]
+        So to conclude:
+        \[ f(u) = \dfrac{1}{2}\| u - c \|^2
+        + \dfrac{\mu}{2}\| Mu \|^2  \]
+        is the vector notation of $f$. \\
+        \item
+        We know that the gradient of $f$ is 
+        the vector field:
+        \[ \nabla f = \para{\partialdd{f}{u_1},
+        \partialdd{f}{u_2}, \dots, \partialdd{f}{u_n}} \]
+        We can compute each term $\partial{f}{u_k}$
+        of that vector by differentiating $f$.
+        Only the terms containing $u_k$
+        have to be considered however:
+        \[ 
+            \partialdd{f}{u_k}
+            = \dfrac{1}{2}\partialdd{}{u_k}
+            (u_k - c_k)^2
+            - \dfrac{\mu}{2}\partialdd{}{u_k}
+            (u_{k+1} - u_k)^2
+            + \dfrac{\mu}{2}\partialdd{}{u_k}
+            (u_{k} - u_{k-1})^2
+        \]
+        \[ \partialdd{f}{u_k} = (u_k - c_k)
+        - \mu(u_{k+1} - u_k) + \mu(u_{k} - u_{k-1}) \]
+        Where the term $\mu(u_{k+1} - u_k)$
+        won't appear in the last entry of $\nabla f$,
+        and the term  $\mu(u_{k} - u_{k-1})$
+        won't appear in the first entry of $\nabla f$:
+        \[ \nabla f = \begin{bmatrix}
+        (u_1 - c_1) - \mu(u_{2} - u_1) \\
+        \vdots \\
+        (u_k - c_k) + \mu(2u_k - u_{k+1} - u_{k-1}) \\
+        \vdots \\
+        (u_n - c_n) + \mu(u_{n} - u_{n-1})
+        \end{bmatrix} \]
+        \item 
+        We want to rewrite $\nabla f$ using vector
+        notation. \\
+        We can start by writing:
+        \[ \nabla f = \begin{bmatrix}
+        (u_1 - c_1) \\
+        \vdots \\
+        (u_k - c_k) \\
+        \vdots \\
+        (u_n - c_n)
+        \end{bmatrix} + \begin{bmatrix}
+        \mu(u_1-u_{2}) \\
+        \vdots \\
+        \mu(2u_k - u_{k+1} - u_{k-1}) \\
+        \vdots \\
+        \mu(u_{n} - u_{n-1})
+        \end{bmatrix} \]
+        We rewrite the first term as the
+        difference of the two vectors $u$ and $c$:
+        \[\begin{bmatrix}
+            (u_1 - c_1) \\
+            \vdots \\
+            (u_k - c_k) \\
+            \vdots \\
+            (u_n - c_n)
+        \end{bmatrix}  = u - c \]
+        As for the second term,
+        notice that all we are doing is multiplying
+        terms in the vector $u$
+        by scalars:
+        \[ \begin{bmatrix}
+            \mu(u_1-u_{2}) \\
+            \vdots \\
+            \mu(2u_k - u_{k+1} - u_{k-1}) \\
+            \vdots \\
+            \mu(u_{n} - u_{n-1})
+        \end{bmatrix} 
+        = \mu \begin{bmatrix}
+            (1)u_1 + (-1)u_{2} + (0)u_3 + (0)u_4
+            + \dots + (0)u_n \\
+            \vdots \\
+            (0)u_1 + \dots + (-1)u_{k-1} + (2)u_k
+            + (-1)u_{k+1} + \dots + (0)u_n \\
+            \vdots \\
+            (0)u_1 + (0)u_{2} + \dots + 
+            (-1)u_{n-1} + (1)u_{n} \\
+        \end{bmatrix}  \]
+        We can encode these scalars in an
+        $n \times n$ matrix $N$ such that:
+        \[ \mu Nu = 
+        \mu \begin{bmatrix}
+            1 & -1 & 0 & 0 & \dots & 0 \\ 
+            -1 & 2 & -1 & 0 & \dots & 0 \\
+            0 & -1 & 2 & -1 & \ddots & 0 \\
+            \vdots & 0 & \ddots & \ddots & \ddots & 0 \\
+            \vdots & \vdots & \ddots & -1 & 2 & -1 \\
+            0 & 0 & \dots & 0 & -1 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            u_1 \\ u_2 \\ \vdots \\ u_n
+        \end{bmatrix} \]
+        To conclude,
+        we can write:
+        \[ \nabla f = u - c + \mu Nu \]
+        in vector notation.
+        \item 
+        In order to solve
+        \[ \nabla f = 0 \]
+        We must solve
+        \[  u - c + \mu Nu = 0 \]
+        \[  Iu + \mu Nu = c \]
+        \[  (\mu N + I)u = c \]
+        which is a linear system that can solved
+        for $u$:
+        \[ u =  (\mu N + I)\inv c \]
+        granted the inverse exists.
+        \item 
+        The matrix $\mu N + I$ must be invertible
+        for there to be a unique solution:
+        \[ \mu N + I = 
+        \begin{bmatrix}
+            \mu+1 & -\mu & 0 & 0 & \dots & 0 \\ 
+            -\mu & 2\mu + 1 & -\mu & 0 & \dots & 0 \\
+            0 & -\mu & 2\mu + 1 & -\mu & \ddots & 0 \\
+            \vdots & 0 & \ddots & \ddots & \ddots & 0 \\
+            \vdots & \vdots & \ddots & -\mu 
+            & 2\mu + 1 & -\mu \\
+            0 & 0 & \dots & 0 & -\mu & \mu + 1
+        \end{bmatrix}
+        \]
+    \end{enumerate}
+    
+    \begingroup
+    \color{red}
+    \subsection*{Correction}
+    \begin{enumerate}[label=\alph*)]
+        \item
+        
+        \item 
+
+        \item
+        The answer is correct,
+        but an easier way to find the gradient
+        is to just use vector and matrix differentials.
+        We already have $f$ in vector notation:
+        \[ f(u) = \dfrac{1}{2}\| u - c \|^2
+        + \dfrac{\mu}{2}\| Mu \|^2  \]
+        \[ \nabla f = \dfrac{1}{2}2(u-c)
+        + \dfrac{\mu}{2}2M^TMu  \]
+        \[ \nabla f = u-c + \mu M^TMu  \]
+        \item 
+
+        \item
+        We know that $M^TMu$
+        is positive semi-definite,
+        since clearly $x^T(M^TMu)x > 0$
+        (for reasons highlighted above). \\
+        Moreover, because $\mu > 0$,
+        then $\mu M^TMu + I$
+        is symmetric positive-definite,
+        which is invertible. \\
+        Positive-definite means
+        positive semi-definite with all
+        positive eigenvalues,
+        and if you add symmetry then we
+        guarantee it is invertible. \\
+    \end{enumerate}
+    \endgroup
+
+
+\end{document}
