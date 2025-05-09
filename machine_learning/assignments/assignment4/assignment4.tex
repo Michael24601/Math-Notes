@@ -1,0 +1,256 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Assignment IV
+}
+\date{2025-05-09}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Ex 1}
+
+The Leibniz Integral rule states that
+the integral:
+\[ \dd{}{z}
+\para{\integral{a(z)}{b(z)}{f(z, y)}{dy}} \]
+Evaluates to:
+\[ f(z, b(z))\dd{}{z}b(z) 
+- f(z, a(z))\dd{}{z}a(z)
++ \integral{a(z)}{b(z)}{\partialdd{}{z}
+f(z, y)}{dy} \]
+\begin{enumerate}[label = \alph*)]
+\item 
+We have the following expected absolute loss
+which is just a sum over the random variabe
+$Y$ (for a fixed $z$):
+\[ \E[|z - Y|] 
+= \integral{-\infty}{\infty}{|z - y|\Pb_Y}{(Y = dy)} \]
+Which we can rewrite using the density:
+\[ \integral{-\infty}{\infty}{|z - y|p_Y(y)}{(dy)} \]
+We want to minimize this risk (expected loss)
+by finding the minimizing value $\hat{z}$,
+which we can do by finding the $z$
+for which the derivative of the expected loss
+is $0$:
+\[ \dd{}{z}\para{\integral{-\infty}{\infty}
+{|z - y|p_Y(y)}{(dy)} } = 0 \]
+First note that:
+\[ |z-y| = \piecewise{(z-y) \IF z \geq y}
+{(y-z) \IF z \leq y} \]
+So we can divide the integral into two sections
+with $y \in (-\infty, z]$
+and then $y \in [z, \infty)$:
+\[ \integral{-\infty}{z}{(y - z)p_Y(y)}{(dy)}
++ \integral{z}{\infty}{(z - y)p_Y(y)}{(dy)} \]
+We can then derivate both using the Leibniz rule
+(note that $\pm\infty$ is a constant
+and its derivative with respect to $z$ is just 0).
+The first two terms in the Leibniz rule
+are $0$ for both integrals
+since they either have $|z-z|$
+or are multiplied by the derivative of a constant:
+\[ \dd{}{z}\para{
+\integral{-\infty}{z}{(z - y)p_Y(y)}{(dy)}}
+= \integral{-\infty}{z}{\partialdd{}{z}
+((z - y)p_Y(y))}{dy}
+= \integral{-\infty}{z}{p_Y(y)}{dy} \]
+\[ \dd{}{z}\para{
+\integral{z}{\infty}{(y - z)p_Y(y)}{(dy)}}
+= \integral{z}{\infty}{\partialdd{}{z}
+((y - z)p_Y(y))}{dy}
+= -\integral{z}{\infty}{p_Y(y)}{dy} \]
+So:
+\[ \dd{}{z}\para{\integral{-\infty}{\infty}
+{|z - y|p_Y(y)}{(dy)} } = 
+\integral{-\infty}{z}{p_Y(y)}{dy}
+-\integral{z}{\infty}{p_Y(y)}{dy}\]
+Note that the integral of the density of $Y$
+over some interval is just the probability
+that $Y$ falls in that interval, so:
+\[ \dd{}{z}\para{\integral{-\infty}{\infty}
+{|z - y|p_Y(y)}{(dy)} } = 
+\Pb(Y \leq z) - \Pb(Y \geq z) \]
+Now, setting the derivative to $0$,
+we get:
+\[ \Pb(Y \leq z) - \Pb(Y \geq z) = 0 \]
+\[ \Pb(Y \leq z) = \Pb(Y \geq z) \]
+And since:
+\[ \Pb(Y \leq z) + \Pb(Y \geq z) = 1 \]
+That means that:
+\[ \Pb(Y \leq z) = \Pb(Y \geq z) = \dfrac{1}{2} \]
+So the value $\hat{z}$
+at which the expected total loss is minimized
+is just the point $z$
+at which the probability that $Y$
+is larger or smaller than $z$ is equal to half,
+which makes $\hat{z}$ the median $m$.
+\item
+We want to find Baye's optimal predictor
+for a fixed $X = x$,
+which we can do by finding the value $z = m(x)$
+such that the conditional risk 
+(expected loss knowing $X = x$) is minimized:
+\[ \E[|z - Y|] 
+= \integral{-\infty}{\infty}
+{|z - y|\Pb_{Y \mid X = x}}{(dy)} \]
+Which we can rewrite using the density:
+\[ \integral{-\infty}{\infty}
+{|z - y|p_{Y | X = x}(y)}{(dy)} \]
+Note that because $X = x$ is fixed,
+this doesn't really change anything;
+we still have an integral over $Y$,
+and we are trying to find the value of $z$
+that minimizes this expected absolute loss. \\
+The only difference is that now it
+is a function of whatever fixed $x$
+we choose. \\
+We can repeat the result but with the
+density given $X = x$:
+\[ \dd{}{z}\para{\integral{-\infty}{\infty}
+{|z - y|p_{Y | X = x}(y)}{(dy)} } = 
+\Pb(Y \leq z \mid X = x) - \Pb(Y \geq z \mid X = x) \]
+Setting the derivative to $0$ tell us that:
+\[ \Pb(Y \leq z \mid X = x) 
+- \Pb(Y \geq z \mid X = x) = 0 \]
+\[ \Pb(Y \leq z \mid X = x) 
+= \Pb(Y \geq z \mid X = x) \]
+And since:
+\[ \Pb(Y \leq z \mid X = x) 
++ \Pb(Y \geq z \mid X = x) = 1 \]
+This means that:
+\[ \Pb(Y \leq z \mid X = x) 
+= \Pb(Y \geq z \mid X = x) = \dfrac{1}{2} \]
+Which again means that $\hat{z}$
+is the median $m(x)$, but this times
+depends on whatever $x$ we are given. \\
+\end{enumerate}
+
+\newpage
+
+\subsection*{Ex 2}
+
+Proving that a loss function $\Phi$
+is classification calibrated
+just means we have to show that $\Phi'(0)$
+exists and that $\Phi'(0) < 0$. \\
+\begin{enumerate}[label = \alph*)]
+    \item 
+    First we have the hinge loss
+    $\Phi_{\text{hinge}}(z) = \max(0, 1-z)$,
+    which we can write as:
+    \[ \Phi_{\text{hinge}}(z) = 
+    \piecewise{1-z \IF z < 1}
+    {0 \IF \quad \; z \geq 1} \]
+    The only point at which the function
+    id not differentiable (smooth) is $z = 1$. \\
+    At $z = 0$, we have 
+    $\Phi_{\text{hinge}}(z) = 1-z$,
+    which means that:
+    \[ \Phi_{\text{hinge}}'(z) = (1-z)' = -1 \]
+    So $\Phi_{\text{hinge}}'(0)$ 
+    exists and is smaller than $0$.
+    \item 
+    We now have the exponential loss
+    $\Phi_{\text{exp}}(z) = e^{-z}$,
+    which is differentiable for all $z \in \R$. \\
+    We can calculate the derivative:
+    \[ \Phi_{\text{exp}}'(z) = (e^{-z})' = -e^{-z} \]
+    Which means that:
+    \[ \Phi_{\text{exp}}'(0) = -e^{0} = -1 \]
+    So $\Phi_{\text{exp}}'(0)$
+    exists and is smaller than $0$.
+    \item 
+    We now have the squared loss
+    $\Phi_{\text{quad}}(z) = (1-z)^2$,
+    which is differentiable for all $z \in \R$. \\
+    We can calculate the derivative:
+    \[ \Phi_{\text{quad}}'(z) = ((1-z)^2)' = 2z -2 \]
+    Which means that:
+    \[ \Phi_{\text{quad}}'(0) = 0 -2 = -2 \]
+    So $\Phi_{\text{quad}}'(0)$
+    exists and is smaller than $0$. \\
+\end{enumerate}
+
+\newpage
+
+\subsection*{Ex 3}
+
+We have a training dataset $\dcal$ 
+with $n$ points:
+\[ \dcal = \{(x_i, y_i) \mid 
+x_i, y_i \in \R \}_{i = 1, \dots n} \]
+and a hypothesis class:
+\[ \hcal = \{ h_{w}(x) = wx \mid w \in \R \} \]
+Which is just the class of all line
+functions passing through the origin
+(the slope can be any $w \in \R$,
+and the $y$-intercept is equal to $0$). \\
+We also use the squared loss function:
+\[ \ell(h_w(x_i), y_i) = (h_w(x_i) - y_i)^2 \]
+We know that the empirical risk
+is the mean of the dataset,
+which we can write as:
+\[ \hat{\rscr}_\ell^n(h_w)
+= \dfrac{1}{n}\sum_{i = 1}^{n}(wx_i - y_i)^2 \]
+\begin{enumerate}[label = \alph*)]
+\item 
+We want to find the value $w* \in \R$
+that minimizes $\hat{\rscr}_\ell^n(h_w)$,
+which would in turn give us the
+empirical risk minimizer $h_w^* = h_{w^*}$
+in the hypothesis class $\hcal$. \\
+We can do it by just differentiating
+with respect to $which$ and setting the derivative
+equal to $w$,
+then solving for $w$:
+\[ \dd{}{w}\hat{\rscr}_\ell^n(h_w)
+= \dd{}{w}\para{\dfrac{1}{n}\sum_{i = 1}^{n}
+(wx_i - y_i)^2} 
+= \dfrac{2}{n}\sum_{i = 1}^{n}x_i(wx_i - y_i) \]
+Setting it equal to $0$, we get:
+\[ \dfrac{2}{n}\sum_{i = 1}^{n}x_i(wx_i - y_i) = 0 \]
+\[ \dfrac{2w}{n}\sum_{i = 1}^{n}x_i^2 
+= \dfrac{2}{n}\sum_{i = 1}^{n} x_iy_i \]
+\[ w = \dfrac{\sum_{i = 1}^{n}x_iy_i}
+{\sum_{i = 1}^{n} x_i^2} \]
+Which is the optimal slope $w^*$.
+\item
+We now have the dataset:
+\[ \dcal = \{ (1, 2), (2, 3), (3, 5)\} \]
+We can compute the optimal weight or slope $w^*$
+for $\dcal$:
+\[ w^* = \dfrac{\sum_{i = 1}^{n}x_iy_i}
+{\sum_{i = 1}^{n} x_i^2}
+= \dfrac{2 + 6 + 15}
+{1 + 4 + 9} = \dfrac{23}{14} \sim 1.64 \]
+We can then use this optimal weight $w^*$
+in the classifier $h_{w^*}$
+to get the empirical risk minimizer $h_w^*$. \\
+We can test its performance on the training
+data:
+\[ \text{For } (x_i, y_i) = (1, 2) \qquad
+h_{1.64}(1) = 1 \cdot 1.64 = 1.64 \sim 2 \]
+\[ \text{For } (x_i, y_i) = (2, 3) \qquad
+h_{1.64}(2) = 2 \cdot 1.64 = 3.28  \sim 3 \]
+\[ \text{For } (x_i, y_i) = (3, 5) \qquad
+h_{1.64}(3) = 3 \cdot 1.64 = 4.92  \sim 3 \]
+It did an ok job.
+\item
+
+\end{enumerate}
+
+
+\end{document}
