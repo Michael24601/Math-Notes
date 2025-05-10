@@ -249,7 +249,18 @@ h_{1.64}(2) = 2 \cdot 1.64 = 3.28  \sim 3 \]
 h_{1.64}(3) = 3 \cdot 1.64 = 4.92  \sim 3 \]
 It did an ok job.
 \item
-
+We now want to calculate the empirical
+risk for $h_{2}$,
+that is, for the function weight weight 
+$\tilde{w} = 2$:
+\[ \hat{\rscr}_\ell^n(h_2)
+= \dfrac{1}{n}\sum_{i = 1}^{n}(2x_i - y_i)^2 \]
+We will do this for the dataset $\dcal$:
+\[ \hat{\rscr}_\ell^3(h_2)
+= (2-2)^2 + (4-3)^2 + (6-5)^2 = 2 \]
+The empirical risk is rather low,
+though likely not as low as that of $w* = 1.64$,
+the optimal weight. \\
 \end{enumerate}
 
 

@@ -1,44 +1,8 @@
 
-
 \documentclass[12pt]{article}
-
 \usepackage[margin=1in]{geometry}
 
-% For using float option H that places figures exatcly where we want them
-\usepackage{float}
-% makes figure font bold
-\usepackage{caption}
-\captionsetup[figure]{labelfont=bf}
-% For text generation
-\usepackage{lipsum}
-% For drawing
-\usepackage{tikz}
-% For smaller or equal sign and not divide sign
-\usepackage{amssymb}
-% For the diagonal fraction
-\usepackage{xfrac}
-% For enumerating exercise parts with letters instead of numbers
-\usepackage{enumitem}
-% For dfrac, which forces the fraction to be in display mode (large) e
-% even in math mode (small)
-\usepackage{amsmath}
-% For degree sign
-\usepackage{gensymb}
-% For "\mathbb" macro
-\usepackage{amsfonts}
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\Q}{\mathbb{Q}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\C}{\mathbb{C}}
-
-% overline short italic
-\newcommand{\olsi}[1]{\,\overline{{#1}}}
-
-\usepackage{indentfirst}
-\usetikzlibrary{shapes,positioning,fit,calc}
-
-\usepackage{changepage} % for adjustwidth environment
+\input{../../../../../variables.tex}
 
 \title{%
     \Huge Abstract Algebra \\
@@ -54,7 +18,8 @@
 \begin{document}
     \pagenumbering{gobble}
     \maketitle
-    \newpage
+    \newpage    
+    \setlength{\parindent}{0pt}
     \pagenumbering{arabic}
 
     For a fixed positive integer $n$,

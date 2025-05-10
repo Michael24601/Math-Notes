@@ -1,55 +1,9 @@
 
 \documentclass[12pt]{article}
-
 \usepackage[margin=1in]{geometry}
 
-% For vertical brace rcases
-\usepackage{mathtools}
-% For positioning figures
-\usepackage{float}
-% makes figure font bold
-\usepackage{caption}
-\captionsetup[figure]{labelfont=bf}
-% For text generation
-\usepackage{lipsum}
-% For drawing
-\usepackage{tikz}
-% For manipulating coordinates
-\usetikzlibrary{calc}
-% For smaller or equal sign and not divide sign
-\usepackage{amssymb}
-% For the diagonal fraction
-\usepackage{xfrac}
-% For enumerating exercise parts with letters instead of numbers
-\usepackage{enumitem}
-% For dfrac, which forces the fraction to be in display mode (large) e
-% even in math mode (small)
-\usepackage{amsmath}
-% For degree sign
-\usepackage{gensymb}
-% For "\mathbb" macro
-\usepackage{amsfonts}
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\Q}{\mathbb{Q}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\C}{\mathbb{C}}
-\newcommand{\F}{\mathbb{F}}
-\newcommand{\rad}{\text{ rad}}
-\newcommand{\lcm}{\text{lcm}}
-\newcommand{\Aut}{\text{Aut}}
-\newcommand{\seq}{\leqslant}
-\newcommand{\beq}{\geqslant}
-\newcommand{\sub}{\subseteq}
-\newcommand{\prosub}{\subset}
-
-\newcommand{\Ocal}{\mathcal{O}}
-\newcommand{\Ccal}{\mathcal{C}}
-\newcommand{\Pcal}{\mathcal{P}}
-\newcommand{\Scal}{\mathcal{S}}
-
-% overline short italic
-\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+\input{../../../../../variables.tex}
+    \setlength{\parindent}{0pt}
 
 \title{%
     \Huge Abstract Algebra \\
@@ -66,8 +20,8 @@
     \pagenumbering{gobble}
     \maketitle
     \newpage
+    \setlength{\parindent}{0pt}
     \pagenumbering{arabic}
-
 
     \section*{Exercise 1}
     Proof that if $H \seq G$, then $\langle H \rangle = H$: \\
@@ -841,41 +795,41 @@
     \section*{Exercise 17 $***$}
     Let $G$ be a finitely generated group
     where $G = \langle g_1, g_2 \dots g_n \rangle$,
-    and let $\Scal$ be the set of all proper subgroups of $G$
+    and let $\scal$ be the set of all proper subgroups of $G$
     (all by $G$ itself).
-    Then $\Scal$ is partially ordered by inclusion
+    Then $\scal$ is partially ordered by inclusion
     (we can create several chains $H_1 \seq H_2 \seq \dots \seq H_k$
-    in $\Scal$, but not necessarily a chain that includes all subgroups).
-    Let $\Ccal$ be such a chain in $\Scal$.
+    in $\scal$, but not necessarily a chain that includes all subgroups).
+    Let $\ccal$ be such a chain in $\scal$.
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item
-            Proof that the union $H$ of all subgroups in $\Ccal$,
+            Proof that the union $H$ of all subgroups in $\ccal$,
             is a subgroup of $G$: \\
-            We already know that $H_1, H_2 \dots H_k \in \Ccal$
+            We already know that $H_1, H_2 \dots H_k \in \ccal$
             are subgroups of $G$.
             We also know that they are ordered by inclusion
-            since $\Ccal$ is a chain.
+            since $\ccal$ is a chain.
             So $H_1, H_2 \dots H_{k-1} \seq H_k$.
             So $H_1, H_2 \dots H_{k-1} \sub H_k$,
             which trivially means that
             \[ H = \bigcup_{i = 1}^k H_i = H_k \]
             So $H = H_k \seq G$. 
         \item
-            Proof that the union $H$ of all subgroups in $\Ccal$,
+            Proof that the union $H$ of all subgroups in $\ccal$,
             is a proper subgroup of $G$: \\
             We already showed that 
             \[ H = \bigcup_{i = 1}^k H_i = H_k \]
-            Since $H \in \Ccal$, $H \in \Scal$,
-            so $H_k$ is a proper subgroup by $\Scal$'s definition,
+            Since $H \in \ccal$, $H \in \scal$,
+            so $H_k$ is a proper subgroup by $\scal$'s definition,
             which means that $H < G$.
         \item
             \textit{Zorn's Lemma} states that a partially ordered
             set made up of ordered subsets must have a maximal element.
             Proof that $G$ has a maximal subgroup: \\
-            We know $\Scal$ is partially ordered,
+            We know $\scal$ is partially ordered,
             and that it is made up of chains of ordered elements.
-            So $\Scal$ has a maximal element 
-            of which every other proper subgroup in $\Scal$
+            So $\scal$ has a maximal element 
+            of which every other proper subgroup in $\scal$
             is a subgroup.
             By definition, this makes it a maximal subgroup.
             So any finitely generated group $G$ has a maximal subgroup.

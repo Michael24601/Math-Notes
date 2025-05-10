@@ -32,6 +32,14 @@
 \usepackage{bbm}
 % for mathsrc
 \usepackage[mathscr]{eucal}
+% For degree sign
+\usepackage{gensymb}
+% For quotes
+\usepackage{csquotes}
+% For vertical lines
+\usepackage{mathtools}
+% For cols
+\usepackage{multicol}
 
 % for tikz
 \usepackage{pgfplots}
@@ -42,8 +50,16 @@
 % overline short italic
 \newcommand{\olsi}[1]{\,\overline{\!{#1}}}
 
-\newcommand*{\perm}[2]{{}^{#1}\!P_{#2}}
-\newcommand*{\comb}[2]{{}^{#1}C_{#2}}
+\newcommand{\perm}[2]{{}^{#1}\!P_{#2}}
+\newcommand{\comb}[2]{{}^{#1}C_{#2}}
+\newcommand{\rad}{\text{ rad}}
+\newcommand{\lcm}{\text{lcm}}
+\newcommand{\Aut}{\text{Aut}}
+\newcommand{\seq}{\leqslant}
+\newcommand{\beq}{\geqslant}
+\newcommand{\sub}{\subseteq}
+\newcommand{\prosub}{\subset}
+\newcommand{\orbit}{\mathcal{O}}
 
 \newcommand{\binomial}[2]{%
   \ifnum#2=0
@@ -96,6 +112,7 @@
 \newcommand{\rcal}{\mathcal{R}}
 \newcommand{\dcal}{\mathcal{D}}
 \newcommand{\hcal}{\mathcal{H}}
+\newcommand{\ccal}{\mathcal{C}}
 
 % Others
 \newcommand{\zfrak}{\mathfrak{Z}}
@@ -187,6 +204,9 @@
 
 % Inverse exponent
 \newcommand{\inv}[0]{^{-1}}
+
+\newcommand{\laplace}[1]{\mathcal{L}\left\{#1\right\}}
+\newcommand{\invlaplace}[1]{\mathcal{L}^{-1}\left\{#1\right\}}
 
 
 % 3D vector

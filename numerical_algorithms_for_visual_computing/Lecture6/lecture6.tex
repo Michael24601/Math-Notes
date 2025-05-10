@@ -19,6 +19,191 @@
 \setlength{\parindent}{0pt}
 \pagenumbering{arabic}
 
+\subsection*{Orthogonal Groups
+Lie Algabra}
+
+As we know, the general linear group:
+\[ GL_n(\F) \]
+is the group made up of invertible
+matrices in $\R^{n \times n}$. \\
+The orthogonal group $O(n)$
+and the special orthogonal group $SO(n)$
+are both subgroups of the general linear
+group when the field is that of the reals
+$GL_n(\R)$ . \\
+
+As we mentioned earlier,
+the orthogonal group $O(n)$
+is the group of orthogonal matrices:
+\[ O(n) = \{ M \mid M \in \R^{n \times n}
+\text{ and } MM^t = M^TM = I \} \]
+Each orthogonal group has a
+subgroup called the special
+orthogonal group, which only contains
+rotations (orthogonal matrices with
+determinant $1$):
+\[ SO(n) = \{ M \mid MM^t = M^TM = I
+\text{ and } \det(M) = 1 \} \]
+All orthogonal matrices have
+a determinant with absolute value
+equal to $1$,
+but reflections have a determinant
+of $-1$. \\
+
+We also mentioned that the Lie Algebra
+of a Lie (smooth) group is just the tangent
+space at the identity element. \\
+
+Note that the Lie Algebra of the orthiogonal
+and special orthogonal groups of size $n$
+are actually the same. \\
+
+First, to find the Lie Algebra of $SO(n)$. \\
+First we define some curve:
+\[ \gamma: \R \to SO(n) \]
+Which takes as input a parameter $t$,
+and outputs rotations in $SO(n)$.
+Note that we should have $\gamma(0) = t$,
+and that $\gamma$ should be continuous
+and differentiable. Alos note that:
+\[ \gamma(t)^T\gamma(t) = I_n \]
+Is the constraint that defines the
+special orthogonal group
+(we also need the determinant constraint,
+which we will discuss later). \\
+
+Now, earlier, when trying to find the
+tangent space, we had a parametric
+equation $f(t)$ that takes in parameters
+and maps to points on the manifold. \\
+However, $SO(n)$ is defined implicitely,
+using a constraint: $f(t) = c$. \\
+In the case of an implicit function,
+we differentiate the constraint itself
+rather than the function $\gamma$:
+\[ \dd{}{t}\gamma(t)^T\gamma(t) = \dd{}{t}I_n \]
+\[ (\gamma(t)^T)'\gamma(t)
++ \gamma(t)^T\gamma'(t) = 0 \]
+Now recall that we want the tangent space
+evaluated at the identity $I_n$,
+mneaning that $t = 0$:
+\[ (\gamma(0)^T)'\gamma(0)
++ \gamma(0)^T\gamma'(0) = 0  \]
+\[ (\gamma(0)^T)' + \gamma'(0) = 0  \]
+\[ (\gamma(0)^T)' - \gamma'(0)  \]
+We now have a constraint for the Lie Algebra:
+\[ (\gamma(0)^T)' = -\gamma'(0)  \]
+The Lie Algebra is the set of skew-symmetric
+matrices $M^T = -M$:
+\[ so(n) = \{M \mid M \in \R^{n \times n}
+\text{ and } M^T = -M \} \]
+Notice that this is an implict definition
+of the tangent space or Lie Algebra. \\
+
+But what about the second constraint $\det(M) = 1$. \\
+This constraint is actually redundant,
+that means that if we differentiate this constraint,
+it won't add any information or restrict the Lie
+Algebra further. \\
+
+You can add an explanation here. \\
+
+What this implies is that the Lie Algebra
+of $O(n)$ and $SO(n)$ are the same:
+\[ so(n) = o(n) \]
+Since the constraint $\det(M) = 1$
+doesn't add anything. \\
+
+We talked about interpolating
+rotations in $\R^2$ earlier.
+Given two rotations $R_0$ and $R_1$,
+and some $t \in [0, 1]$:
+\[ R(t,R_0,R_1) = 
+e^{{R_0t\ln\para{{R_1}{R_0}\inv}}} \]
+Recall that in order to get this,
+we had to first go to the Lie Algebra
+(go to the angles $\theta_0$ and $\theta_1$),
+interpolate them,
+then go back to the special orthogonal group. \\
+We also did the same for complex numbers
+that represent rotations. \\
+
+Can we do the same for the Orthogonal
+group elements? Interpolate between two of them?
+The answer is that we can't in general. \\
+
+Think about it this way;
+if we have two elements $R_0$ and $R_1$
+such that both have a positive determinant,
+then they are just two rotations,
+and interpolating from one rotation to the other
+is simple enough. \\
+If both have negative determinants,
+then both are also rotations,
+but in the reflected space,
+so we can interpolate between the two. \\
+But if $R_0$ and $R_1$ have opposite determinant,
+one is in the reflected space,
+and the other is not, so it is impossible
+to find a smooth path between the two
+(we would need to relect at some point,
+which we can't do smoothly). \\
+
+Analytically,
+the reason why we can't do it is because
+in the interpolation formula:
+\[ R(t,R_0,R_1) = 
+e^{{R_0t\ln\para{{R_1}{R_0}\inv}}} \]
+We have ${R_1}{R_0}\inv$.
+If the two matrices $R_0$ and $R_1$ have opposite
+signs, then the determinant of ${R_1}{R_0}\inv$
+is negative. \\
+The logarithm is not defined for matrices
+with negative determinants. \\
+
+\newpage
+
+\subsection*{Matrix Exponential}
+
+We have already taken the exponential of some
+specific matrices with desirable properties. 
+But what if we have a general matrix? \\
+
+First note that by the Maclauarin Series
+of the exponential:
+\[ e^{M} = \sum_i^\infty \dfrac{M^i}{i!} \]
+So we just need a way to find $M^i$. \\
+
+Notice that if $M$ is diagonizable,
+we can write its eigendecomposition as such:
+\[ M = P\Sigma P^{-1} \]
+Where $P$ is the eigenspace of $M$
+(matrix with eigenvector columns)
+and $\Sigma$ is a diagonal matrix
+with the eigenvalues $\lambda_i$
+on the diagonal. \\
+
+Now, to find $M^i$, note that:
+\[ M^i = (P\Sigma P^{-1})^i \]
+\[ M^i = (P\Sigma P^{-1})(P\Sigma P^{-1})\dots
+(P\Sigma P^{-1})\]
+\[ M^i = P\Sigma (P^{-1}P)\Sigma (P^{-1}P) \dots
+(P^{-1}P)\Sigma P^{-1} = P\Sigma^i P\inv \]
+Also notice that since $\Sigma$
+is diagonal, taking its power just means
+taking the power of the scalars on its main
+diagonal. \\
+
+We can thus conclude that:
+\[ e^{M} = \sum_i^\infty \dfrac{M^i}{i!} 
+= \sum_i^\infty \dfrac{(P\Sigma P\inv)^i}{i!}
+= P\sum_i^\infty \para{\dfrac{(\Sigma)^i}{i!}} P\inv
+= Pe^{\Sigma}P\inv \]
+And this is how we can find the exponential
+of any diagonizable matrix. \\
+
+\newpage
+
 \subsection*{Rotation Around Axis}
 
 First note that if a matrix has the property:
@@ -83,51 +268,55 @@ So how to write an explicit logarithm?
 Last time, with a normal rotation matrix,
 it was easy to extract $J\theta$,
 since $J$ was always the same. \\
+Now, we want to extract $\theta[a]_x$
+in some other way. \\
 
-In this case, we would need to first do:
+We would need to first do:
 \[ \dfrac{R - R^T}{2} = \sin(\theta)[a]_\times \]
+This gets us a skew symmetric matrix $Q$
+with $\sin(\theta)$ multiplying the entries.
+Now notice that we have:
+\[ Q = \sin(\theta)[a]_\times
+= \matThree{0}{-\sin(\theta)a_z}
+{\sin(\theta)a_y}{\sin(\theta)a_z}{0}
+{-\sin(\theta)a_x}{-\sin(\theta)a_y}
+{\sin(\theta)a_x}{0}\]
+Now, we can extract $\sin(\theta)$
+by just taking:
+\[ Q_{12}^2 + Q_{13}^2 + Q_{23}^2
+= (a_x^2 + a_y^2 + a_z^2)\sin^2(\theta) \]
+We know that
+\[(a_x^2 + a_y^2 + a_z^2) = 1\]
+Since it is the length squared of $a$,
+which we assumed had length $1$. \\
+So now we have:
+\[ |\sin(\theta)| 
+= \sqrt{Q_{12}^2 + Q_{13}^2 + Q_{23}^2} \]
+Which gets us $\theta$ for the logarithm. \\
 
-We can then do more (divide by $\sin$)
-to access the matrix. \\
+We still need $[a]_x$ however. \\
+Now that we have $|\sin(\theta)|$,
+we can divide $Q = \sin(\theta)[a]_x$
+by it. \\
+This works except when $\sin(\theta) = 0$. \\
 
-We can also interpolate in the same way. \\
-Note that we don't just interpolate around
-the angle, we have to use the interpolation
-formula, since the two rotations we are
+We can also interpolate axis rotations
+in the same way as before:
+\[ R(t,R_0,R_1) = 
+e^{{R_0t\ln\para{{R_1}{R_0}\inv}}}
+= e^{{R_0t\ln\para{{R_1}{R_0}^T}}} \]
+Note that the two rotations $R_0$
+and $R_1$ we are
 interpolating between may be around different
-axis. \\
+axis, so this is a bit more complex than the $\R^2$
+rotation, where we just interpolated
+the angles. \\
 
-Interpolation gives the fastest path
-between two rotations. \\
-
-The logarithm maps to the Lie Algebra from the
-Group.
-
-\newpage
-
-\subsection*{Lie Algebra of the Special
-Orthogonal Group}
-
-As we know, the general linear group:
-\[ GL_n(\F) \]
-is the group made up of invertible
-matrices in $\R^{n \times n}$. \\
-
-Formula about Lie Algebra of $SO(n)$.
-
-Note on eigendecomposition and how it helps
-take exponent to find Lie Algebra. \\
-
-Note on the Lie Algebra $so(n)$,
-and what it is. \\
-
-Note on interpolation in $O(n)$,
-and how it only works if the two
-transformations $R$ have the same determinant
-sign (no reflection between the two),
-can't go smoothly \\
-Logarithm of matrix won't work for
-a negative determinant. \\
+Note that any rotation in $\R^3$
+using Euler angles
+$R(\alpha, \beta, \gamma)$
+can be expressed as a single rotation
+$R(\theta)$ around some axis $a$. \\
 
 \newpage
 
@@ -137,17 +326,245 @@ Quaternions are like complex numbers:
 \[ q = q_0 + iq_1 + jq_2 + kq_3 \]
 Where $i$, $j$ and $k$ are imaginary.
 
-We have anti-sommutativity:
-\[ ij = -ji \]
+We have:
+\[ ij = k \qquad ki = j \qquad jk = i \]
+And we also have:
+\[ i^2 = j^2 = k^2 = -1 \]
+As they are all imaginary. \\
+
+This tells us that they are anti-commutative:
+\[ ij = -ji \qquad ki = -ik \qquad jk = -kj \]
 Meaning flipping the order flips the sign. \\
 
-We also defined the quaternion inverse which
-is the same as the complex number inverse.
+We can multiply quaternions as such:
+\[ qp = (q_0 + iq_1 + jq_2 + kq_3)
+(p_0 + ip_1 + jp_2 + kp_3) \]
+\[ qp = (q_0p_0 - q_1p_1 - q_2p_2 - q_3p_3) 
++ (q_1p_0 + q_0p_1 - q_3p_2 + q_2p_3)i \]
+\[ + (q_2p_0 + q_3p_1 + q_0p_2 - q_1p_3)j 
++ (q_3p_0 - q_2p_1 + q_1p_2 + q_0p_3)k \]
+Note that this is non-commutative. \\
 
-We then use the taylor series on:
-\[ e^{\theta(u_xi + u_yj + u_zk)} \]
-To get a 3D rotation.
+We can also define the complement of a quaternion:
+\[ \olsi{q} = q_0 - iq_1 - jq_2 - kq_3 \]
+Such that:
+\[ \sqrt{q\olsi{q}} 
+= \sqrt{q_0^2 + q_1^2 + q_2^2 + q_3^2} = |q| \]
+is the length of the quaternion. \\
 
-We also do interpolation.
+We can also define the quaternion inverse $q\inv$
+such that:
+\[ qq\inv = q\inv q = 1 \]
+That means that:
+\[ q\inv = \dfrac{1}{q}
+= \dfrac{\olsi{q}}{q\olsi{q}}
+= \dfrac{\olsi{q}}{|q|^2} \]
+is the inverse. \\
+
+Any quaternion of length $1$ can be used
+to represent a rotation in $\R^3$,
+just as complex numbers of length $1$
+could be used to represent any 
+rotation in $\R^2$. \\
+In particular, quaternions are used
+to represent a rotation around an axis in $\R^3$.
+However, since any rotation matrix in $\R^3$
+can be represented as a single rotation
+around some axis,
+this means that quaternions can be used
+to represent any rotation in $\R^3$. \\
+
+So, to elaborate on that point,
+a quaternion that represents a rotation
+by angle $\theta$
+around an axis $u$ where $\|u\| = 1$
+(we always assume length of the axis is $1$)
+can we written as:
+\[ q(\theta) = \cos \para{\dfrac{\theta}{2}}
++ \sin \para{\dfrac{\theta}{2}}
+((u_x)i + (u_y)j + (u_z)k) \]
+(If it had length not equal to $1$,
+we would have multiplied the formula by $|q|$). \\
+We can sort of see parallels
+betwene this and the complex number
+formula in terms of $\cos$ and $\sin$,
+where $\sin$ was the imaginary part and
+$\cos$ was the real part. \\
+
+Then, in order to rotate $v$
+by around the axis $u$,
+we would need to perform the following
+operation:
+\[ qp\olsi{q} \]
+Where
+\[ p = (v_x)i + (v_y)j + (v_z)k \]
+is the quaternion used to represent
+the vector $v$. \\
+
+In fact, in order to derive the
+formula for the rotation quaternion,
+we can do exactly what we did for complex numbers:
+\[ \dd{v}{\theta} = \dfrac{\theta}{2}
+((u_x)i + (u_y)j + (u_z)k) \]
+We solve this ODE. \\
+Here:
+\[ \dfrac{\theta}{2}
+((u_x)i + (u_y)j + (u_z)k) \]
+is the quaternion analogue to $u \times v$,
+which we had when we were doing axis angles. \\
+It is unclear to me why this is the analogue. \\
+
+The solution will be:
+\[ e^{\sfrac{\theta}{2}((u_x)i + (u_y)j + (u_z)k)} \]
+where $(u_x)i + (u_y)j + (u_z)k$
+is the imaginary part of the quaternion.
+Using the Maclaurin series,
+we get that:
+\[ e^{\sfrac{\theta}{2}((u_x)i + (u_y)j + (u_z)k)}
+= \sum_{i = 1}^{\infty}
+\dfrac{(\sfrac{\theta}{2}
+((u_x)i + (u_y)j + (u_z)k))^i}{i!} \]
+Notice that $((u_x)i + (u_y)j + (u_z)k)^2 = -1$,
+since we assumed that $\|u\| = 1$. \\
+So there is going to be a cycle,
+the exact same as with $i$ (since $i^2 = 1$),
+so we get:
+\[ e^{\sfrac{\theta}{2}((u_x)i + (u_y)j + (u_z)k)}
+=  \cos \para{\dfrac{\theta}{2}}
++ \sin \para{\dfrac{\theta}{2}}
+((u_x)i + (u_y)j + (u_z)k) \]
+Which is what we said it would be earlier. \\
+
+We can also interpolate between quaternions:
+\[ q(t) = 
+e^{{q_0t\ln\para{{q_1}{q_0}\inv}}} \]
+This can be equivalently written as:
+\[ q(t) = \frac{\sin((1 - t)\alpha)}{\sin \alpha} 
+q_0 + \frac{\sin(t\alpha)}{\sin \alpha} q_1 \]
+Where $\alpha$ is the angle between $q_0$
+and $q_1$. \\
+
+It's actually more expensive to apply
+quaternion rotations than matrix ones. \\
+
+We can define the Lie group of quaternion
+rotation as:
+\[ S^3 = \{ q \in \mathbb{H} \cong \R^4
+\mid |q| = 1 \} \]
+Where each element is a quaternion of
+length $1$. \\
+
+There is no isomorphism
+between $S^3$ and $SO(3)$ however. \\
+Think about it this way,
+if we rotate $v$ around $u$ by $\theta$,
+or rotate $v$ around $-u$ by $-\theta$,
+both would be the same rotation in $SO(3)$,
+but would be represented by seperate
+quaternions in $S^3$. \\
+Instead, we have a double cover of $SO(3)$;
+basically two elements from $S^3$
+map to each element of $SO(3)$.
+We can think of them as like two seperate
+isomorphisms. \\
+
+The group $S^3$ also has a Lie Algebra:
+\[ s^3 = \{ \dfrac{\theta}{2}((u_x)i + (u_y)j + (u_z)k) 
+\mid \theta \in \R, \;  \|u\| = 1 \} \]
+Notice that this just defined the tangent
+plane at point $p = 1$. \\
+The logarithm of a quaternion in $S^3$ takes it
+to this Lie Algebra. \\
+
+Note that this explains why
+the quaternion inverse is 
+$\dfrac{\olsi{q}}{|q|^2}$. \\
+If the quaternion has length $1$,
+this is just a rotation. \\
+So $\olsi{q}$
+will have a negated imaginary part:
+\[ \cos \para{\dfrac{\theta}{2}}
+- \sin \para{\dfrac{\theta}{2}}
+((u_x)i + (u_y)j + (u_z)k) \]
+Which can just be written as a rotation in 
+the opposite direction of $q$:
+\[\cos \para{-\dfrac{\theta}{2}}
++ \sin \para{-\dfrac{\theta}{2}}
+((u_x)i + (u_y)j + (u_z)k) \]
+Here dividing by $|q|^2$ does nothing. \\
+On the other hand, if $|q| > 1$,
+then the rotation also scales at the same time,
+by a factor of $|q|$. \\
+This is why we divide by $|q|^2$.
+The first division by $|q|$ undoes the
+scaling, and the second division by $|q|$
+applies the inverse scaling. \\
+So $\dfrac{\olsi{q}}{|q|^2}$
+represents the inverse always. \\
+
+\newpage
+
+\subsection*{Rigid Transformations}
+
+The group of rigid transformations,
+called the special euclidian group,
+is defined as:
+\[ SE(m) = \left\{ f : \R^m \to 
+\R^m \mid f(p) = Ap + a,\ A 
+\in SO(m),\ a \in \R^m \right\} \]
+It is basically a group that only includes
+matrices that move objects around without scaling
+or reflecting them,
+allowing only rotations and translations. \\
+It includes the special orthogonal group $SO(n)$
+(rotations) in it as a subgroup. \\
+
+We can likewise define the Euclidian group,
+which is similar, but also allows reflections:
+\[ E(m) = \left\{ f : \R^m \to 
+\R^m \mid f(p) = Ap + a,\ A 
+\in O(m),\ a \in \R^m \right\} \]
+It includes the orthogonal group $O(n)$
+(rotations and reflections) in it as a subgroup. \\
+
+In both cases,
+the group operation is function composition:
+\[ (f_2 \circ f_1)(p) = R_2(R_1p + t_1) + t_2
+= R_2R_1p + (R_2t_1 + t_2) \] 
+Which is associative by definition of function
+composition, and clearly both groups 
+are closed under it
+(the result of applying the operation
+is an element of the group itself). \\
+
+The identity is just the operation:
+\[ f(p) = Ip + 0 \]
+Which applies no rotation and no translation. \\
+
+The inverse of $f$ is:
+\[ q = Rp + t \implies  p = R\inv q - R\inv t \]
+Which we can write as:
+\[ f\inv(p) = R\inv p - R\inv t =
+R^T p - R^T t \]
+And it holds for both groups
+as both are made up of orthogonal matrices. \\
+
+And with that, we've shown that they're
+both groups. \\
+
+We can also define a group for the same
+transformation, but represented
+in homogeneous coordinates. \\
+Everything we said thus far would apply,
+but instead of having to manually define
+inverse and identity,
+note that they will just correspond
+to the identity $I_{n+1}$
+and the inverse $M^{-1}$
+of the homogeneous matrix $M$ 
+in $\R^{(n+1) \times (n+1)}$,
+which makes things simpler. \\
+
+\newpage
 
 \end{document}
