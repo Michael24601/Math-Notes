@@ -80,9 +80,9 @@
     we can formalize the notion of measurements
     by noting that the length,
     area, and volume are no more than functions
-    \[ L:\pcal{\R} \to [0, \infty) \]    
-    \[ A:\pcal{\R^2} \to [0, \infty) \]
-    \[ V:\pcal{\R^3} \to [0, \infty) \]
+    \[ L:\pcal{\rbb} \to [0, \infty) \]    
+    \[ A:\pcal{\rbb^2} \to [0, \infty) \]
+    \[ V:\pcal{\rbb^3} \to [0, \infty) \]
     that map subsets of some global space
     to a non-negative real number. \\
     Here $\pcal{A}$ is the powerset 
@@ -91,11 +91,11 @@
     the area of a unit square
     with the bottom left corner at the origin
     is $A(S)$ where 
-    \[ S = \{ (x, y) \in \R^2 \mid 
+    \[ S = \{ (x, y) \in \rbb^2 \mid 
     0 \leq x, y \leq 1  \} \]
     We can think of this as taking a subset cotaining
     every point $(x, y)$ within the square,
-    (which is just a section on the plane $\R^2$)
+    (which is just a section on the plane $\rbb^2$)
     and inputting it into the are function. \\
 
     We can now start stripping away details
@@ -192,9 +192,9 @@
         $\mu(\emptyset) = 0$
         \item 
         Countable additivity states that if
-        $(A_n)_{n \in \N} \in X$ are disjoint subsets:
-        \[ (A_n)_{n \in \N} \in X \implies 
-        \mu\para{\bigcup_{n \in \N}A_n} 
+        $(A_n)_{n \in \nbb} \in X$ are disjoint subsets:
+        \[ (A_n)_{n \in \nbb} \in X \implies 
+        \mu\para{\bigcup_{n \in \nbb}A_n} 
         = \sum_{n \in N} \mu(A_n) \]
     \end{enumerate}
     These axioms basically ensure that the measure
@@ -280,11 +280,11 @@
     space (which is what we call the distribution
     of the random variable). \\
 
-    We call a subset of the real numbers $\R$
+    We call a subset of the real numbers $\rbb$
     open if we can move a little bit in the
     positive and negative directions and still
     be inside the subset. \\
-    More formally, a set $S \subseteq \R$
+    More formally, a set $S \subseteq \rbb$
     is open if there exists some $\epsilon > 0$
     such that for each element $s \in S$,
     the range of numbers
@@ -299,12 +299,12 @@
 
     The Borel $\sigma$-algebra $\bscr$
     is the smallest $\sigma$-algebra
-    on $\R$ that contains
-    all of the open subsets of $\R$. \\
+    on $\rbb$ that contains
+    all of the open subsets of $\rbb$. \\
     As we know, a $\sigma$-algebra has to be closed
     under complements and finite unions. 
     We can thus form $\bscr$ by taking all
-    of the open subsets on $\R$,
+    of the open subsets on $\rbb$,
     their complements,
     and finite unions. \\
     
@@ -326,8 +326,8 @@
     used measures. \\
     When formalized, they are called
     the Lebesgue Measures,
-    a family of measures that for $\R$,
-    $\R^2$, and $\R^3$,
+    a family of measures that for $\rbb$,
+    $\rbb^2$, and $\rbb^3$,
     represent the length, are and volume,
     but which can be extended to higher
     dimensions. \\
@@ -336,11 +336,11 @@
 
     If we have two measures $\mu$ and $\gamma$
     defined on some measurable space
-    $(\xcal, \X)$, then we say
+    $(\xcal, \xbb)$, then we say
     $\mu$ is absolutely continuous with respect
     to $\gamma$ if
     \[ \gamma(A) = 0 \implies \mu(A) = 0 \]
-    for all $A \in \X$. \\
+    for all $A \in \xbb$. \\
     This is the case if
     \[ \mu(A) = \int_{A}p(x)d\gamma(x) \]
     for some measurable function 
@@ -352,13 +352,13 @@
     the other measure. \\
 
     Given a measurable space
-    $(\xcal, \X)$
+    $(\xcal, \xbb)$
     equipped with some measure $\mu$
-    (measure space  $(\xcal, \X, \mu)$),
+    (measure space  $(\xcal, \xbb, \mu)$),
     we want to define a function
     \[f:\xcal \to [0, \infty) \]
     such that the measure of some subset
-    $A \in \X$ is equal to the area
+    $A \in \xbb$ is equal to the area
     under $f$ within the range of values $A$
     \[ \mu(A) = \int_{A}f(x)dx \]
     We can call this a density function. \\
@@ -366,15 +366,15 @@
     we don't know what set $\xcal$ is,
     and integrals are usually tied closely
     to the notion of lengths and real numbers
-    ($dx$ is a small length in $\R$). \\
+    ($dx$ is a small length in $\rbb$). \\
     Instead, we define an integral in terms
     of some measure $v$ that is actually
-    defined on $(\xcal, \X)$:
+    defined on $(\xcal, \xbb)$:
     \[ \mu(A) = \int_{A}f(x)dv(x) \]
     Note that in the original integral
     we showed, the measure that was (implicitely)
     used was the Lebesgue measure $\lambda$
-    defined on vector spaces $\R^n$. \\
+    defined on vector spaces $\rbb^n$. \\
     Finally, we note that for $f$
     to be a density function,
     it needs to be measurable. \\
@@ -399,12 +399,12 @@
     at is Fubini's Theorem. \\
     Suppose we have two $\sigma$-finite
     measure spaces:
-    \[ (\xcal, \X, \mu)
-    \AND (\ycal, \Y, v) \]
+    \[ (\xcal, \xbb, \mu)
+    \AND (\ycal, \ybb, v) \]
     then there exists a joint measure
     space:
     \[ (\xcal \times \ycal, 
-    \X \otimes \Y) \]
+    \xbb \otimes \ybb) \]
     where $\xcal \times \ycal$
     is the cartesian product containing
     all ordered pairs with one element
@@ -413,30 +413,30 @@
     of this measurable space contains
     every possibile combination of outcomes
     from $\xcal$ and $\ycal$. \\
-    The term $\X \otimes \Y$,
+    The term $\xbb \otimes \ybb$,
     called the $\sigma$-algebra product,
     is the smallest $\sigma$-algebra
     containing the cartesian product
-    $\X \times \Y$. \\
+    $\xbb \times \ybb$. \\
     When we take this cartesian product,
     there is no guarantee that the resulting
     set will fulfill the closure requirements
     of a $\sigma$-algebra.
     So if we were to take every element in
-    $\X \times \Y$, their complements,
+    $\xbb \times \ybb$, their complements,
     and their finite unions,
     we would end up with the smallest $\sigma$-algebra
-    that contains $\X \times \Y$. \\
+    that contains $\xbb \times \ybb$. \\
     To conclude 
-    \[ (\xcal \times \ycal, \X \otimes \Y) \]
+    \[ (\xcal \times \ycal, \xbb \otimes \ybb) \]
     is a measurable space that allows us
     to measure every combination of outcomes
     in $\xcal$ and $\ycal$. \\
     In order to make this measure,
     we use a unique measure $\mu \otimes v$
     called the product measure,
-    where for any $A \in \X$ and
-    $B \in \Y$
+    where for any $A \in \xbb$ and
+    $B \in \ybb$
     \[ \mu \otimes v(A, B) =
     \mu(A) \cdot v(B)  \]
     Similarly to any other measure space,
@@ -445,7 +445,7 @@
     the product measure. \\
     So for any integrable function:
     \[ f:\xcal \times \ycal
-    \to \R \]
+    \to \rbb \]
     we can evaluate this integral
     over the joint measure space
     as a double integral
@@ -505,16 +505,16 @@
     the $\sigma$-algebra which we will
     denote $\fscr$. \\
     Finally, the probability is a measure
-    $\Pb$ defined on the measurable
+    $\pbb$ defined on the measurable
     space $(\Omega, \fscr)$,
-    with $\Pb\{\Omega\} = 1$
+    with $\pbb\{\Omega\} = 1$
     (It is certain that one outcome
     in the sample space will take place,
     so the probability that that will transpire
     has to be 1). \\
     
     This measure space:
-    \[ (\Omega, \fscr, \Pb) \]
+    \[ (\Omega, \fscr, \pbb) \]
     is then called a probability space. \\
 
     In fact, any measure space
@@ -545,7 +545,7 @@
     A measurable function
     \[ X: \Omega \to \xcal \]
     from the probability space to the measurable
-    space $(\xcal, \X)$
+    space $(\xcal, \xbb)$
     is called a random element.
     If the set $\xcal$ contains numbers,
     then $X$ is more specifically a random variable. \\
@@ -565,16 +565,16 @@
     we need to convert back to the probability
     space using the inverse of the random element's
     function $X$.
-    We then use the probability measure $\Pb$
+    We then use the probability measure $\pbb$
     on the preimage to get the probability
     of the random variable's outcome:
-    \[ \Pb \circ X\inv \{x\} 
-    = \Pb(X\inv (x)) \]
+    \[ \pbb \circ X\inv \{x\} 
+    = \pbb(X\inv (x)) \]
     Notice that this is no more than the
-    push-forward measure of $\Pb$ on $X$. \\
-    In fact, $\Pb_X$ can be thought of
+    push-forward measure of $\pbb$ on $X$. \\
+    In fact, $\pbb_X$ can be thought of
     as a measure defined on the measurable
-    space $(\xcal, \X)$
+    space $(\xcal, \xbb)$
     (since it assigns a measure to elements
     in $\xcal$). \\
 
@@ -588,7 +588,7 @@
     did not make much sense at the time.
     However, in the context of random variables,
     what we are saying is that:
-    \[ \Pb_X(A) = \Pb(X \in A) \]
+    \[ \pbb_X(A) = \pbb(X \in A) \]
     which is notation we have seen before
     for random variables. \\
 
@@ -596,14 +596,14 @@
     function that describes the distribution
     of a random element $X$.
     It is denoted by 
-    \[ \Pb_X = \Pb \circ X\inv \]
+    \[ \pbb_X = \pbb \circ X\inv \]
     which is called the probability
     distribution of $X$. \\
 
     If two random elements $X$ and $Y$
     on a probabilty space
     have the same distribution
-    \[ \Pb_X = \Pb_Y \]
+    \[ \pbb_X = \pbb_Y \]
     then $X$ and $Y$ are equally
     distributed. \\
 
@@ -611,13 +611,13 @@
     defined on the same probability space,
     describing different outcomes. \\
     This means we have two measurable
-    space $(\xcal, \X)$
-    and $(\ycal, \Y)$,
+    space $(\xcal, \xbb)$
+    and $(\ycal, \ybb)$,
     and two random elements:
     \[ X: \Omega \to \xcal \qquad 
     Y: \Omega \to \ycal \]
     Then we can define a new measurable space:
-    \[ (\xcal \times \ycal, \X \otimes \Y) \]
+    \[ (\xcal \times \ycal, \xbb \otimes \ybb) \]
     Called the joint space of $X$
     and $Y$. \\
     We can map to this joint space using
@@ -630,7 +630,7 @@
     If we were to then measure the probabilities
     of outcomes in this new joint random variable,
     we would get a distribution:
-    \[ \Pb_{X, Y} = \Pb \circ (X, Y)\inv \]
+    \[ \pbb_{X, Y} = \pbb \circ (X, Y)\inv \]
     called the joint probability distribution
     of $X$ and $Y$,
     which describes the probability that 
@@ -645,7 +645,7 @@
     When we have a joint distribution
     of two random elements $X$ and $Y$,
     there is nothing stopping us from measuring
-    the distributions $\Pb_X$ and $\Pb_Y$
+    the distributions $\pbb_X$ and $\pbb_Y$
     regardless. \\
     As expected, this measures the probability
     that events take place in each of
@@ -664,47 +664,47 @@
     Now is the time to formalize that notion. \\
 
     For a random variable $X$
-    defined on a measurable space $(\xcal, \X)$,
-    equipped with a probability measure $\Pb_X$,
+    defined on a measurable space $(\xcal, \xbb)$,
+    equipped with a probability measure $\pbb_X$,
     we can create density functions using
     a measurable function:
     \[ f:\xcal \to [0, \infty) \]
     where
-    \[ \Pb_X(A) = \int_{A}f(x)dv(x) \]
+    \[ \pbb_X(A) = \int_{A}f(x)dv(x) \]
     for some measure $v$ on $\xcal$,
     commonly the Lebesgue measure
-    if $\xcal = \R^n$. \\
+    if $\xcal = \rbb^n$. \\
     
     Notice that this implies that the 
-    measure $\Pb_X$ is absolutely
+    measure $\pbb_X$ is absolutely
     continuous with regards to the measure $v$.
     (the space we are integrating over). \\
     Notice that this implies that
-    \[ v(A) = 0 \implies \Pb_X(A) = 0 \]
+    \[ v(A) = 0 \implies \pbb_X(A) = 0 \]
     which means that if a section $A$
     has a measure $v(A) = 0$,
     the probability that $A$ would happen in $0$
     as well. \\
     When we are dealing with real numbers,
-    in $\R$ for example,
+    in $\rbb$ for example,
     this is easier to understand.
     The measure $v$ is the Lebesgue
     measure $\lambda$,
     which describes the length along $\xcal$.
     So what we are saying is that,
     if the length is so short that it equals
-    to 0 (for example, a single point on $\R$),
+    to 0 (for example, a single point on $\rbb$),
     then the probability this outcome will take
     place is also 0,
     which makes sense since the area above a point
     is a line with area 0. \\
 
-    We will be working with densities in $\R$
+    We will be working with densities in $\rbb$
     for the most part,
-    so if $\xcal = \R$,
+    so if $\xcal = \rbb$,
     then we can define a density function $f$
     of a random variable $X$ as just:
-    \[ \Pb(X \in A) = \Pb(A) = 
+    \[ \pbb(X \in A) = \pbb(A) = 
     \int_Af(x)dx \]
     which is to say, the probability
     that an event in $A$ occurs is the area
@@ -717,21 +717,21 @@
     which has a density function:
     \[ f(x) = \dfrac{1}{2\sqrt{2\pi \sigma^2}}
     e^{\para{-\dfrac{(x-\mu)^2}{2\sigma^2}}} \]
-    for any $x \in \R$. \\
+    for any $x \in \rbb$. \\
     The normal, or Guassian distribution,
     is denoted $\mathcal{N}(\mu, \sigma)$,
     with mean $\mu$ and standard
     deviation $\sigma$. \\
 
-    The joint distribution $\Pb_{(X, Y)}$
+    The joint distribution $\pbb_{(X, Y)}$
     is also accompanied by a joint density
     $p_{(X, Y)}$. \\ 
 
     The transformation law
     gives us a way to get the density function
-    of a random variable $Y$ in $\R^n$
+    of a random variable $Y$ in $\rbb^n$
     given the density
-    function of another $\R^n$ valued
+    function of another $\rbb^n$ valued
     random variable $X$,
     and a measurable function $f: X \to Y$
     that maps $X$ to $Y$. \\
@@ -746,13 +746,13 @@
     \subsection*{Expected Value and Variance}
     
     If we define an integrable random varibale:
-    \[ X: \Omega \to \R \]
+    \[ X: \Omega \to \rbb \]
     from the probability space
-    $(\Omega, \fscr, \Pb)$,
+    $(\Omega, \fscr, \pbb)$,
     then the expected value
     of that random variable is:
-    \[ \E[X] = \int_{\Omega}X(\omega)
-    \Pb(d\omega) \]
+    \[ \ebb[X] = \int_{\Omega}X(\omega)
+    \pbb(d\omega) \]
     That is to say,
     it is the sum of all events
     in $X$ weighted by the probability
@@ -762,96 +762,96 @@
     of $X$. \\
 
     Now suppose we have a function
-    \[ f: \xcal \to \R \]
+    \[ f: \xcal \to \rbb \]
     we want to try and find
     the expected value of $f(X)$. \\
     As such:
-    \[ \E[f(X)]
+    \[ \ebb[f(X)]
     = \int_{\Omega}(f \circ X)(\omega)
-    \Pb(d\omega) \]
+    \pbb(d\omega) \]
     Here, note that $x = X(\omega)$,
     which means that $\omega = X\inv(x)$.
     So if we switch our variable to $x$:
-    \[\int_{\xcal}f(x)(\Pb \circ X\inv)(dx) \]
-    Then we notice that we have $\Pb \circ X\inv$,
-    which is the push-forward measure of $\Pb$
-    under $X$, also called $\Pb_X$,
+    \[\int_{\xcal}f(x)(\pbb \circ X\inv)(dx) \]
+    Then we notice that we have $\pbb \circ X\inv$,
+    which is the push-forward measure of $\pbb$
+    under $X$, also called $\pbb_X$,
     the probability measure on $\xcal$:
     So we have
-    \[ \int_{\xcal}f(x)\Pb_X(dx) \]
+    \[ \int_{\xcal}f(x)\pbb_X(dx) \]
     Notice here that in the result,
     the integral is basically just the expected
     value inetgral, but evaluated
     in $\xcal$ using its own probability
-    measure $\Pb_X$,
+    measure $\pbb_X$,
     instead of $\Omega$ and the probability
-    measure $\Pb$. \\
+    measure $\pbb$. \\
     So we can say:
-    \[ \E[f(X)] 
-    = \int_{\xcal}f(x)\Pb_X(dx) 
-    = \E_X[f] \]
-    where $\E_X$ is just the expected value,
+    \[ \ebb[f(X)] 
+    = \int_{\xcal}f(x)\pbb_X(dx) 
+    = \ebb_X[f] \]
+    where $\ebb_X$ is just the expected value,
     evaulated in $\xcal$,
-    using $\Pb_X$. \\
+    using $\pbb_X$. \\
 
     If we have a discrete (non integrable)
     random variable
-    \[ X: \Omega \to \R \]
+    \[ X: \Omega \to \rbb \]
     then the expected value is a sum:
-    \[ \sum_{i}x_i\Pb(X = x_i) \]
+    \[ \sum_{i}x_i\pbb(X = x_i) \]
     This clearly has the same meaning
     of "average" of $X$. \\
 
     Likewise, we can generalize this idea
     to any measuable function of the random variable,
     such as $f(X)$, where
-    \[ f: \R \to \R \]
+    \[ f: \rbb \to \rbb \]
     Here, we can see that
-    \[ \E[f(X)] = \sum_{i}f(x_i)\Pb(X = x_i) \]
+    \[ \ebb[f(X)] = \sum_{i}f(x_i)\pbb(X = x_i) \]
     which is the discrete analogue to
     integrating with respect to the law
-    $\Pb_X$ instead of $\Pb$. \\
+    $\pbb_X$ instead of $\pbb$. \\
 
     If we have the probability
     density function $P_X$ of a continuous
     random variable
-    \[ X: \Omega \to \R \]
+    \[ X: \Omega \to \rbb \]
     then the expected value of $X$
     can instead be given by:
-    \[ \E[X] = \int_{\R} x P_X(x) dx \]
+    \[ \ebb[X] = \int_{\rbb} x P_X(x) dx \]
     which again clearly describes the average
     of the values of $X$. \\
     
     And, for any measurable function
-    \[ f: \R \to \R \]
+    \[ f: \rbb \to \rbb \]
     we have
-    \[ \E[f(X)] = \int_{\R} f(x)P_X(x) dx \]
+    \[ \ebb[f(X)] = \int_{\rbb} f(x)P_X(x) dx \]
     which corresponds to
     integrating with respect to the law
-    $\Pb_X$ instead of $\Pb$. \\
+    $\pbb_X$ instead of $\pbb$. \\
 
     For integrable random variables $X$ and $Y$,
-    and some numbers $a, b \in \R$,
+    and some numbers $a, b \in \rbb$,
     here are some properties of expected values:
     \begin{enumerate}
         \item 
         Linearity:
-        \[ \E[aX + bY] = a\E[X] + b\E[Y] \]
+        \[ \ebb[aX + bY] = a\ebb[X] + b\ebb[Y] \]
         \item 
         Monotonicity: If $X \leq Y$, then 
-        \[ \E[X] \leq \E[Y] \]
+        \[ \ebb[X] \leq \ebb[Y] \]
         \item
         Non-negativity: If $X \geq 0$, then
-        \[ \E[X] \geq 0 \]
+        \[ \ebb[X] \geq 0 \]
         \item
         Constant rule: For any constant $c \in R$,
-        \[ \E[c] = c \]
+        \[ \ebb[c] = c \]
         which makes sense since the average value
         of a constant is its own value.
         \item
         Indicator function:
         for any measurable subset $A \in \fscr$
-        \[ \E[1_A] = \Pb(A) \]
+        \[ \ebb[1_A] = \pbb(A) \]
         this makes sense, since
         we are taking every event $a \in A$,
         multiplying it by the probability
@@ -863,9 +863,9 @@
     While the expected value gives us the average,
     the variance of a square-integrable
     random variable
-    \[ X: \Omega \to \R \]
+    \[ X: \Omega \to \rbb \]
     gives us the spreadness:
-    \[ \var(X) = \E[(X - \E[X])^2] \]
+    \[ \var(X) = \ebb[(X - \ebb[X])^2] \]
     it basically calculates the distance
     between each point in $X$
     and the average of $X$,
@@ -881,10 +881,10 @@
 
     We can also relate the distribution
     of two random variables
-    \[ X, Y: \Omega \to \R \]
+    \[ X, Y: \Omega \to \rbb \]
     using the covariance:
     \[ \cov(X, Y) = 
-    \E[(X - \E[X])(Y - \E[Y])] \]
+    \ebb[(X - \ebb[X])(Y - \ebb[Y])] \]
     Note that $\cov(X, X)$
     is just the variance $\var(X)$. \\
 
@@ -907,12 +907,12 @@
     is $0$. \\
     
     We can also extend the idea of variance
-    to random variables in $\R^n$:
-    \[ X: \Omega \to \R^n \]
+    to random variables in $\rbb^n$:
+    \[ X: \Omega \to \rbb^n \]
     which we call the covariance matrix
     of $X$:
     \[ \cov(X) = 
-    \E[(X - \E[X])(X - \E[X])^T] \]
+    \ebb[(X - \ebb[X])(X - \ebb[X])^T] \]
     expanding this outer product,
     we get a matrix where each entry is
     \[ (\cov(X))_{ij} = \cov(X_i, X_j) \]
@@ -923,8 +923,8 @@
     matrix for a vector that has
     block elements. \\
     Suppose that we have the random vectors
-    \[ X: \Omega \to \R^n
-    \qquad Y: \Omega \to \R^d \]
+    \[ X: \Omega \to \rbb^n
+    \qquad Y: \Omega \to \rbb^d \]
     If we have a vector
     \[ \vecTwo{X}{Y} \]
     then its covariance matrix is
@@ -947,7 +947,7 @@
     which can be calculated
     using:
     \[ \cov(X, Y) = 
-    \E[(X - \E[X])(Y - \E[Y])^T] \]
+    \ebb[(X - \ebb[X])(Y - \ebb[Y])^T] \]
     We note that
     \[ \cov(X, Y) = 
     \cov(Y, X)^T \]
@@ -959,12 +959,12 @@
     the other is the covariance of the
     vector containing $X$ and $Y$,
     which is like teh variance but in
-    $\R^{n + d}$ space. \\
+    $\rbb^{n + d}$ space. \\
 
     Some properties of variances include:
     \begin{enumerate}
         \item 
-        \[ \cov(X, Y) = \E[XY] - \E[X]\E[Y] \]
+        \[ \cov(X, Y) = \ebb[XY] - \ebb[X]\ebb[Y] \]
         \item
         \[ \var(aX + bY)
         = a^2\var(X) + b^2\var(Y)
@@ -992,25 +992,25 @@
     \[ \{ X_1, X_2, \dots X_n \} \]
     then
     \[ \var\para{\sum_{i=1}^{n}X_i}
-        = \E\brac{\para{\sum_{i=1}^{n}X_i 
-    - \E\brac{\sum_{i=1}^{n}X_i}}^2}\]
+        = \ebb\brac{\para{\sum_{i=1}^{n}X_i 
+    - \ebb\brac{\sum_{i=1}^{n}X_i}}^2}\]
     We then use the linearity of expected values:
     \[ \var\para{\sum_{i=1}^{n}X_i}
-    = \E\brac{\para{\sum_{i=1}^{n}X_i 
-    - \sum_{i=1}^{n}\E[X_i]}^2}\]
+    = \ebb\brac{\para{\sum_{i=1}^{n}X_i 
+    - \sum_{i=1}^{n}\ebb[X_i]}^2}\]
     \[ \var\para{\sum_{i=1}^{n}X_i}
-    = \E\brac{\para{\sum_{i=1}^{n} (X_i 
-    - \E[X_i])}^2}\]
+    = \ebb\brac{\para{\sum_{i=1}^{n} (X_i 
+    - \ebb[X_i])}^2}\]
     The square of a sum
     is the sum of the product 
     of every pair in the sum:
     \[ \var\para{\sum_{i=1}^{n}X_i}
-    = \E\brac{\sum_{i=1}^{n}\sum_{j=1}^{n}
-    (X_i - \E[X_i])(X_j - \E[X_j])}\]
+    = \ebb\brac{\sum_{i=1}^{n}\sum_{j=1}^{n}
+    (X_i - \ebb[X_i])(X_j - \ebb[X_j])}\]
     Again using the linearity of expected values:
     \[ \var\para{\sum_{i=1}^{n}X_i}
     = \sum_{i=1}^{n}\sum_{j=1}^{n}
-    \E[X_i - \E[X_i])(X_j - \E[X_j])
+    \ebb[X_i - \ebb[X_i])(X_j - \ebb[X_j])
     = \sum_{i=1}^{n}\sum_{j=1}^{n}\cov(X_i, X_j) \]
     However, if the variables are mutually
     independent, then
@@ -1026,14 +1026,14 @@
     \subsection*{Probability Fundamentals}
 
     Given a probability space
-    $(\Omega, \fscr, \Pb)$,
+    $(\Omega, \fscr, \pbb)$,
     and two measurable subsets
     $A, B \in \fscr$,
     then $A$ and $B$
     are independent if
-    \[ \Pb(A \cap B) 
-    = \Pb(A) \cdot \Pb(B) \]
-    where $ \Pb(A \cap B)$
+    \[ \pbb(A \cap B) 
+    = \pbb(A) \cdot \pbb(B) \]
+    where $ \pbb(A \cap B)$
     is the event where both $A$
     and $B$ take place. \\
 
@@ -1044,8 +1044,8 @@
     Y: \Omega \to \ycal \]
     then we say that $X$ and $Y$
     are independent if
-    \[ \Pb_{(X, Y)}
-    = \Pb_X \otimes \Pb_Y \]
+    \[ \pbb_{(X, Y)}
+    = \pbb_X \otimes \pbb_Y \]
     their joint distribution is the
     product of their marginal distributions. \\
     Note that the same applies
@@ -1062,21 +1062,21 @@
     then the expected value of their
     product is just the product
     of their expected value:
-    \[ \E\brac{\prod_{i=1}^{n}
-    X_i} = \prod_{i=1}^{n}\E[X_i] \]
+    \[ \ebb\brac{\prod_{i=1}^{n}
+    X_i} = \prod_{i=1}^{n}\ebb[X_i] \]
     This can be proven by 
     using the integral or sum
     forumla for the expected
     value, coupled with the fact that
-    $ \Pb_{(X, Y)}
-    = \Pb_X \otimes \Pb_Y $. \\
+    $ \pbb_{(X, Y)}
+    = \pbb_X \otimes \pbb_Y $. \\
     
     Recall that we know that
-    \[ \cov(X, Y) = \E[XY] - \E[X]\E[Y] \]
+    \[ \cov(X, Y) = \ebb[XY] - \ebb[X]\ebb[Y] \]
     However, if $X, Y$
     are independent,
     then that implies that 
-    \[ \E[XY] = \E[X]\E[Y] \]
+    \[ \ebb[XY] = \ebb[X]\ebb[Y] \]
     which means that $\cov(X, Y) = 0$. \\
     This is how we can derive the
     result that $\cov(X, Y) = 0$
@@ -1084,14 +1084,14 @@
     are independent. \\
 
     Given a probability space
-    $(\Omega, \fscr, \Pb)$,
+    $(\Omega, \fscr, \pbb)$,
     and two events $A, B \in \fscr$,
-    if $\Pb(A) \neq 0$,
+    if $\pbb(A) \neq 0$,
     then we can define the conditional
     probability:
-    \[ \Pb(B \mid A)
-    = \dfrac{\Pb(A \cap B)}{\Pb(A)} \]
-    where $\Pb(B \mid A)$
+    \[ \pbb(B \mid A)
+    = \dfrac{\pbb(A \cap B)}{\pbb(A)} \]
+    where $\pbb(B \mid A)$
     means the probability of $B$
     happening given that we know $A$
     has happened. \\
@@ -1103,35 +1103,35 @@
 
     Note that if we fix $A$,
     then the function
-    \[ \Pb_{(\cdot \mid A)}: \fscr \to
+    \[ \pbb_{(\cdot \mid A)}: \fscr \to
     [0, 1] \]
     is a measure,
     specifically the measure of some
     event $B$ taking place given
     that $A$ has taken place. \\
     This measure is only well defined
-    for $\Pb(A) \neq 0$
+    for $\pbb(A) \neq 0$
     (since the conditional probability
-    divides by $\Pb(A)$). \\
+    divides by $\pbb(A)$). \\
 
     We know that
-    \[ \Pb(B \mid A)
-    = \dfrac{\Pb(A \cap B)}{\Pb(A)} 
+    \[ \pbb(B \mid A)
+    = \dfrac{\pbb(A \cap B)}{\pbb(A)} 
     \quad \text{ and } \quad 
-    \Pb(A \mid B)
-    = \dfrac{\Pb(A \cap B)}{\Pb(B)} \]
+    \pbb(A \mid B)
+    = \dfrac{\pbb(A \cap B)}{\pbb(B)} \]
     we can combine them to form:
-    \[ \Pb(B \mid A)
-    = \dfrac{\Pb(A \mid B) \cdot \Pb(B)}
-    {\Pb(A)} \]
+    \[ \pbb(B \mid A)
+    = \dfrac{\pbb(A \mid B) \cdot \pbb(B)}
+    {\pbb(A)} \]
     which is called Baye's rule and allows
     the reversal of conditional
     probabilities. \\
 
     The law of total probability states that
-    \[ \Pb(B)
-    = \sum_{i \in I}\Pb(B \mid A_i)
-    \cdot \Pb(A_i) \]
+    \[ \pbb(B)
+    = \sum_{i \in I}\pbb(B \mid A_i)
+    \cdot \pbb(A_i) \]
     if ${A_i}_{i \in I}$
     is a countable partition of $\fscr$
     (partition means the union of the subsets
@@ -1152,7 +1152,7 @@
     $\{A_i\}_{i \in I}$
     as a countable partition of $\fscr$,
     then
-    \[ \sum_{i \in I}\Pb(A_i \mid B)
+    \[ \sum_{i \in I}\pbb(A_i \mid B)
     = 1 \]
     This is because we are taking
     the probability that all events

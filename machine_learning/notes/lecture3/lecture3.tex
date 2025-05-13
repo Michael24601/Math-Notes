@@ -40,22 +40,22 @@ functions. \\
 First we define a regression:
 \[ \eta: \xcal \to [0, 1] \]
 Which is given by:
-\[ \eta(x) = \Pb_{Y \mid X = x}(1)
-= \Pb(Y = 1 \mid X = x) \]
+\[ \eta(x) = \pbb_{Y \mid X = x}(1)
+= \pbb(Y = 1 \mid X = x) \]
 Which is essentially the probability
 that $Y$ is the label $1$
 given $x$. \\
 
 We can write the expected risk over $Y$ as:
 \[ E[Y \mid X = x]
-= \Pb(Y = 1\mid X = x)(1)
-+ \Pb(Y = -1 \mid X = x)(-1) \]
+= \pbb(Y = 1\mid X = x)(1)
++ \pbb(Y = -1 \mid X = x)(-1) \]
 \[ E[Y \mid X = x] 
-= \Pb(Y = 1\mid X = x)
-- \Pb(Y = -1 \mid X = x) \]
+= \pbb(Y = 1\mid X = x)
+- \pbb(Y = -1 \mid X = x) \]
 \[  E[Y \mid X = x] 
-= \Pb(Y = 1\mid X = x)
-- (1 - \Pb(Y = 1\mid X = x)) \]
+= \pbb(Y = 1\mid X = x)
+- (1 - \pbb(Y = 1\mid X = x)) \]
 \[ E[Y \mid X = x] 
 = 2\eta(x) - 1  \]
 As we know, we have outputs
@@ -65,8 +65,8 @@ and $1$ will take place. \\
 So if the result of the expected
 value is larger than $0$
 then: 
-\[ \Pb(Y = 1 \mid X = x) >
-\Pb(Y = -1 \mid X = x) \]
+\[ \pbb(Y = 1 \mid X = x) >
+\pbb(Y = -1 \mid X = x) \]
 Which means that best possible
 classification $f^*(x)$
 for $x$
@@ -86,7 +86,7 @@ but the general idea is the same;
 we could threshold the regression
 to get the optimal prediction $f^*(x)$,
 which just depends on the probability
-$\Pb(Y \mid X = x)$. \\
+$\pbb(Y \mid X = x)$. \\
 
 We can use the regression function
 to prove that a loss function $\Phi$
@@ -96,14 +96,14 @@ and $\Phi(0)' < 0$. \\
 
 First note that:
 \[ \rscr_\Phi(g)
-= \E[\Phi(Yg(X))]
-= \E[\E[\Phi(Yg(X))] \mid X ] \]
+= \ebb[\Phi(Yg(X))]
+= \ebb[\ebb[\Phi(Yg(X))] \mid X ] \]
 We can then unfurl the expected value
 over $Y$
 (recall that $\ycal = \{-1, 1\}$):
-\[ \E[\Pb(Y = -1 \mid X)\Phi(-g(X))
-+ \Pb(Y = 1 \mid X)\Phi(g(X))] \]
-\[ \E[(1-\eta(X))\Phi(-g(X))
+\[ \ebb[\pbb(Y = -1 \mid X)\Phi(-g(X))
++ \pbb(Y = 1 \mid X)\Phi(g(X))] \]
+\[ \ebb[(1-\eta(X))\Phi(-g(X))
 + \eta(X)\Phi(g(X))] \]
 If we take $\xi = \eta(x)$,
 then we can write:
@@ -136,13 +136,13 @@ and $\Phi(0)' < 0$. \\
 
 Recall that:
 \[ f^*(x) = \piecewise{1 \quad \;\;\; \text{ if }
-\Pb(Y = 1 \mid X) >
-\Pb(Y = -1 \mid X)}
+\pbb(Y = 1 \mid X) >
+\pbb(Y = -1 \mid X)}
 {-1 \quad \text{ otherwise }} \]
 is the optimal classifier. \\
 
-Here, $\Pb(Y = 1 \mid X) > \Pb(Y = -1 \mid X)$
-means that $\Pb(Y = 1 \mid X) > 0.5$,
+Here, $\pbb(Y = 1 \mid X) > \pbb(Y = -1 \mid X)$
+means that $\pbb(Y = 1 \mid X) > 0.5$,
 which means that $\xi > 0.5$,
 which means that $2\xi - 1 > 0$. \\
 So in short, 
@@ -301,7 +301,7 @@ Then the binary classifier of class $l$
 would take $x$ as input and return
 not a label, but the probability of $x$
 having label $l$: 
-\[ f_l: \xcal \to \R^+ \]
+\[ f_l: \xcal \to \rbb^+ \]
 We can then form our multiclass classifier
 $f_{\text{OVA}}(x)$ as such:
 \[ f_{\text{OVA}}(x) = 
@@ -351,13 +351,13 @@ function $g$. \\
 
 If we have $K$ classes, then $g$
 outputs a vector of $K$ values:
-\[ g: \xcal \to \R^K \]
+\[ g: \xcal \to \rbb^K \]
 where each value gives the confidence
 of $g$ that the class that corresponds to this
 entry in the vector is the correct class. \\
 
 For this classifier we can use the softmax loss:
-\[ \ell: \R^K \ycal \to \R^+ \]
+\[ \ell: \rbb^K \ycal \to \rbb^+ \]
 \[ \ell(g(x), y) = -\log\para{\dfrac{e^{g_y(x)}}
 {\sum_{k = 1}^K e^{g_k(x)}}} \]
 Which will have low cost if the $\nth(y)$
@@ -377,12 +377,12 @@ which will have a format:
 \[ g^*(x)
     = \begin{bmatrix}
     \log\para{\alpha
-    \Pb(Y = 1 \mid X = x)} \\
+    \pbb(Y = 1 \mid X = x)} \\
     \log\para{\alpha
-    \Pb(Y = 2 \mid X = x)} \\ 
+    \pbb(Y = 2 \mid X = x)} \\ 
     \vdots \\
     \log\para{\alpha
-    \Pb(Y = K \mid X = x)} \\ 
+    \pbb(Y = K \mid X = x)} \\ 
 \end{bmatrix} \]
 where $\log$ is strictly increasing
 and $\alpha$ is a positive value
@@ -392,7 +392,7 @@ this means that the maximal entry
 is the one that corresponds to the
 highest probability:
 \[ \arg\max_k g^*_k(x) = \arg \max_k
-\Pb(Y = k \mid X = x) \]
+\pbb(Y = k \mid X = x) \]
 So since the entry with the highest value
 in the output of $g^*(x)$
 is the optimal output (the one with the
@@ -410,7 +410,7 @@ In regression, the output is continuous,
 instead of discrete. \\
 
 So, we would have a data space:
-\[ \xcal  \AND \ycal = \R^{d_y}\]
+\[ \xcal  \AND \ycal = \rbb^{d_y}\]
 where $d_y$ is the dimension of
 the output for that specific output point. \\
 
@@ -441,17 +441,17 @@ and the predicted ouput $f(x)$:
 \[ \ell(f(x), y) = \|f(x) - y\|^2 \]
 Note that this loss yields the following
 result:
-\[ \E[\ell(f(x), Y) \mid X = x]
-= \E[\|f(x) - Y\|^2  \mid X = x]
-= \E[Y \mid X = x] \]
+\[ \ebb[\ell(f(x), Y) \mid X = x]
+= \ebb[\|f(x) - Y\|^2  \mid X = x]
+= \ebb[Y \mid X = x] \]
 which was proven in the exerices. \\
 Minimizing this value (which is
 just the conditional risk at a single
 input $X = x$)
 gives us the optimal output for $x$:
 \[ f^*(x) = \arg\min_{f(x)}
-\E[\|f(x) - Y\|^2  \mid X = x]
-= \E[Y \mid X = x] = \text{mean}_{X=x}(Y) \]
+\ebb[\|f(x) - Y\|^2  \mid X = x]
+= \ebb[Y \mid X = x] = \text{mean}_{X=x}(Y) \]
 Which is just the mean since that is
 what the expected value is. \\
 
@@ -474,7 +474,7 @@ loss given $X = x$
 gives us the optimal prediction $f^*(x)$
 for a fixed $x$:
 \[ f^*(x) = \arg\min_{f(x)}
-\E[\|f(x) - Y\|_1  \mid X = x]
+\ebb[\|f(x) - Y\|_1  \mid X = x]
 = \text{median}_{X=x}(Y) \]
 This is again a well known value, but it 
 is the median. \\

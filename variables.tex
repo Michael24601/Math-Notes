@@ -1,5 +1,10 @@
 
-% For using float option H that places figures exatcly where we want them
+%===============================================================================
+%================================== PACKAGES ===================================
+%===============================================================================
+
+% For using float option H that places figures 
+% exatcly where we want them
 \usepackage{float}
 % makes figure font bold
 \usepackage{caption}
@@ -47,96 +52,157 @@
 \usepackage{amsmath}
 \usepgfplotslibrary{groupplots}
 
-% overline short italic
-\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
 
-\newcommand{\perm}[2]{{}^{#1}\!P_{#2}}
-\newcommand{\comb}[2]{{}^{#1}C_{#2}}
-\newcommand{\rad}{\text{ rad}}
-\newcommand{\lcm}{\text{lcm}}
-\newcommand{\Aut}{\text{Aut}}
-\newcommand{\seq}{\leqslant}
-\newcommand{\beq}{\geqslant}
-\newcommand{\sub}{\subseteq}
-\newcommand{\prosub}{\subset}
-\newcommand{\orbit}{\mathcal{O}}
+%===============================================================================
+%==================================== FONTS ====================================
+%===============================================================================
 
-\newcommand{\binomial}[2]{%
-  \ifnum#2=0
-    1%
-  \else
-    \ifnum#1=0
-      0%
-    \else
-      \the\numexpr%
-        \binom{#1-1}{#2-1}+\binom{#1-1}{#2}%
-    \fi
-  \fi
-}
 
-% Commands for set symbols
-
-% Natural numbers
-\newcommand{\N}{\mathbb{N}}
-% Integers
-\newcommand{\Z}{\mathbb{Z}}
-% Rational Numbers
-\newcommand{\Q}{\mathbb{Q}}
-% Real Numbers
-\newcommand{\R}{\mathbb{R}}
-% Complex Numbers
-\newcommand{\C}{\mathbb{C}}
-% Field
-\newcommand{\F}{\mathbb{F}}
-% Probability
-\newcommand{\Pb}{\mathbb{P}}
-% Others
-\newcommand{\X}{\mathbb{X}}
-\newcommand{\Y}{\mathbb{Y}}
-% Expected value
-\newcommand{\E}{\mathbb{E}}
-% Others
-\newcommand{\U}{\mathbb{U}}
-\newcommand{\V}{\mathbb{V}}
-
-% Powerset
-\newcommand{\pcal}{\mathcal{P}}
-\newcommand{\xcal}{\mathcal{X}}
-\newcommand{\ycal}{\mathcal{Y}}
+% Mathcal
 \newcommand{\acal}{\mathcal{A}}
 \newcommand{\bcal}{\mathcal{B}}
+\newcommand{\ccal}{\mathcal{C}}
+\newcommand{\dcal}{\mathcal{D}}
+\newcommand{\ecal}{\mathcal{E}}
 \newcommand{\fcal}{\mathcal{F}}
+\newcommand{\gcal}{\mathcal{G}}
+\newcommand{\hcal}{\mathcal{H}}
+\newcommand{\ical}{\mathcal{I}}
+\newcommand{\jcal}{\mathcal{J}}
+\newcommand{\kcal}{\mathcal{K}}
+\newcommand{\lcal}{\mathcal{L}}
+\newcommand{\mcal}{\mathcal{M}}
+\newcommand{\ncal}{\mathcal{N}}
+\newcommand{\ocal}{\mathcal{O}}
+\newcommand{\pcal}{\mathcal{P}}
+\newcommand{\qcal}{\mathcal{Q}}
+\newcommand{\rcal}{\mathcal{R}}
 \newcommand{\scal}{\mathcal{S}}
+\newcommand{\tcal}{\mathcal{T}}
 \newcommand{\ucal}{\mathcal{U}}
 \newcommand{\vcal}{\mathcal{V}}
-\newcommand{\rcal}{\mathcal{R}}
-\newcommand{\dcal}{\mathcal{D}}
-\newcommand{\hcal}{\mathcal{H}}
-\newcommand{\ccal}{\mathcal{C}}
+\newcommand{\wcal}{\mathcal{W}}
+\newcommand{\xcal}{\mathcal{X}}
+\newcommand{\ycal}{\mathcal{Y}}
+\newcommand{\zcal}{\mathcal{Z}}
 
-% Others
-\newcommand{\zfrak}{\mathfrak{Z}}
+% Mathfrak
 \newcommand{\afrak}{\mathfrak{A}}
+\newcommand{\bfrak}{\mathfrak{B}}
+\newcommand{\cfrak}{\mathfrak{C}}
+\newcommand{\dfrak}{\mathfrak{D}}
+\newcommand{\efrak}{\mathfrak{E}}
 \newcommand{\ffrak}{\mathfrak{F}}
+\newcommand{\gfrak}{\mathfrak{G}}
+\newcommand{\hfrak}{\mathfrak{H}}
+\newcommand{\ifrak}{\mathfrak{I}}
+\newcommand{\jfrak}{\mathfrak{J}}
+\newcommand{\kfrak}{\mathfrak{K}}
+\newcommand{\lfrak}{\mathfrak{L}}
+\newcommand{\mfrak}{\mathfrak{M}}
+\newcommand{\nfrak}{\mathfrak{N}}
+\newcommand{\ofrak}{\mathfrak{O}}
+\newcommand{\pfrak}{\mathfrak{P}}
+\newcommand{\qfrak}{\mathfrak{Q}}
 \newcommand{\rfrak}{\mathfrak{R}}
+\newcommand{\sfrak}{\mathfrak{S}}
+\newcommand{\tfrak}{\mathfrak{T}}
+\newcommand{\ufrak}{\mathfrak{U}}
+\newcommand{\vfrak}{\mathfrak{V}}
+\newcommand{\wfrak}{\mathfrak{W}}
+\newcommand{\xfrak}{\mathfrak{X}}
+\newcommand{\yfrak}{\mathfrak{Y}}
+\newcommand{\zfrak}{\mathfrak{Z}}
 
-% Script (for sigma algebra and risk)
+% Mathscr
+\newcommand{\ascr}{\mathscr{A}}
+\newcommand{\bscr}{\mathscr{B}}
+\newcommand{\cscr}{\mathscr{C}}
+\newcommand{\dscr}{\mathscr{D}}
+\newcommand{\escr}{\mathscr{E}}
+\newcommand{\fscr}{\mathscr{F}}
+\newcommand{\gscr}{\mathscr{G}}
+\newcommand{\hscr}{\mathscr{H}}
+\newcommand{\iscr}{\mathscr{I}}
+\newcommand{\jscr}{\mathscr{J}}
+\newcommand{\kscr}{\mathscr{K}}
+\newcommand{\lscr}{\mathscr{L}}
+\newcommand{\mscr}{\mathscr{M}}
+\newcommand{\nscr}{\mathscr{N}}
+\newcommand{\oscr}{\mathscr{O}}
+\newcommand{\pscr}{\mathscr{P}}
+\newcommand{\qscr}{\mathscr{Q}}
 \newcommand{\rscr}{\mathscr{R}}
+\newcommand{\sscr}{\mathscr{S}}
+\newcommand{\tscr}{\mathscr{T}}
+\newcommand{\uscr}{\mathscr{U}}
+\newcommand{\vscr}{\mathscr{V}}
+\newcommand{\wscr}{\mathscr{W}}
 \newcommand{\xscr}{\mathscr{X}}
 \newcommand{\yscr}{\mathscr{Y}}
-\newcommand{\sscr}{\mathscr{S}}
-\newcommand{\ascr}{\mathscr{A}}
-\newcommand{\fscr}{\mathscr{F}}
-\newcommand{\bscr}{\mathscr{B}}
+\newcommand{\zscr}{\mathscr{Z}}
 
-% Normal
+% Mathbb
+\newcommand{\abb}{\mathbb{A}}
+\newcommand{\bbb}{\mathbb{B}}
+\newcommand{\cbb}{\mathbb{C}}
+\newcommand{\dbb}{\mathbb{D}}
+\newcommand{\ebb}{\mathbb{E}}
+\newcommand{\fbb}{\mathbb{F}}
+\newcommand{\gbb}{\mathbb{G}}
+\newcommand{\hbb}{\mathbb{H}}
+\newcommand{\ibb}{\mathbb{I}}
+\newcommand{\jbb}{\mathbb{J}}
+\newcommand{\kbb}{\mathbb{K}}
+\newcommand{\lbb}{\mathbb{L}}
+\newcommand{\mbb}{\mathbb{M}}
+\newcommand{\nbb}{\mathbb{N}}
+\newcommand{\obb}{\mathbb{O}}
+\newcommand{\pbb}{\mathbb{P}}
+\newcommand{\qbb}{\mathbb{Q}}
+\newcommand{\rbb}{\mathbb{R}}
+\newcommand{\sbb}{\mathbb{S}}
+\newcommand{\tbb}{\mathbb{T}}
+\newcommand{\ubb}{\mathbb{U}}
+\newcommand{\vbb}{\mathbb{V}}
+\newcommand{\wbb}{\mathbb{W}}
+\newcommand{\xbb}{\mathbb{X}}
+\newcommand{\ybb}{\mathbb{Y}}
+\newcommand{\zbb}{\mathbb{Z}}
+
+
+%===============================================================================
+%=============================== SPECIAL SYMBOLS ===============================
+%===============================================================================
+
+
+% Orbit (group theory)
+\newcommand{\orbit}{\mathcal{O}}
+% Normal group
 \newcommand{\normal}{\mathcal{N}}
-
 % Indicator function
 \newcommand{\indicator}{\mathbbm{1}}
+% Laplace transform
+\newcommand{\laplace}[1]{\mathcal{L}}
 
 
-% Bracket types
+%===============================================================================
+%================================== OPERATORS ==================================
+%===============================================================================
+
+
+% Inverse exponent
+\newcommand{\inv}[0]{^{-1}}
+% Overline bar
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}}
+% Less than or equal slanted
+\newcommand{\seqs}{\leqslant}
+% Greater or equal slanted
+\newcommand{\geqs}{\geqslant}
+% Subset or equal
+\newcommand{\sub}{\subseteq}
+% Proper subset
+\newcommand{\prosub}{\subset}
 
 % Parantheses
 \newcommand{\para}[1]{\left( #1 \right)}
@@ -147,28 +213,48 @@
 % Angled Brackets
 \newcommand{\ang}[1]{\left\langle #1 \right\rangle}
 
-% Color
-\newcommand{\myColor}[2]{
-\begingroup
-\color{#1}
-    #2
-\endgroup
-}
+% Piece wise (use \\ between cases)
+\newcommand{\piecewise}[1]{\begin{cases} #1 \end{cases}}
 
 
+%===============================================================================
+%============================== TEXT BASED SYMBOLS =============================
+%===============================================================================
+
+
+% Radians
+\newcommand{\rad}{\text{rad}}
+% Least Common Multiple
+\newcommand{\lcm}{\text{lcm}}
+% Automorphism
+\newcommand{\Aut}{\text{Aut}}
+% Variance
 \newcommand{\var}{\text{Var}}
+% Covariance
 \newcommand{\cov}{\text{Cov}}
+% Cofactor (matrix)
 \newcommand{\cof}{\text{Cof}}
+% Adjugate (matrix)
 \newcommand{\adj}{\text{Adj}}
+% Trace (matrix)
+\newcommand{\tr}{\text{tr}}
+% Standard deviation
 \newcommand{\std}{\text{Std}}
+% Correlation coefficient
 \newcommand{\corr}{\text{Corr}}
+% Sign
 \newcommand{\sign}{\text{sign}}
 
-
-% And and Or in math mode
-\newcommand{\AND}{\qquad \text{ and } \qquad}
-\newcommand{\OR}{\qquad \text{ or } \qquad}
-\newcommand{\IF}{\qquad \text{ if }}
+% And text
+\newcommand{\AND}{\text{ and }}
+% Or text 
+\newcommand{\OR}{\text{ or }}
+% If text
+\newcommand{\IF}{\text{ if }}
+% When text
+\newcommand{\WHEN}{\text{ when }}
+% Then text
+\newcommand{\THEN}{\text{ then }}
 
 % 1st
 \newcommand{\st}[1]{#1^{\text{st}}}
@@ -178,103 +264,102 @@
 \newcommand{\rd}[1]{#1^{\text{rd}}}
 % nth
 \newcommand{\nth}[1]{#1^{\text{th}}}
-% Derivation
 
-% d over d
+
+%===============================================================================
+%========================= PROBABILITY AND STATISTICS ==========================
+%===============================================================================
+
+
+% Permutation
+\newcommand{\perm}[2]{{}^{#1}\!P_{#2}}
+% Combination
+\newcommand{\comb}[2]{{}^{#1}C_{#2}}
+
+% Baye's risk
+\newcommand{\risk}[1]{\mathscr{R}_{#1}}
+% Baye's optimal risk
+\newcommand{\riskOptimal}[1]{\mathscr{R}_{#1}^*}
+% Baye's empirical risk
+\newcommand{\riskEmpirical}[2]{\hat{\mathscr{R}}_{#1}^{#2}}
+
+
+%===============================================================================
+%=================================== CALCULUS ==================================
+%===============================================================================
+
+
+% d over d derivative
 \newcommand{\dd}[2]{\dfrac{d#1}{d#2}}
-% partial d over d
+% partial d over d derivative
 \newcommand{\partialdd}[2]{\dfrac{\partial #1}{\partial #2}}
-% delta d over d
+% delta d over d derivative
 \newcommand{\deltadd}[2]{\dfrac{\Delta #1}{\Delta #2}}
 
-% Integration
-
-% One variable
+% Integration between a and b
 \newcommand{\integral}[4]{\int_{#1}^{#2} #3 \, #4}
-% Two variables
-\newcommand{\multiIntegral}[6]{\int_{#1}^{#2}\int_{#3}^{#4} #5 \, #6}
-% Bounded by some space 
+% Integration in some space 
 \newcommand{\boundIntegral}[2]{\int_{#1} #2 \, d#1}
 
 % Limit
 \newcommand{\limit}[3]{\lim_{#1 \to #2} #3}
 
+
+%===============================================================================
+%================================  BIG SYMBOLS  ================================
+%===============================================================================
+
+
+% Sum
+\newcommand{\sumof}[2]{\sum_{#1}^{#2}}
+% Product
+\newcommand{\productof}[2]{\prod_{#1}^{#2}}
+% Union
+\newcommand{\unionof}[2]{\bigcup_{#1}^{#2}}
+% Intersection
+\newcommand{\intersectionof}[2]{\bigcap_{#1}^{#2}}
+% Or
+\newcommand{\orof}[2]{\bigvee_{#1}^{#2}}
+% And
+\newcommand{\andof}[2]{\bigwedge_{#1}^{#2}}
+
+
+%===============================================================================
+%=============================== LINEAR ALGEBRA ================================
+%===============================================================================
+
+
 % Bold vector arrow
 \newcommand{\bv}[1]{\vec{\mathbf{#1}}}
 
-% Inverse exponent
-\newcommand{\inv}[0]{^{-1}}
+% Matrix or vector (use // for column, & for row) 
+% with brackets
+\newcommand{\bmat}[1]{\begin{bmatrix} #1 \end{bmatrix}}
+% Matrix or vector (use // for column, & for row) 
+% with curved brackets
+\newcommand{\pmat}[1]{\begin{pmatrix} #1 \end{pmatrix}}
+% Matrix or vector (use // for column, & for row) 
+% with lines on either side 
+\newcommand{\lmat}[1]{\begin{vmatrix} #1 \end{vmatrix}}
+% Matrix or vector (use // for column, & for row) 
+% with curly braces
+\newcommand{\cmat}[1]{\begin{Bmatrix} #1 \end{Bmatrix}}
+% Matrix or vector (use // for column, & for row) 
+% with no braces
+\newcommand{\mat}[1]{\begin{matrix} #1 \end{matrix}}
 
-\newcommand{\laplace}[1]{\mathcal{L}\left\{#1\right\}}
-\newcommand{\invlaplace}[1]{\mathcal{L}^{-1}\left\{#1\right\}}
+
+%===============================================================================
+%================================ LARGE OBJECTS ================================
+%===============================================================================
 
 
-% 3D vector
-\newcommand{\vecThree}[3]{\begin{bmatrix} 
-    #1 \\ #2 \\ #3 
-\end{bmatrix}}
-% Transposed 3D vector
-\newcommand{\vecThreeTranposed}[3]{\begin{bmatrix} 
-    #1 & #2 & #3
-\end{bmatrix}}
-
-% 3x3 Matrix
-\newcommand{\matThree}[9]{\begin{bmatrix} 
-    #1 & #2 & #3 \\
-    #4 & #5 & #6 \\
-    #7 & #8 & #9
-\end{bmatrix}}
-
-% 2D vector
-\newcommand{\vecTwo}[2]{\begin{bmatrix} 
-    #1 \\ #2 
-\end{bmatrix}}
-
-% Transposed 2D vector
-\newcommand{\vecTwoTransposed}[2]{\begin{bmatrix} 
-    #1 & #2 
-\end{bmatrix}}
-
-% 2x2 Matrix
-\newcommand{\matTwo}[4]{\begin{bmatrix} 
-    #1 & #2 \\
-    #3 & #4 
-\end{bmatrix}}
-
-% Piece wise
-\newcommand{\piecewise}[2]{\begin{cases}
-    #1 \\
+% Color
+\newcommand{\colorText}[2]{
+\begingroup
+\color{#1}
     #2
-\end{cases}}
-
-% Piece wise
-\newcommand{\piecewiseThree}[3]{\begin{cases}
-    #1 \\
-    #2 \\
-    #3
-\end{cases}}
-
-
-% Three columns figure
-\newcommand{\colThree}[4]{
-    \begin{figure}[h]
-        \centering
-        \begin{minipage}{0.3\textwidth}
-            \centering
-            #1
-        \end{minipage}
-        \hspace{0.5cm}
-        \begin{minipage}{0.3\textwidth}        
-            \centering
-            #2
-        \end{minipage}
-        \hspace{0.5cm}
-        \begin{minipage}{0.3\textwidth}
-            \centering
-            #3
-        \end{minipage}
-        \caption{#4}
-    \end{figure}
+\endgroup
 }
 
 % Centered figure
@@ -287,10 +372,16 @@
 }
 
 % Tikz figure
-\newcommand{\tikzFigure}[1]{
+\newcommand{\tikzGraphic}[1]{
     \begin{center}
     \begin{tikzpicture}
         #1
     \end{tikzpicture}
     \end{center}
 }
+
+% Enumerate numbers (seperate by \item)
+\newcommand{\numbers}{\textbf{\number*)}}
+
+% Enumerate letters (seperate by \item)
+\newcommand{\letters}{\textbf{\alph*)}}

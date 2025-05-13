@@ -23,7 +23,7 @@
     \pagenumbering{arabic}
 
     For a fixed positive integer $n$,
-    we will define an equivalency relation on $\Z$
+    we will define an equivalency relation on $\zbb$
     \[ a \sim b \text{ if and only if } n \mid (b - a) \]
     This is clearly both reflexive and symmetric.
     It is also transitive;
@@ -67,7 +67,7 @@
     when divided by $n$ using the division algorithm from section 0.0.2. \\
 
     The number of distinct equivalence classes modulo $n$
-    (which partition $\Z$) is $n$.
+    (which partition $\zbb$) is $n$.
     This is easy to see, since each equivalence classe
     determines the remainder of its elements when divided by $n$,
     and the remainder $r$ has to be an integer $0 \leqslant r < n$. \\
@@ -86,7 +86,7 @@
     where we attempt to find
     the smallest integer congruent to $a$ modulo $n$,
     the representative of the class that we most often use. \\
-    This set of equivalence classes is called $\Z/n\Z$,
+    This set of equivalence classes is called $\zbb/n\zbb$,
     \textbf{the integers modulo $\mathbf{\textit{n}}$}.
     The reason we use this notation will become clear
     in chapter 1.3.1, regarding Quotient Groups. \\
@@ -95,18 +95,18 @@
     each positive integer $n$ we fix at the start,
     as a new $n$ defines a new relation,
     with new equivalence classes.
-    for instance, in the set $\Z/3\Z$
+    for instance, in the set $\zbb/3\zbb$
     (when working in the relation with $n = 3$),
     $6$ and $9$ are part of the same class $\olsi{0}$,
     as both have remainder $0$ when divided by $3$. 
-    But in $\Z/4\Z$,
+    But in $\zbb/4\zbb$,
     (when working in the relation with $n = 3$),
     $6 \in \olsi{2}$ and $9 \in \olsi{1}$,
     as $2$ and $1$ are the remainders of $6$ and $9$
     when divided by $n$. \\
 
     \textbf{Modular Arithmetic} is defined as addition and multiplication
-    performed on the elements of $\Z/n\Z$:
+    performed on the elements of $\zbb/n\zbb$:
     \[ \olsi{a} + \olsi{b} = \olsi{a + b} 
     \quad \text{ and } \quad
     \olsi{a} \cdot \olsi{b} = \olsi{a \cdot b} \]
@@ -139,7 +139,7 @@
     We will talk about this in detail in section 1.1.1. \\
     For now, we will note that the addition and multiplication
     operations on the equivalence classes can be seen as
-    functions $\Z/n\Z \times \Z/n\Z \to \Z/n\Z$. \\
+    functions $\zbb/n\zbb \times \zbb/n\zbb \to \zbb/n\zbb$. \\
     If for instance addition of residue classes is well defined,
     the function described above would also be well defined.
     This means that that if $\olsi{a} = \olsi{b}$,
@@ -175,7 +175,7 @@
     it would not have been welld defined. \\
 
     Now to prove the last statement,
-    we show that, for any $a_1, a_1, b_1, b_2 \in \Z$,
+    we show that, for any $a_1, a_1, b_1, b_2 \in \zbb$,
     with $\olsi{a_1} = \olsi{b_1}$ and  $\olsi{a_2} = \olsi{b_2}$,
     we must show that $\olsi{a_1 + a_2} = \olsi{b_1 + b_2}$
     and  $\olsi{a_1a_2} = \olsi{b_1b_2}$
@@ -207,14 +207,14 @@
     nor to binary functions (operators).
     For instance, the inverse of $\olsi{a}$
     and can be thought of as a unary operator,
-    or as a function $f: \Z/n\Z \to \Z/n\Z$,
+    or as a function $f: \zbb/n\zbb \to \zbb/n\zbb$,
     which also needs to be shown to be well defined.
 
-    An important subset of $\Z/n\Z$
+    An important subset of $\zbb/n\zbb$
     is the set consisting of the collection of residue classes
-    that have a multiplicative inverse in $\Z/n\Z$:
-    \[ (\Z/n\Z)^\times
-    = \{ \olsi{a} \in \Z/n\Z \mid \text{gcd}(a, n) = 1 \} \]
+    that have a multiplicative inverse in $\zbb/n\zbb$:
+    \[ (\zbb/n\zbb)^\times
+    = \{ \olsi{a} \in \zbb/n\zbb \mid \text{gcd}(a, n) = 1 \} \]
     A \textbf{multiplicative inverse} of a class $\olsi{a}$
     is a class $\olsi{x}$ such that $\olsi{a}\olsi{x} = 1$.
     Obviously, in order for the multiplicative

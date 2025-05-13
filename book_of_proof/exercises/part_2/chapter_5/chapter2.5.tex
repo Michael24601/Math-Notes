@@ -24,47 +24,47 @@
     For questions 1 - 13, we have to use a contrapositive proof. \\
 
     \section*{Exercise 1}
-    Proof that for $n \in \Z$,
+    Proof that for $n \in \zbb$,
     if $n^2$ is even,
     then $n$ is even: \\
     Suppose that $n \in Z$ 
     such that $n$ is not even.
     Then $n$ is odd which means
-    that $n$ can be written as $2m + 1$ where $m \in \Z$.
+    that $n$ can be written as $2m + 1$ where $m \in \zbb$.
     Then $n^2 = (2m+1)^2 = 4m^2 + 4m + 1 = 2(2m^2 + 2m) + 1$
     where $2m^2 + 2m$ is an integer.
     This means that $n^2$ is odd (not even),
     which proves the proposition contrapositively.
 
     \section*{Exercise 2}
-    Proof that for $n \in \Z$,
+    Proof that for $n \in \zbb$,
     if $n^2$ is odd,
     then $n$ is odd: \\
     Suppose that $n \in Z$ 
     such that $n$ is not odd.
     Then $n$ is even which means
-    that $n$ can be written as $2m$ where $m \in \Z$.
+    that $n$ can be written as $2m$ where $m \in \zbb$.
     Then $n^2 = (2m)^2 = 4m^2 + 4m = 2(2m^2 + 2m)$
     where $2m^2 + 2m$ is an integer.
     This means that $n^2$ is even (not odd),
     which proves the proposition contrapositively.
 
     \section*{Exercise 3}
-    Proof that for $a, b \in \Z$,
+    Proof that for $a, b \in \zbb$,
     if $a^2(b^2 - 2b)$ is odd,
     then $a$ and $b$ are odd: \\
-    Suppose that $a, b \in \Z$
+    Suppose that $a, b \in \zbb$
     such that $a$ and $b$ aren't both odd. 
     This means that $a$ or $b$ is even (or both). \\
     If $a$ is even (and $b$ is either),
-    we could write $a$ as $2n$ for some $n \in \Z$.
+    we could write $a$ as $2n$ for some $n \in \zbb$.
     Then
     \[ a^2(b^2 - 2b) = (2n)^2(b^2 - 2b)
     = 4n^2(b^2 - 2b) = 2(2n^2(b^2 - 2b)) \]
     where $2n^2(b^2 - 2b)$ is an integer,
     so $a^2(b^2 - 2b)$ is even (not odd). \\
     If $b$ is even (and $a$ is either),
-    we could write $b$ as $2m$ for some $n \in \Z$.
+    we could write $b$ as $2m$ for some $n \in \zbb$.
     Then
     \[ a^2(b^2 - 2b) = a^2((2m)^2 - 2(2m))
     = a^2(4m^2 - 4m) = 2(a^2(2m^2 - 2m)) \]
@@ -72,31 +72,31 @@
     so $a^2(b^2 - 2b)$ is even (not odd). \\
 
     \section*{Exercise 4}
-    Proof that for $a, b, c \in \Z$,
+    Proof that for $a, b, c \in \zbb$,
     if $a \nmid bc$,
     then $a \nmid b$: \\
-    Suppose that $a, b, c \in \Z$
+    Suppose that $a, b, c \in \zbb$
     such that $a \mid b$,
-    then $b = an$ for some $n \in \Z$.
+    then $b = an$ for some $n \in \zbb$.
     So $bc = a(cn)$ where $cn$ is an integer.
     Thus $a \mid bc$,
     proving the proposition contrapositively. \\
 
     \section*{Exercise 5}
-    Proof that for $x \in \R$,
+    Proof that for $x \in \rbb$,
     if $x^2 + 5x < 0$,
     then $x < 0$: \\
-    Suppose that $x \in \R$
+    Suppose that $x \in \rbb$
     such that $x \geqslant 0$.
     Then $5x \geqslant 0$ and $x^2 \geqslant 0$.
     This means that $x^2 + 5x \geqslant 0$,
     which proves the proposition contrapositively. \\
 
     \section*{Exercise 6}
-    Proof that for $x \in \R$,
+    Proof that for $x \in \rbb$,
     if $x^3 - x > 0$,
     then $x > -1$: \\
-    Suppose that $x \in \R$
+    Suppose that $x \in \rbb$
     such that $x \leqslant -1$.
     Then $x^2\geqslant 1$.
     We can then multiply the whole equation by $x$,
@@ -106,22 +106,22 @@
     which proves the proposition contrapositively. \\
 
     \section*{Exercise 7}
-    Proof that for $a, b \in \Z$,
+    Proof that for $a, b \in \zbb$,
     if $a + b$ and $ab$ are even,
     then $a$ and $b$ are even: \\
-    Suppose that $a, b \in \Z$
+    Suppose that $a, b \in \zbb$
     such that $a$ or $b$ is odd
     (both of them are not even).
     We can assume, with no loss of generality
     that $a$ is odd, and $b$ is either.
-    Then $a = 2n+1$ for some $n \in \Z$. \\
+    Then $a = 2n+1$ for some $n \in \zbb$. \\
     Now if $b$ is even,
-    then $b = 2m$ for some $m \in \Z$. 
+    then $b = 2m$ for some $m \in \zbb$. 
     This means that $ab = (2n+1)(2m) = 2(m(2n+1))$
     where $m(2n+1)$ is an integer,
     so $ab$ is even. \\
     On ther other hand, if $b$ is odd,
-    then $b = 2q + 1$ for some $q \in \Z$. 
+    then $b = 2q + 1$ for some $q \in \zbb$. 
     This means that $a + b = 2n+1 + 2q+1 = 2(n + q + 1)$
     where $n + q + 1$ is an integer,
     so $a + b$ is even. \\
@@ -130,10 +130,10 @@
     proving the proposition contrapositively. \\
 
     \section*{Exercise 8}
-    Proof that for $x \in \R$,
+    Proof that for $x \in \rbb$,
     if $x^5 - 4x^4 + 3x^3 - x^2 + 3x - 4 \geqslant 0$,
     then $x \geqslant 0$: \\
-    Suppose that $x \in \R$
+    Suppose that $x \in \rbb$
     such that $x < 0$.
     Then $x^5, x^3, x < 0$,
     and $x^2, x^4 > 0$.
@@ -144,35 +144,35 @@
     completing the proof. \\
 
     \section*{Exercise 9}
-    Proof that for $n \in \Z$,
+    Proof that for $n \in \zbb$,
     if $3 \nmid n^2$,
     then $3 \nmid n$: \\
-    Suppose that $n \in \Z$
+    Suppose that $n \in \zbb$
     such that $3 \nmid n$.
-    Then $n = 3m$ for some $m \in \Z$.
+    Then $n = 3m$ for some $m \in \zbb$.
     This means that $n^2 = (3m)^2 = 9m^2 = 3(2m^2)$,
     which tells us that $3 \mid n^2$,
     proving the proposition contrapositively. \\
     
     \section*{Exercise 10}
-    Proof that for $x, y, z \in \Z$ and $x \neq 0$,
+    Proof that for $x, y, z \in \zbb$ and $x \neq 0$,
     if $x \nmid yz$,
     then $x \nmid y$ and $x \nmid z$: \\
-    Suppose that  $x, y, z \in \Z$
+    Suppose that  $x, y, z \in \zbb$
     such that $x \neq 0$, $x \mid y$, $x \mid z$. 
-    Then $y = nx$ and $z = mx$ for some $n, m \in \Z$.
+    Then $y = nx$ and $z = mx$ for some $n, m \in \zbb$.
     This means that $yz = mnx^2 = x(xmn)$
     where $xmn$ is an integer.
     We thus conclude that $x \mid yz$
     which proves the proposition contrapositively. \\
 
     \section*{Exercise 11}
-    Proof that for $x, y \in \Z$,
+    Proof that for $x, y \in \zbb$,
     if $x^2(y+3)$ is even,
     then $x$ is even or $y$ is odd: \\
-    Suppose that $x, y \in \Z$
+    Suppose that $x, y \in \zbb$
     such that $x$ is not even (odd) and $y$ is not odd (even).
-    Then $x = 2n + 1$ and $y = 2m$ for some $n, m \in \Z$.
+    Then $x = 2n + 1$ and $y = 2m$ for some $n, m \in \zbb$.
     This means that
     \[ x^2(y+3) = (2n+1)^2(2m + 3)
     = (4n^2 + 4n + 1)(2m + 3) \]
@@ -183,22 +183,22 @@
     proving the proposition contrapositively. \\
 
     \section*{Exercise 12}
-    Proof that for $x \in \Z$,
+    Proof that for $x \in \zbb$,
     if $4 \nmid x^2$,
     then $x$ is odd: \\
-    Suppose that $x \in \Z$
+    Suppose that $x \in \zbb$
     such that $x$ is even.
-    Then $x = 2n$ for some $n \in \Z$.
+    Then $x = 2n$ for some $n \in \zbb$.
     This means that $x^2 = (2n)^2 = 4n^2$,
     which tells us that $4 \nmid x^2$,
     proving the proposition contrapositively. \\
 New line
 
     \section*{Exercise 13}
-    Proof that for $x \in \R$,
+    Proof that for $x \in \rbb$,
     if $x^5 + 7x^3 + 5x \geqslant x^4 + x^2 + 8$,
     then $x \geqslant 0$: \\
-    Suppose that $x \in \R$
+    Suppose that $x \in \rbb$
     such that $x < 0$.
     Then $x^5, x^3, x < 0$,
     which means that $x^5 + 7x^3 + 5x < 0$.
@@ -211,14 +211,14 @@ New line
     and contrapositive proof. \\
 
     \section*{Exercise 14}
-    Proof that for $a, b \in \Z$,
+    Proof that for $a, b \in \zbb$,
     if $a$ and $b$ have the same parity,
     then $3a + 7$ and $7b - 4$ do not: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a, b \in \Z$
+    Suppose that $a, b \in \zbb$
     such that $a$ and $b$ have the same parity: \\
     If $a$ and $b$ are even,
-    then $a = 2n$ and $b = 2m$ for some $n, m \in \Z$.
+    then $a = 2n$ and $b = 2m$ for some $n, m \in \zbb$.
     This means that
     \[ 3a + 7 = 3(2n) + 7 = 6n + 7 = 2(3n + 3) + 1 \]
     where $3n + 3$ is an integer,
@@ -229,7 +229,7 @@ New line
     making $7b - 4$ even.
     This means that they have opposite parity. \\
     If $a$ and $b$ are odd,
-    then $a = 2p + 1$ and $b = 2q + 1$ for some $p, q \in \Z$.
+    then $a = 2p + 1$ and $b = 2q + 1$ for some $p, q \in \zbb$.
     This means that
     \[ 3a + 7 = 3(2p + 1) + 7 = 6p + 10 = 2(3p + 5) \]
     where $3p + 5$ is an integer,
@@ -241,58 +241,58 @@ New line
     This means that they have opposite parity. \\
 
     \section*{Exercise 15}
-    Proof that for $x \in \Z$,
+    Proof that for $x \in \zbb$,
     if $x^3 - 1$ is even, 
     then $x$ is odd: \\
     For this question, it is easier to use a contrapositive proof. \\
-    Suppose that $x \in \Z$
+    Suppose that $x \in \zbb$
     such that $x$ is even (not odd).
-    Then $x = 2n$ for some $n \in \Z$.
+    Then $x = 2n$ for some $n \in \zbb$.
     This means that
     \[ x^3 - 1 = (2n^3) - 1 = 8n^3 - 2 + 1 = 2(4n^2 - 1) + 1 \]
     where $4n^2 - 1$ is an integer,
     which tells us that $x^3 - 1$ is odd (not even). \\
 
     \section*{Exercise 16}
-    Proog that for $x, y \in \Z$,
+    Proog that for $x, y \in \zbb$,
     if $x + y$ is even,
     then $x$ and $y$ have the same parity: \\
     For this question, it is easier to use a contrapositive proof. \\
-    Suppose that $x, y \in \Z$
+    Suppose that $x, y \in \zbb$
     such that $x$ and $y$ have opposite parity. \\
     We can assume with no loss of generality
     that $x$ is even and $y$ is odd. 
     If so, we can write $x = 2n$ and $y = 2m + 1$
-    for some $n, m \in \Z$.
+    for some $n, m \in \zbb$.
     This means that $x + y = 2n + 2m + 1 = 2(n+m) + 1$
     where $n + m$ is an integer,
     which means that $x + y$ is odd,
     proving the proposition contrapositively. \\
 
     \section*{Exercise 17}
-    Proof that for $n \in \Z$,
+    Proof that for $n \in \zbb$,
     if $n$ is odd,
     then $8 \mid (n^2 - 1)$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $n \in \Z$
+    Suppose that $n \in \zbb$
     such that $n$ is odd.
-    Then $n = 2m+1$ for some $m \in \Z$.
+    Then $n = 2m+1$ for some $m \in \zbb$.
     This means that
     \[ n^2 - 1 = (2m+1)^2 - 1 = 4m^2 + 4m = 4(m)(m+1) \]
     Since $m$ and $m+1$ are consecutive integers,
     one of them is even;
     we can assume with no loss of generality that it is $m$
     which is even.
-    This means that we can write $m$ as $2a$ for some $a \in \Z$.
+    This means that we can write $m$ as $2a$ for some $a \in \zbb$.
     By extension, this means that $n^2 - 1 = 8a(m+1)$
     where $a(m+1)$ is an integer,
     which means that $8 \nmid n^2 - 1$. \\
 
     \section*{Exercise 18}
-    Proof that if $a, b \in \Z$,
+    Proof that if $a, b \in \zbb$,
     then $(a+b)^3 \equiv a^3 + b^3 \mod 3$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a, b \in \Z$.
+    Suppose that $a, b \in \zbb$.
     Then
     \[ (a+b)^3 - (a^3 + b^3) = a^3 + 3a^2b + 3ab^2 + b^3 - (a^3 + b^3) 
     = 3(a^2b + ab^2) \]
@@ -301,15 +301,15 @@ New line
     This tells us that $(a+b)^3 \equiv a^3 + b^3 \mod 3$. \\
 
     \section*{Exercise 19}
-    Proof that for $a, b, c \in \Z$ and $n \in \N$,
+    Proof that for $a, b, c \in \zbb$ and $n \in \nbb$,
     if $a \equiv b \mod n$ and $a \equiv c \mod n$,
     then $c \equiv b \mod n$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a, b, c \in \Z$ and $n \in \N$
+    Suppose that $a, b, c \in \zbb$ and $n \in \nbb$
     such that $a \equiv b \mod n$ and $a \equiv c \mod n$.
     Then $n \mid (a - b)$ and $n \mid (a - c)$,
     which means that $a-b = np$ and $a-c = nq$
-    for some $p, q \in \Z$.
+    for some $p, q \in \zbb$.
     This means that
     \[ (a-b)-(a-c) = c - b  \quad = \quad np - nq = n(p -q) \]
     where $p-q$ is an integer.
@@ -317,14 +317,14 @@ New line
     which means that $c \equiv b \mod n$. \\
 
     \section*{Exercise 20}
-    Proof that for $a \in \Z$,
+    Proof that for $a \in \zbb$,
     if $a \equiv 1 \mod 5$,
     then $a^2 \equiv 1 \mod 5$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a \in \Z$,
+    Suppose that $a \in \zbb$,
     such that $a \equiv 1 \mod 5$.
     Then $5 \mid a-1$,
-    which means that $a-1 = 5n$ for some $n \in \Z$.
+    which means that $a-1 = 5n$ for some $n \in \zbb$.
     Rearranging the equation gives us $a = 5n - 1$,
     which means that $a^2 = (5n-1)^2 = 25n^2 -10n + 1$.
     We can rearrange the equation again to arrive
@@ -334,14 +334,14 @@ New line
     which tells us that $a^2 \equiv 1  \mod 5$. \\
 
     \section*{Exercise 21}
-    Proof that for $a, b \in \Z$ and $n \in \N$,
+    Proof that for $a, b \in \zbb$ and $n \in \nbb$,
     if $a \equiv b \mod n$,
     then $a^3 \equiv b^3 \mod n$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a, b \in \Z$ and $n \in \N$
+    Suppose that $a, b \in \zbb$ and $n \in \nbb$
     such that $a \equiv b \mod n$.
     Then $n \mid (a - b)$,
-    which means that $(a-b) = nm$ for some $m \in \Z$.
+    which means that $(a-b) = nm$ for some $m \in \zbb$.
     This means that $(a-b)^3 = (nm)^3$,
     which means that $a^3 - 3a^2b + 3ab^2 - b^3 = n^3m^3$.
     We can rearrange the equation to arrive at
@@ -350,41 +350,41 @@ New line
     where $n^2m^3 + 3ab$ is an integer.
 
     \section*{Exercise 22}
-    Proof that for $a \in \Z$ and $n \in \N$,
+    Proof that for $a \in \zbb$ and $n \in \nbb$,
     if $r$ is the remainder of $a$ being divided by $n$,
     then $a \equiv r \mod n$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a \in \Z$ and $n \in \N$ such that
+    Suppose that $a \in \zbb$ and $n \in \nbb$ such that
     if $r$ is the remainder of $a$ being divided by $n$.
-    Then $a = nq + r$ for some $q \in \Z$. 
+    Then $a = nq + r$ for some $q \in \zbb$. 
     This means that $a - r = nq$,
     which tells us that $n \mid (a-r)$.
     We thus conclude $a \equiv r \mod n$. \\
 
     \section*{Exercise 23}
-    Proof that for $a, b, c \in \Z$ and $n \in N$,
+    Proof that for $a, b, c \in \zbb$ and $n \in N$,
     if $a \equiv b \mod n$,
     then $ca \equiv b \mod n$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a, b, c \in \Z$ and $n \in N$
+    Suppose that $a, b, c \in \zbb$ and $n \in N$
     such that $a \equiv b \mod n$.
     Then $n \mid a - b$,
-    which means that $a-b = np$ for some $p \in \Z$.
+    which means that $a-b = np$ for some $p \in \zbb$.
     This means that $c(a-b) = ca - bc = npc$
     where $pc$ is an integer.
     We can conclude that $n \mid (ca - cb)$,
     which means that $ca \equiv cb \mod n$. \\
 
     \section*{Exercise 24}
-    Proof that for $a, b, c, d \in \Z$ and $n \in N$,
+    Proof that for $a, b, c, d \in \zbb$ and $n \in N$,
     if $a \equiv b \mod n$ and $c \equiv d \mod n$,
     then $ac \equiv bd \mod n$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a, b, c, d \in \Z$ and $n \in N$
+    Suppose that $a, b, c, d \in \zbb$ and $n \in N$
     such that $a \equiv b \mod n$ and $c \equiv d \mod n$.
     Then $n \mid a - b$ and $n \mid c - d$,
     which means that $a-b = np$ and $c -d = nq$
-    for some $p, q \in \Z$.
+    for some $p, q \in \zbb$.
     This means that $a = np + b$ and $c = nq + d$.
     We then get
     \[ ac = (np+b)(nq+d) = n^2pq + npd + nqb + bd \]
@@ -395,13 +395,13 @@ New line
     which means that $ac \equiv bd \mod n$. \\
 
     \section*{Exercise 25 $***$}
-    Proof that for $n \in \N$,
+    Proof that for $n \in \nbb$,
     if $2^n - 1$ is prime,
     then $n$ is prime: \\
     For this question, it is easier to use a contrapositive proof. \\
-    Suppose that $n \in \N$
+    Suppose that $n \in \nbb$
     such that $n$ is composite (not prime).
-    This means that $n = pq$ for some $p, q \in \Z$
+    This means that $n = pq$ for some $p, q \in \zbb$
     such that $p, q \geqslant 2$. \\
     We know that
     \[ x^k - 1 = (x-1)(x^{n-1} + x^{n-1} \dots x + 1) \]
@@ -415,11 +415,11 @@ New line
     $2^n - 1$ is composite (not prime). \\
 
     \section*{Exercise 26 $***$}
-    Proof that if $n = 2^k - 1$ for some $k \in \N$,
+    Proof that if $n = 2^k - 1$ for some $k \in \nbb$,
     then every entry in any row $n$
     of \textit{Pascal's Triangle} is odd: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $n = 2^k - 1$ for some $k \in \N$. \\
+    Suppose that $n = 2^k - 1$ for some $k \in \nbb$. \\
     We know that this is \textit{Pascal's Triangle}:
     \[
     \begin{array}{ccccccccccccc}
@@ -437,7 +437,7 @@ New line
     \]
     When we are at row $n$,
     all entries will be of the form $\comb{n}{m}$
-    where $m \in \N$ such that $0 \leqslant m \leqslant n$. \\
+    where $m \in \nbb$ such that $0 \leqslant m \leqslant n$. \\
     First, we assert that $\comb{n}{0} = 1$
     which is obviously odd. \\
     Next, we will show that this applies
@@ -463,24 +463,24 @@ New line
     from left to right. \\
 
     \section*{Exercise 27}
-    Proof that for $a \in \N$,
+    Proof that for $a \in \nbb$,
     if $a \equiv 0 \mod 4$ or $a \equiv 1 \mod 4$,
     then $\comb{a}{2}$ is even: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a \in \N$
+    Suppose that $a \in \nbb$
     such that $a \equiv 0 \mod 4$ or $a \equiv 1 \mod 4$.
     We know that
     \[ \comb{a}{2} = \dfrac{a!}{2!(a-2)!} = \dfrac{a(a-1)}{2} \]
     If $a \equiv 0 \mod 4$,
     then $4 \mid a$,
-    which means that $a = 4n$ for some $n \in \Z$.
+    which means that $a = 4n$ for some $n \in \zbb$.
     This tells us that 
     \[ \comb{a}{2} = \dfrac{4n(4n-1)}{2} = 2n(2n-1) \]
     where $n(2n-1)$ is an integer,
     which makes $\comb{a}{2}$ even. \\
     On the other hand, if $a \equiv 1 \mod 4$,
     then $4 \mid (a-1)$,
-    which means that $a-1 = 4n$ for some $n \in \Z$,'
+    which means that $a-1 = 4n$ for some $n \in \zbb$,'
     which in turn means that $a = 4n + 1$.
     This tells us that 
     \[ \comb{a}{2} = \dfrac{(4n+1)(4n)}{2} = 2n(2n+1) \]
@@ -488,22 +488,22 @@ New line
     which makes $\comb{a}{2}$ even. \\
 
     \section*{Exercise 28}
-    Proof that if $n \in \Z$,
+    Proof that if $n \in \zbb$,
     then $4 \nmid (n^2 - 3)$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $n \in \Z$.
+    Suppose that $n \in \zbb$.
     Then $n$ can be even or odd,
     so if we can show the proposition stands for both cases,
     we will have covered all of our bases. \\
     If $n$ is even,
-    then $n = 2m$ for some $m \in \Z$.
+    then $n = 2m$ for some $m \in \zbb$.
     This means that
     \[ n^2 - 3 = (2m)^2 - 3 = 4m^2 - 3 = 4m^2 - 4 + 1 = 4(m^2 - 1) + 1 \]
     This means that $(n^2 - 3) - 1 = 4(m^2 - 1)$
     where $m^2 - 1$ is an integer.
     So $(n^2 - 3) \equiv 1 \mod 4$. \\
     If $n$ is odd,
-    then $n = 2p+1$ for some $p \in \Z$.
+    then $n = 2p+1$ for some $p \in \zbb$.
     This means that
     \[ n^2 - 3 = (2p+1)^2 - 3 = 4p^2 + 4p + 1 - 3 =
     4p^2 + 4p - 4 + 2 = 4(p^2 + p - 1) + 2 \]
@@ -515,11 +515,11 @@ New line
     so $4 \nmid (n^2 - 3)$. \\
 
     \section*{Exercise 29}
-    Proof that for $a, b \in \Z$,
+    Proof that for $a, b \in \zbb$,
     if $a$ and $b$ aren't both $0$,
     then $\gcd(a, b) = \gcd(a-b, b)$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a, b \in \Z$
+    Suppose that $a, b \in \zbb$
     such that $a$ and $b$ aren't both $0$.
     Let's take $g_1 = \gcd(a, b)$ and $g_2 = \gcd(a - b, b)$.
     To show that they are equal,
@@ -527,7 +527,7 @@ New line
     and $g_2 \leqslant g_1$. \\
     We know that $g_1 \mid a$ and $g_1 \mid b$,
     which means that $a = ng_1$ and $b = mg_1$
-    for some $n, m \in \Z$.
+    for some $n, m \in \zbb$.
     This means that $a - b = ng_1 - mg_1 = (n-m)g_1$,
     where $n-m$ is an integer,
     which tells us that $g_1 \mid (a-b)$.
@@ -537,7 +537,7 @@ New line
     By the same argument,
     we know that $g_2 \mid b$ and $g_2 \mid (a-b)$,
     which means that $b = pg_2$ and $a-b = qg_2$
-    for some $p, q \in \Z$.
+    for some $p, q \in \zbb$.
     This means that $a - b + b = a = pg_2 + qg_2 = (p+q)g_2$,
     where $p+q$ is an integer,
     which tells us that $g_2 \mid a$.
@@ -547,11 +547,11 @@ New line
     We can thus conclude that $g_1 = g_2$. \\
 
     \section*{Exercise 30}
-    Proof that for $a, b \in \Z$ and $n \in \N$,
+    Proof that for $a, b \in \zbb$ and $n \in \nbb$,
     if $a \equiv b \mod n$,
     then $\gcd(a, n) = \gcd(b, n)$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a, b \in \Z$ and $n \in \N$
+    Suppose that $a, b \in \zbb$ and $n \in \nbb$
     such that $a \equiv b \mod n$.
     Let's take $g_1 = \gcd(a, n)$ and $g_2 = \gcd(b, n)$.
     To show that they are equal,
@@ -560,10 +560,10 @@ New line
     Since $a \equiv b \mod n$,
     we have that $n \mid (a-b)$,
     which means that $a-b = nm$
-    for some $m \in \Z$.
+    for some $m \in \zbb$.
     We know that $g_1 \mid a$ and $g_1 \mid n$.
     This means that $a = pg_1$ and $n = qg_1$
-    for some $p, q \in \Z$.
+    for some $p, q \in \zbb$.
     So we can rewrite $a-b = nm$
     as $b = pg_1 - qg_1m = g_1(p - qm)$
     where $p - qm$ is an integer.
@@ -574,7 +574,7 @@ New line
     On the other hand, 
     we know that $g_2 \mid b$ and $g_2 \mid n$,
     so we can write $b = g_2r$ and $b = g_2s$
-    for some $r, s \in \Z$. 
+    for some $r, s \in \zbb$. 
     So we can write $a-b = nm$
     as $a = rg_2 - sg_2m = g_2(r - sm)$
     where $r - sm$ is an integer.
@@ -585,21 +585,21 @@ New line
     We can thus conclude that $g_1 = g_2$. \\
 
     \section*{Exercise 31}
-    Proof that for $a, b \in \Z$,
+    Proof that for $a, b \in \zbb$,
     if the division algorithm is applied such that $a = qb + r$
-    where $0 \leqslant r < b$ for  $r, q \in \Z$,
+    where $0 \leqslant r < b$ for  $r, q \in \zbb$,
     then $\gcd(a, b) = \gcd(r, b)$: \\
     For this question, it is easier to use a direct proof. \\
-    Suppose that $a, b \in \Z$.
+    Suppose that $a, b \in \zbb$.
     By the division algorithm, $a = qb + r$
-    where $0 \leqslant r < b$ for  $r, q \in \Z$. \\
+    where $0 \leqslant r < b$ for  $r, q \in \zbb$. \\
     Let's take $g_1 = \gcd(a, b)$ and $g_2 = \gcd(r, b)$.
     To show that they are equal,
     we only need to show that $g_1 \leqslant g_2$
     and $g_2 \leqslant g_1$. \\
     We know that $g_1 \mid a$ and $g_1 \mid b$.
     Then $a = ng_1$ and $b = mg_1$
-    for some $n, m \in \Z$.
+    for some $n, m \in \zbb$.
     We know that $r = a - qb$,
     so $r = ng_1 - qmg_1 = g_1(n - qm)$
     where $n - qm$ is an integer.
@@ -609,7 +609,7 @@ New line
     it must be that $g_1 \leqslant g_2$. \\
     On the other hand, we know that $g_2 \mid r$ and $g_2 \mid b$.
     Then $r = pg_2$ and $b = sg_2$
-    for some $p, s \in \Z$.
+    for some $p, s \in \zbb$.
     We know that $a = qb + r$,
     so $a = qsg_2 + pg_2 = g_2(qs + p)$
     where $qs + p$ is an integer.

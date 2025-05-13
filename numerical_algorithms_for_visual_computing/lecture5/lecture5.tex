@@ -22,10 +22,10 @@
 \subsection*{Complex Numbers}
 
 We will now introduce complex numbers. \\
-As we know, a complex number $z \in \C$
+As we know, a complex number $z \in \cbb$
 can be written as:
 \[ z = a + ib \]
-for some $a, b \in \R$. \\
+for some $a, b \in \rbb$. \\
 We can define addition and multiplication:
 \[ z_1 = a + ib \qquad z_2 = c + id \]
 where:
@@ -207,7 +207,7 @@ an isomorphism between the group $S$
 of complex numbers $e^{i\theta}$
 on the unit circle, and the group of
 all rotation matrices $R(\theta)$
-in $\R^2$ (the special orthogonal group):
+in $\rbb^2$ (the special orthogonal group):
 \[ \phi: S \to SO(2) \]
 It's easy to see why this is an isomorphism.
 It's also clearly a homomorphism,
@@ -262,16 +262,16 @@ rotation by $\theta$. \\
 
 \subsection*{Tangent Spaces}
 
-Imagine for a second the line $i\R$,
+Imagine for a second the line $i\rbb$,
 which is the line that sits tangent
 to the unit circle at $(1 + i0)$. \\
 We can imagine that the exponential map
-maps reals $\theta \in \R$ which live on this
+maps reals $\theta \in \rbb$ which live on this
 tangent line, to the unit circle using
 $e^{i\theta}$,
 and the logarithmic map maps points on the
 unit circle back to the tangent line. \\
-The tangent line $i\R$ is the Lie alegbra
+The tangent line $i\rbb$ is the Lie alegbra
 of the Lie group $S$. \\
 
 Note that when we interpolated,
@@ -304,7 +304,7 @@ generalization of a curve or surface),
 we can define a tangent space
 $T_pC$ of the manifold at a point $p$. \\
 The tangent space to a point is the space spanned
-by the hyperplane $\R^{n}$
+by the hyperplane $\rbb^{n}$
 tangent to that point. \\
 For example, when we have a curve,
 which is a one dimensional manifold,
@@ -317,7 +317,7 @@ The tangent space is a vector space. \\
 We can define a manifold as such:
 \[ C(t) = \{\gamma_1(t),\gamma_2(t), 
 \dots\gamma_n(t) \mid
-t \in (\alpha, \beta, \dots) \in \R^m \} \]
+t \in (\alpha, \beta, \dots) \in \rbb^m \} \]
 So $t$ is a set of parameters,
 and $x_1(t),\gamma_2(t), \dots,\gamma_n(t)$
 are the coordinates of the manifold at
@@ -331,8 +331,8 @@ the manifold lives in. \\
 
 We can for now focus on having a simple
 curve, which is a one dimensional manifold
-in $\R^n$ space:
-\[ C(t) = \{\gamma(t) \in \R^n \mid t \in \R \} \]
+in $\rbb^n$ space:
+\[ C(t) = \{\gamma(t) \in \rbb^n \mid t \in \rbb \} \]
 Where:
 \[ \gamma(t) = \vecThree{\gamma_1(t)}
 {\vdots}{\gamma_n(t)} \]
@@ -363,13 +363,13 @@ We can then start at the origin $\gamma(t_0)$,
 and span the entirity of the vector $\dd{\gamma}{t}$,
 which gives us the parametric equation of a line:
 \[ \lambda \dd{\gamma}{t}(t_0) +
-\gamma(t_0) \qquad \lambda \in \R \]
+\gamma(t_0) \qquad \lambda \in \rbb \]
 Which is our tangent. \\
 
 If we ignore the origin and just focus
 on the space spanned by the direction:
 \[ T_pC = \curl{ \lambda \dd{\gamma}{t}(t_0)
-\mid \lambda \in \R } \]
+\mid \lambda \in \rbb } \]
 We have our tangent space,
 which is just a vector space. \\
 
@@ -379,8 +379,8 @@ and using partial derivatives. \\
 
 For example:
 \[ C(\alpha, \beta) =
-\{\gamma(\alpha, \beta) \in \R^n 
-\mid (\alpha, \beta) \in \R^2 \} \]
+\{\gamma(\alpha, \beta) \in \rbb^n 
+\mid (\alpha, \beta) \in \rbb^2 \} \]
 the following manifold is a two dimensional
 surface in $n$-dimensional space. \\
 The tangent space of this surface would be a
@@ -401,7 +401,7 @@ So the tangent plane will be:
 \lambda \partialdd{\gamma}{\alpha}(\alpha_0, \beta_0) +
 \mu \partialdd{\gamma}{\beta}(\alpha_0, \beta_0) +
 \gamma(\alpha_0, \beta_0) \qquad
-\lambda, \mu \in \R \]
+\lambda, \mu \in \rbb \]
 And the tangent space is the
 span of this plane, which means we
 can ignore the origin and just focus
@@ -410,7 +410,7 @@ that have the form:
 \[ T_pC = \curl{ 
 \lambda \partialdd{\gamma}{\alpha}(\alpha_0, \beta_0)
 + \mu \partialdd{\gamma}{\beta}(\alpha_0, \beta_0) 
-\mid \lambda, \mu \in \R } \]
+\mid \lambda, \mu \in \rbb } \]
 Which is again a vector space. \\
 
 Sometimes we may include the point
@@ -420,8 +420,8 @@ the idea that vectors in seperate tangent spaces
 can't be operated on at the same time. \\
 
 We know that for a function $\gamma$
-with an output in $\R^n$,
-and inputs $(\alpha, \beta) \in \R^2$,
+with an output in $\rbb^n$,
+and inputs $(\alpha, \beta) \in \rbb^2$,
 then the Jacobian is the $n \times 2$ matrix:
 \[ J_\gamma = \begin{bmatrix}
 {\partialdd{\gamma^1}{\alpha}} & 
@@ -453,7 +453,7 @@ of $\gamma$. \\
 We can then express the tangent space as:
 \[ T_pC = \curl{ 
 J_g \vecTwo{\lambda}{\mu}
-\mid \lambda, \mu \in \R } \]
+\mid \lambda, \mu \in \rbb } \]
 Which we know is just a linear combination of each
 column in the Jacobian, which are each
 a direction vector in the tangent space. \\

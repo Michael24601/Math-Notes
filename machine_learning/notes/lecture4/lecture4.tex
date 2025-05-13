@@ -25,11 +25,11 @@
 
 In theory, we have an underlying
 probability space:
-\[ (\Omega, \acal, \Pb) \]
+\[ (\Omega, \acal, \pbb) \]
 And a data space:
 \[(\xcal\times \ycal, \xscr \otimes \yscr, 
-\Pb_{X, Y})\]
-Where $\Pb_{X, Y}$ is the joint distribution 
+\pbb_{X, Y})\]
+Where $\pbb_{X, Y}$ is the joint distribution 
 and $\xcal, \ycal$
 are the input and output spaces. \\
 
@@ -59,14 +59,14 @@ variable of one data point
 (not the datapoint itself). \\
 
 Note that this induces a probability
-measure for sample points $\Pb_S$,
+measure for sample points $\pbb_S$,
 with the $\sigma$-algebra
 \[ \sscr = (\xscr \otimes \yscr)^{\otimes n} \]
 and sample space:
 \[ \scal = (\xcal \times \ycal)^n \]
 Which form a measure space:
 \[ ((\xcal, \ycal)^n,
-(\xscr \otimes \yscr)^{\otimes n}, \Pb_S) \]
+(\xscr \otimes \yscr)^{\otimes n}, \pbb_S) \]
 for $S$, the random variable. \\
 
 Note that one instance of the random variable $S$
@@ -106,7 +106,7 @@ of a classifier in practice since
 it requires full knowledge of the distribution. \\
 
 Instead, given a loss function:
-\[ \ell: \ycal\times \ycal\to \R^+ \]
+\[ \ell: \ycal\times \ycal\to \rbb^+ \]
 And a classifier:
 \[ f: \xcal\to \ycal\]
 And a dataset:
@@ -159,7 +159,7 @@ and $S'$
 (choice of training and testing data). \\
 
 Given a fixed dataset $B \in S$,
-a loss function $\ell: \ycal \times \ycal \to \R^+$,
+a loss function $\ell: \ycal \times \ycal \to \rbb^+$,
 and a hypothesis class $\ffrak$,
 we can find a classifier $f: \xcal \to \ycal$
 in $\ffrak$ that minimizes the empirical risk:
@@ -229,7 +229,7 @@ So what we ended up doing was finding the
 optimal prediction $f^*(x)$
 for each individual input $x$,
 by using the marginal distribution 
-$\Pb_{Y \mid X = x}$ and attempting to maximize
+$\pbb_{Y \mid X = x}$ and attempting to maximize
 it for each point $x$. \\
 
 However, if we do that in practice,
@@ -269,7 +269,7 @@ by a hypothesis class. \\
 
 A hypothesis class $\ffrak_\Theta$
 is a family of functions
-with a parameter space $\Theta \subset \R^d$:
+with a parameter space $\Theta \subset \rbb^d$:
 \[ \ffrak_\Theta = 
 \{ f_\theta \mid \theta \in \Theta \} \]
 The set of functions $f_\theta$ in $\ffrak_\Theta$
@@ -278,9 +278,9 @@ for any combination of values. \\
 
 For example, one family of functions is the
 family of lines:
-\[ \ffrak(x) = \{ wx + b \mid w, b \in \R \} \]
+\[ \ffrak(x) = \{ wx + b \mid w, b \in \rbb \} \]
 Which includes every linear function
-$f: \R \to \R$. \\
+$f: \rbb \to \rbb$. \\
 
 The hypothesis classes are essentially
 the models we use while doing machine learning,
@@ -460,7 +460,101 @@ There are two remedies to overfitting:
 
 \subsection*{Regularization}
 
+As mentioned in the last section,
+regularization introduces a penalty
+for going against prior assumptions about the
+distribution. \\
 
+Suppose we have a training dataset $B$ 
+with $n$ points:
+\[ B = \{(x_i, y_i) \mid 
+x_i, y_i \in \rbb \}_{i = 1, \dots n} \]
+a hypothesis class $\ffrak$,
+and a oss function:
+\[ \ell: \ycal \times \ycal \to \rbb^+ \]
+Then we can define a regularization functional:
+\[ \rcal: \ffrak \to \rbb^+ \]
+Which is basically a function that takes
+a function (classifier) as input,
+and assigns a penalty for going against some
+prior assumption. \\
+
+Our goal now will be to minimize the regularized
+empirical risk, that is:
+\[ \min_{f \in \ffrak} \para{ 
+\riskEmpirical{\ell}{n}(f) + \lambda\rcal(f)} \]
+Where $\lambda \geq 0$ is the regularization
+parameter. \\
+
+We can also minimize regularized empirical
+risk with a dependence on a random dataset $S$:
+\[ f_S = \arg\min_{f \in \ffrak} \para{ 
+\riskEmpirical{\ell}{S}(f) + \lambda\rcal(f)} \]
+Note that the regularization term does not
+depend on the randomness (as it is not a function
+of the dataset). \\
+
+Minimizing the regularized risk is another
+example of $\ascr$, a machine learning
+algorithm. \\
+
+The regularization parameter $\lambda$
+basically determines how much regularization
+is taking place. \\
+It determines the tradeoff between trustin
+our assumptions (larger $\lambda$)
+or trusting the data (smaller $\lambda$). \\
+
+Basically, as $\lambda \to \infty$,
+we no longer care about minimizing the risk;
+all our resources have to go towards choosing
+a minimizer $\hat{f}$ that turns the
+regularization term $\rcal(f)$ to $0$. \\
+As $\lambda \to \infty$,
+we don't care about regularization,
+as it has no effect, so we just minimize the risk
+as usual. \\
+
+Now we will look at some example of regularization
+terms. \\
+We will assume we have $\xcal = [0, 1]$ and
+$\ycal = \rbb$. \\
+
+We can assume that $\ffrak = C^2(\xcal, \ycal)$
+(is twice continuously differentiable,
+or smooth basically),
+and that the values of the prediction function
+change slowly. \\
+\[ \rcal(f) = \dfrac{1}{2}\int_{[0, 1]} 
+(f'(x))^2 dx \]
+This assumption can be enforced through the term. \\
+
+We assume that the penalty for large 
+changes is proportional to the penalty for
+small changes. \\
+\[ \rcal(f) = \|f\|_{\text{TV}} 
+= \dfrac{1}{2}\int_{[0, 1]} |f'(x)| dx \]
+This assumption can be enforced through the term. \\
+
+We assume that the values should not change
+abruptly. \\
+\[ \rcal(f) = \text{Lip}(f) \]
+This assumption can be enforced through this term,
+which uses Lipshitz continuity. \\
+
+If we have:
+\[ f_\theta(x) 
+= \sumof{i=1}{d}\theta_i\varphi_i(x) \]
+And assume that many of the coordinates
+are $0$ (that is $\theta = 0$).
+Note that $\theta$ is a vector of
+parameters, not just one parameter.
+\[ \rcal(f_\theta) = \|\theta\|_1 \]
+Notice how the term that enforces the assumption
+is equal to the 1-norm of the vector $\theta$,
+the sum of the absolute value of its entries,
+such that minimizing it reduces to minimizing
+that sum (so $\theta \rightsquigarrow 0$). \\
 
 \newpage
 

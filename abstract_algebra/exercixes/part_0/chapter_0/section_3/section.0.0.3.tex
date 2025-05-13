@@ -24,15 +24,15 @@
 
     \section*{Exercise 1}
 
-    The elements of the residue classes of $\Z/18\Z$ are: \\
-    The class $\olsi{0}$ is the set $\{ 18n \mid n \in \Z \}$. \\
-    The class $\olsi{1}$ is the set $\{ 18n + 1 \mid n \in \Z \}$. \\
-    The class $\olsi{2}$ is the set $\{ 18n + 2 \mid n \in \Z \}$. \\
+    The elements of the residue classes of $\zbb/18\zbb$ are: \\
+    The class $\olsi{0}$ is the set $\{ 18n \mid n \in \zbb \}$. \\
+    The class $\olsi{1}$ is the set $\{ 18n + 1 \mid n \in \zbb \}$. \\
+    The class $\olsi{2}$ is the set $\{ 18n + 2 \mid n \in \zbb \}$. \\
     $\vdots$ \\
-    The class $\olsi{17}$ is the set $\{ 18n + 17 \mid n \in \Z \}$. \\
+    The class $\olsi{17}$ is the set $\{ 18n + 17 \mid n \in \zbb \}$. \\
 
     \section*{Exercise 2}
-    Proof that the equivalence classes in $\Z/n\Z$
+    Proof that the equivalence classes in $\zbb/n\zbb$
     are precisely $\olsi{1}$, $\olsi{2}\dots$ $\olsi{n-1}$: \\
     We know by the division algorithm,
     that for any integer $a$, 
@@ -44,7 +44,7 @@
     and since $0$, $1\dots$ $n-1$ are themselves the remainders
     when divided by $n$,
     and any member of an equivalence class can be its representative,
-    it is clear that the equivalence classes of $\Z/n\Z$
+    it is clear that the equivalence classes of $\zbb/n\zbb$
     are $\olsi{0}$, $\olsi{1}\dots$ $\olsi{n-1}$. \\
 
     \section*{Exercise 3}
@@ -58,7 +58,7 @@
     meaning the sum and product operations are well defined
     for the classes.
     We can use modulo arithmetic to prove our statement. \\
-    We want to show that, in $\Z/9\Z$
+    We want to show that, in $\zbb/9\zbb$
     \[  \olsi{a_n10^n + a_{n-1}10^{n-1} + \dots a_110 + a_0}
     = \olsi{a_n + a_{n-1} + \dots a_1 + a_0} \]
     We already know that $\olsi{10} = \olsi{1}$,
@@ -79,7 +79,7 @@
 
     \section*{Exercise 4 $***$}
     The remainder of $37^{100}$ when divided by $29$
-    can be calculated through arithmetic in $\Z/29\Z$,
+    can be calculated through arithmetic in $\zbb/29\zbb$,
     where we know addition and multiplication is well defined. \\
     We know that
     \[ \olsi{37} = \olsi{8} \]
@@ -119,12 +119,12 @@
     which means that $9^{1500}$ ends with $01$. \\
 
     \section*{Exercise 6}
-    Proof that the squares of all elements in $\Z/4\Z$
+    Proof that the squares of all elements in $\zbb/4\zbb$
     are just $\olsi{0}$ and $\olsi{1}$: \\
     We know that addition and multiplication are well defined
-    in $\Z/n\Z$.
+    in $\zbb/n\zbb$.
     We also know that
-    \[\Z/n\Z = \{ \olsi{0}, \olsi{1}, \olsi{2}, \olsi{3} \}\]
+    \[\zbb/n\zbb = \{ \olsi{0}, \olsi{1}, \olsi{2}, \olsi{3} \}\]
     So the squares of all the elements are
     \[ \olsi{0}^2 = \olsi{0^2} = \olsi{0} \]
     \[ \olsi{1}^2 = \olsi{1^2} = \olsi{1} \]
@@ -135,14 +135,14 @@
     Proof that if $a$ and $b$ are any integers,
     then $a^2 + b^2$ never leaves a remainder of $3$
     when divided by $4$: \\
-    Multiplication and addition are well defined in $\Z/n\Z$,
+    Multiplication and addition are well defined in $\zbb/n\zbb$,
     So all we need to show is that
     \[ \olsi{a^2 + b^2} \neq \olsi{3} \]
     which means that 
     \[ \olsi{a^2} + \olsi{b^2} \neq \olsi{3} \]
     \[ \olsi{a}^2 + \olsi{b}^2 \neq \olsi{3} \]
     From exercise 0.0.3.6,
-    we know that the squares of all elements in $\Z/4\Z$
+    we know that the squares of all elements in $\zbb/4\zbb$
     of the form $\olsi{a}^2$
     are either $\olsi{0}$ or $\olsi{1}$.
     So we only need to show that the above equation
@@ -156,7 +156,7 @@
     is never $3$. \\
 
     \section*{Exercise 8 $***$}
-    Proof that for any non-zero integers $a, b, c \in \Z - \{ 0 \}$, 
+    Proof that for any non-zero integers $a, b, c \in \zbb - \{ 0 \}$, 
     the equation $a^2 + b^2 = 3c^2$ has no solutions: \\
     We can use a proof by smallest counterexample,
     in which we assume we have a fully reduced solution,
@@ -165,16 +165,16 @@
     of the positive integers. \\
     First we need to show that each of $a, b, c$
     are divisible by $2$.
-    Consider the equation in $\Z/4\Z$,
+    Consider the equation in $\zbb/4\zbb$,
     which we can do since addition and multiplication are well defined
-    in $\Z/n\Z$.
+    in $\zbb/n\zbb$.
     For the equation to hold,
     we would need to have $a^2 + b^2 \equiv 3c^2 \mod 4$. \\
     We know from exercise 0.0.3.7
     that $\olsi{a^2 + b^2} \neq \olsi{3}$
-    for any $a, b \in \Z$. \\
+    for any $a, b \in \zbb$. \\
     We know from exercise 0.0.3.6 that $\olsi{c^2} = \olsi{0}$
-    or $\olsi{c^2} = \olsi{1}$ for any $c \in \Z$,
+    or $\olsi{c^2} = \olsi{1}$ for any $c \in \zbb$,
     which means that
     \[ \olsi{3c^2} = \olsi{3} \cdot \olsi{1}
     = \olsi{3 \cdot 1} = \olsi{3} 
@@ -189,10 +189,10 @@
     $\olsi{c} = \olsi{0}$ or if $\olsi{c} = \olsi{2}$.
     If $c \equiv 0 \mod 4$,
     then $4 \mid c$, which means that $c = 4p = 2(2p)$
-    for some $p \in \Z$.
+    for some $p \in \zbb$.
     If $c \equiv 2 \mod 4$,
     then $4 \mid c - 2$, which means that $c - 2 = 4q = 4q + 2 = 2(2q + 1)$
-    for some $q \in \Z$.
+    for some $q \in \zbb$.
     Either way, we now know that $2 \mid c$. \\
     The only way to have $\olsi{a^2 + b^2} = \olsi{0}$,
     according to exercise 0.0.3.7,
@@ -216,8 +216,8 @@
     where $m^2, r^2, s^2$ are also divisible by $4$,
     we conclude that no smallest numbers $a^2$, $b^2$ and $c^2$
     can exist to satisfy the equation
-    by the Well Ordering of $\Z^+$
-    (since $a^2, b^2, c^2 \in \Z^+$,
+    by the Well Ordering of $\zbb^+$
+    (since $a^2, b^2, c^2 \in \zbb^+$,
     and none are zero,
     so dividing them by $4$ always produces smaller numbers). \\
 
@@ -232,35 +232,35 @@
     Since $m$ and $m+1$ have opposite parities,
     one of them must be even.
     Let's say that $a$ is the even term and $b$ is the odd term.
-    Then we can write $a = 2c$ for some $c \in \Z$,
+    Then we can write $a = 2c$ for some $c \in \zbb$,
     which means that $m^2 = 4ab + 1 = 4(2c)b + 1 = 8cb + 1$.
-    So $m^2 - 1 = 8cb$ where $cb \in \Z$,
+    So $m^2 - 1 = 8cb$ where $cb \in \zbb$,
     which tells us that $8 \mid m^2 - 1$.
     This means that $m^2 \equiv 1 \mod 8$,
     completing the proof. \\
 
     \section*{Exercise 10 $***$}
-    Proof that the number of elements of $(\Z/n\Z)^\times$
+    Proof that the number of elements of $(\zbb/n\zbb)^\times$
     is $\varphi(n)$ where $\varphi$ is Euler's Phi function: \\
-    We know that $(\Z/n\Z)^\times$ is the set of elements of $\Z/n\Z$
+    We know that $(\zbb/n\zbb)^\times$ is the set of elements of $\zbb/n\zbb$
     that have a multiplicative inverse.
     First we need to show that 
-    \[ A = \{ \olsi{a} \mid \olsi{a} \in \Z/n\Z
+    \[ A = \{ \olsi{a} \mid \olsi{a} \in \zbb/n\zbb
     \text{ and } \gcd(a, n) = 1 \} 
-    \text{ is the same as } (\Z/n\Z)^\times \]
+    \text{ is the same as } (\zbb/n\zbb)^\times \]
     This means that we need to show that,
     for any equivalence class $\olsi{a}$,
-    $\olsi{a}$ has a multiplicative inverse in $\Z/n\Z$
+    $\olsi{a}$ has a multiplicative inverse in $\zbb/n\zbb$
     if and only if $\gcd(a, n) = 1$.
     Another way of saying that is that we need to show
-    that $(\Z/n\Z)^\times \subseteq A$
-    and that $A \subseteq (\Z/n\Z)^\times$,
-    which would imply that $A = (\Z/n\Z)^\times$. \\
+    that $(\zbb/n\zbb)^\times \subseteq A$
+    and that $A \subseteq (\zbb/n\zbb)^\times$,
+    which would imply that $A = (\zbb/n\zbb)^\times$. \\
     Note that because we are looking for the inverse of a set,
     we need to show that the operation is well defined
     (we need to prove it for any representative $a$ of $\olsi{a}$). \\
     First we note that if $\gcd(a, n) = 1$,
-    then by the Euclidian Algorithm, we can find integers $x, y \in \Z$
+    then by the Euclidian Algorithm, we can find integers $x, y \in \zbb$
     such that $ax + ny = 1$,
     which means that $ax - 1 = ny$,
     which in turn implies that $n \mid ax - 1$.
@@ -272,13 +272,13 @@
     which means that if $a$ has a multiplicative inverse $x$,
     then so does $b$. \\
     So if $\gcd(a, n) = 1$
-    we know that $\olsi{a} \in (\Z/n\Z)^\times$,
-    which means that $(\Z/n\Z)^\times \subseteq A$. \\
+    we know that $\olsi{a} \in (\zbb/n\zbb)^\times$,
+    which means that $(\zbb/n\zbb)^\times \subseteq A$. \\
     Next, we note that if $\olsi{a}$ has a multiplicative inverse
-    $x$ in $\Z/n\Z$,
+    $x$ in $\zbb/n\zbb$,
     then $ax \equiv 1 \mod n$.
     So $n \mid ax - 1$,
-    which means that $ax - 1 = ny$ for some $y \in \Z$.
+    which means that $ax - 1 = ny$ for some $y \in \zbb$.
     We can rearrange the equation to show that $ax - ny = 1$.
     If $\gcd(a, n) = d > 1$,
     then we could take $d$ as a factor in the left hand side,
@@ -293,12 +293,12 @@
     then $b$ has the same multiplicative inverse $x$,
     since $bx \equiv ax \mod n$,
     so if $\gcd(a, n) = 1$, then $\gcd(b, n) = 1$ too.
-    So if $\olsi{a} \in (\Z/n\Z)^\times$,
+    So if $\olsi{a} \in (\zbb/n\zbb)^\times$,
     then all elements $a \in \olsi{a}$
     are relatively prime to $n$,
-    which means that $A \subseteq (\Z/n\Z)^\times$. \\
-    We can thus conclude that $A = (\Z/n\Z)^\times$. \\
-    We just showed that $A = (\Z/n\Z)^\times$,
+    which means that $A \subseteq (\zbb/n\zbb)^\times$. \\
+    We can thus conclude that $A = (\zbb/n\zbb)^\times$. \\
+    We just showed that $A = (\zbb/n\zbb)^\times$,
     where we also had to show that it applies
     no matter which representative of $a$ we pick,
     which makes it well definded.
@@ -308,21 +308,21 @@
     the $n$ classes $\olsi{0}, \olsi{1}, \olsi{2} \dots \olsi{n-1}$.
     This means that if any of $\{1, 2 \dots n \}$
     are relatively prime to $n$,
-    their respective class has to be in $(\Z/n\Z)^\times$.
+    their respective class has to be in $(\zbb/n\zbb)^\times$.
     By definition,
     this means that there will be $\varphi(n)$
-    residue classes in $(\Z/n\Z)^\times$,
+    residue classes in $(\zbb/n\zbb)^\times$,
     since of the integers $\{1, 2 \dots n \}$,
     $\varphi(n)$ are relatively prime to $n$ by definition. \\
 
     \subsection*{Exercise 11}
-    Proof that if $\olsi{a}, \olsi{b} \in (\Z/n\Z)^\times$,
-    then $\olsi{a} \cdot \olsi{b} \in (\Z/n\Z)^\times$: \\
+    Proof that if $\olsi{a}, \olsi{b} \in (\zbb/n\zbb)^\times$,
+    then $\olsi{a} \cdot \olsi{b} \in (\zbb/n\zbb)^\times$: \\
     We already know that multiplication
-    and multiplicative inverses are well defined in $\Z/n\Z$
+    and multiplicative inverses are well defined in $\zbb/n\zbb$
     (according to the chapter and to exercise 0.0.3.10),
     so we don't need to show that they are. \\
-    If $\olsi{a}, \olsi{b} \in (\Z/n\Z)^\times$,
+    If $\olsi{a}, \olsi{b} \in (\zbb/n\zbb)^\times$,
     then they have inverses $\olsi{x}$ and $\olsi{y}$
     such that $\olsi{a} \cdot \olsi{x} = \olsi{b} \cdot \olsi{y} = 1$.
     Now consider the class $\olsi{y} \cdot \olsi{x}$
@@ -339,11 +339,11 @@
     = \olsi{1} \]
     So $\olsi{y} \cdot \olsi{x}$
     is the multiplicative inverse of $\olsi{a} \cdot \olsi{b}$.
-    This means that $\olsi{a} \cdot \olsi{b} \in (\Z/n\Z)^\times$
+    This means that $\olsi{a} \cdot \olsi{b} \in (\zbb/n\zbb)^\times$
     since it has a multiplicative inverse. \\
 
     \subsection*{Exercise 12}
-    Proof that, for $n, a \in \Z$ such that $n > 1$
+    Proof that, for $n, a \in \zbb$ such that $n > 1$
     and $1 \leqslant a \leqslant n$,
     if $a$ and $n$ are not relatively prime,
     then there exists an integer $b$ such that
@@ -354,21 +354,21 @@
     then we can take $b$ to be $\dfrac{n}{d}$.
     We can clearly see that $1 \leqslant b < n$
     since $d > 1$.
-    We can also see that $\dfrac{a}{d}$ is an integer $p \in \Z$
+    We can also see that $\dfrac{a}{d}$ is an integer $p \in \zbb$
     since $d \mid a$,
     which means that $ab = a\dfrac{n}{d} = pn$,
     which in turn tells us that $n \mid ab$.
     Thus $ab \equiv 0 \mod n$. \\
-    However, assume now that there exists an integer $c \in \Z$
+    However, assume now that there exists an integer $c \in \zbb$
     such that $ac \equiv 1 \mod n$.
     We know by definition that if $x \equiv y \mod n$,
-    then $xz \equiv y \mod n$ for any $x, y, z \in \Z$. 
+    then $xz \equiv y \mod n$ for any $x, y, z \in \zbb$. 
     So $abc \equiv 0 \mod n$
     since $ab \equiv 0 \mod n$.
     But this is not possible;
     for $abc$ to have remainder $0$ when divided by $n$,
     it needs to have a factor of $n$ in it;
-    we know that $ac = nq + 1$ for some integer $q \in \Z$,
+    we know that $ac = nq + 1$ for some integer $q \in \zbb$,
     and we know that $1 \leqslant b < n$,
     so multiplying $ac$ by $b$
     produces $nqb + b$ where $b$ does not contain a factor of $n$,
@@ -376,13 +376,13 @@
     We thus conclude that $c$ can't exist. \\
 
     \subsection*{Exercise 13}
-    Proof that, for $n, a \in \Z$ such that $n > 1$
+    Proof that, for $n, a \in \zbb$ such that $n > 1$
     and $1 \leqslant a \leqslant n$,
     if $a$ and $n$ are relatively prime,
-    then there exists an $c \in \Z$
+    then there exists an $c \in \zbb$
     such that $ac \equiv 1 \mod n$: \\
     If $\gcd(a, n) = 1$,
-    then by the Euclidian Algorithm, we can find integers $x, y \in \Z$
+    then by the Euclidian Algorithm, we can find integers $x, y \in \zbb$
     such that $ax + ny = 1$,
     which means that $ax - 1 = ny$,
     which in turn implies that $n \mid ax - 1$.
@@ -391,7 +391,7 @@
 
     \subsection*{Exercise 14}
     We already proved in exercise 0.0.3.10 that
-    \[ (\Z/n\Z)^\times = \{ \olsi{a} \mid \olsi{a} \in \Z/n\Z
+    \[ (\zbb/n\zbb)^\times = \{ \olsi{a} \mid \olsi{a} \in \zbb/n\zbb
     \text{ and } \gcd(a, n) = 1 \} \]
     but now we need to conclude it
     from exercises 0.0.3.12 and 0.0.3.13: \\
@@ -409,7 +409,7 @@
     $\gcd(a, n) = 1$ if and only if an integer $c$ exists
     such that $ac \equiv 1 \mod n$. \\
     We thus conclude that $\olsi{a}$
-    has a multiplicative inverse $\olsi{c}$ in $(\Z/n\Z)^\times$ 
+    has a multiplicative inverse $\olsi{c}$ in $(\zbb/n\zbb)^\times$ 
     if and only if $\gcd(a, n) = 1$
     (for any representative $a$ of $A$). \\
     Note that this statement is until now, only true for 
@@ -456,7 +456,7 @@
     For each of these pairs of numbers $a$ and $n$,
     we need to show that $a$ and $n$ are relatively prime,
     and we need to find the multiplicative inverse of $\olsi{a}$
-    in $\Z/n\Z$: \\
+    in $\zbb/n\zbb$: \\
     What we can do is use the Euclidian Algorithm
     to show that $\gcd(a, n) = 1$ for each case,
     then we can find the integers $x$ and $y$

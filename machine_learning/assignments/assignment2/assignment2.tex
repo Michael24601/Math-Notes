@@ -21,7 +21,7 @@
 
 \subsection*{Ex 1}
 
-Given random vector $X, Y \in \R^d$ where
+Given random vector $X, Y \in \rbb^d$ where
 \[ Y = g(X) \]
 then the transformation law tells us that
 the density function of $Y$ can be calculated
@@ -138,7 +138,7 @@ So we remove $U_2 = 1$. \\
 We also remove $U_2 = 0$ since the logarithm
 is not defined or differential there. \\
 We thus get the domain:
-\[ (0, 1] \times (0, 1) \to \R^2 - \{0\} \]
+\[ (0, 1] \times (0, 1) \to \rbb^2 - \{0\} \]
 Because we only removed a finite subset of the
 domain (only 1 or 2 points really),
 the density function is not affected and remains $1$. \\
@@ -244,18 +244,18 @@ offset by $\pi$ just vanishes when we differentiate. \\
 \begin{enumerate}[label=\alph*)]
     \item 
     The probability that "Free" is in the text:
-    \[\Pb(F) = \Pb(F \mid S) \cdot \Pb(S)
-    +  \Pb(F \mid \olsi{S}) \cdot \Pb(\olsi{S})
+    \[\pbb(F) = \pbb(F \mid S) \cdot \pbb(S)
+    +  \pbb(F \mid \olsi{S}) \cdot \pbb(\olsi{S})
     = 0.8 * 0.7 + 0.2 * 0.3 = 0.62 \]
     We can now calculate the posterior
     probabilities:
-    \[ \Pb(S \mid F)
-    = \dfrac{\Pb(F \mid S) \cdot \Pb(S)}{\Pb(F)}
+    \[ \pbb(S \mid F)
+    = \dfrac{\pbb(F \mid S) \cdot \pbb(S)}{\pbb(F)}
     = \dfrac{0.8 \cdot 0.7}{0.62}
     \sim 0.90 \]
-    \[ \Pb(\olsi{S} \mid F)
-    = \dfrac{\Pb(F \mid \olsi{S}) \cdot \Pb(\olsi{S})}
-    {\Pb(F)}
+    \[ \pbb(\olsi{S} \mid F)
+    = \dfrac{\pbb(F \mid \olsi{S}) \cdot \pbb(\olsi{S})}
+    {\pbb(F)}
     = \dfrac{0.2 \cdot 0.3}{0.62}
     \sim 0.1 \]
     \item 
@@ -274,42 +274,42 @@ offset by $\pi$ just vanishes when we differentiate. \\
     all inputs $x$
     (which is a sum over all of $X$
     of a sum over all of $Y$):
-    \[ \rscr_\ell(f) = \E[\ell(f(X), Y)]
-    = \E[\E[\ell(f(X), Y) \mid X]] \]
+    \[ \rscr_\ell(f) = \ebb[\ell(f(X), Y)]
+    = \ebb[\ebb[\ell(f(X), Y) \mid X]] \]
     If we remove the outer sum (over $X$),
     we get the conditional risk for a 
     single input $x$, which is
     what we want to minimize:
-    \[ \E[\ell(f(x), Y) \mid X = x] \]
+    \[ \ebb[\ell(f(x), Y) \mid X = x] \]
     It is just a sum over all $Y$. \\
     Our goal is to minimize this value,
     meaning we need to find the value of $x$
     for which the expected value 
     of the conditional loss is minimal:
-    \[ f^*(x) = \min_{f(x)} \\E[\ell(f(x), Y) \mid X = x]  \]
+    \[ f^*(x) = \min_{f(x)} \\ebb[\ell(f(x), Y) \mid X = x]  \]
     We have:
-    \[ \E[\ell(f(x), Y) \mid X = x]
-    = \ell(f(x), S)\Pb(Y = S \mid X = x)
-    + \ell(f(x), \olsi{S})\Pb(Y = \olsi{S} \mid X = x) \]
-    \[ \E[\ell(f(F), Y) \mid F]
+    \[ \ebb[\ell(f(x), Y) \mid X = x]
+    = \ell(f(x), S)\pbb(Y = S \mid X = x)
+    + \ell(f(x), \olsi{S})\pbb(Y = \olsi{S} \mid X = x) \]
+    \[ \ebb[\ell(f(F), Y) \mid F]
     = \indicator_{f(F) \neq \olsi{S}}
-    \Pb(\olsi{S} \mid F) +
+    \pbb(\olsi{S} \mid F) +
     \indicator_{f(F) \neq S}
-    \Pb(S \mid X)  \]
+    \pbb(S \mid X)  \]
     Now, suppose we predict that
     the email is spam $f(S)$:
-    \[ \E[\ell(S, Y) \mid F]
+    \[ \ebb[\ell(S, Y) \mid F]
     = \indicator_{S \neq \olsi{S}}
-    \Pb(\olsi{S} \mid F) +
+    \pbb(\olsi{S} \mid F) +
     \indicator_{S \neq S}
-    \Pb(S \mid X) 
+    \pbb(S \mid X) 
     \sim 1 \cdot 0.1 + 0 \cdot 0.9 = 0.1 \]
     If we predict that the email is not spam:
-    \[ \E[\ell(\olsi{S}, Y) \mid F]
+    \[ \ebb[\ell(\olsi{S}, Y) \mid F]
     = \indicator_{\olsi{S} \neq \olsi{S}}
-    \Pb(\olsi{S} \mid F) +
+    \pbb(\olsi{S} \mid F) +
     \indicator_{\olsi{S} \neq S}
-    \Pb(S \mid F) 
+    \pbb(S \mid F) 
     \sim 1 \cdot 0.9 + 0 \cdot 0.1 = 0.9 \]
     We need to minimize the expected value,
     which means
@@ -320,19 +320,19 @@ offset by $\pi$ just vanishes when we differentiate. \\
     So we should consider the email spam.
     \item 
     If we now have
-    \[ \Pb(S) = 0.4 \qquad 
-    \Pb(\olsi{S}) = 0.6 \]
+    \[ \pbb(S) = 0.4 \qquad 
+    \pbb(\olsi{S}) = 0.6 \]
     then we can recalculate:
-    \[\Pb(F) = \Pb(F \mid S) \cdot \Pb(S)
-    +  \Pb(F \mid \olsi{S}) \cdot \Pb(\olsi{S})
+    \[\pbb(F) = \pbb(F \mid S) \cdot \pbb(S)
+    +  \pbb(F \mid \olsi{S}) \cdot \pbb(\olsi{S})
     = 0.8 * 0.4 + 0.2 * 0.6 = 0.44 \]
-    \[ \Pb(S \mid F)
-    = \dfrac{\Pb(F \mid S) \cdot \Pb(S)}{\Pb(F)}
+    \[ \pbb(S \mid F)
+    = \dfrac{\pbb(F \mid S) \cdot \pbb(S)}{\pbb(F)}
     = \dfrac{0.8 \cdot 0.4}{0.44}
     \sim 0.73 \]
-    \[ \Pb(\olsi{S} \mid F)
-    = \dfrac{\Pb(F \mid \olsi{S}) \cdot \Pb(\olsi{S})}
-    {\Pb(F)}
+    \[ \pbb(\olsi{S} \mid F)
+    = \dfrac{\pbb(F \mid \olsi{S}) \cdot \pbb(\olsi{S})}
+    {\pbb(F)}
     = \dfrac{0.2 \cdot 0.6}{0.44}
     \sim 0.27 \]
     We can then find the expected value again. \\

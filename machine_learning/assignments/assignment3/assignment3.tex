@@ -24,15 +24,15 @@
 \item 
 We know that Baye's optimal risk is:
 \[ \rscr_\ell^*
-= \inf_{f(x)} \; \E[\ell(f(X), Y)] 
+= \inf_{f(x)} \; \ebb[\ell(f(X), Y)] 
 = \inf_{f(x)} \; 
-\E[\E[\ell(f(X), Y) \mid X]] \]
+\ebb[\ebb[\ell(f(X), Y) \mid X]] \]
 which is the minimization of 
 a sum over $X$ first (outer sum)
 and then $Y$ (inner sum):
 \[ \rscr_\ell(f)
-= \sum_{x_i} \Pb(X = x_i)
-\sum_{y_i} \Pb(Y = y_i \mid X = x_i)
+= \sum_{x_i} \pbb(X = x_i)
+\sum_{y_i} \pbb(Y = y_i \mid X = x_i)
 \cdot \ell(f(x_i), y_i) \]
 In the lecture, we showed that the
 optimal risk (best possible learning rule)
@@ -66,8 +66,8 @@ of the outcomes we didn't choose
 will appear (which is only
 one in this case, as $Y$ it is binary):
 \[ \rscr_\ell(f^)
-= \sum_{x_i} \Pb(X = x_i)
-\Pb(Y = \olsi{f(x_i)} \mid X = x_i) \]
+= \sum_{x_i} \pbb(X = x_i)
+\pbb(Y = \olsi{f(x_i)} \mid X = x_i) \]
 where $\olsi{f(x_i)}$
 is the outcome we did not choose. \\
 Since $X$ is uniform on $[0, 1]$,
@@ -126,14 +126,14 @@ which can be anything so long
 as the monotonicity is preserved):
 \[ f_1(x) = \dfrac{x-0.25}{a} \qquad
 f_2(x) = \dfrac{0.75 - x}{a} \]
-for any $a \in \R$ where $a > 0$. \\
+for any $a \in \rbb$ where $a > 0$. \\
 We can then extract the optimal
 parameters:
 \[ (w^*, b^*) \in
 \curl{\para{\dfrac{1}{a}, \dfrac{-0.25}{a}}}
 \cup
 \curl{\para{\dfrac{-1}{a}, \dfrac{0.75}{a}}}
-\qquad \forall a \in \R, a > 0 \]
+\qquad \forall a \in \rbb, a > 0 \]
 Now we note that:
 \[ f_1(x)
 = \piecewiseThree
@@ -191,7 +191,7 @@ matc h $f^*$.
     Since $X$ is continuous,
     we could have instead used:
     \[ \int_{[0, 1]} 
-    \Pb(Y = \olsi{f^*(x)} \mid X = x) \Pb(dx) \]
+    \pbb(Y = \olsi{f^*(x)} \mid X = x) \pbb(dx) \]
     If $X$ is uniform on $[a, b]$, the probability that
     $x$ is in some interval $[c, d] \in [a, b]$ is
     \[ \dfrac{d-c}{b-a} \]
@@ -200,12 +200,12 @@ matc h $f^*$.
     the probability that it is in $[1, 2]$
     is $0.5$). \\
     Note that since $X$ is uniform on $[0, 1]$,
-    then $\Pb(dx) = dx$.
+    then $\pbb(dx) = dx$.
     The probability that $X$ is in some small interval $dx$
     is just $\dfrac{dx}{1} = dx$. \\
     So:
     \[ \int_{[0, 1]} 
-    \Pb(Y = f^*(x) \mid X = x) dx =
+    \pbb(Y = f^*(x) \mid X = x) dx =
     \int_0^{0.25} 0.2 dx
     + \int_{0.25}^{0.75} 0.1 dx
     +\int_{0.75}^{0.1} 0.2 dx \]
@@ -216,8 +216,8 @@ matc h $f^*$.
     on $[0, 1]$:
     \[ \int_0^{0.25} 0.2 dx = 0.2 \cdot 0.25 \]
     Which is the same as:
-    \[ \Pb(Y = -1 \mid X \in [0, 0.25]) 
-    \cdot \Pb(X \in [0, 0.25]) \]
+    \[ \pbb(Y = -1 \mid X \in [0, 0.25]) 
+    \cdot \pbb(X \in [0, 0.25]) \]
     This is the same result we got,
     but we used the integral, which is more accurate
     (in this case, it doesn't matter,
@@ -233,10 +233,10 @@ matc h $f^*$.
     as well. \\
     This can be done using
     the density function. Recall that:
-    \[ E[f(X)] = \int f(x)\Pb_X(dx) 
+    \[ E[f(X)] = \int f(x)\pbb_X(dx) 
     = \int f(x) p(x)dx \]
     for any measurable function $f(x)$. \\
-    Note that this is actually why $\Pb(dx) = dx$;
+    Note that this is actually why $\pbb(dx) = dx$;
     because $p(x) = 1$ when the distribution
     is uniform (on $[0, 1]$). \\
     \item 
@@ -265,7 +265,7 @@ matc h $f^*$.
     We have an output space
     $\ycal = \{ 1, 2, \dots K \}$
     and a loss function
-    \[ \ell: \R^k \times \ycal \to \R \]
+    \[ \ell: \rbb^k \times \ycal \to \rbb \]
     where
     \[ \ell(z, y)
     = -z_y + \log\para{\sum_{j=1}^K e^{z_j} } \]
@@ -276,75 +276,75 @@ matc h $f^*$.
     We want to find the value of
     the conditional risk for some 
     $x \in \xcal$: \\
-    \[ \E[\ell(z, Y) \mid X = x] \]
+    \[ \ebb[\ell(z, Y) \mid X = x] \]
     The expected value here is just a sum
     over $Y$ weighetd by the conditional
     probability:
     \[ \sum_{k = 1}^K \ell(z, Y \mid X = x)
-    \cdot \Pb(Y = k \mid X = x) \]
+    \cdot \pbb(Y = k \mid X = x) \]
     \[ \sum_{k = 1}^K
     \para{-z_y + \log\para{\sum_{j=1}^K e^{z_j}}}
-    \cdot \Pb(Y = k \mid X = x) \]
+    \cdot \pbb(Y = k \mid X = x) \]
     \[ \sum_{k = 1}^K \para{-z_y
-    \cdot \Pb(Y = k \mid X = x)}
+    \cdot \pbb(Y = k \mid X = x)}
     + \sum_{k = 1}^K
     \para{\log\para{\sum_{j=1}^K e^{z_j}}
-    \cdot \Pb(Y = k \mid X = x)} \]
+    \cdot \pbb(Y = k \mid X = x)} \]
     \[ \sum_{k = 1}^K \para{-z_y
-    \cdot \Pb(Y = k \mid X = x)}
+    \cdot \pbb(Y = k \mid X = x)}
     + \log\para{\sum_{j=1}^K e^{z_j}}
     \cdot
-    \sum_{k = 1}^K \Pb(Y = k \mid X = x) \]
+    \sum_{k = 1}^K \pbb(Y = k \mid X = x) \]
     Now we know that:
     \[ \sum_{k = 1}^K
-    \Pb(Y = k \mid X = x) = 1 \]
+    \pbb(Y = k \mid X = x) = 1 \]
     because $Y = 1$, $Y = 2$,
     $\dots$ $Y = K$
     partition the $Y$ space $\ycal$. \\
     So we now have :
     \[ \sum_{k = 1}^K \para{-z_y
-    \cdot \Pb(Y = k \mid X = x)}
+    \cdot \pbb(Y = k \mid X = x)}
     + \log\para{\sum_{j=1}^K e^{z_j}} \]
     \item 
     We want to minimize the conditional
     risk, which means finding the gradient
     with respect to $z$
-    (since $z \in \R^K$ is continuous)
+    (since $z \in \rbb^K$ is continuous)
     and then setting it to 0
-    \[ \nabla \E[\ell(z, Y \mid X = x)] = 0 \]
+    \[ \nabla \ebb[\ell(z, Y \mid X = x)] = 0 \]
     This will give us the optimal
     output $z^*$ for the input $x$. \\
     We can focus on each partial
     derivative individually:
     \[\partialdd{}{z_k}
     \para{ \sum_{k = 1}^K \para{-z_y
-    \cdot \Pb(Y = k \mid X = x)}
+    \cdot \pbb(Y = k \mid X = x)}
     + \log\para{\sum_{j=1}^K e^{z_j}}} \]
     \[\partialdd{}{z_k}
     \para{ \sum_{k = 1}^K \para{-z_y
-    \cdot \Pb(Y = k \mid X = x)}} 
+    \cdot \pbb(Y = k \mid X = x)}} 
     + \partialdd{}{z_k}
     \para{\log\para{\sum_{j=1}^K e^{z_j}}} \]
     \[ \dfrac{e^{z_k}}
     {\log\para{\sum_{j=1}^K e^{z_j}}}
-    - \Pb(Y = k \mid X = x) \]
+    - \pbb(Y = k \mid X = x) \]
     We then set the gradient to $0$,
     which gives us:
     \[ \dfrac{e^{z_k}}
     {\log\para{\sum_{j=1}^K e^{z_j}}}
-    - \Pb(Y = k \mid X = x) = 0 \]
+    - \pbb(Y = k \mid X = x) = 0 \]
     \[ \dfrac{e^{z_k}}
     {\log\para{\sum_{j=1}^K e^{z_j}}}
-    = \Pb(Y = k \mid X = x) \]
+    = \pbb(Y = k \mid X = x) \]
     \[ e^{z_k}
     = \log\para{\sum_{j=1}^K e^{z_j}}
-    \Pb(Y = k \mid X = x) \]
+    \pbb(Y = k \mid X = x) \]
     \[ z_k
     = \log\para{\log\para{\sum_{j=1}^K e^{z_j}}
-    \Pb(Y = k \mid X = x)} \]
+    \pbb(Y = k \mid X = x)} \]
     So:
     \[ z^*_k = \log\para{
-    \alpha \Pb(Y = k \mid X = x)} \]
+    \alpha \pbb(Y = k \mid X = x)} \]
     where we have:
     \[ \alpha = \log\para{\sum_{j=1}^K e^{z_j}} \]
     Note that $\alpha > 0$,
@@ -358,32 +358,32 @@ matc h $f^*$.
     We saw that for a fixed input $x$,
     the optimal output is given by:
     \[ g^*_k(x) = z^*_k = \log\para{
-    \alpha \Pb(Y = k \mid X = x)} \]
+    \alpha \pbb(Y = k \mid X = x)} \]
     which is just a $\log$
     and scaling of $z^*_k$. \\
     Now we want to show that:
     \[ \arg \max_k g^*_k(x)
-    =  \arg \max_k \Pb(Y = k \mid X = x) \]
+    =  \arg \max_k \pbb(Y = k \mid X = x) \]
     That is to say,
     the choice of $k$
     that gives us the largest
     entry $z^*_k$ of the optimal prediction,
     is the same $k$ as the one that
     maximizes the probability
-    $\Pb(Y = k \mid X = x)$. \\
+    $\pbb(Y = k \mid X = x)$. \\
     Now, we have:
     \[ g^*(x)
     = \begin{bmatrix}
         \log\para{\alpha
-        \Pb(Y = 1 \mid X = x)} \\
+        \pbb(Y = 1 \mid X = x)} \\
         \log\para{\alpha
-        \Pb(Y = 2 \mid X = x)} \\ 
+        \pbb(Y = 2 \mid X = x)} \\ 
         \vdots \\
         \log\para{\alpha
-        \Pb(Y = k \mid X = x)} \\ 
+        \pbb(Y = k \mid X = x)} \\ 
         \vdots \\
         \log\para{\alpha
-        \Pb(Y = K \mid X = x)} \\ 
+        \pbb(Y = K \mid X = x)} \\ 
     \end{bmatrix} \]
     Notice that as we mentioned earlier,
     $\alpha$ is independent of the index $k$,
@@ -396,13 +396,13 @@ matc h $f^*$.
     flip the monotonicity),
     this means that the largest entry
     is the one that has index $k$ such that
-    $\Pb(Y = k \mid X = x)$
+    $\pbb(Y = k \mid X = x)$
     is the largest. \\
     Note that this is just $f^*(x)$,
     since by definition $f^*(x)$
-    chooses $Y = k$ such that $\Pb(Y = k \mid X = x)$
+    chooses $Y = k$ such that $\pbb(Y = k \mid X = x)$
     is the largest (in order to minimize risk,
-    which has $1 -  \Pb(Y = k \mid X = x)$
+    which has $1 -  \pbb(Y = k \mid X = x)$
     in it). \\
     This completes our proof. \\
     
@@ -431,7 +431,7 @@ matc h $f^*$.
     in the optimal prediction $g^*(x)$,
     has the same index $k$
     as the $k$ that maximizes
-    $\Pb(Y = k \mid X = x)$. \\
+    $\pbb(Y = k \mid X = x)$. \\
     And that makes perfect sense!
     It just means that the best classifier,
     when given an input $x$,
@@ -482,59 +482,59 @@ matc h $f^*$.
     We want to optimize
     Baye's optimal predictor for
     some $x \in \xcal$:
-    \[ f^*(x) = \min_{z \in \R^n}
-    \E[\ell(z, Y) \mid X = x] \]
+    \[ f^*(x) = \min_{z \in \rbb^n}
+    \ebb[\ell(z, Y) \mid X = x] \]
     where $\ell(z, y) = \| z - y\|^2$. \\
     We can use the gradient
-    since $z \in \R^n$ is continuous. \\
+    since $z \in \rbb^n$ is continuous. \\
     \[ f^*(x)
-    = \E[ \| z - Y\|^2 \mid X = x] \]
+    = \ebb[ \| z - Y\|^2 \mid X = x] \]
     \[ f^*(x)
-    = \E[z^2 + Y^2 -2zY \mid X = x] \]
+    = \ebb[z^2 + Y^2 -2zY \mid X = x] \]
     \[ f^*(x)
-    = z^2 + \E[Y^2 \mid X = x]
-    + -2z\E[Y \mid X = x] \]
+    = z^2 + \ebb[Y^2 \mid X = x]
+    + -2z\ebb[Y \mid X = x] \]
     We can factor out $z$ because the expected
     value is that of the $Y$ random variable. \\
     We can then find the gradient
     (with respect to $z$)
-    \[ \nabla z = 2z - 2\E[Y \mid X = x] \]
+    \[ \nabla z = 2z - 2\ebb[Y \mid X = x] \]
     Then setting it to $0$:
-    \[ 2z - 2\E[Y \mid X = x] = 0\]
-    \[ z = \E[Y \mid X = x] \]
+    \[ 2z - 2\ebb[Y \mid X = x] = 0\]
+    \[ z = \ebb[Y \mid X = x] \]
     So the value of $z$,
     (which is the output of the classifier
     given $x$)
     that optimizes the conditional risk
-    is $\E[Y \mid X = x]$.
+    is $\ebb[Y \mid X = x]$.
     \item 
     Now we want to optimize
     Baye's optimal predictor for
     some $x \in \xcal$:
-    \[ f^*(x) = \min_{c \in \R^+}
-    \E[\ell(z, Y) \mid X = x] \]
+    \[ f^*(x) = \min_{c \in \rbb^+}
+    \ebb[\ell(z, Y) \mid X = x] \]
     where $\ell(c, y) = \log(f(x)) + \dfrac{Y}{f(x)}$. \\
     We can use the derivative
-    since $c \in \R^+$ is continuous. \\
+    since $c \in \rbb^+$ is continuous. \\
     \[ f^*(x)
-    = \E[ \log(c) + \dfrac{Y}{c} \mid X = x] \]
+    = \ebb[ \log(c) + \dfrac{Y}{c} \mid X = x] \]
     \[ f^*(x)
-    = \log(c) + \dfrac{1}{c}\E[Y \mid X = x] \]
+    = \log(c) + \dfrac{1}{c}\ebb[Y \mid X = x] \]
     We can factor out $c$ because the expected
     value is that of the $Y$ random variable. \\
     We can then find the derivative
     (with respect to $c$):
     \[ \dd{f}{c} = \dfrac{1}{c} - 
-    \dfrac{1}{c^2}\E[Y \mid X = x] \]
+    \dfrac{1}{c^2}\ebb[Y \mid X = x] \]
     Then setting it to $0$:
     \[ \dfrac{1}{c} - 
-    \dfrac{1}{c^2}\E[Y \mid X = x] = 0 \]
-    \[ c = \E[Y \mid X = x] \]
+    \dfrac{1}{c^2}\ebb[Y \mid X = x] = 0 \]
+    \[ c = \ebb[Y \mid X = x] \]
     So the value of $c$,
     (which is the output of the classifier
     given $x$)
     that optimizes the conditional risk
-    is $\E[Y \mid X = x]$.
+    is $\ebb[Y \mid X = x]$.
 \end{enumerate}
 
 \begingroup

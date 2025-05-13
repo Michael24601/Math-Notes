@@ -35,18 +35,18 @@
 
 
     \section*{Exercise 2}
-    Proof that $(\Z, +)$ acts on itself by $z \cdot a = z + a$
-    $\forall z, a \in \Z$: \\
-    In $\Z$, 0 is the identity, and $0 \cdot a = 0 + a = a$,
-    while $\forall a, b \in \Z$,
+    Proof that $(\zbb, +)$ acts on itself by $z \cdot a = z + a$
+    $\forall z, a \in \zbb$: \\
+    In $\zbb$, 0 is the identity, and $0 \cdot a = 0 + a = a$,
+    while $\forall a, b \in \zbb$,
     $a \cdot (b \cdot z) = a + (b + z) = (a + b) + z = (a + b) \cdot z$.
     So it is a group action.
 
 
     \section*{Exercise 3}
-    Proof that $(\R, +)$ acts on $\R^2$
-    where for $r, x, y \in \R$, $r \cdot (x, y) = (x + ry, y)$: \\
-    For $r, s \in \R$,
+    Proof that $(\rbb, +)$ acts on $\rbb^2$
+    where for $r, x, y \in \rbb$, $r \cdot (x, y) = (x + ry, y)$: \\
+    For $r, s \in \rbb$,
     $r \cdot (s \cdot (x, y)) = r \cdot (x + sy, y)
     = (x + ry + sy, y)
     = (x + (r + s)y, y)
@@ -181,7 +181,7 @@
     $\forall \alpha \in F^\times$ and $r_i \in F$.
     (the action of $\alpha$ on each individual $r_i$ is the one that
     was proved to be an action in exercise 1.1.7.1).
-    Proof that this action is faithful when $F = \R$ and $V = \R^n$: \\
+    Proof that this action is faithful when $F = \rbb$ and $V = \rbb^n$: \\
     We know that for the multiplicative identity 1 of $F^\times$,
     \[ 1 \cdot (r_1, r_2, \dots r_n) =
     (1 \cdot r_1, 1 \cdot r_2, \dots 1 \cdot r_n)
@@ -191,7 +191,7 @@
     = \beta \cdot (\beta r_1, \beta r_2, \dots \beta r_n)
     = (\alpha (\beta r_1), \alpha (\beta r_2),
     \dots \alpha (\beta r_n)) \]
-    and because multiplication is associative in $\R$, this is equal to
+    and because multiplication is associative in $\rbb$, this is equal to
     \[((\alpha \beta) r_1, (\alpha \beta) r_2,
     \dots (\alpha \beta) r_n)
      = (\alpha \beta) \cdot (r_1, r_2, \dots r_n) \]
@@ -205,7 +205,7 @@
     such that $\forall v \in V$, $\alpha \cdot v = \beta \cdot v$.
     This implies that $\forall r_i \in v$,
     $\alpha r_i = \beta r_i$.
-    Since $r_i \in \R$,
+    Since $r_i \in \rbb$,
     we have $\alpha r_i - \beta r_i = 0$.
     So $(\alpha - \beta) r_i = 0$,
     which means that $(\alpha - \beta) = 0$,
@@ -858,12 +858,12 @@
     all orbits must have the same cardinality.
     And from exercise 1.1.7.18,
     we know that the orbits of $G$ partition the set $G$,
-    so if $|\orbit| = n$, then $|G| = nm$ for some $m \in \Z$.
+    so if $|\orbit| = n$, then $|G| = nm$ for some $m \in \zbb$.
     Since $|H| = |\orbit| = n$, that means that $|H| \mid |G|$.
 
 
     \section*{Exercise 20 $***$}
-    Proof that the group of rigid motions of a tetrahedron in $\R^3$ $G$
+    Proof that the group of rigid motions of a tetrahedron in $\rbb^3$ $G$
     is isomorphic to a subgroup of $S_4$: \\
     Consider the set $S = \{1, 2, 3 ,4\}$ which represents the vertices of
     a tetrahedron (which has 4).
@@ -950,7 +950,7 @@
 
 
     \section*{Exercise 21 $***$}
-    Proof that the group of rigid motions of a cube in $\R^3$ $G$
+    Proof that the group of rigid motions of a cube in $\rbb^3$ $G$
     is isomorphic to $S_4$: \\
     Consider the set $S = \{1, 2, 3, 4\}$ which represents
     the 4 diagonals (or opposite vertices) of a tetrahedron (which has 4).
@@ -1055,7 +1055,7 @@
 
     
     \section*{Exercise 22 $***$}
-    Proof that the group of rigid motions of an octahedron in $\R^3$ $G$
+    Proof that the group of rigid motions of an octahedron in $\rbb^3$ $G$
     is isomorphic to a subgroup of $S_4$: \\
     Consider the set $S = \{1, 2, 3 ,4\}$ which represents the opposite
     faces of the octahedron (which has 4 pairs).
@@ -1235,14 +1235,14 @@
     That means that the subgroup of $S_4$ to which $G$ is isomorphic
     is $S_4$ itself (all groups are as subgroup of themselves). \\
     As we know from exercise 1.1.7.21,
-    the group $G'$ of rigid motions of a cube in $\R^3$
+    the group $G'$ of rigid motions of a cube in $\rbb^3$
     is also isomorphic to $S_4$.
     Since isomorphy is an equivalence relation, it is transitive.
     So as $G \cong S_4$ and $S_4 \cong G'$, we have $G \cong G'$.
 
     
     \section*{Exercise 23 $***$}
-    Consider the action of the group of rigid motions of a cube in $\R^3$
+    Consider the action of the group of rigid motions of a cube in $\rbb^3$
     $G$ on the set $S = \{1, 2, 3\}$,
     where each transformation in $G$ permutes $S$ in the same way that
     the transformation permutes the pairs of faces of the cube.
@@ -1439,7 +1439,7 @@
     then the kernel of the action must contain more elements
     than just the identity,
     as proven in exercise 1.1.7.6.
-    So the kernel is the set of rigid motion in $\R^3$ that leaves the
+    So the kernel is the set of rigid motion in $\rbb^3$ that leaves the
     pairs of faces in place,
     but does allow us to swap between the faces so long as they belong
     to the same pair.

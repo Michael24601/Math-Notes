@@ -36,12 +36,12 @@
 \usepackage{gensymb}
 % For "\mathbb" macro
 \usepackage{amsfonts}
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\Q}{\mathbb{Q}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\C}{\mathbb{C}}
-\newcommand{\F}{\mathbb{F}}
+\newcommand{\nbb}{\mathbb{N}}
+\newcommand{\zbb}{\mathbb{Z}}
+\newcommand{\qbb}{\mathbb{Q}}
+\newcommand{\rbb}{\mathbb{R}}
+\newcommand{\cbb}{\mathbb{C}}
+\newcommand{\fbb}{\mathbb{F}}
 \newcommand{\rad}{\text{ rad}}
 \newcommand{\lcm}{\text{lcm}}
 \newcommand{\Aut}{\text{Aut}}
@@ -51,7 +51,7 @@
 \newcommand{\prosub}{\subset}
 
 \newcommand{\Ocal}{\mathcal{O}}
-\newcommand{\Ccal}{\mathcal{C}}
+\newcommand{\cbbcal}{\mathcal{C}}
 \newcommand{\Pcal}{\mathcal{P}}
 \newcommand{\Scal}{\mathcal{S}}
 
@@ -902,10 +902,10 @@
     \section*{Exercise 9}
     Referring to exercise 1.2.3.6,
     we know all the subgroups and inclusions
-    of $\Z/48\Z$ (same applies for $\Z/16\Z$ and $\Z/24\Z$):
+    of $\zbb/48\zbb$ (same applies for $\zbb/16\zbb$ and $\zbb/24\zbb$):
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item
-            For $\Z/16\Z$:
+            For $\zbb/16\zbb$:
 
             \begin{figure}[H]
                 \centering
@@ -921,7 +921,7 @@
                 % Scope used to shift the coordinates from the basis
                 \begin{scope}[shift={(0, 0, 0)}, rotate=0]
                     \node (1) at (0, 0)
-                    {$\Z/16\Z$}; 
+                    {$\zbb/16\zbb$}; 
                     \node (2) [below=\d of 1]
                     {$\langle \olsi{2} \rangle$}; 
                     \node (4) [below= \d of 2]
@@ -940,10 +940,10 @@
                 \end{scope} 
 
                 \end{tikzpicture}
-            \caption{\label{fig:figure1} Lattice of $\Z/16\Z$.}
+            \caption{\label{fig:figure1} Lattice of $\zbb/16\zbb$.}
             \end{figure} 
         \item
-            For $\Z/24\Z$:
+            For $\zbb/24\zbb$:
 
             \begin{figure}[H]
                 \centering
@@ -960,7 +960,7 @@
                 % Scope used to shift the coordinates from the basis
                 \begin{scope}[shift={(0, 0, 0)}, rotate=0]
 
-                    \node (1) at (0, 0) {$\Z/24\Z$}; 
+                    \node (1) at (0, 0) {$\zbb/24\zbb$}; 
                     \node (2) [below left=\d and \d of 1]
                     {$\langle \olsi{2} \rangle$}; 
                     \node (3) [below right=\d and \v of 1]
@@ -991,10 +991,10 @@
                 \end{scope} 
 
                 \end{tikzpicture}
-            \caption{\label{fig:figure1} Lattice of $\Z/24\Z$.}
+            \caption{\label{fig:figure1} Lattice of $\zbb/24\zbb$.}
             \end{figure} 
         \item
-            For $\Z/48\Z$:
+            For $\zbb/48\zbb$:
 
             \begin{figure}[H]
                 \centering
@@ -1011,7 +1011,7 @@
                 % Scope used to shift the coordinates from the basis
                 \begin{scope}[shift={(0, 0, 0)}, rotate=0]
 
-                    \node (1) at (0, 0) {$\Z/48\Z$}; 
+                    \node (1) at (0, 0) {$\zbb/48\zbb$}; 
                     \node (2) [below left=\d and \d of 1]
                     {$\langle \olsi{2} \rangle$}; 
                     \node (3) [below right=\d and \v of 1]
@@ -1049,7 +1049,7 @@
                 \end{scope} 
 
                 \end{tikzpicture}
-            \caption{\label{fig:figure1} Lattice of $\Z/48\Z$.}
+            \caption{\label{fig:figure1} Lattice of $\zbb/48\zbb$.}
             \end{figure} 
     \end{enumerate}
 

@@ -23,19 +23,19 @@
 Lie Algabra}
 
 As we know, the general linear group:
-\[ GL_n(\F) \]
+\[ GL_n(\fbb) \]
 is the group made up of invertible
-matrices in $\R^{n \times n}$. \\
+matrices in $\rbb^{n \times n}$. \\
 The orthogonal group $O(n)$
 and the special orthogonal group $SO(n)$
 are both subgroups of the general linear
 group when the field is that of the reals
-$GL_n(\R)$ . \\
+$GL_n(\rbb)$ . \\
 
 As we mentioned earlier,
 the orthogonal group $O(n)$
 is the group of orthogonal matrices:
-\[ O(n) = \{ M \mid M \in \R^{n \times n}
+\[ O(n) = \{ M \mid M \in \rbb^{n \times n}
 \text{ and } MM^t = M^TM = I \} \]
 Each orthogonal group has a
 subgroup called the special
@@ -60,7 +60,7 @@ are actually the same. \\
 
 First, to find the Lie Algebra of $SO(n)$. \\
 First we define some curve:
-\[ \gamma: \R \to SO(n) \]
+\[ \gamma: \rbb \to SO(n) \]
 Which takes as input a parameter $t$,
 and outputs rotations in $SO(n)$.
 Note that we should have $\gamma(0) = t$,
@@ -95,7 +95,7 @@ We now have a constraint for the Lie Algebra:
 \[ (\gamma(0)^T)' = -\gamma'(0)  \]
 The Lie Algebra is the set of skew-symmetric
 matrices $M^T = -M$:
-\[ so(n) = \{M \mid M \in \R^{n \times n}
+\[ so(n) = \{M \mid M \in \rbb^{n \times n}
 \text{ and } M^T = -M \} \]
 Notice that this is an implict definition
 of the tangent space or Lie Algebra. \\
@@ -115,7 +115,7 @@ Since the constraint $\det(M) = 1$
 doesn't add anything. \\
 
 We talked about interpolating
-rotations in $\R^2$ earlier.
+rotations in $\rbb^2$ earlier.
 Given two rotations $R_0$ and $R_1$,
 and some $t \in [0, 1]$:
 \[ R(t,R_0,R_1) = 
@@ -216,7 +216,7 @@ then it is skew symmetric (top right triangle
 is the negation of the bottom left). \\
 
 Suppose we want to generate the rotation
-matrix in $\R^3$ for a rotation around some
+matrix in $\rbb^3$ for a rotation around some
 axis $a$ (given by a vector with length $1$). \\
 
 We can imagine that the vector we want to rotate,
@@ -308,11 +308,11 @@ e^{{R_0t\ln\para{{R_1}{R_0}\inv}}}
 Note that the two rotations $R_0$
 and $R_1$ we are
 interpolating between may be around different
-axis, so this is a bit more complex than the $\R^2$
+axis, so this is a bit more complex than the $\rbb^2$
 rotation, where we just interpolated
 the angles. \\
 
-Note that any rotation in $\R^3$
+Note that any rotation in $\rbb^3$
 using Euler angles
 $R(\alpha, \beta, \gamma)$
 can be expressed as a single rotation
@@ -362,17 +362,17 @@ That means that:
 is the inverse. \\
 
 Any quaternion of length $1$ can be used
-to represent a rotation in $\R^3$,
+to represent a rotation in $\rbb^3$,
 just as complex numbers of length $1$
 could be used to represent any 
-rotation in $\R^2$. \\
+rotation in $\rbb^2$. \\
 In particular, quaternions are used
-to represent a rotation around an axis in $\R^3$.
-However, since any rotation matrix in $\R^3$
+to represent a rotation around an axis in $\rbb^3$.
+However, since any rotation matrix in $\rbb^3$
 can be represented as a single rotation
 around some axis,
 this means that quaternions can be used
-to represent any rotation in $\R^3$. \\
+to represent any rotation in $\rbb^3$. \\
 
 So, to elaborate on that point,
 a quaternion that represents a rotation
@@ -449,7 +449,7 @@ quaternion rotations than matrix ones. \\
 
 We can define the Lie group of quaternion
 rotation as:
-\[ S^3 = \{ q \in \mathbb{H} \cong \R^4
+\[ S^3 = \{ q \in \mathbb{H} \cong \rbb^4
 \mid |q| = 1 \} \]
 Where each element is a quaternion of
 length $1$. \\
@@ -470,7 +470,7 @@ isomorphisms. \\
 
 The group $S^3$ also has a Lie Algebra:
 \[ s^3 = \{ \dfrac{\theta}{2}((u_x)i + (u_y)j + (u_z)k) 
-\mid \theta \in \R, \;  \|u\| = 1 \} \]
+\mid \theta \in \rbb, \;  \|u\| = 1 \} \]
 Notice that this just defined the tangent
 plane at point $p = 1$. \\
 The logarithm of a quaternion in $S^3$ takes it
@@ -509,9 +509,9 @@ represents the inverse always. \\
 The group of rigid transformations,
 called the special euclidian group,
 is defined as:
-\[ SE(m) = \left\{ f : \R^m \to 
-\R^m \mid f(p) = Ap + a,\ A 
-\in SO(m),\ a \in \R^m \right\} \]
+\[ SE(m) = \left\{ f : \rbb^m \to 
+\rbb^m \mid f(p) = Ap + a,\ A 
+\in SO(m),\ a \in \rbb^m \right\} \]
 It is basically a group that only includes
 matrices that move objects around without scaling
 or reflecting them,
@@ -521,9 +521,9 @@ It includes the special orthogonal group $SO(n)$
 
 We can likewise define the Euclidian group,
 which is similar, but also allows reflections:
-\[ E(m) = \left\{ f : \R^m \to 
-\R^m \mid f(p) = Ap + a,\ A 
-\in O(m),\ a \in \R^m \right\} \]
+\[ E(m) = \left\{ f : \rbb^m \to 
+\rbb^m \mid f(p) = Ap + a,\ A 
+\in O(m),\ a \in \rbb^m \right\} \]
 It includes the orthogonal group $O(n)$
 (rotations and reflections) in it as a subgroup. \\
 
@@ -562,7 +562,7 @@ note that they will just correspond
 to the identity $I_{n+1}$
 and the inverse $M^{-1}$
 of the homogeneous matrix $M$ 
-in $\R^{(n+1) \times (n+1)}$,
+in $\rbb^{(n+1) \times (n+1)}$,
 which makes things simpler. \\
 
 \newpage

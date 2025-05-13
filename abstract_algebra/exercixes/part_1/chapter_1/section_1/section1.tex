@@ -32,13 +32,13 @@
     % at the end (use Alph for uppercase)
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item
-            For $G = (\Z, \ast)$ where $\ast(a, b) = a - b$: \\
+            For $G = (\zbb, \ast)$ where $\ast(a, b) = a - b$: \\
             We have $\ast(\ast(a, b), c) = (a - b) - c$
             and $\ast(a, \ast(b, c)) = a - (b - c) = a - (b - c)$
-            (subtraction is associative in $\Z$).
+            (subtraction is associative in $\zbb$).
             So $G$ is associative. 
         \item
-            For $G = (\R, \ast)$ where $\ast(a, b) = a + b + ab$: \\
+            For $G = (\rbb, \ast)$ where $\ast(a, b) = a + b + ab$: \\
             We have $\ast(\ast(a, b), c)
             = (a + b + ab) + c + (a + b + ab)c
             = a + b + c + ab + ac + bc + abc$
@@ -47,7 +47,7 @@
             = a + b + c + ab + ac + bc + abc$.
             So $G$ is associative.
         \item
-            For $G = (\Q, \ast)$ where $\ast(a, b) = \dfrac{a+b}{5}$: \\
+            For $G = (\qbb, \ast)$ where $\ast(a, b) = \dfrac{a+b}{5}$: \\
             We have \[\ast(\ast(a, b), c)
             = \dfrac{\dfrac{a + b}{5} + c}{5}
             = \dfrac{a}{25} + \dfrac{b}{25} + \dfrac{c}{5}\]
@@ -56,7 +56,7 @@
             = \dfrac{a}{5} + \dfrac{b}{25} + \dfrac{c}{25}\]
             So $G$ isn't associative.
         \item
-            For $G = (\Z \times \Z, \ast)$
+            For $G = (\zbb \times \zbb, \ast)$
             where $\ast((a, b), (c, d)) = (ad + bc, bd)$: \\
             We have $\ast(\ast((a, b), (c, d)), (e, f)) 
             = \ast((ad + bc, bd), (e, f)) 
@@ -67,7 +67,7 @@
             = (adf + bcf + bde, bdf)$.
             So $G$ is associative.
         \item
-            For $G = (\Q - \{0\}, \ast)$ where $\ast(a, b) = \dfrac{a}{b}$: \\
+            For $G = (\qbb - \{0\}, \ast)$ where $\ast(a, b) = \dfrac{a}{b}$: \\
             We have \[\ast(\ast(a, b), c)
             = \dfrac{\sfrac{a}{b}}{c} = \dfrac{ac}{b}\]
             and \[\ast(a, \ast(b, c))
@@ -81,66 +81,66 @@
     we need to show that $ \forall a, b \in G$, $\ast(a, b) = \ast(b, a)$.
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item
-            For $G = (\Z, \ast)$ where $\ast(a, b) = a - b$: \\
+            For $G = (\zbb, \ast)$ where $\ast(a, b) = a - b$: \\
             We have $\ast(a, b) = a - b$ and $\ast(b, a) = b - a$.
             So $G$ isn't commutative.
         \item
-            For $G = (\R, \ast)$ where $\ast(a, b) = a + b + ab$: \\
+            For $G = (\rbb, \ast)$ where $\ast(a, b) = a + b + ab$: \\
             We have $\ast(a, b) = a + b + ab$ and $\ast(b, a) = b + a + ba$.
             So $G$ is commutative.
         \item
-            For $G = (\Q, \ast)$ where $\ast(a, b) = \dfrac{a+b}{5}$: \\
+            For $G = (\qbb, \ast)$ where $\ast(a, b) = \dfrac{a+b}{5}$: \\
             We have \[\ast(a, b) = \dfrac{a + b}{5}\]
             And \[\ast(b, a) = \dfrac{b + a}{5}\]
             So $G$ is commutative.
         \item
-            For $G = (\Z \times \Z, \ast)$
+            For $G = (\zbb \times \zbb, \ast)$
             where $\ast((a, b), (c, d)) = (ad + bc, bd)$: \\
             We have $\ast((a, b), (c, d)) = (ad + bc, bd)$
             and $\ast((c, d), (a, b)) = (cb + da, db)$.
             So $G$ is commutative.
         \item
-            For $G = (\Q - \{0\}, \ast)$ where $\ast(a, b) = \dfrac{a}{b}$: \\
+            For $G = (\qbb - \{0\}, \ast)$ where $\ast(a, b) = \dfrac{a}{b}$: \\
             We have $\ast(a, b) = \dfrac{a}{b}$ and $\ast(b, a) = \dfrac{b}{a}$.
             So $G$ isn't commutative. 
     \end{enumerate}
 
 
     \section*{Exercise 3}
-    Proof that the addition of residue classes in $\Z/n\Z$ is associative: \\
-    We have, $\forall \olsi{a}, \olsi{b}, \olsi{c} \in \Z/n\Z$,
+    Proof that the addition of residue classes in $\zbb/n\zbb$ is associative: \\
+    We have, $\forall \olsi{a}, \olsi{b}, \olsi{c} \in \zbb/n\zbb$,
     $(\olsi{a} + \olsi{b}) + \olsi{c}
     = \olsi{a + b} + \olsi{c}
     = \olsi{a + b + c}$
     and $\olsi{a} + (\olsi{b} + \olsi{c})
     = \olsi{a} + \olsi{b + c} 
     = \olsi{a + b + c}$.
-    So addition is associative in $\Z/n\Z$.
+    So addition is associative in $\zbb/n\zbb$.
 
 
     \section*{Exercise 4}
     Proof that the multiplication of residue classes
-    in $\Z/n\Z$ is associative: \\
-    We have, $\forall \olsi{a}, \olsi{b}, \olsi{c} \in \Z/n\Z$,
+    in $\zbb/n\zbb$ is associative: \\
+    We have, $\forall \olsi{a}, \olsi{b}, \olsi{c} \in \zbb/n\zbb$,
     $(\olsi{a}\olsi{b})\olsi{c}
     = (\olsi{ab})\olsi{c} 
     = \olsi{abc}$ 
     and $\olsi{a}(\olsi{b}\olsi{c})
     = \olsi{a}(\olsi{bc})
     = \olsi{abc}$.
-    So multiplication is associative in $\Z/n\Z$.
+    So multiplication is associative in $\zbb/n\zbb$.
     
 
     \section*{Exercise 5}
-    Proof that the residue classes $\Z/n\Z$ aren't groups under multiplication
+    Proof that the residue classes $\zbb/n\zbb$ aren't groups under multiplication
     when $n > 1$: \\
-    The issue is that $\olsi{0} \in (\Z/n\Z, \times)$ has more than one inverse
+    The issue is that $\olsi{0} \in (\zbb/n\zbb, \times)$ has more than one inverse
     when $n > 1$.
-    This is because $\forall \olsi{a} \in \Z/n\Z$,
+    This is because $\forall \olsi{a} \in \zbb/n\zbb$,
     $\olsi{0}\olsi{a} = \olsi{0 \cdot a} = \olsi{0}$.
-    So every $\olsi{a} \in \Z/n\Z$ is an inverse of $\olsi{0}$,
+    So every $\olsi{a} \in \zbb/n\zbb$ is an inverse of $\olsi{0}$,
     which contradicts the uniqueness of the inverse.
-    So $\Z/n\Z$ isn't a group under multiplication.
+    So $\zbb/n\zbb$ isn't a group under multiplication.
 
 
     \section*{Exercise 6}
@@ -148,13 +148,13 @@
     under addition:
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item
-            For $G = \{q \in \Q \mid$ where for $q = \dfrac{a}{b}$
+            For $G = \{q \in \qbb \mid$ where for $q = \dfrac{a}{b}$
             written in lowest terms, $b$ is odd$\}$: \\
             We have $0 = \sfrac{0}{1}$ is the idenity,
-            $q^{-1} = -q$ $\forall q \in \Q$,
-            and we know that addition is associative in $\Q$.
+            $q^{-1} = -q$ $\forall q \in \qbb$,
+            and we know that addition is associative in $\qbb$.
             So all we have left to show is closure under addition.
-            For any $p, q \in \Q$,
+            For any $p, q \in \qbb$,
             where $p = \dfrac{a}{b}$ and $q = \dfrac{c}{d}$
             are written in lowest terms, $b$, and $d$ are odd,
             and \[p + q = \dfrac{a}{b} + \dfrac{c}{d} = \dfrac{ad + cb}{bd}\]
@@ -164,7 +164,7 @@
             So $G$ is closed under addition,
             so $G$ is a group under addition.
         \item
-            For $G = \{q \in \Q \mid$ where for $q = \dfrac{a}{b}$
+            For $G = \{q \in \qbb \mid$ where for $q = \dfrac{a}{b}$
             written in lowest terms, $b$ is even$\}$: \\
             This is not a group as it is not closed under addition.
             To give a counterexample,
@@ -172,25 +172,25 @@
             where $\sfrac{1}{1} \notin G$.
             So $G$ is not a group under addition.
         \item
-            For $G = \{q \in \Q\ \mid |q| < 1\}$: \\
+            For $G = \{q \in \qbb\ \mid |q| < 1\}$: \\
             This is not a group as it is not closed under addition.
             To give a counterexample,
             we have $0.8 + 0.8 = 1.6$, and $1.6 \notin G$.
             So $G$ is not a group under addition.
         \item
-            For $G = \{q \in \Q\ \mid |q| > 1\} + \{0\}$: \\
+            For $G = \{q \in \qbb\ \mid |q| > 1\} + \{0\}$: \\
             This is not a group as it is not closed under addition.
             To give a counterexample,
             we have $1.2 - 1.1 = 0.1$, and $0.1 \notin G$.
             So $G$ is not a group under addition.
         \item
-            For $G = \{q \in \Q \mid$ where for $q = \dfrac{a}{b}$
+            For $G = \{q \in \qbb \mid$ where for $q = \dfrac{a}{b}$
             written in lowest terms, $b = 1$ or $2\}$: \\
             We have $0 = \sfrac{0}{1}$ is the idenity,
-            $q^{-1} = -q$ $\forall q \in \Q$,
-            and we know that addition is associative in $\Q$.
+            $q^{-1} = -q$ $\forall q \in \qbb$,
+            and we know that addition is associative in $\qbb$.
             So all we have left to show is closure under addition.
-            For any $p, q \in \Q$,
+            For any $p, q \in \qbb$,
             where $p = \dfrac{a}{b}$
             and $p = \dfrac{c}{d}$ are written in lowest terms,
             $b$ and $d$ are either both equal to $1$ or $2$,
@@ -208,7 +208,7 @@
                     Since the fractions are written in lowest terms,
                     $a$ and $c$ are odd,
                     so $a + c$ is even.
-                    So $a + c = 2n$ for some $n \in \Z$.
+                    So $a + c = 2n$ for some $n \in \zbb$.
                     So we can reduce the fraction to $\dfrac{n}{1}$
                     where $\dfrac{n}{1} \in G$.
                 \item
@@ -226,7 +226,7 @@
             So $G$ is closed under addition,
             which means $G$ is a group under addition.
         \item
-        For $G = \{q \in \Q \mid$ where for $q = \dfrac{a}{b}$
+        For $G = \{q \in \qbb \mid$ where for $q = \dfrac{a}{b}$
         written in lowest terms, $b = 1$ or $2$ or $b = 3\}$: \\
         We can show that G is not closed under addition.
         To give a counterexample,
@@ -239,7 +239,7 @@
 
 
     \section*{Exercise 7}
-    For $(G, \ast)$, where $G = \{r \in \R \mid 0 \leqslant r < 1\}$,
+    For $(G, \ast)$, where $G = \{r \in \rbb \mid 0 \leqslant r < 1\}$,
     and $\forall x, y \in G$, 
     $x \ast y \equiv (x + y) \mod{1}$
     or $x \ast y = (x + y - \lfloor x + y \rfloor)$
@@ -320,14 +320,14 @@
 
     
     \section*{Exercise 8}
-    For $G = \{c \in \C \mid c^{n} = 1$ for some $n \in \Z^{+}\}$:
+    For $G = \{c \in \cbb \mid c^{n} = 1$ for some $n \in \zbb^{+}\}$:
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item 
             To show that $G$ is a group under multilication
-            (called the \textit{group of roots of unity} in $\C$),
+            (called the \textit{group of roots of unity} in $\cbb$),
             we first note that trivially, the identity is $1$,
             and $1 \in G$ because $1^{1} = 1$.
-            Moreover, $\forall c \in G$ and $n \in \Z^{+}$,
+            Moreover, $\forall c \in G$ and $n \in \zbb^{+}$,
             $c^{-1} = \dfrac{1}{c}$
             since $c^{n} = 1$
             implies $(\dfrac{1}{c})^{n} = \dfrac{1}{c^{n}} = \dfrac{1}{1} = 1$,
@@ -344,10 +344,10 @@
             this means $G$ is a group under multiplication.
         \item 
             To show that $G$ is not a group under addition,
-            we will first note that the only number $x \in \C$
+            we will first note that the only number $x \in \cbb$
             that satisfies the equation $x + a = a, \forall a \in G$ is $0$.
-            But $0 \notin \C$
-            as $\nexists n \in \Z^{+}$
+            But $0 \notin \cbb$
+            as $\nexists n \in \zbb^{+}$
             such that $0^n = 1$.
             As $G$ can't have an idenity,
             it doesn't form a group under addition. 
@@ -355,7 +355,7 @@
 
 
     \section*{Exercise 9}
-    Let $S = \{a + b\sqrt{2} \mid a, b \in \Q\}$
+    Let $S = \{a + b\sqrt{2} \mid a, b \in \qbb\}$
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item 
             Proof that $S$ is a group under addition.
@@ -365,7 +365,7 @@
             So all we have to show is closure.
             For $x = a + b\sqrt{2}$ and $y = c + d\sqrt{2}$,
             $x + y = (a + c) + (b + d)\sqrt{2}$
-            where $(a + c), (b, d) \in \Q$.
+            where $(a + c), (b, d) \in \qbb$.
             So $x + y \in S$,
             which means S is closed under addition, making it a group. 
         \item
@@ -377,13 +377,13 @@
             = \dfrac{a - b\sqrt{2}}{(a + b\sqrt{2})(a - b\sqrt{2})}
             = \dfrac{a - b\sqrt{2}}{a^{2} + 2b^{2}}
             = \dfrac{a}{n} + \dfrac{-b}{n}\sqrt{2}$
-            where $n \in \Q$,
+            where $n \in \qbb$,
             so $\dfrac{1}{a + b\sqrt{2}} \in S - \{0\}$,
             making it the inverse of $a + b\sqrt{2}$.
-            Finally, $\forall a, b, c, d \in \Q$,
+            Finally, $\forall a, b, c, d \in \qbb$,
             we have $(a + b\sqrt{2})(c + d\sqrt{2})
             = (ac + 2) + (ad + cb)\sqrt{2}$
-            where $(ac + 2), (ad + cb) \in \Q$,
+            where $(ac + 2), (ad + cb) \in \qbb$,
             so $S$ is closed under multiplication,
             making it a group under multiplication.
     \end{enumerate}
@@ -422,9 +422,9 @@
 
 
     \section*{Exercise 11}
-    We have $\Z/12\Z = \{\olsi{0},\olsi{1}, \olsi{2}, \olsi{3}, \olsi{4},
+    We have $\zbb/12\zbb = \{\olsi{0},\olsi{1}, \olsi{2}, \olsi{3}, \olsi{4},
     \olsi{5}, \olsi{6}, \olsi{7}, \olsi{8}, \olsi{9}, \olsi{10}, \olsi{11}\}$.
-    In the group $(\Z/12\Z, +)$:
+    In the group $(\zbb/12\zbb, +)$:
     $|\olsi{0}| = 1$,
     $|\olsi{1}| = 12$,
     $|\olsi{2}| = 6$,
@@ -441,7 +441,7 @@
 
 
     \section*{Exercise 12}
-    As for the group $(\Z/12\Z, \times)$
+    As for the group $(\zbb/12\zbb, \times)$
     and the elements $\{\olsi{1}, \olsi{-1}, \olsi{5}, \olsi{7}, \olsi{-7},
     \olsi{13}\}$:
     $|\olsi{1}| = 1$,
@@ -453,7 +453,7 @@
 
 
     \section*{Exercise 13}
-    As for the group $(\Z/36\Z, +)$
+    As for the group $(\zbb/36\zbb, +)$
     and the elements $\{\olsi{1}, \olsi{2}, \olsi{6}, \olsi{9}, \olsi{10},
     \olsi{12}, \olsi{-1}, \olsi{-10}, \olsi{-18}\}$:
     $|\olsi{1}| = 36$,
@@ -469,7 +469,7 @@
 
 
     \section*{Exercise 14}
-    As for the group $(\Z/36\Z, \times)$
+    As for the group $(\zbb/36\zbb, \times)$
     and the elements $\{\olsi{1}, \olsi{-1}, \olsi{5}, \olsi{13}, \olsi{-13},
     \olsi{17}\}$:
     $|\olsi{1}| = 1$,
@@ -531,7 +531,7 @@
 
 
     \section*{Exercise 19 $***$}
-    Proof that for $x \in G$ and $a, b \in \Z^{+}:$
+    Proof that for $x \in G$ and $a, b \in \zbb^{+}:$
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item 
             Proof that $x^{a+b} = x^ax^b$: \\
@@ -675,7 +675,7 @@
     then $(x^2)^k = x$ for some integer $k$:
     We know that $(x^2)^k = x^{2k}$.
     If $|x| = n$ and $n$ is odd,
-    then $2m - 1$ for some $m \in \Z$.
+    then $2m - 1$ for some $m \in \zbb$.
     So $x^n = x^{2m-1} = 1
     \implies x^{2m-1} \cdot x = x
     \implies x^{2m}x^{-1} \cdot x = x
@@ -724,7 +724,7 @@
 
     \section*{Exercise 23}
     Proof that for $x \in G$,
-    if $|x| = n < \infty$ and $n = s \cdot t$ where $s, t \in \Z$,
+    if $|x| = n < \infty$ and $n = s \cdot t$ where $s, t \in \zbb$,
     then $|x^s| = t$: \\
     We have $x^n = 1$,
     so $x^{st} = 1$,
@@ -742,7 +742,7 @@
     \section*{Exercise 24}
     Proof that for $a, b \in G$,
     if $a$ and $b$ commute ($ab = ba$),
-    then $(ab)^n = a^nb^n \forall n \in \Z$: \\
+    then $(ab)^n = a^nb^n \forall n \in \zbb$: \\
     We first start with proving the proposition for $n > 0$ using induction: \\
     \textbf{Basis step:}
     We know that for $n = 1$, then $(ab)^1 = ab = a^1b^1$. \\
@@ -810,13 +810,13 @@
 
     \section*{Exercise 27}
     Proof that if $x \in G$ is a fixed element,
-    and $S = \{x^n \mid n \in \Z\}$,
+    and $S = \{x^n \mid n \in \zbb\}$,
     $(S, \cdot)$ is a subrgoup of $(G, \cdot)$: \\
     Every element $x$'s inverse $x^{-1} \in S$.
     This is because if $x^n = 1$,
-    then $x^{-n} = 1$ where $-n \in \Z$.
-    Likewise, for some $n, m \in \Z$, $x^n, x^m \in G$,
-    and $x^n \cdot x^m = x^{n+m}$ where $n, m \in \Z$.
+    then $x^{-n} = 1$ where $-n \in \zbb$.
+    Likewise, for some $n, m \in \zbb$, $x^n, x^m \in G$,
+    and $x^n \cdot x^m = x^{n+m}$ where $n, m \in \zbb$.
     So $x^n \cdot x^m \in G$, which makes $G$ closed under multiplication. 
     Moreover, the multiplicative identity of $S$ is that of $G$,
     as it is in $S$: $x^0 = 1 \in S$.
@@ -945,7 +945,7 @@
             So this is a contradiction,
             which means that $x^i \neq x^{-i}$ under the given conditions. 
         \item 
-            Proof that if $n$ is even such that $n = 2k, k \in \Z$,
+            Proof that if $n$ is even such that $n = 2k, k \in \zbb$,
             then $x^i = x^{-i}$ for $1 \leqslant i < n$ only when $i = k$: \\
             We know that after $n$, the next largest number to the power 
             which $x$ turns to 1 is $2n$.
@@ -960,8 +960,8 @@
 
     \section*{Exercise 34}
     Proof that if $x \in G$, and $|x| = \infty$,
-    then all $x^n \forall n \in \Z$ are unique:
-    For $i, j \in \Z$ and $i \neq j$, 
+    then all $x^n \forall n \in \zbb$ are unique:
+    For $i, j \in \zbb$ and $i \neq j$, 
     assume by contradiction that $x^i = x^j$.
     Then $x^{i - j} = 1$.
     But this contradicts our assumption that $|x| = \infty$.
@@ -970,12 +970,12 @@
 
     \section*{Exercise 35}
     Proof that for $x \in G$ where $|x| = n < \infty$,
-    $\forall n \in \Z$, $x^n = x^i$ for some integer $i$
+    $\forall n \in \zbb$, $x^n = x^i$ for some integer $i$
     such that $0 \leqslant i < n$: \\
     If $0 \leqslant m < n$, then we've already proven it.
     If $m < 0$ or $m \geqslant n$,
     then we can start by using the division algorithm to write $m = qn + r$
-    where by definition $q, r \in \Z$ and $0 \leqslant r < n$.
+    where by definition $q, r \in \zbb$ and $0 \leqslant r < n$.
     So we have $x^m = x^{qn + r} = x^{qn}x^r = (x^n)^qx^r = 1^nx^r = x^r$.
     Since $0 \leqslant r < n$, this proves the proposition.
 

@@ -54,7 +54,7 @@
     \section*{Exercise 1}
     We can use the Euclidian Algorithm to find the 
     greatest common divisor of any two integers $a$ and $b$,
-    and then find two integers $x, b \in \Z$
+    and then find two integers $x, b \in \zbb$
     such that $\gcd(a, b) = ax + by$ by using substitution.
     We can also find their least common multiple
     which is defined as being $\dfrac{ab}{\gcd(a, b)}$.
@@ -86,15 +86,15 @@
     \end{enumerate} 
 
     \section*{Exercise 2}
-    Proof that if $k \in \Z$ divides the integers $a$ and $b$,
-    then it also divides $as + bt$ for any integers $s, t \in \Z$: \\
+    Proof that if $k \in \zbb$ divides the integers $a$ and $b$,
+    then it also divides $as + bt$ for any integers $s, t \in \zbb$: \\
     If $k \mid a$ and $k \mid b$,
-    then $a = nk$ and $b = mk$ for some integers $n, m \in \Z$.
+    then $a = nk$ and $b = mk$ for some integers $n, m \in \zbb$.
     Then $as + bt = nks + mkt = k(ns + mt)$,
     which means that $k \mid as + bt$. \\
 
     \section*{Exercise 3}
-    Proof that if $n \in \Z$ is composite,
+    Proof that if $n \in \zbb$ is composite,
     then there are integers $a$ and $b$
     such that $n \mid ab$ but $n \nmid a$ and $n \nmid b$: \\
     By the Fundamental Theorem of Arithmetic, 
@@ -109,11 +109,11 @@
     $n \nmid a$ and $n \nmid b$. \\
 
     \section*{Exercise 4}
-    Let's take two integers $a, b \in \Z - \{0\}$ (non-zero),
+    Let's take two integers $a, b \in \zbb - \{0\}$ (non-zero),
     the integer $d$ to be $\gcd(a, b)$,
     and $x_0$ and $y_0$ to be the solution to $ax + by = N$
-    for some $N \in \Z$.
-    Proof that for any integer $t \in \Z$,
+    for some $N \in \zbb$.
+    Proof that for any integer $t \in \zbb$,
     \[ x = x_0 + \dfrac{bt}{d} 
     \quad \text{ and } \quad
     x = y_0 - \dfrac{at}{d}  \]
@@ -164,7 +164,7 @@
     \end{figure}
     
     \section*{Exercise 6}
-    Proof of the Well Ordering Principle of $\Z^+$: \\
+    Proof of the Well Ordering Principle of $\zbb^+$: \\
     We can prove it using induction
     (note that the base case will be $1$ and $2$,
     because using the inductive argument only works
@@ -172,7 +172,7 @@
     so to go from the base case to all other cases,
     we need at least $2$ elements). \\
     Suppose we have a set $A_n$
-    such that $A_n$ contains $n$ distinct numbers in $\Z^+$ . \\
+    such that $A_n$ contains $n$ distinct numbers in $\zbb^+$ . \\
     \textbf{Basis step:}
     For $n = 2$,
     we know that $A$ contains $2$ distinct elements $a$ and $b$.
@@ -213,7 +213,7 @@
     and show that we can derive an even smaller one,
     creating a contradiction. \\
     Let us assume that for a prime $p$,
-    there exists two non-zero integers $a, b \in \Z - \{0\}$ 
+    there exists two non-zero integers $a, b \in \zbb - \{0\}$ 
     such that $a^2 = pb^2$.
     If $a$ and $b$ have factors in common,
     notice that we can divide both sides of the equations by them,
@@ -223,9 +223,9 @@
     The equation implies that $p \mid c^2$,
     and since $p$ is prime, 
     it has to be that $p \mid c$
-    (if $p \mid hk$ where $h, k \in \Z$ and $p$ is prime,
+    (if $p \mid hk$ where $h, k \in \zbb$ and $p$ is prime,
     then $p \mid h$ or $p \mid k$).
-    So $a$ can be written as $pn$ for some integer $n \in \Z$.
+    So $a$ can be written as $pn$ for some integer $n \in \zbb$.
     We thus get that $n^2p^2 = pd^2$,
     which we can reduce to $n^2p = d^2$.
     By the same argument, $p \mid d^2$,
@@ -240,7 +240,7 @@
     by dividing by $p$,
     which contradicts the Well Ordering Principle,
     since it implies that we can always get a smaller and smaller
-    $|a|$ and $|b|$, which belong to $\Z^+$. \\
+    $|a|$ and $|b|$, which belong to $\zbb^+$. \\
 
     \section*{Exercise 8 $***$}
     For a prime $p$,
@@ -250,16 +250,16 @@
     such that $p$ divides $n! = (n)(n-1)\dots(2)(1)$. \\
     We can use the \textit{Greatest Integer Function},
     also called the \textit{Floor Function}
-    and denoted by $\lfloor x \rfloor$ for $x \in \R$,
+    and denoted by $\lfloor x \rfloor$ for $x \in \rbb$,
     which returns the greatest integer
     smaller than the real number $x$. \\
-    We know that if $p \mid ab$ where $a, b \in \Z$ and $p$ is prime,
+    We know that if $p \mid ab$ where $a, b \in \zbb$ and $p$ is prime,
     then $p \mid a$ or $p \mid b$.
     And if $b$ is composite such that $b = cd$,
     then $p \mid a$ or $p \mid c$ or $p \mid d$.
     We can repeat this argument as many times as we want,
     and what it means is that,
-    if $p \mid m_1m_2m_3\dotsm_k$ where $m_i \in \Z$,
+    if $p \mid m_1m_2m_3\dotsm_k$ where $m_i \in \zbb$,
     then $p$ must divide at least one factor $m_i$. \\
     So if $p \mid n!$,
     then $p \mid n$ or $p \mid (n-1) \dots$

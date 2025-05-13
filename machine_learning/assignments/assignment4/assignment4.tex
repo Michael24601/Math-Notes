@@ -6,7 +6,7 @@
 
 \input{../../../variables.tex}
 
-\title{%
+\title{
     \Huge Machine Learning \\
     \Large Assignment IV
 }
@@ -31,13 +31,14 @@ Evaluates to:
 - f(z, a(z))\dd{}{z}a(z)
 + \integral{a(z)}{b(z)}{\partialdd{}{z}
 f(z, y)}{dy} \]
-\begin{enumerate}[label = \alph*)]
+
+\begin{enumerate}[label = \letters]
 \item 
 We have the following expected absolute loss
 which is just a sum over the random variabe
 $Y$ (for a fixed $z$):
-\[ \E[|z - Y|] 
-= \integral{-\infty}{\infty}{|z - y|\Pb_Y}{(Y = dy)} \]
+\[ \ebb[|z - Y|] 
+= \integral{-\infty}{\infty}{|z - y|\pbb_Y}{(Y = dy)} \]
 Which we can rewrite using the density:
 \[ \integral{-\infty}{\infty}{|z - y|p_Y(y)}{(dy)} \]
 We want to minimize this risk (expected loss)
@@ -48,8 +49,8 @@ is $0$:
 \[ \dd{}{z}\para{\integral{-\infty}{\infty}
 {|z - y|p_Y(y)}{(dy)} } = 0 \]
 First note that:
-\[ |z-y| = \piecewise{(z-y) \IF z \geq y}
-{(y-z) \IF z \leq y} \]
+\[ |z-y| = \piecewise{(z-y) \IF z \geq y \\
+(y-z) \IF z \leq y} \]
 So we can divide the integral into two sections
 with $y \in (-\infty, z]$
 and then $y \in [z, \infty)$:
@@ -82,15 +83,15 @@ over some interval is just the probability
 that $Y$ falls in that interval, so:
 \[ \dd{}{z}\para{\integral{-\infty}{\infty}
 {|z - y|p_Y(y)}{(dy)} } = 
-\Pb(Y \leq z) - \Pb(Y \geq z) \]
+\pbb(Y \leq z) - \pbb(Y \geq z) \]
 Now, setting the derivative to $0$,
 we get:
-\[ \Pb(Y \leq z) - \Pb(Y \geq z) = 0 \]
-\[ \Pb(Y \leq z) = \Pb(Y \geq z) \]
+\[ \pbb(Y \leq z) - \pbb(Y \geq z) = 0 \]
+\[ \pbb(Y \leq z) = \pbb(Y \geq z) \]
 And since:
-\[ \Pb(Y \leq z) + \Pb(Y \geq z) = 1 \]
+\[ \pbb(Y \leq z) + \pbb(Y \geq z) = 1 \]
 That means that:
-\[ \Pb(Y \leq z) = \Pb(Y \geq z) = \dfrac{1}{2} \]
+\[ \pbb(Y \leq z) = \pbb(Y \geq z) = \dfrac{1}{2} \]
 So the value $\hat{z}$
 at which the expected total loss is minimized
 is just the point $z$
@@ -103,9 +104,9 @@ for a fixed $X = x$,
 which we can do by finding the value $z = m(x)$
 such that the conditional risk 
 (expected loss knowing $X = x$) is minimized:
-\[ \E[|z - Y|] 
+\[ \ebb[|z - Y|] 
 = \integral{-\infty}{\infty}
-{|z - y|\Pb_{Y \mid X = x}}{(dy)} \]
+{|z - y|\pbb_{Y \mid X = x}}{(dy)} \]
 Which we can rewrite using the density:
 \[ \integral{-\infty}{\infty}
 {|z - y|p_{Y | X = x}(y)}{(dy)} \]
@@ -121,22 +122,40 @@ We can repeat the result but with the
 density given $X = x$:
 \[ \dd{}{z}\para{\integral{-\infty}{\infty}
 {|z - y|p_{Y | X = x}(y)}{(dy)} } = 
-\Pb(Y \leq z \mid X = x) - \Pb(Y \geq z \mid X = x) \]
+\pbb(Y \leq z \mid X = x) - \pbb(Y \geq z \mid X = x) \]
 Setting the derivative to $0$ tell us that:
-\[ \Pb(Y \leq z \mid X = x) 
-- \Pb(Y \geq z \mid X = x) = 0 \]
-\[ \Pb(Y \leq z \mid X = x) 
-= \Pb(Y \geq z \mid X = x) \]
+\[ \pbb(Y \leq z \mid X = x) 
+- \pbb(Y \geq z \mid X = x) = 0 \]
+\[ \pbb(Y \leq z \mid X = x) 
+= \pbb(Y \geq z \mid X = x) \]
 And since:
-\[ \Pb(Y \leq z \mid X = x) 
-+ \Pb(Y \geq z \mid X = x) = 1 \]
+\[ \pbb(Y \leq z \mid X = x) 
++ \pbb(Y \geq z \mid X = x) = 1 \]
 This means that:
-\[ \Pb(Y \leq z \mid X = x) 
-= \Pb(Y \geq z \mid X = x) = \dfrac{1}{2} \]
+\[ \pbb(Y \leq z \mid X = x) 
+= \pbb(Y \geq z \mid X = x) = \dfrac{1}{2} \]
 Which again means that $\hat{z}$
 is the median $m(x)$, but this times
 depends on whatever $x$ we are given. \\
 \end{enumerate}
+
+\newpage
+
+\colorText{red}{
+    \subsection*{Correction}
+    \begin{enumerate}[label = \letters]
+        \item 
+        Remember to either mention the function is
+        known to be convex, or calculate the second
+        derivative and show it's positive. \\
+        This isn't necessary if we are told
+        the function is convex, or if it's something
+        like the risk, which is always convex if
+        the loss is convex. \\
+        \item
+    \end{enumerate}
+}
+
 
 \newpage
 
@@ -146,14 +165,15 @@ Proving that a loss function $\Phi$
 is classification calibrated
 just means we have to show that $\Phi'(0)$
 exists and that $\Phi'(0) < 0$. \\
-\begin{enumerate}[label = \alph*)]
+
+\begin{enumerate}[label = \letters]
     \item 
     First we have the hinge loss
     $\Phi_{\text{hinge}}(z) = \max(0, 1-z)$,
     which we can write as:
     \[ \Phi_{\text{hinge}}(z) = 
-    \piecewise{1-z \IF z < 1}
-    {0 \IF \quad \; z \geq 1} \]
+    \piecewise{1-z \IF z < 1 \\
+    0 \IF \quad \; z \geq 1} \]
     The only point at which the function
     id not differentiable (smooth) is $z = 1$. \\
     At $z = 0$, we have 
@@ -165,7 +185,7 @@ exists and that $\Phi'(0) < 0$. \\
     \item 
     We now have the exponential loss
     $\Phi_{\text{exp}}(z) = e^{-z}$,
-    which is differentiable for all $z \in \R$. \\
+    which is differentiable for all $z \in \rbb$. \\
     We can calculate the derivative:
     \[ \Phi_{\text{exp}}'(z) = (e^{-z})' = -e^{-z} \]
     Which means that:
@@ -175,7 +195,7 @@ exists and that $\Phi'(0) < 0$. \\
     \item 
     We now have the squared loss
     $\Phi_{\text{quad}}(z) = (1-z)^2$,
-    which is differentiable for all $z \in \R$. \\
+    which is differentiable for all $z \in \rbb$. \\
     We can calculate the derivative:
     \[ \Phi_{\text{quad}}'(z) = ((1-z)^2)' = 2z -2 \]
     Which means that:
@@ -186,17 +206,61 @@ exists and that $\Phi'(0) < 0$. \\
 
 \newpage
 
+\colorText{red}{
+    \subsection*{Correction}
+    In order for the loss $\Phi$ to be classification
+    calibrated, we need to show that $\Phi'(0)$
+    exists and that $\Phi'(0) < 0$,
+    but we also need it to be convex in the first
+    place. \\
+    I forgot to prove the convexity of the functions. \\
+    \begin{enumerate}[label = \letters]
+        \item 
+        For the hinge loss, we have
+        $\Phi = \max(0, 1-z)$.
+        A function that is the max of two functions
+        is convex if both functions are convex. \\
+        So we can show that $0$ and $1-z$
+        are convex by doing the second derivative. \\
+        We also need to mention that it is
+        differentiable at $0$,
+        which we can do by just noting that $1-z$
+        is differentiable.
+        \item
+        We can just find the second derivative 
+        of $e^{-z}$, which will be $e^{-z}$,
+        which is always positive, and thus
+        it is convex. \\
+        \item
+        We can again find the second derivative
+        of $(1-z)^2$, which is $2$,
+        which is always positive. \\
+    \end{enumerate}
+    Note that the tutor mentioned that it
+    might not be enough to just mention
+    that the function is differentiable at $0$.
+    We may need to find the limit as $z$
+    approaches from both sides,
+    and then show the derivative exists. \\
+
+    Some other students also just directly
+    proved that $\sign(g^*) = f^*$,
+    which is correct but may be harder. \\
+}
+
+\newpage
+
 \subsection*{Ex 3}
 
 We have a training dataset $\dcal$ 
 with $n$ points:
 \[ \dcal = \{(x_i, y_i) \mid 
-x_i, y_i \in \R \}_{i = 1, \dots n} \]
+x_i, y_i \in \rbb \}_{i = 1, \dots n} \]
 and a hypothesis class:
-\[ \hcal = \{ h_{w}(x) = wx \mid w \in \R \} \]
+\[ \hcal = \{ h_{w}(x) = wx \mid w \in \rbb \} \]
 Which is just the class of all line
 functions passing through the origin
-(the slope can be any $w \in \R$,
+(the slope can be any $w \in \rbb$,
 and the $y$-intercept is equal to $0$). \\
 We also use the squared loss function:
 \[ \ell(h_w(x_i), y_i) = (h_w(x_i) - y_i)^2 \]
@@ -205,9 +269,10 @@ is the mean of the dataset,
 which we can write as:
 \[ \hat{\rscr}_\ell^n(h_w)
 = \dfrac{1}{n}\sum_{i = 1}^{n}(wx_i - y_i)^2 \]
-\begin{enumerate}[label = \alph*)]
+
+\begin{enumerate}[label = \letters]
 \item 
-We want to find the value $w* \in \R$
+We want to find the value $w* \in \rbb$
 that minimizes $\hat{\rscr}_\ell^n(h_w)$,
 which would in turn give us the
 empirical risk minimizer $h_w^* = h_{w^*}$

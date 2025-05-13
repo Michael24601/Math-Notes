@@ -126,7 +126,7 @@
         \end{bmatrix} \]
         where each $x_i$ is a column vector,
         and a function
-        \[ f:\R^d \to \R \]
+        \[ f:\rbb^d \to \rbb \]
         \[ f(c) = \sum_{i=1}^{n}\|x_i - c\|^2 \]
         that descibres the mean squared
         error (average difference between $c$
@@ -186,8 +186,8 @@
         As we know, the covariance of $X_i$ and $X_j$
         is:
         \[ \text{Cov}(x_i, x_j) =  
-        \dfrac{1}{n}\E(x_i - \E(x_i))\E(x_j - \E(x_j)) \]
-        where $\E(x_i)$ and $\E(x_j)$
+        \dfrac{1}{n}\ebb(x_i - \ebb(x_i))\ebb(x_j - \ebb(x_j)) \]
+        where $\ebb(x_i)$ and $\ebb(x_j)$
         are the means of each distribution. \\
         The empirical covariance $\Sigma_X$
         is the same,
@@ -203,7 +203,7 @@
         means of each vector $x_i$. \\
         We need to prove that $\Sigma_X$
         is positive semi-definite,
-        meaning that for any vector $w \in \R^d$:
+        meaning that for any vector $w \in \rbb^d$:
         \[ w^T\Sigma w \geq 0 \]
         Notice that:
         \[ w^T\Sigma w = w^T \para{
@@ -260,7 +260,7 @@
         \[ (u + v)^T(u + v) 
         = u^Tu + u^Tv + v^Tu + v^Tv 
         = u^2 + 2u^Tv + v^2 \]
-        where $x, u, v \in \R^n$. \\
+        where $x, u, v \in \rbb^n$. \\
         Another small remark is that $u^Tv = v^Tu$,
         both being the dot product,
         but neither is equal to $uv^T$,
@@ -290,11 +290,11 @@
         As we know, the mean $\mu$
         is the expected value of the
         random variable:
-        \[ \E\brac{\sum_{i = 1}^{n} X_i} \]
+        \[ \ebb\brac{\sum_{i = 1}^{n} X_i} \]
         By the linearity of the expected value:
-        \[ \E\brac{\sum_{i = 1}^{n} X_i} =
-        \sum_{i = 1}^{n} \E(X_i) = 0 \]
-        since $\E(X_i) = 0$ for all $X_i$
+        \[ \ebb\brac{\sum_{i = 1}^{n} X_i} =
+        \sum_{i = 1}^{n} \ebb(X_i) = 0 \]
+        since $\ebb(X_i) = 0$ for all $X_i$
         (since $X_i \sim \normal(0, \Sigma_i)$). \\
         As for the variance of the random
         variable (or covariance matrix),
@@ -314,7 +314,7 @@
         \para{\sum_{i=1}^{n} \Sigma_i}\inv x} \]
         \item 
         We know that for a random vector
-        in $\R^{2d}$
+        in $\rbb^{2d}$
         \[ X = \vecTwo{X_1}{X_2} \]
         (where each of $X_1$ and $X_2$
         are themselves vectors, though we
@@ -338,8 +338,8 @@
         changes). \\
         As for the mean of this random variable,
         it is just 
-        \[ \E\brac{ \vecTwo{X_1}{X_2}}
-        = \vecTwo{\E(X_1)}{\E(X_2)}
+        \[ \ebb\brac{ \vecTwo{X_1}{X_2}}
+        = \vecTwo{\ebb(X_1)}{\ebb(X_2)}
         = \vecTwo{0}{0} \]
         So the random variable follows the
         distribution
@@ -358,13 +358,13 @@
     \begin{enumerate}[label=\alph*)]
         \item 
         We have a function $f$:
-        \[ f:\R^n \to \R \]
+        \[ f:\rbb^n \to \rbb \]
         \[ f(u) 
         = \dfrac{1}{2}\sum_{i=1}^{n}(u_i - c_i)^2
         + \dfrac{\mu}{2}\sum_{i=1}^{n-1}(u_{i+1} - u_i)^2
         \]
-        defined for some $c \in \R^n$
-        and scalar $\mu \in \R^+$. \\
+        defined for some $c \in \rbb^n$
+        and scalar $\mu \in \rbb^+$. \\
         In order to write it using vector notation,
         we not ethat the first sum is just
         the 2-norm squared of $u - c$:

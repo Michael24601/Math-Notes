@@ -29,7 +29,7 @@
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item 
             Proof that $\varphi(x^n) = \varphi(x)^n$ $\forall x \in G$
-            and $n \in \Z^+$: \\
+            and $n \in \zbb^+$: \\
             Knowing that $\varphi$ is a homomorphism,
             we can use induction to prove the statement: \\
             \textbf{Basis step:}
@@ -63,7 +63,7 @@
             $\varphi(x^{-1}) = \varphi(x)^{-1}$
             (since $\varphi$ is well defined). \\
             From the two statements we have proved,
-            we conclude that by setting $y = x^n$ for $n \in \Z^+$,
+            we conclude that by setting $y = x^n$ for $n \in \zbb^+$,
             $ \varphi(x^{-n}) = \varphi((x^n)^{-1})
             = \varphi(y^{-1})
             = \varphi(y)^{-1}
@@ -72,7 +72,7 @@
             = \varphi(x)^{-n}$.
             Since we've shown the proposition in part a applies for $n < 0$,
             and since $\varphi(1_G) = 1_H$ implies it works for
-            $n = 0$, we conclude that $\forall n \in \Z$, 
+            $n = 0$, we conclude that $\forall n \in \zbb$, 
             $\varphi(x^n) = \varphi(x)^n$.
     \end{enumerate}
 
@@ -141,7 +141,7 @@
     if they map two groups together,
     the two groups must have the same order.
     This fact, coupled with the statement we just proved,
-    tells us that for any fixed $n \in \Z^+$,
+    tells us that for any fixed $n \in \zbb^+$,
     there are the same number of elements of order $n$ the two groups. \\
     The statement we proved doesn't necessarily stand
     if $\varphi$ were a homomorphism.
@@ -197,13 +197,13 @@
 
 
     \section*{Exercise 4 $***$}
-    Proof that the multiplicative groups $G = (\R - \{0\}, \times)$
-    and $H = (\C - \{0\}, \times)$ are not isomorphic: \\
+    Proof that the multiplicative groups $G = (\rbb - \{0\}, \times)$
+    and $H = (\cbb - \{0\}, \times)$ are not isomorphic: \\
     In exercise 1.1.6.2 we showed that two isomorphic groups contain the same
-    number of elements with order $n$ for any $n \in \Z^+$.
+    number of elements with order $n$ for any $n \in \zbb^+$.
     In $G$, we have only one element of order 3.
     This is because 1 is the multiplicative identity of $G$,
-    and $x^3 = 1$ only has a solution at $x = 1$ in $\R$. \\
+    and $x^3 = 1$ only has a solution at $x = 1$ in $\rbb$. \\
     However, in $H$, the equation $x^3 = 1$ has 3 solutions:
     \[x_1 = 1, \text{ } x_2 = \dfrac{-1 + i\sqrt{3}}{2}
     \text{ and } x_3 = \dfrac{-1 - i\sqrt{3}}{2}\]
@@ -213,32 +213,32 @@
     
 
     \section*{Exercise 5}
-    Proof that the multiplicative groups $(\R, +)$
-    and $(\C, +)$ are not isomorphic: \\
+    Proof that the multiplicative groups $(\rbb, +)$
+    and $(\cbb, +)$ are not isomorphic: \\
     While both groups are of infinite order,$
-    \R$ is a larger type of infinity than $\Q$.
-    $\R$'s infinity is called uncountable and denoted $2^{\aleph_0}$.
-    $\Q$'s infinity is called countable and denoted $\aleph_0$.
+    \rbb$ is a larger type of infinity than $\qbb$.
+    $\rbb$'s infinity is called uncountable and denoted $2^{\aleph_0}$.
+    $\qbb$'s infinity is called countable and denoted $\aleph_0$.
     By definition, one infinity beling larger than another means that
     we can't have a 1 to 1 mapping between the two.
-    Since there exists no bijections between $\R$ and $\Q$,
+    Since there exists no bijections between $\rbb$ and $\qbb$,
     they can't be isomorphic.
 
 
     \section*{Exercise 6 $***$}
-    Proof the additive groups $\Z$ and $\Q$ are not isomorphic: \\
-    Suppose that $\phi: \Q \to \Z$ is an isomorphism.
-    Then there must exist an element $q \in \Q$
-    such that $\phi(q) = 1_\Z$.
+    Proof the additive groups $\zbb$ and $\qbb$ are not isomorphic: \\
+    Suppose that $\phi: \qbb \to \zbb$ is an isomorphism.
+    Then there must exist an element $q \in \qbb$
+    such that $\phi(q) = 1_\zbb$.
     We know frome exercise 1.1.6.1 that in an isomorphism,
-    $\phi(n \cdot x) = n \cdot \phi(x)$ $\forall x \in \Q$,
+    $\phi(n \cdot x) = n \cdot \phi(x)$ $\forall x \in \qbb$,
     (but with addition rather than multiplication as the group operation).
-    So $\phi(q) = \phi(2(\sfrac{q}{2})) = 2\phi(q/2) = 1_\Z = 1$.
+    So $\phi(q) = \phi(2(\sfrac{q}{2})) = 2\phi(q/2) = 1_\zbb = 1$.
     So $1 = 2\phi(\sfrac{q}{2})$, meaning $\phi(\sfrac{q}{2}) = \sfrac{1}{2}$.
-    But since $\sfrac{1}{2} \notin \Z$,
+    But since $\sfrac{1}{2} \notin \zbb$,
     then $\sfrac{q}{2}$ does not have an image,
     meaning $\phi$ is not a function, which is a contradiction.
-    So the groups $(\Z, +)$ and $(\Q, +)$ are not isomorphic.
+    So the groups $(\zbb, +)$ and $(\qbb, +)$ are not isomorphic.
 
 
     \section*{Exercise 7}
@@ -465,17 +465,17 @@
 
 
     \section*{Exercise 15}
-    Proof that the map $\pi: \R^2 \to \R$,
-    where $\pi((x, y)) = x \forall x, y \in \R$, is an homomorphism: \\
-    This map is well defined because for each tuple in $\R^2$
-    unambiguously maps to exactly one element in $\R$
+    Proof that the map $\pi: \rbb^2 \to \rbb$,
+    where $\pi((x, y)) = x \forall x, y \in \rbb$, is an homomorphism: \\
+    This map is well defined because for each tuple in $\rbb^2$
+    unambiguously maps to exactly one element in $\rbb$
     since it's the first element in the tuple itself.
-    Moreover, $\forall (x, y), (z, w) \in \R^2$,
+    Moreover, $\forall (x, y), (z, w) \in \rbb^2$,
     $\pi((x, y)(z, w)) = \pi((xz, yw)) = xz = \pi((x, y))\pi((z, w))$,
     so $\pi$ is a homomorphism. \\
     Additionally, $\ker \pi$ is the set of elements that map to $0$
-    (the additive identity of $\R$),
-    so $\ker \pi = \{(0, r) \mid r \in \R\}$.                                                       
+    (the additive identity of $\rbb$),
+    so $\ker \pi = \{(0, r) \mid r \in \rbb\}$.                                                       
 
 
     \section*{Exercise 16}
@@ -545,7 +545,7 @@
     
 
     \section*{Exercise 19}
-    Let $G = \{z \in \C \mid z^n = 1 \text{ for some } n \in \Z^+ \}$
+    Let $G = \{z \in \cbb \mid z^n = 1 \text{ for some } n \in \zbb^+ \}$
     be a multiplicative group with identity 1.
     Proof that for a fixed integer $k > 1$,
     the map $\varphi: G \to G$,
@@ -555,9 +555,9 @@
     and unambiguous and $G$ is closed under the group operation. \\
     Futhermore, $\forall x, y \in G$,
     $\varphi(xy) = (xy)^k = x^ky^k = \varphi(x)\varphi(y)$
-    since multiplication is commutative in $\C$. 
+    since multiplication is commutative in $\cbb$. 
     So $\varphi$ is a homomorphism. \\
-    Additionally, $\forall z \in G$, $\exists n \in \Z^+$
+    Additionally, $\forall z \in G$, $\exists n \in \zbb^+$
     such that $z^n = 1$.
     So $z^{\sfrac{1}{k}}$, $(z^{\sfrac{1}{k}})^{nk} = (z^1)^{n} = 1$,
     which means that $\forall z \in G$, $z^{\sfrac{1}{k}} \in G$.
@@ -565,7 +565,7 @@
     which makes $\varphi$ surjective. \\
     The map is not an isomorphism however, as it is not injective.
     To show this, we first note that $1 = e^{2 \pi i}$,
-    so $\forall n \in \Z$, $1 = e^{2 \pi i} = (e^{\sfrac{2 \pi i}{n}})^n$.
+    so $\forall n \in \zbb$, $1 = e^{2 \pi i} = (e^{\sfrac{2 \pi i}{n}})^n$.
     Hence, all elements $e^{\sfrac{2 \pi i}{n}} \in G$.
     So for any fixed integer $k$ that is larger than 1,
     if we set $n = k$,
@@ -613,17 +613,17 @@
 
 
     \section*{Exercise 21}
-    Proof that for a fixed $k \in \Q - \{0\}$,
-    the map $\phi : \Q \to \Q$ defined by $\phi(q) = kq$ $q \in \Q$ 
+    Proof that for a fixed $k \in \qbb - \{0\}$,
+    the map $\phi : \qbb \to \qbb$ defined by $\phi(q) = kq$ $q \in \qbb$ 
     (the additive group) is an automorphism: \\
-    First, for $p, q \in \Q$,
+    First, for $p, q \in \qbb$,
     $\phi(p + q) = k(p + q) = kp + kq = \phi(p) + \phi(q)$,
     so $\phi$ is a homomorphism.
-    Moreover, for every $q$ in $\Q$, $\sfrac{q}{k} \in \Q$
-    since $k \neq 0$ and $\Q$ is closed under division.
-    So every element $q$ in $\Q$ is the image of an element in $\Q$,
+    Moreover, for every $q$ in $\qbb$, $\sfrac{q}{k} \in \qbb$
+    since $k \neq 0$ and $\qbb$ is closed under division.
+    So every element $q$ in $\qbb$ is the image of an element in $\qbb$,
     making $\phi$ surjective.
-    And as $|\Q| = |\Q|$, $\phi$'s surjectivity suggests it's injective,
+    And as $|\qbb| = |\qbb|$, $\phi$'s surjectivity suggests it's injective,
     making the mapping a bijection,
     and by extension, an isomorphism,
     which in turn, makes it an automorphism.
@@ -743,7 +743,7 @@
 
 
     \section*{Exercise 25}
-    Let $n \in \Z^+$, $r$ and $s$ be the generators of $D_{2n}$,
+    Let $n \in \zbb^+$, $r$ and $s$ be the generators of $D_{2n}$,
     and $\theta = \sfrac{2 \pi}{n} \rad$: \\
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item 
@@ -835,7 +835,7 @@
                     \caption{\label{fig:figure1} Transformation of $p$ by $A$.}
                 \end{figure}
         \item 
-            Proof that $\varphi: D_{2n} \to GL_2(\R)$,
+            Proof that $\varphi: D_{2n} \to GL_2(\rbb)$,
             where $\varphi(r) = A$ and $\varphi(s) = B =
             \begin{pmatrix}
                 0 & 1 \\
@@ -909,12 +909,12 @@
                 \caption{\label{fig:figure1} Transformation of $p$ by $B$.}
             \end{figure}
 
-            We know that $\{A, B\}$ is a set in $GL_2(\R)$,
+            We know that $\{A, B\}$ is a set in $GL_2(\rbb)$,
             if its elements can be mapped to the generators of $D_{2n}$
             in such a way as to satisfy the representation's relations,
             then $\varphi$ becomes a homomorphism. \\ 
             We know that the identity matrix $I_2$ is the identity of
-            $GL_2(\R)$.
+            $GL_2(\rbb)$.
             Moreover
             \[ A^n = \begin{pmatrix}
                 \cos(\theta) & -\sin(\theta) \\
@@ -988,12 +988,12 @@
                 \cos(\theta) & \sin(\theta) \\
             \end{pmatrix} = AB \]
             So the relations are satisfied,
-            but since $A$ and $B$ are not $GL_2(\R)$'s generators,
+            but since $A$ and $B$ are not $GL_2(\rbb)$'s generators,
             $\varphi$ is a non-surjective homomorphism.
         \item
             Proof that $\varphi$ is injective: \\
             By exercise 1.1.6.13,
-            we know that $\varphi(D_{2n}) \leqslant GL_2(\R)$.
+            we know that $\varphi(D_{2n}) \leqslant GL_2(\rbb)$.
             This subrgoup is generated by $A$ and $B$.
             Since we have $A^n = B^2 = 1$,
             and $AB = BA^{-1}$,
@@ -1004,13 +1004,13 @@
             Which means that $|\varphi(D_2n)| = 2n = |D_{2n}|$.
             Since $\varphi$ is well defined,
             that means that each element in $D_{2n}$ maps to exactly
-            one element in $GL_2(\R)$.
+            one element in $GL_2(\rbb)$.
             So $\varphi$ is injective.
     \end{enumerate}
 
     
     \section*{Exercise 26}
-    Proof that $\varphi: Q_8 \to GL_2(\C)$ defined by
+    Proof that $\varphi: Q_8 \to GL_2(\cbb)$ defined by
     \[  \varphi(i) = A =\begin{pmatrix}
         \sqrt{-1} & 0 \\
         0 & \sqrt{-1} \\
@@ -1059,7 +1059,7 @@
         0 & 1 \\
     \end{pmatrix} = I_2 \]
     where $I_2$ is the identity matrix,
-    and the identity of $GL_2(\C)$. \\
+    and the identity of $GL_2(\cbb)$. \\
     And finally
     \[  BAB = \begin{pmatrix}
         0 & -1 \\
@@ -1085,19 +1085,19 @@
         \sqrt{-1} & 0 \\
         0 & \sqrt{-1} \\
     \end{pmatrix} = A \]
-    Since $A$ and $B$ are in $GL_2(\C)$,
+    Since $A$ and $B$ are in $GL_2(\cbb)$,
     and since mapping $i$ and $j$, $Q_8$'s generators, to them
     satisfied $Q_8$'s relations,
     that makes the mapping $\varphi$ a homomorphism
-    (non-surjective as $A$ and $B$ don't generate $GL_2(\C)$). \\
+    (non-surjective as $A$ and $B$ don't generate $GL_2(\cbb)$). \\
     Proof that $\varphi$ is injective:
-    By 1.1.6.13, we know that $\varphi(Q_8) \leqslant GL_2(\C)$.
+    By 1.1.6.13, we know that $\varphi(Q_8) \leqslant GL_2(\cbb)$.
     We know that $A$ and $B$ generate $\varphi(Q_8)$,
     so $\varphi(Q_8) = \{ 1, -1, A, B, A^{-1}, B^{-1}, AB, BA \}$.
     (any other combination produces one of the elements in the set).
     So $|\varphi(Q_8)| = 8 = Q_8$.
     Hence, as $\varphi$ is well defined, each element in $Q_8$
-    maps to exactly one element in $GL_2(\C)$,
+    maps to exactly one element in $GL_2(\cbb)$,
     making the mapping injective.
         
 \end{document}

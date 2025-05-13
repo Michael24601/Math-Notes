@@ -41,8 +41,8 @@ We know that because $A$
 is tall and skinny, we have less
 vectors than we do dimensions. 
 For example, we may have a matrix
-whose columns span a plane in $\R^3$.
-But since $b$ is in $\R^3$,
+whose columns span a plane in $\rbb^3$.
+But since $b$ is in $\rbb^3$,
 isn't it possible for $b$ to just not
 be on said plane? \\
 The answer is yes, but
@@ -76,7 +76,7 @@ and because we want it to be differentiable. \\
 So we have the norm squared:
 \[ E(x) = \|Ax - b\|^2 \]
 This is a positive convex function
-\[ E : \R^n \to \R \]
+\[ E : \rbb^n \to \rbb \]
 which means it will have a minimum
 at the point $x$ where:
 \[ \nabla E(x) = 0 \]
@@ -418,7 +418,7 @@ However, we can use homogeneous coordinates
 (going up one dimension)
 in order to model the transformation using a 
 square matrix. \\
-So suppose we have $p, q \in \R^2$,
+So suppose we have $p, q \in \rbb^2$,
 then notice that:
 \[ \vecTwo{q_1}{q_2} = \vecTwo{p_1 + t_1}{p_2 + t_2} \]
 If we were to add a padding to the vector
@@ -431,11 +431,11 @@ Then we can write:
 So the linear transformation gave us the translated vector,
 but in homoegenous coordinates. \\
 We can more generally write a translation of
-vectors in $\R^n$ as the homogeneous matrix in
-$\R^{(n+1) \times (n+1)}$ with the format:
+vectors in $\rbb^n$ as the homogeneous matrix in
+$\rbb^{(n+1) \times (n+1)}$ with the format:
 \[ \matTwo{I}{t}{0}{1} \]
-where $I$ is the identity matrix in $\R^{n \times n}$
-and $t \in \R^n$. \\
+where $I$ is the identity matrix in $\rbb^{n \times n}$
+and $t \in \rbb^n$. \\
 
 Now, it will also be useful to have the inverse of this
 transformation.
@@ -487,7 +487,7 @@ $\cos(a + b)$ and $\sin(a+b)$:
 Notice that this means that
 \[R = \matTwo{\cos(\theta)}{-\sin(\theta)}
 {\sin(\theta)}{\cos(\theta)} \]
-We can extend this to any dimension $\R^n$. \\
+We can extend this to any dimension $\rbb^n$. \\
 We can write $R(\theta)$ to indicate
 a rotation of angle $\theta$. \\
 
@@ -548,7 +548,7 @@ value of $1$. \\
 However some of the entries can be $-1$
 instead of $1$:
 \[ \matTwo{1}{0}{0}{-1} \]
-The transformation reflects the space $\R^n$
+The transformation reflects the space $\rbb^n$
 around basis vectors of the $-1$ entries.
 
 \newpage
@@ -558,7 +558,7 @@ around basis vectors of the $-1$ entries.
 The matrix:
 \[ S = \matThree{\alpha_1}{0}{0}
 {0}{\alpha_2}{0}{0}{0}{\alpha_3} \]
-scales vectors in $\R^3$
+scales vectors in $\rbb^3$
 by $\alpha_1$, $\alpha_2$, and $\alpha_3$
 in the directions
 \[ \vecThree{1}{0}{0}
@@ -566,7 +566,7 @@ in the directions
 \qquad \vecThree{0}{0}{1} \]
 We thus call it a scaling matrix. \\
 
-A scaling matrix in $\R^n$ has a determinant equal 
+A scaling matrix in $\rbb^n$ has a determinant equal 
 to the product of its main diagonal:
 \[ \sum_{i=1}^{n}\alpha_i\]
 This is because the total amount of scaling
@@ -670,8 +670,8 @@ every single point on the object using the tranformation. \\
 For instance, suppose we have
 a parametrically defined set (surface):
 \[ \mathcal{M}_\varphi = 
-\{ \varphi(s) \in \R^n \mid 
-s \in \mathcal{D} \subseteq \R^k \} \]
+\{ \varphi(s) \in \rbb^n \mid 
+s \in \mathcal{D} \subseteq \rbb^k \} \]
 In order to transform this set (surface),
 we just transform every point in it. \\
 As we know, parametric equations are great at
@@ -682,8 +682,8 @@ We will apply some affine transformation $Ap + t$
 (which is usually encoded in a square
 homogeneous matrix):
 \[ A\mathcal{M}_\varphi + t
-= \{ A\varphi(s) + t\in \R^n \mid 
-s \in \mathcal{D} \subseteq \R^k \} \]
+= \{ A\varphi(s) + t\in \rbb^n \mid 
+s \in \mathcal{D} \subseteq \rbb^k \} \]
 So we just apply the transformation
 to each point on the set.
 We denote the transformed set or surface
@@ -714,7 +714,7 @@ coordinates of the object itself. \\
 On the other hand, suppose we have an implicitely
 defined surface:
 \[ \mathcal{M}_{f\inv(0)}
-= \{ p \in \R^n \mid f(p) =0 \} \]
+= \{ p \in \rbb^n \mid f(p) =0 \} \]
 which is just the set of points $p$
 such that $f(p) = 0$ is satisfied. \\
 This makes it easy to check for membership,
@@ -722,7 +722,7 @@ but harder to generate points,
 which makes transforming it slightly more
 complicated:
 \[ A\mathcal{M}_{f\inv(0)} + t
-= \{ Ap + t \in \R^n \mid f(p) =0 \} \]
+= \{ Ap + t \in \rbb^n \mid f(p) =0 \} \]
 Basically it is the set of transformed points 
 $Ap + t$ from the original surface definition,
 so the condition to satisfy is still $f(p)$. \\
@@ -731,14 +731,14 @@ and $p = A\inv(q - t)$ can thus rewrite
 the set in the original format of
 an implicit surface:
 \[ A\mathcal{M}_{f\inv(0)} + t
-= \{ q \in \R^n \mid f(A\inv(q - t)) = 0 \} \]
+= \{ q \in \rbb^n \mid f(A\inv(q - t)) = 0 \} \]
 but this time with a new function,
 which is the composition of $f$ and the inverse of the
 affine transformation into one function:
 \[ f \circ A\inv \circ T(-t) \]
 which means that:
 \[ A\mathcal{M}_{f\inv(0)} + t
-= \{ q \in \R^n \mid 
+= \{ q \in \rbb^n \mid 
 (f \circ A\inv \circ T(-t))(q) = 0 \} \]
 We can thus denote the transformed set or surface
 $\mathcal{M}_{(f \circ A\inv \circ T(-t))\inv(0)}$. \\
@@ -767,26 +767,26 @@ some box $c$,
 then we expect that the volume of the box
 would scale by the determinant of $A$. \\
 
-For a matrix in $\R^2$,
+For a matrix in $\rbb^2$,
 it is the area of the parallelogram formed
 by the column vectors of the matrix (basis vectors
 of the matrix). \\
-In $\R^3$, it is the volume of the parallelepiped. \\
-In $\R^n$, it is the measure of an $n$-parallelotope. \\
+In $\rbb^3$, it is the volume of the parallelepiped. \\
+In $\rbb^n$, it is the measure of an $n$-parallelotope. \\
 
-So if we have some basis in $\R^n$,
+So if we have some basis in $\rbb^n$,
 calculating the measure of the
 parallelotope is as simple as finding the
 determinant. \\
 
-But what happens if we have a basis in $\R^3$
+But what happens if we have a basis in $\rbb^3$
 that is made up of two $3$-dimensional vectors $f_1$
 and $f_2$. \\
 We thus have a $2$-dimensional basis,
 since $f_1$ and $f_2$ span a plane
 (if they are colinear). \\
 But how can we calculate the parallelogram
-formed by these basis vectors in $\R^3$?
+formed by these basis vectors in $\rbb^3$?
 We don't have a square matrix. \\
 
 The first method is to use the cross product.
@@ -803,7 +803,7 @@ So we can calculate the parallelogram's
 area as $\|f_1 \times f_2\|$. \\
 
 This method does not generalize however
-as it only works in $\R^3$. \\
+as it only works in $\rbb^3$. \\
 As we saw earlier,
 multiplying a vector by:
 \[ \vecTwoTransposed{f_1}{f_2}^T \]
@@ -813,10 +813,10 @@ On the other hand,
 multiplying the vectors together:
 \[ F^TF = \vecTwo{f_1}{f_2}
 \vecTwoTransposed{f_1}{f_2} \]
-returns a matrix in $\R^2$
+returns a matrix in $\rbb^2$
 that represents the same basis
 as the one defined by $f_1$ and $f_2$,
-but in $\R^2$ (on the plane). \\
+but in $\rbb^2$ (on the plane). \\
 So we can use this basis to calcualte
 the area of the parallelogram;
 since it is square,
@@ -830,7 +830,7 @@ This method generalizes to any dimensions. \\
 
 Note that this implies that
 \[ \det(F^TF) = \|F_1 \times F_2\|^2 \]
-in $\R^3$. \\
+in $\rbb^3$. \\
 
 \newpage
 

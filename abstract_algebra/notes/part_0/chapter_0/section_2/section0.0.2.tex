@@ -31,24 +31,24 @@
     on Group Theory. \\
 
     One property of integers is the \textbf{well ordering} property.
-    Any non-empty subset $A$ of the positive integers $\Z^+$
+    Any non-empty subset $A$ of the positive integers $\zbb^+$
     will have an element $m$
     such that $m \leqslant a$ $\forall a \in A$
     (called the \textbf{minimal element} of $A$). \\
 
-    If $a, b \in \Z$, and $a \neq 0$,
-    then $a$ \textbf{divides} $b$ if $b = na$ for some $n \in \Z$.
+    If $a, b \in \zbb$, and $a \neq 0$,
+    then $a$ \textbf{divides} $b$ if $b = na$ for some $n \in \zbb$.
     We use $a \mid b$ to represent this fact
     (and $a \nmid b$ if $a$ does not divide $b$).
     In other words, $a$ divides $b$ if we can evenly divide
     $b$ $a$ times, with no remainder. \\
     Here, we say that $b$ is a \textbf{mutliple} of $a$,
     as $b = a \times n$. \\
-    Note that $1$ divides all integers $a \in \Z$ (with $n = a$)
+    Note that $1$ divides all integers $a \in \zbb$ (with $n = a$)
     and all integers divide themselves (with $n = 1$). \\
     
 
-    If $a, b \in \Z - \{0\}$,
+    If $a, b \in \zbb - \{0\}$,
     then there is a unique integer $d$,
     called the \textbf{greatest common divisor} of $a$ and $b$,
     or $\text{gcd}(a, b)$, or sometimes just $(a, b)$.
@@ -70,7 +70,7 @@
     and we say $a$ and $b$ are \textbf{relatively prime}. \\
     If $a = b$, then $\text{gcd}(a, b) = a = b$. \\
  
-    If $a, b \in \Z - \{0\}$,
+    If $a, b \in \zbb - \{0\}$,
     then there is a unique integer $l$,
     called the \textbf{least common multiple} of $a$ and $b$,
     or $\text{lcm}(a, b)$.
@@ -95,8 +95,8 @@
     is that $ld = ab$. \\
 
     The \textbf{division algorithm} states that
-    for $a, b \in \Z - \{0\}$,
-    there exists unique integers $q, r \in \Z$ such that
+    for $a, b \in \zbb - \{0\}$,
+    there exists unique integers $q, r \in \zbb$ such that
     \[ a = qb + r \quad \text{ and } \quad 0 \leqslant r < |b| \]
     This is reminiscent the long division algorithm,
     in elementary math. 
@@ -115,7 +115,7 @@
     The \textbf{Euclidian algorithm} allows us
     calculate the greatest common divisor of two numbers
     using the division algorithm.
-    Given $a, b \in \Z - \{0\}$,
+    Given $a, b \in \zbb - \{0\}$,
     if $a = b$, then $\text{gcd}(a, b) = a = b$,
     and we are done. 
     So we can assume that they aren't equal,
@@ -139,11 +139,11 @@
     which cannot continue indefinitely. \\
 
     As a consequence of this algorithm,
-    we get that for all $a, b \in \Z - \{0\}$,
-    there exists some $x, y \in \Z$ such that
+    we get that for all $a, b \in \zbb - \{0\}$,
+    there exists some $x, y \in \zbb$ such that
     \[ \text{gcd}(a, b) = ax + by \] 
     which means that the greatest common divisior can be written
-    as a \textbf{linear combination} of $a$ and $b$ in $\Z$. \\
+    as a \textbf{linear combination} of $a$ and $b$ in $\zbb$. \\
     This is done by recursively writing $r_n$,
     the last remainder and greatest common divisor of $a$ and $b$,
     as a function of the previous remainder.
@@ -154,7 +154,7 @@
     Since all coefficients $q_i$ and $r_i$ are integers,
     we necessarily end up with $r_n = ax + by$. \\
 
-    A positive integer $p \in \Z^+$ is called \textbf{prime}
+    A positive integer $p \in \zbb^+$ is called \textbf{prime}
     if the only positive divisors of $p$ are $p$ and $1$. \\
     All non-prime positive integers are called \textbf{composite}. \\
     An important property of primes,
@@ -168,7 +168,7 @@
     Note that we do not consider $1$ to be prime. \\
 
     \textbf{The Fundamental Theorem of Arithmetic}
-    states that for any integer $n \in \Z$ such that $n > 1$,
+    states that for any integer $n \in \zbb$ such that $n > 1$,
     $n$ can be factored into a unique product of primes. \\
     In other words, for any integer $n$ larger than $1$,
     there exists distinct primes $p_1, p_2 \dots p_s$
@@ -208,7 +208,7 @@
     This too will be proved later. \\
 
     The \textbf{Euler phi-function} $\varphi$ is defined as follows:
-    for any non negative integer $n \in \Z^+$,
+    for any non negative integer $n \in \zbb^+$,
     $\phi(n)$ is the number of positive $a \leqslant n$
     that are relatively prime to $n$.
     For example, $\phi(12) = 4$,
@@ -219,13 +219,13 @@
     For primes $p$ and integers $a \geqslant 1$,
     \[ \varphi(p^a) = p^{a} - p^{a-1} = p^{a-1}(p - 1) \]
     The function is also multiplicative,
-    in the sense that for integers $a, b \in \Z^+$
+    in the sense that for integers $a, b \in \zbb^+$
     \[ \varphi(a, b) = \varphi(a)\varphi(b)
     \quad \text{ if } \quad \text{gcd}(a, b) = 1 \]
     Using both formulas together,
     along with the Fundamental Theorem of Arithmetic,
     we arrive at this general formula
-    for any non-negative integer $n \in \Z^+$
+    for any non-negative integer $n \in \zbb^+$
     with the prime factorization
     ${p_1}^{\alpha_1}{p_2}^{\alpha_2} \dots {p_s}^{\alpha_s}$:
     \[ \varphi(n) = 

@@ -72,13 +72,13 @@ using the total expectation law to decompose
 the expectation of the joint distribution
 into the expectation of the marginal:
 \[ \rscr_\ell(f)
-= \E[\ell(f(X), Y)]
-= \E[\E[\ell(f(X), Y) \mid X]] \]
+= \ebb[\ell(f(X), Y)]
+= \ebb[\ebb[\ell(f(X), Y) \mid X]] \]
 This will be important. \\
 
 Here
-\[ \E[\ell(f(X), Y)]
-= \E[\E[\ell(f(X), Y) \mid X]] \]
+\[ \ebb[\ell(f(X), Y)]
+= \ebb[\ebb[\ell(f(X), Y) \mid X]] \]
 The inner expectation is a sum over
 all the values of $Y$ (the output),
 while the outer expectation is a sum over
@@ -95,7 +95,7 @@ which is like the risk
 but for a single input $x$,
 can be written as:
 \[ r(f(x) \mid x)
-= \E[\ell(f(x), Y) \mid X = x] \]
+= \ebb[\ell(f(x), Y) \mid X = x] \]
 which makes sense, since this is a sum
 over all values of $Y$,
 for one input $x$,
@@ -110,7 +110,7 @@ And the risk if just the sum of all individual
 losses (over $X$)
 times the probability that they take place:
 \[ \rscr_\ell(f) = 
-\sum_{x} r(f(x) \mid x)\cdot \Pb(X = x) \]
+\sum_{x} r(f(x) \mid x)\cdot \pbb(X = x) \]
 which makes:
 The total risk is the risk of each 
 indidividual input,
@@ -122,22 +122,22 @@ then the total risk $\rscr_\ell(f)$
 won't necessarily be affected much. \\ 
 
 Note that
-\[ \rscr_\ell(f) = \E[\ell(f(X), Y)] \]
+\[ \rscr_\ell(f) = \ebb[\ell(f(X), Y)] \]
 And
-\[ \rscr_\ell(f) = \E[\E[\ell(f(X), Y) \mid X]] 
-= \E[r(f(x) \mid x)] \]
+\[ \rscr_\ell(f) = \ebb[\ebb[\ell(f(X), Y) \mid X]] 
+= \ebb[r(f(x) \mid x)] \]
 which seems to imply that the conditional
 risk $r(f(x) \mid x)$
 is equal to the loss $\ell(f(X), Y)$. \\
 However this is NOT case! \\
 The first expected value:
-\[ \E[\ell(f(X), Y)] \] 
+\[ \ebb[\ell(f(X), Y)] \] 
 is a sum of the joint distribution
 over the joint space,
 which means a sum over both $x$ and $y$
 (basically a double integral). \\
 On the other hand:
-\[ \E[r(f(x) \mid x)] \]
+\[ \ebb[r(f(x) \mid x)] \]
 Here the expected value is the outer
 expected value,
 which a sum over $x$ only (the inner expected
@@ -149,10 +149,10 @@ and the value inside each is therefore distinct. \\
 In other words, just because we can decompose
 this integral like this:
 \[\int_{\xcal \times \ycal} f(x, y)
-\cdot \Pb_{(X, Y)}(dx, dy) 
+\cdot \pbb_{(X, Y)}(dx, dy) 
 = \int_{\xcal} \int_{\ycal} f(x, y)
-\cdot \Pb_{Y \mid X = x}(dy)
-\Pb_X(dx) \]
+\cdot \pbb_{Y \mid X = x}(dy)
+\pbb_X(dx) \]
 does not mean that the contents of the left integral
 is equal to the contents of the outer integral
 on the right:
@@ -173,16 +173,16 @@ and another by the marginal. \\
 We can see it more clearly with sums:
 The first has every combination of $x$
 and $y$ weighted by the joint probability:
-\[ \E[\ell(f(X), Y)]
-= \sum_x \sum_y \ell(f(x), y) \Pb(X = x, Y = y) \]
+\[ \ebb[\ell(f(X), Y)]
+= \sum_x \sum_y \ell(f(x), y) \pbb(X = x, Y = y) \]
 The second has the same formula but decomposed:
-\[ \E[\E[\ell(f(X), Y) \mid X = x]]
-= \sum_x \Pb(X = x) \sum_y \ell(f(x), y) 
-\Pb(Y = y \mid X = x) \] \\
+\[ \ebb[\ebb[\ell(f(X), Y) \mid X = x]]
+= \sum_x \pbb(X = x) \sum_y \ell(f(x), y) 
+\pbb(Y = y \mid X = x) \] \\
 
 We know that the optimal risk is:
 \[ \rscr_\ell^*
-= \inf_f \E[\E[\ell(f(X), Y) \mid X]] \]
+= \inf_f \ebb[\ebb[\ell(f(X), Y) \mid X]] \]
 first we try to find the optimal
 output $f(x)$ for each input $x$
 (by summing over all outputs $Y$ for the fixed $x$),
@@ -196,7 +196,7 @@ we can skip the outer summation,
 and just do the inner one with that $x$
 (the optimal conditional risk):
 \[ f^*(x) = \text{min}_{f(x)} \;
-\E[\ell(f(x), Y) \mid X = x] \]
+\ebb[\ell(f(x), Y) \mid X = x] \]
 which means that the optimal output $f^*(x)$
 is the one that minimizes the expected value
 of the loss knowing $X = x$
@@ -206,8 +206,8 @@ In fact, if we find Baye's optimal classifier
 $f*$,
 then we can prove that it satisfies this optimization
 \[ f^*(x) = \text{min}_{f(x)} \;
-\E[\ell(f(x), Y) \mid X = x] \]
-for all $x$ over the distribution $\Pb_x$.
+\ebb[\ell(f(x), Y) \mid X = x] \]
+for all $x$ over the distribution $\pbb_x$.
 On the other hand, if we prove it only
 for a specific $x$ (using only the conditional
 probabilities given that $x$),
@@ -221,9 +221,9 @@ which minimizes the total risk,
 also minimizes each inidividual conditional risk. \\
 First we know that Baye's optimal risk is:
 \[ \rscr_\ell^* = \inf_f 
-\E[\E[(\ell(f(X), Y) \mid X)]]
+\ebb[\ebb[(\ell(f(X), Y) \mid X)]]
 = \inf_f \int_{\xcal} r(f(x) \mid x) \cdot
-\Pb_X(dx) \]
+\pbb_X(dx) \]
 Here, the infimum means the largest lower bound
 of the intgeral. \\
 However, notice that if we took the sum of the
@@ -232,9 +232,9 @@ infimum of each individual conditional risk
 then we would have to have a value smaller
 or equal to the infimum of the sum at large:
 \[ \inf_f \int_{\xcal} r(f(x) \mid x) \cdot
-\Pb_X(dx)
+\pbb_X(dx)
 \geq \int_{\xcal} \inf_{fx} r(f(x) \mid x) \cdot
-\Pb_X(dx) = \rscr_\ell(f^*) \]
+\pbb_X(dx) = \rscr_\ell(f^*) \]
 This is a general result;
 the minimum (or infimum) of the sum
 of a function is larger or equal to the
@@ -258,7 +258,7 @@ finding the optimal classifier boilds
 down to finding the best output for each
 indidividual input. \\
 However, in practice, we usually don't have
-the entire distribution $\Pb_{X, Y}$.
+the entire distribution $\pbb_{X, Y}$.
 We only have some samples, such as the training
 and testing data. \\
 
@@ -269,22 +269,22 @@ and testing data. \\
 We can calculate the risk of a binary
 classification as follows:
 \[ \rscr_\ell(f)
-= \E[\E[\ell(f(X), Y) \mid X]] \]
+= \ebb[\ebb[\ell(f(X), Y) \mid X]] \]
 \[ \rscr_\ell(f)
-=  \sum_x \Pb(X = x)
+=  \sum_x \pbb(X = x)
 \sum_y \ell(f(x), y) \cdot
-\Pb(Y = y \mid X = x) \]
+\pbb(Y = y \mid X = x) \]
 \[ \rscr_\ell(f)
-= \sum_x \Pb(X = x)
+= \sum_x \pbb(X = x)
 \sum_y \indicator_{f(x) \neq y}\cdot
-\Pb(Y = y \mid X = x) \]
+\pbb(Y = y \mid X = x) \]
 Notice that we only have two possible
 values for $Y$, so:
 \[ \rscr_\ell(f)
-= \E[ \indicator_{f(X) \neq y_1}\cdot
-\Pb(Y = y_1 \mid X) +
+= \ebb[ \indicator_{f(X) \neq y_1}\cdot
+\pbb(Y = y_1 \mid X) +
 \indicator_{f(X) \neq y_2}\cdot
-\Pb(Y = y_2 \mid X)] \]
+\pbb(Y = y_2 \mid X)] \]
 The conditional probability of the one
 that equals our prediction $f(x)$
 will be mutliplied by $0$ as per the loss,
@@ -300,19 +300,19 @@ we want to pick $f(x)$
 such that the risk is as small as possible.
 And since:
 \[ \rscr_\ell(f)
-= \E[ \Pb(Y = y_1 \mid X)] \]
+= \ebb[ \pbb(Y = y_1 \mid X)] \]
 when $f(x) = y_2$,
 that means we want to pick $y_1$
 over $y_2$ if:
-\[ \Pb(Y = y_1 \mid X) >
-\Pb(Y = y_2 \mid X)  \]
+\[ \pbb(Y = y_1 \mid X) >
+\pbb(Y = y_2 \mid X)  \]
 which makes intuitive sense, both in terms 
 of minimizing the risk,
 and choosing the more likely output.
 So we will have:
 \[ f^*(x) = \piecewise{y_1 \quad \text{ if }
-\Pb(Y = y_1 \mid X) >
-\Pb(Y = y_2 \mid X)}
+\pbb(Y = y_1 \mid X) >
+\pbb(Y = y_2 \mid X)}
 {y_2 \quad \text{ otherwise }} \]
 for the optimal classifier. \\
 
@@ -320,32 +320,32 @@ Note that we can actually bound the error
 on Baye's optimal classifier. \\
 We already know that:
 \[ \rscr_\ell(f)
-= \E[ \indicator_{f(X) \neq y_1}\cdot
-\Pb(Y = y_1 \mid X) +
+= \ebb[ \indicator_{f(X) \neq y_1}\cdot
+\pbb(Y = y_1 \mid X) +
 \indicator_{f(X) \neq y_2}\cdot
-\Pb(Y = y_2 \mid X)] \]
+\pbb(Y = y_2 \mid X)] \]
 where one of the two probabilities
 will be multiplies by $0$,
 and the other by $1$,
 depending on the output of the classifier. \\
 In the optimal classifier, we have:
 \[ f^*(x) = \piecewise{y_1 \quad \text{ if }
-\Pb(Y = y_1 \mid X = x) >
-\Pb(Y = y_2 \mid X = x)}
+\pbb(Y = y_1 \mid X = x) >
+\pbb(Y = y_2 \mid X = x)}
 {y_2 \quad \text{ otherwise }} \]
 So that means that we can write the
 optimal risk as:
 \[ \rscr_\ell^*
-= \E[ \min(
-\Pb(Y = y_1 \mid X), \,
-\Pb(Y = y_2 \mid X))] \]
+= \ebb[ \min(
+\pbb(Y = y_1 \mid X), \,
+\pbb(Y = y_2 \mid X))] \]
 Now, a general result that we can use
 is the fact that the expected value of the
 minimum is less than or equal to the minimum
 of the expected value:
 \[ \rscr_\ell^* \leq \min(
-\E[\Pb(Y = y_1 \mid X)], \,
-\E[\Pb(Y = y_2 \mid X)]) \]
+\ebb[\pbb(Y = y_1 \mid X)], \,
+\ebb[\pbb(Y = y_2 \mid X)]) \]
 Then, we can unfurl the expected value
 by multiplying the contents by the
 marginal probability of $X = x$
@@ -353,7 +353,7 @@ for each $x$,
 which when summed over all values of $x$
 just gives us the marginal probability of $Y$:
 \[ \rscr_\ell^* \leq \min(
-\Pb_Y(y_1), \, \Pb_Y(y_2)) \]
+\pbb_Y(y_1), \, \pbb_Y(y_2)) \]
 Which gives us a bound on the best-case error
 (optimal risk). \\
 
@@ -408,14 +408,14 @@ every other outcome we have derived. \\
 For example,
 the risk can be written as:
 \[ \rscr_\ell(f)
-= \sum_{x} \Pb(X = x)
+= \sum_{x} \pbb(X = x)
 \sum_{y} C_{ij}\indicator_{y = i, f(x) = j}\cdot
-\Pb(Y = y \mid X = x) \]
+\pbb(Y = y \mid X = x) \]
 And the bound on the optimal risk can be
 written as:
 \[ \rscr_\ell^* \leq \min(
-C_{y_1y_2}\Pb_Y(y_1), \, 
-C_{y_2y_1}\Pb_Y(y_2)) \] \\
+C_{y_1y_2}\pbb_Y(y_1), \, 
+C_{y_2y_1}\pbb_Y(y_2)) \] \\
 
 \newpage
 
@@ -432,26 +432,26 @@ are hardly changed. \\
 Baye's risk formula is
 unchanged:
 \[ \rscr_\ell(f)
-= \E\brac{\sum_y \indicator_{f(X) \neq y}
-\Pb(Y = y \mid X)} \]
+= \ebb\brac{\sum_y \indicator_{f(X) \neq y}
+\pbb(Y = y \mid X)} \]
 However, note that only one
 of the values in the sum will go to 0
 (when $f(X) = y$),
 the rest will all remain,
 so when we simplify by removing
-$\Pb(Y = y \mid X)$
+$\pbb(Y = y \mid X)$
 where $y = f(X)$,
 we end up with:
 \[ \rscr_\ell^*
-= \E\brac{
-\olsi{\Pb(Y = y \mid X)}}
-= \E\brac{
-1 - \Pb(Y = y \mid X)} \]
+= \ebb\brac{
+\olsi{\pbb(Y = y \mid X)}}
+= \ebb\brac{
+1 - \pbb(Y = y \mid X)} \]
 where $y$ is the output
 equal to the choice that was made
 $y = f(X)$ (for each $x$). \\
 This is the same formula as before,
-though before, $\olsi{\Pb(Y = y \mid X)}$
+though before, $\olsi{\pbb(Y = y \mid X)}$
 was just one event's probability
 (when $y \neq f(X)$),
 but now it's several. \\
@@ -470,10 +470,10 @@ global minimum. \\
 In this section we will formalize this notion. \\
 
 A function:
-\[ f: \R^d \to \R \]
+\[ f: \rbb^d \to \rbb \]
 is called convex if and only if
 for every pair
-$x, y \in \R^d$,
+$x, y \in \rbb^d$,
 and $\lambda \in [0, 1]$,
 the following equation holds:
 \[ f((1-\lambda)x + \lambda y)
@@ -535,7 +535,7 @@ when we averred that convex functions
 should always be below a line
 that connects two points on it. \\
 In other words, if we have a convex function:
-\[ f: \R^d \to \R \],
+\[ f: \rbb^d \to \rbb \],
 and we slice it with any plane,
 the slice of $f$ on that plane,
 which is a one dimensional function,
@@ -555,7 +555,7 @@ is increasing,
 and decrease if the input $x$ is decreasing
 (they have the same sign). \\
 It is very easy to see why this is so
-in a function $\R \to \R$
+in a function $\rbb \to \rbb$
 (just a curve). \\
 We expect a convex function to look like a cup,
 which means that its rate of change must
@@ -587,7 +587,7 @@ even those that don't coincide
 with the axis of a variables. \\
 
 For a convex function:
-\[ f:\R \to \R \]
+\[ f:\rbb \to \rbb \]
 we also have that:
 \[ x \in \arg \min f \iff 
 0 \in [f'(x; -1), f'(x; +1)] \]
@@ -620,7 +620,7 @@ where $\ycal = \{-1, 1\}$,
 we can instead create
 a continuous,
 surrogate prediction function $g(x)$:
-\[ g: \xcal \to \R \]
+\[ g: \xcal \to \rbb \]
 Then, to map to $\ycal$ (our final output),
 we can use threshholding 
 (pick certain intervals to map to certain
@@ -660,7 +660,7 @@ have opposite signs, a lot of cost must be
 added, as $g(x)$ made a bas predicion. \\
 We can do that using the margin $yg(x)$.
 We can define a function $\Phi$:
-\[ \Phi: \R \to \R \]
+\[ \Phi: \rbb \to \rbb \]
 which gives us the loss function:
 \[ \ell(g(x), y) = \Phi(yg(x)) \]
 such that $\Phi$
@@ -691,8 +691,8 @@ the slides have several examples:
 From here we can define Baye's risk for a
 surrogate classifier $g$,
 which is the ecpected value of the loss:
-\[ \rscr_\Phi(g) = \E[\ell(g(x), y)]
-= \E[\Phi(yg(x))] \]
+\[ \rscr_\Phi(g) = \ebb[\ell(g(x), y)]
+= \ebb[\Phi(yg(x))] \]
 We can refer to it as the $\Phi$-risk. \\
 
 Our goal again will be to minimize the

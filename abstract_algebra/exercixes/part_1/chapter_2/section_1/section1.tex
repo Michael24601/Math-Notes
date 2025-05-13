@@ -32,7 +32,7 @@
     by showing that $\forall x, y \in S$, $xy^{-1} \in S$. \\
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item 
-            For $G = (\C, +)$ and $S = \{ a + ai \mid a \in \R \}$: \\
+            For $G = (\cbb, +)$ and $S = \{ a + ai \mid a \in \rbb \}$: \\
             We know $S$ is not empty because $0 + 0i$,
             the identity of $G$, is in $S$.
             And for $a + ai, b + bi \in S$,
@@ -42,27 +42,27 @@
             then $(a-b) + (a-b)i \in S$,
             so $S \leqslant G$.
         \item 
-            For $G = (\C, \times)$ and $S = \{ z \in \C \mid \|z\| = 1
-            \; (z = e^{ri\pi} \; \forall r \in \R)\}$: \\
+            For $G = (\cbb, \times)$ and $S = \{ z \in \cbb \mid \|z\| = 1
+            \; (z = e^{ri\pi} \; \forall r \in \rbb)\}$: \\
             We know $S$ is not empty because $1 + 0i = e^{0i\pi}$,
             the identity of $G$, is in $S$.
             And for $e^{ni\pi}, e^{mi\pi} \in S$,
             where the inverse of $e^{mi\pi}$ is $e^{-mi\pi}$,
             we have $e^{ni\pi} \times e^{-mi\pi} = e^{(n - m)i\pi}$.
-            Since $n - m \in \R$,
+            Since $n - m \in \rbb$,
             then $e^{(n - m)i\pi} \in S$,
             so $S \leqslant G$.
         \item 
-            For $G = (\Q, +)$ and $S = \{ q \in \Q \mid b \mid n 
+            For $G = (\qbb, +)$ and $S = \{ q \in \qbb \mid b \mid n 
             \text{ for } q = \sfrac{a}{b} \}$
-            where $n$ is a fixed number in $\Z^+$
+            where $n$ is a fixed number in $\zbb^+$
             and $\sfrac{a}{b}$ is written in lowest terms: \\
             We know $S$ is not empty because $0 = 0/1$,
             the identity of $G$, is in $S$,
             as $1|n$.
             And for $\sfrac{a}{b}, \sfrac{c}{d} \in S$,
             written in lowest terms,
-            where $n = xb = yd$ for some $x, y \in \Z$,
+            where $n = xb = yd$ for some $x, y \in \zbb$,
             and the inverse of $\sfrac{c}{d}$ is $-\sfrac{c}{d}$,
             we have $\sfrac{a}{b} = \sfrac{ax}{n}$
             and $\sfrac{c}{d} = \sfrac{cy}{n}$. 
@@ -73,9 +73,9 @@
             So $\dfrac{ax - cy}{n} \in S$,
             which means $S \leqslant G$.
         \item 
-            For $G = (\Q, +)$ and $S = \{ q \in \Q \mid b \text{ is
+            For $G = (\qbb, +)$ and $S = \{ q \in \qbb \mid b \text{ is
             relatively prime to $n$ for } q = \sfrac{a}{b} \}$
-            where $n$ is a fixed number in $\Z^+$
+            where $n$ is a fixed number in $\zbb^+$
             and $\sfrac{a}{b}$ is written in lowest terms: \\
             We know $S$ is not empty because $0 = 0/1$,
             the identity of $G$, is in $S$ since $\gcd(1, n) = 1$.
@@ -94,20 +94,20 @@
             So $\dfrac{ad - cb}{db} \in S$,
             which means $S \leqslant G$. 
         \item 
-            For $G = (\R - {0}, \times)$
-            and $S = \{r \in \R \mid r^2 \in \Q\}$: \\
+            For $G = (\rbb - {0}, \times)$
+            and $S = \{r \in \rbb \mid r^2 \in \qbb\}$: \\
             We know $S$ is not empty because $1$,
             the identity of $G$, is in $S$ since $1^2 = 1 = 1/1$.
             And for any $x, y \in S$,
-            where $x^2, y^2 \in \Q$,
+            where $x^2, y^2 \in \qbb$,
             meaning that $x^2 = \sfrac{a}{b}$ and $y^2 = \sfrac{c}{d}$ for
-            $a, b, c, d \in \Z$,
+            $a, b, c, d \in \zbb$,
             and the inverse of $y$ is $\sfrac{1}{y}$,
             we have \[x \cdot \dfrac{1}{y} = \dfrac{x}{y}\]
             where \[(xy)^2 = \dfrac{x^2}{y^2}
             = \dfrac{\sfrac{a}{b}}{\sfrac{c}{d}}
             = \dfrac{ad}{bc}\]
-            Since $ad, bc \in \Z$, $\dfrac{ad}{bc} \in \Q$.
+            Since $ad, bc \in \zbb$, $\dfrac{ad}{bc} \in \qbb$.
             So $x \cdot \sfrac{1}{y} \in S$,
             which means $S \leqslant G$. 
     \end{enumerate}
@@ -149,15 +149,15 @@
             (since $x^p$ is just $x$ multiplies by itself several times).
             So $S$ isn't a subgroup of $G$.
         \item 
-            For $G = (\Z, +)$
-            and $S = \{n \in \Z \mid n \text{ is odd} \}:$ \\
+            For $G = (\zbb, +)$
+            and $S = \{n \in \zbb \mid n \text{ is odd} \}:$ \\
             We have $1, 3 \in S$, but $1 + 3 = 4$, which is even,
             and so not in $S$.
             So as $S$ isn't closed under addition,
             it is not a subgroup of $G$.
         \item 
-            For $G = (\R, +)$
-            and $S = \{r \in \R \mid r^2 \in \Q\}:$ \\
+            For $G = (\rbb, +)$
+            and $S = \{r \in \rbb \mid r^2 \in \qbb\}:$ \\
             We have $\sqrt{2}, \sqrt{3} \in S$,
             because $\sqrt{2}^2 = 2$ and $\sqrt{3}^2 = 3$.
             But $(\sqrt{2} + \sqrt{3})^2
@@ -203,8 +203,8 @@
     \section*{Exercise 4}
     To give an example of an infinite group $G$ with an infinite subset $H$
     closed under teh group operation that isn't a subgroup,
-    we can take $G = (\Z, +)$ (including 0),
-    and $H = \Z^+$. 
+    we can take $G = (\zbb, +)$ (including 0),
+    and $H = \zbb^+$. 
     $H$ is infinite, and closed under addition,
     since $a + b > 0$ when $a,b > 0$,
     but it does not contain any inverses of identity.
@@ -231,7 +231,7 @@
     and that $1 \in S$ since $|1| = 1$. 
     Moreover, $\forall a, b \in S$, $|a|, |b| < \infty$,
     and by exercises 1.1.1.20, $|b^{-1}| = |b| < \infty$,
-    so for some $n, m \in \Z$, $a^n = (b^{-1})^m = 1$.
+    so for some $n, m \in \zbb$, $a^n = (b^{-1})^m = 1$.
     So $(ab^{-1})^{nm} = a^{nm}(b^{-1})^{nm}
     = (a^n)^m((b^{-1})^m)^n
     = 1^m1^n
@@ -243,7 +243,7 @@
     Hence, $S$ is closed under inverses and the group operation,
     so $S \leqslant G$. \\
     To give a counterexample when $G$ is not abelian,
-    we can consider the group of bijective function $\R \to \R$
+    we can consider the group of bijective function $\rbb \to \rbb$
     under composition.
     This is a group as the identity is the identity function $h(x) = x$,
     composition is associative,
@@ -264,12 +264,12 @@
 
 
     \section*{Exercise 7}
-    For a fixed $n \in \Z^+$ such that $n > 1$,
-    And the group $G = \Z \times \Z/n\Z$,
+    For a fixed $n \in \zbb^+$ such that $n > 1$,
+    And the group $G = \zbb \times \zbb/n\zbb$,
     (the direct product of two additive groups)
     the torsion subrgoup of $G$ is the set of elements that have finite
     order.
-    It exists because both $\Z$ and $\Z/n\Z$ are abelian
+    It exists because both $\zbb$ and $\zbb/n\zbb$ are abelian
     (addition is commutative),
     which means their direct product is also abelian
     as proven in exercise 1.1.1.29.
@@ -279,12 +279,12 @@
     order in their respective groups $A$ and $B$.
     This is because the identity of $A \times B$ is the ordered
     pair of the identities of $A$ and $B$ by exercises 1.1.1.28. \\
-    However, besides the identity 0 of $\Z$, all integers have infinite
+    However, besides the identity 0 of $\zbb$, all integers have infinite
     order.
-    On the other hand, all elements of $\Z/n\Z$ have finite order,
+    On the other hand, all elements of $\zbb/n\zbb$ have finite order,
     since the group itself is finite.
     So the torsion subgroup of $G$ is comprosied of the set
-    $\{(0, \olsi{a}) \in G \mid \olsi{a} \in \Z/n\Z \}$. \\
+    $\{(0, \olsi{a}) \in G \mid \olsi{a} \in \zbb/n\zbb \}$. \\
     Proof that the set $S = \{g \in G \mid |g| = \infty\} \cup \{1_G\}$,
     which comprises of the elements in $G$ with infinite order 
     and the identity, isn't a subgroup of $G$: \\
@@ -338,7 +338,7 @@
 
 
     \section*{Exercise 9}
-    For any field $F$ and $n \in \Z^+$,
+    For any field $F$ and $n \in \zbb^+$,
     let $G = GL_n(F)$ and $SL_n(F) = \{A \in GL_n(F) \mid \det(A) = 1\}$.
     Proof that $SL_n(F) \leqslant GL_n(F)$
     (called \textit{the Special Linear group}): \\
@@ -376,7 +376,7 @@
             So $H \cap K$ is closed under inverses and the group operation,
             which means $H \cap K \leqslant G$.
         \item
-            Proof that for any fixed $n \in \Z^+$,
+            Proof that for any fixed $n \in \zbb^+$,
             if $H_1, H_2 ... H_n \leqslant G$,
             then $\bigcap_{i = 1}^n H_i \leqslant G$: \\
             We can use a similar proof to part a.
@@ -449,7 +449,7 @@
 
 
     \section*{Exercise 12}
-    Let $A$ be an abelian group and fix some $n \in \Z$. \\
+    Let $A$ be an abelian group and fix some $n \in \zbb$. \\
     \begin{enumerate}[label=\textbf{\alph*.}]
         \item 
             Proof that $H = \{a^n \mid a \in A\}$ is a subgroup of $A$: \\
@@ -490,9 +490,9 @@
 
 
     \section*{Exercise 13 $***$}
-    Let $H$ be a subrgoup of $(\Q, +)$.
+    Let $H$ be a subrgoup of $(\qbb, +)$.
     Proof that if $\sfrac{1}{x} \in H$ for every $x \in H$ other than $x = 0$,
-    then $H = \{0\}$ or $H = (\Q, +)$: \\
+    then $H = \{0\}$ or $H = (\qbb, +)$: \\
     First, if $|H| = 1$, then $H = \{0\}$ (the trivial group),
     and we can stop.
     If however, $|H| \geqslant 2$,
@@ -505,14 +505,14 @@
     by adding $\sfrac{1}{x}$ to itself $x$ times,
     and since $H$ is a subgroup and therefore closed under addition,
     the result, which is 1, is in $H$.
-    As shown in exercise 1.1.2.14 $(\Z, +)$ is generated by just 1,
+    As shown in exercise 1.1.2.14 $(\zbb, +)$ is generated by just 1,
     so as $H$ is closed under addition,
     ever integer $a$ is in $H$.
     This implies that every rational $\sfrac{1}{a}$ is also in $H$.
     Again, as $H$ is closed under addition,
     we can form any rational $\sfrac{b}{a}$ in $H$
     by adding $\sfrac{1}{a}$ to itself $b$ times.
-    So $H = (\Q, +)$.
+    So $H = (\qbb, +)$.
 
 
     \section*{Exercise 14}
@@ -553,7 +553,7 @@
 
 
     \section*{Exercise 16 $***$}
-    For any field $F$ and fixed $n \in \Z^+$,
+    For any field $F$ and fixed $n \in \zbb^+$,
     consider $H = \{ A \in GL_n(F) \mid a_{ij} = 0 \text{ when } i > j\}$
     where $a_{ij}$ is an entry in $A$'s $i$th row and $j$th column
     is a subgroup of $GL_n(F)$
@@ -633,7 +633,7 @@
 
 
     \section*{Exercise 17 $***$}
-    For any field $F$ and fixed $n \in \Z^+$,
+    For any field $F$ and fixed $n \in \zbb^+$,
     consider $H = \{ A \in GL_n(F) \mid a_{ij} = 0 \text{ when } i > j
     \text{ and } a_{ii} = 1 \; \forall i \}$
     where $a_{ij}$ is an entry in $A$'s $i$th row and $j$th column

@@ -1,0 +1,326 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture V
+}
+\date{2025-05-12}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Learning in Practice}
+
+\subsection*{Linear Regression}
+
+For linear gression we assume that
+we have $\xcal$ and $\ycal = \rbb$
+(the output is continuous). \\
+
+For now we assume that $\rcal(f) \equiv 0$. \\
+
+We will use the squared loss $\ell = (z- y)^2$. \\
+
+Roughly, what we mean by linear regression is that
+the prediction function is linear in its parameters. \\
+It can still be non-linear with repsect to
+the input! \\
+
+The first step of Linear Regression is 
+to take the input data $\xcal$ and use a feature
+map that maps the data to $\rbb^d$:
+\[ \varphi: \xcal \to \rbb^d \]
+This is representation of $\xcal$ 
+that eases learning while carrying the same
+information. \\
+
+The hypothesis class $\ffrak$ is a family of
+linear functions $f_\theta$ with
+repsect to its parameters $\theta \in \Theta$:
+\[ f_\theta(x) = \ang{\theta, \varphi(x)}
+= \sum_{i = 1}^d \theta_i \varphi_i(x) \]
+Where $f_\theta$ is linear in terms of the
+$\theta$ parameters, but not $x$,
+since we don't know what $\varphi$ does. \\
+
+Note that instead of having $\varphi(x)$
+have all $d$ dimensions, we can instead define
+a lower dimension $\tilde{\varphi}(x)$
+that is in $\rbb^{d-1}$,
+and then set $\varphi(x) = (\tilde{\varphi}(x), 1)$. \\
+Basically, we want $\varphi(x)$ to have
+a single constant $1$ at the end. \\
+Note that this allows that the last parameter,
+$\theta_d$, is just a shift in this case;
+a $b$ offset,
+turning the function into an affine function
+(since it now has a simple shift element constant). \\
+
+One example of a $\varphi(x)$ is:
+\[ \varphi(x) = (1, x, x^2, x^3, \dots, x^{d-1})^T \]
+This gives us a polynomial prediction function:
+\[ f\theta = \sumof{i=1}{d}\theta_i x^i \]
+This is a monomial basis, where the function
+is polynomial in terms of $x$,
+but linear or affine in terms of $\theta$. \\
+
+There is also a fourrier basis.
+
+We should be careful not to use a basis with too
+high a dimension as it would increase the number
+of features by a lot. \\
+
+We are using squared loss; we can think
+of the result as finding the values of $\theta$
+that averages out over all $y$ values.
+This makes sense when you look at the
+empirical risk and what it calculates. \\
+
+Note that we can write $\riskEmpirical{\ell}{n}
+(f_\theta)$ as $\riskEmpirical{\ell}{n}
+(\theta)$. \\
+
+We can rewrite risk in vector and matrix
+notation. \\
+We define $\Phi$ to be the matrix
+where each row is $\varphi(x_i)^T$
+of the $\nth{i}$ input in the dataset $x_i$. \\
+So we get $\Phi \theta - \boldsymbol{y}$
+where $\boldsymbol{y}$ is the vector of all
+outputs $(y_1, y_2, \dots y_n)^T$. \\
+Which means that the risk would look like:
+\[ \dfrac{1}{n}\|\Phi \theta - \boldsymbol{y}\|^2 \]
+Which makes it clear we are finding the $\theta$
+that minimizes the distance expressed above. \\
+
+Now how do we solve:
+\[ \dfrac{1}{n}\|\Phi \theta - \boldsymbol{y}\|^2 = 0 \]
+We know that we can just differentiate and finding
+the gradient of the expression and setting
+it to $0$. \\
+We know that:
+\[ \nabla \riskEmpirical{\ell}{n}(f_{\theta}) 
+= \nabla \dfrac{1}{n}
+\|\Phi \theta - \boldsymbol{y}\|^2 
+= \dfrac{2}{n}\Phi^T(\Phi \theta - \boldsymbol{y}) \]
+So setting it to $0$ we get:
+\[ \theta = (\Phi^T\Phi)^{-1} \Phi^T 
+\boldsymbol{y} \]
+This $\theta$ is the set of arguments
+that minimizes the empitical risk. \\
+Note that this only works if $\Phi$
+is full column rank to begin with;
+that is, all its columns must linearly
+independent. \\
+We call $(\Phi^T\Phi)^{-1} \Phi^T$
+the pseudo inverse. \\
+
+Note that this is just the normal form
+from the Numerical Algorithms course. \\
+
+So if $\Phi$ has full column rank,
+we have a unique closed form solution. \\
+Note that $\Phi$ having full column rank
+makes the $\riskEmpirical{\ell}{n}$
+coercive, meaning it has a global minimizer
+$\hat{\theta}$. \\
+Pratically, $\Phi^T\Phi$ is invertible
+if all the columns in $\Phi$
+are linearly independent. \\
+The full proof is on the slides. \\
+
+Note that $\dfrac{1}{n}\Phi^T\Phi$ is the
+empirical covariance matrix (of what?).
+
+Instead of using matrix and vector gradients,
+we can try finding the partial derivatives
+of the original function and setting the gradient
+to $0$ as an exercise. \\
+
+Now that we have a unique closed form solution,
+we can add regularization back. \\
+
+We now have to minimize:
+\[ \min_{\theta} = \riskEmpirical{\ell}{n}(f_\theta)
++ \lambda \rcal(f_\theta) \] \\
+Note that we can also write $\rcal(f_\theta)$
+as $\rcal(\theta)$. \\
+
+One example of a regularizer is shrinkage,
+or quadratic regularization:
+\[ \rcal(\theta) = \|\theta\|^2 \]
+What this means is that this regularizer
+will favour small parameters $\theta_i$,
+and it can be thought of as a measure of
+simplicity to ensure the regressor doesn't
+become too complex. \\
+
+Note that in certain case, $\rcal(f_\theta)$
+and $\rcal(\theta)$ could be different. \\
+Sometimes imposing regularization on function
+or parameters is not the same. \\
+
+Putting everything together, we have Ridge Regression:
+\[ \min_{\theta} = \nabla \dfrac{1}{n}
+\|\Phi \theta - \boldsymbol{y}\|^2 
++ \lambda \|\theta\|^2 \]
+We can also minimize this,
+and it does have a unique closed form solution that
+we can find analytically:
+\[ \hat{\theta}_\lambda = 
+(n\lambda I + \Phi^T\Phi)\inv \Phi^T\boldsymbol{y} \]
+Note that $n\lambda I + \Phi^T\Phi$ is always
+invertible, no need to impose any column rank
+rules on $\Phi$. \\
+The proof comes from the fact that:
+\[ \left\| \pmat{x \\ y} \right\|^2 
+= \|x^2\| + \|y^2\| \]
+The full proof is on the slides. \\
+
+Note that we can take our regularized
+Ridge Regression risk, and rewrite as an 
+unregularized regression problem with a modified
+$\tilde{\Phi}$, which we know is solved by 
+$\hat{\theta}_\lambda$. \\
+We at some point arrive at a matrix:
+\[ \Phi^T\Phi + n \lambda I \]
+which we need to invert. \\
+Note that this matrix is always invertible,
+since it is positive definite (the first
+part is positive semi-definite,
+then we add the diagonal matrix to it,
+making it positive-definite),
+which is always invertible. \\
+That is why Ridge Regression always has a
+solution regardless of $\Phi$'s column rank. \\
+
+\newpage
+
+\subsection*{Statistical Analysis of Least Square
+Regression}
+
+This section is about analyzing how close we can
+get using real data to the optimal classifiers
+and risk (Baye's). \\
+
+So we will basically measure how close we
+can get to the theoretical best output. \\
+
+We have two settings. \\
+In the first one, we assume we have a random
+data set. \\
+In the second one we have a fixed dataset that
+we want to analyze and try to best predict the 
+outputs of these fixed inputs. \\
+This is like the difference between
+$\riskEmpirical{\ell}{S}$ 
+and $\riskEmpirical{\ell}{n}$
+where $S$ is the random dataset variable. \\
+
+We will make our life a little easier and
+focus on the fixed design setting. \\
+
+We can calculate the true (non-empirical)
+risk:
+\[ \risk{\ell}{}(f_\theta) = 
+\dfrac{1}{n}\ebb[\|\Phi \theta - \boldsymbol{Y}\|] \]
+Where $\boldsymbol{Y}$
+is the random variable of the vector of outputs:
+\[ \boldsymbol{Y} = (Y_1,Y_2, \dots, Y_n)^T \]
+where each $\boldsymbol{Y_i}$
+is the random variable of one output in the dataset. \\
+
+We assume that $\Phi^T\Phi$ is invertible. \\
+
+We will also assume that the optimal classifier
+belongs to our hypothesis class $\ffrak$,
+and impose that. \\
+In other words, we assume that
+$\boldsymbol{Y} = \Phi \theta^* + \varepsilon$
+where $\varepsilon$ is some random noise
+with a known mean and variance (look at slides). \\
+
+Note that $\varepsilon$ is also a vector. \\
+
+We can use this fact to rewrite the expectation
+in terms of the noise $\theta^*$ and the noise 
+$\varepsilon$. \\
+
+We can prove that if 
+$\boldsymbol{Y} = \Phi \theta^* + \varepsilon$,
+then this $\theta^*$ gives us Baye's optimal
+risk and classifier. \\
+
+The next part we compare Baye's risk with
+any $\theta$ to the optimal $\theta^*$
+that we defined above. \\
+If we calculate some $\tilde{\theta}$
+using the random output $\boldsymbol{Y}$,
+we can calculate the expected risk
+of this $\tilde{\theta}$,
+and comapre that to Baye's risk. \\
+We can decompose this risk into two parts,
+the bias and the variance,
+which is basically the average performance
+of these parameters that we found. \\
+
+The bias is teh distance between $\tilde{\theta}$
+and $\theta^*$. \\
+A low bias means that we have a too simple
+learning rule, and we have an underfit.\\
+
+The variance measures the variation between them. \\
+If it's too high, it means we have overfitting. \\
+
+The slides have a proof of this decomposition. \\
+
+We now propose a linear least squares
+estimator 
+$\hat{\theta} = \dfrac{1}{n}\Sigma\inv \Phi^T 
+\boldsymbol{Y}$. \\
+This is the formula we saw before. \\
+It is unbiased, and often gives us:
+\[ \ebb[\hat{\theta}] = \theta^* \]
+So it often gives us the best prameters. \\
+Notice that unbiased means the bias
+term we saw earlier would go to $0$
+(so no bias). \\
+
+So the only term left is the variance. \\
+The difference between expected risk and
+Baye's risk is given by the variance formula
+that is basically our convergence rate
+(how far off we are). \\
+
+Note that the formula on the slides for the
+convergence rate tells us that we get closer
+to Baye's optimal risk with more data
+(we divide by $n$). \\
+
+Also the more dimensions we have $d$,
+the harder it is to approach Baye's optimal 
+risk (we multiply by $d$). \\
+
+NOTE: we use expected risk for a value
+if that value depends on a random variable,
+which is why we do that for $\tilde{\theta}$
+and $\hat{\theta}$. \\
+
+Note that this is best estimator among all
+unbiased estimators. \\
+
+
+
+\newpage
+
+\end{document}

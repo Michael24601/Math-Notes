@@ -21,7 +21,7 @@
 
 \subsection*{Vector Space Bases}
 
-Given a vector space $V$ over $\R$,
+Given a vector space $V$ over $\rbb$,
 a subset $B$ of $V$
 \[ B = \{v_1, v_2, \dots v_n \} \]
 is called a basis of $V$ as long as the
@@ -47,7 +47,7 @@ that have to be applied to the basis vectors
 such that their linear combinaton produces
 the vector. \\
 By default, all vectors are written in the standard
-basis, which in $\R^2$ means the vectors:
+basis, which in $\rbb^2$ means the vectors:
 \[ \hat{i} = \vecTwo{1}{0} \qquad \text{ and }
 \qquad \hat{j} = \vecTwo{0}{1} \]
 So, when we have a vector:
@@ -148,12 +148,12 @@ in the basis $A$. \\
 So if $A$ is invertible (linearly independent
 column vectors),
 then $A$ is a basis proper, with uniqueness
-and existence properties for any vector in $\R^n$,
+and existence properties for any vector in $\rbb^n$,
 which means we will have on unique solution. \\
 On the other hand, if the $A$ is not a basis proper,
 then the matrix flattens the original span
 onto a lower dimension 
-(like flattening $\R^2$ onto a line).
+(like flattening $\rbb^2$ onto a line).
 It's possible then that $b$ is not in the new
 span, which means no solution exists,
 or that $b$ is in that space, but reachable
@@ -245,7 +245,7 @@ as they are simple,
 and as any polygon can be divided into triangles. \\
 
 We will now look at how to check if a line
-intersects a triangle in $\R^3$. \\
+intersects a triangle in $\rbb^3$. \\
 
 A triangle resides on a plane,
 and can be defined by three points
@@ -298,7 +298,7 @@ We can use the parametric equation as a starting
 point:
 to get the normal, we can use the cross
 product of any two non-colinear vectors
-on the plane (only works in $\R^3$),
+on the plane (only works in $\rbb^3$),
 which returns a vector orthogonal to the plane
 defined by the two vectors.
 We can use $\bv{f_1} \times \bv{f_2}$
@@ -401,7 +401,7 @@ does when it transform $\bv{p_0}$:
     f_2^1 & f_2^2 & 2_1^3
 \end{bmatrix} \vecThree{p_0^1}{p_0^2}{p_0^3} \]
 It is a $2 \times 3$ matrix,
-meaning that it flattens $\R^3$
+meaning that it flattens $\rbb^3$
 space onto a plane. \\
 In this case in particular,
 it projects $\bv{p_0}$ onto the plane
@@ -433,12 +433,12 @@ in the new basis. \\
 
 \subsection*{Intersection with a Quadric}
 
-Quadrics are the $\R^3$ analogue of conics in $\R^2$. \\
+Quadrics are the $\rbb^3$ analogue of conics in $\rbb^2$. \\
 Conics form the family of curves you get if you intersect
 a cone by a plane.
 That includes circles, ellipses, parabolae,
 and hyperbolae. \\
-In $\R^2$, the general formula for a conic curve is
+In $\rbb^2$, the general formula for a conic curve is
 \[ Ax^2 + By^2 + Cxy + Dx + Ey + F = 0 \]
 This formula can be extended to $R^3$:
 \[ Ax^2 + By^2 + Cz^2 + Dxy + Exz + Fyz +

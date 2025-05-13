@@ -63,7 +63,7 @@ Now to the main topic of this section.
 We will show that vectors are invariant,
 while their components are not invariant. \\
 
-A vector represents a point in $\R^n$
+A vector represents a point in $\rbb^n$
 space. That point is invariant,
 meaning that it does not vary depending
 on the basis in which the vector is expressed. \\
@@ -174,19 +174,19 @@ This function maps a vector $v$
 to the dot product of the row vector $\alpha$
 and the column vector $v$. \\
 
-So for example, if we have a vector $v \in \R^2$,
+So for example, if we have a vector $v \in \rbb^2$,
 then the covector $\alpha$ along with the dot product
 operation form a function:
 \[ \alpha(v) =
 \vecTwoTransposed{\alpha_1}{\alpha_2}
 \vecTwo{v^1}{v^2} = \alpha_1v^1 + \alpha_2v^2 \]
-which maps the vector $v$ from $\R^2$
-to $\alpha_1v^1 + \alpha_2v^2$ in $\R$. \\
+which maps the vector $v$ from $\rbb^2$
+to $\alpha_1v^1 + \alpha_2v^2$ in $\rbb$. \\
 
 More generally, we can define a covector
 as the function from the vector space
 onto the reals as:
-\[ \alpha: V \to \R \]
+\[ \alpha: V \to \rbb \]
 where:
 \[ \alpha(v) = \sum_{i = 1}^{n} \alpha_iv^i \] \\
 
@@ -240,7 +240,7 @@ both directions $\beta^T$ and $\gamma^T$,
 and adds them together. \\
 
 We can also scale covectors. \\
-For a scalar $\lambda \in \R$,
+For a scalar $\lambda \in \rbb$,
 we can scale a covector $\alpha$:
 \[ (\lambda \alpha)(v)
 = \sum_{i = 1}^{n} (\lambda \alpha_i)v^i
@@ -480,11 +480,11 @@ on the dual basis instead of the covector. \\
 
 \subsection*{Rotations in Three Dimensions}
 
-In $\R^2$,
+In $\rbb^2$,
 the only rotation we can do is in the $xy$ plane,
 so we only have one angle of rotation $\theta$. \\
 
-In $\R^3$ however,
+In $\rbb^3$ however,
 we can actually rotate vectors in three planes
 (around three seperate axes):
 $R_x$ is the rotation in the $yz$ plane,
@@ -492,7 +492,7 @@ $R_y$ is the rotation in the $xz$ plane,
 and $R_z$ is the rotation in the $xy$ plane. \\
 
 Each one can be expressed similarly to 
-a rotation in $\R^2$ (since they are a rotation
+a rotation in $\rbb^2$ (since they are a rotation
 in a single plane), but in a $3\times 3$ matrix:
 \[ R_x(\theta) = \matTwo{0}{0}{0}{R(\theta)}
 \matThree{0}{0}{0}{0}{\cos(\theta)}
@@ -541,7 +541,7 @@ that have absolute value equal to $1$,
 which encompasses all rotation and reflection
 matrices, as well as their combinations,
 form a group:
-\[ O(n) = \{ M \mid M \in \R^{n \times n}
+\[ O(n) = \{ M \mid M \in \rbb^{n \times n}
 \text{ and } MM^t = M^TM = I \} \]
 Which is called an orthogonal group. \\
 
@@ -577,7 +577,7 @@ then we can map:
 \subsection*{Gram-Schmidt Process and
 More on Rotations}
 
-Suppose that we are in $\R^3$,
+Suppose that we are in $\rbb^3$,
 and we want to rotate
 a vector or point $p$ around some plane
 that doesn't necessarily coincide
@@ -590,7 +590,7 @@ $f_1$ and $f_2$ that span the plane. \\
 
 The first issue we will encounter is that
 the point may not be on the plane
-since we are in $\R^3$. \\
+since we are in $\rbb^3$. \\
 In order to rotate a point in this plane,
 we will first have to project the point
 onto the plane,
