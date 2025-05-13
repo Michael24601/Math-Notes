@@ -54,8 +54,8 @@ First note that:
 So we can divide the integral into two sections
 with $y \in (-\infty, z]$
 and then $y \in [z, \infty)$:
-\[ \integral{-\infty}{z}{(y - z)p_Y(y)}{(dy)}
-+ \integral{z}{\infty}{(z - y)p_Y(y)}{(dy)} \]
+\[ \integral{-\infty}{z}{(z-y)p_Y(y)}{(dy)}
++ \integral{z}{\infty}{(y-z)p_Y(y)}{(dy)} \]
 We can then derivate both using the Leibniz rule
 (note that $\pm\infty$ is a constant
 and its derivative with respect to $z$ is just 0).
@@ -244,8 +244,13 @@ exists and that $\Phi'(0) < 0$. \\
     and then show the derivative exists. \\
 
     Some other students also just directly
-    proved that $\sign(g^*) = f^*$,
-    which is correct but may be harder. \\
+    proved that $\sign(g^*) = f^*$.
+    We can do that by calculating the risk
+    of $g$ with loss $\Phi$,
+    and showing it leads to $\sign(g)$
+    where $\sign(g)$ has the value of the
+    label with the largest conditional probability,
+    same as $f^*$. \\
 }
 
 \newpage
@@ -314,18 +319,18 @@ h_{1.64}(2) = 2 \cdot 1.64 = 3.28  \sim 3 \]
 h_{1.64}(3) = 3 \cdot 1.64 = 4.92  \sim 3 \]
 It did an ok job.
 \item
-We now want to calculate the empirical
+We now want to calculate the gradient of the empirical
 risk for $h_{2}$,
-that is, for the function weight weight 
+that is, for the function weight 
 $\tilde{w} = 2$:
-\[ \hat{\rscr}_\ell^n(h_2)
-= \dfrac{1}{n}\sum_{i = 1}^{n}(2x_i - y_i)^2 \]
+\[ \dd{}{z}\hat{\rscr}_\ell^n(h_2)
+= \dfrac{2}{n}\sum_{i = 1}^{n}(2x_i - y_i)x_i \]
 We will do this for the dataset $\dcal$:
 \[ \hat{\rscr}_\ell^3(h_2)
-= (2-2)^2 + (4-3)^2 + (6-5)^2 = 2 \]
-The empirical risk is rather low,
-though likely not as low as that of $w* = 1.64$,
-the optimal weight. \\
+= \dfrac{2}{3}((2-2) \cdot 1 + (4-3) \cdot 2 
++ (6-5) \cdot 3) = \dfrac{10}{3} \]
+This is not equal to $0$ since this is not the
+optimal risk. \\
 \end{enumerate}
 
 
