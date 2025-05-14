@@ -1,0 +1,532 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture VIII
+}
+\date{2025-05-14}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{The Rendering Equation}
+
+The fundamental quantity that we are working
+with is radiance, $L$, which is basically light. \\
+
+When a ray of light in direction $\omega_i$
+hits a point $x$, it will be reflected in all directions.
+Likewise, the outgoing reflected ray of light in
+direction $\omega_o$ is the result of many incoming
+rays of light that hit $x$ and reflect. \\
+
+The rendering equation calculates the amount of
+outgoing radiance or light from a point $x$
+in the outgoing direction $\omega_o$:
+\[ L_{o}(x, \omega_o)
+= L_{e}(x, \omega_o)
++ \int_\Omega L_{i}(x, \omega_i) \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\omega_i \]
+Here, the outgoing radiance is the emitted light
+(if the point is a source of light)
+plus the light reflected at that point (from other
+light sources). \\
+
+So $L_{e}(x, \omega_o)$ is the emitted light 
+from point $0$ in direction $\omega_o$. \\
+It is $0$ on a non-light source, an non-zero
+on a light source.
+ 
+On the other hand, the integral:
+\[ \int_\Omega L_{i}(x, \omega_i) \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\omega_i \]
+integrates over all incoming rays of light
+of direction $\omega_i$ into point $x$.
+Here $\Omega$ is the hemisphere above $x$. \\
+So $L_{i}(x, \omega_i)$ is the incoming ray
+of light in direction $-\omega_i$. \\
+And $f(x, \omega_i, \omega_o)$ is the BRDF, 
+which is the amount of light from direction $\omega_i$
+that gets reflected in direction $\omega_o$
+at point $x$.
+This will depend on the material that $x$ is made of. \\
+Finally, $\omega_i \cdot n$ is the dot product,
+which basically gives us the angle $\theta$
+between the incoming light direction and the normal
+$n$ at $x$, which scales how much light is reflected
+(Lambert's cosine law).
+It's the cosine of the angle because we 
+assume both directions $n$ and $\omega_i$
+have length $1$. \\
+
+Also note that we usually have an absolute value
+around the dot product (wouldn't make sense to have
+negative light). \\
+
+The BRDF $f(x, \omega_i, \omega_o)$ depends on the
+material type, and is defined by the user.
+
+The dot product term depends $\omega_i \cdot n$
+depends on the geometry of the scene. \\
+
+Finally, the light coming in $L_{i}(x, \omega_i)$
+is not known; it is itself calculated
+as the outgoing ray from some point $y$
+whose ray of light in direction $\omega_i$
+hits $x$. \\
+
+There is a small point that needs clarification. \\
+By convention, when we say $L_i(x, \omega_i)$,
+we actually mean the coming into $x$
+from direction $-\omega_i$
+($\omega_i$ shoots out of $x$ towards the source). \\
+This is by convention, and it is a bit confusing. \\
+My guess is that it creates a useful symmetry.
+If we have:
+\[ L_o(x, \omega) \qquad \AND \qquad L_i(x, \omega) \]
+Here, $L_i(x, \omega)$ will come into $x$ on one side,
+but instead of coming out the other side,
+this $L_o(x, \omega)$ will go out from the same
+direction (but opposite) that the light came in. \\
+One intuition that helped me is to think of
+the hemisphere $\Omega$.
+If we think of the sum of the rays of light
+in all directions $\Omega$,
+both incidant and exitant:
+\[ \int_\Omega L_i(x, \omega_i) \; d\omega_i
+\qquad \AND \qquad 
+\int_\Omega L_i(x, \omega_o) \; d\omega_o \]
+Then both of these sums sum over the same
+hemisphere; if the light $L_i(x, \omega_i)$
+were coming from $\omega_i$,
+then the lights would be coming from the
+opposite side (other hemisphere). \\
+So defining $L_i(x, \omega_i)$
+such that the light is coming in from direction
+$-\omega_i$ creates this useful
+symmetry that allows us to use the same
+hemisphere for incoming and outgoing light. \\
+
+The scene, or geometry,
+$\mcal$, is basically made up of surfaces defined
+by some equations:
+\[ \mcal = \unionof{i=1}{n} S_i \]
+$S$ is the set of the surfaces. \\
+
+The function $N:\mcal \to \rbb^d$
+gives the normal $N(x)$ at any point $x$ on $\mcal$. \\
+
+We can imagine that the screen on which we view the
+scene is the sensor, that captures rays of light 
+$L_o(x, \omega_o)$ and then showcases the correct pixel
+color depending on which rays hit which pixels. \\
+The rays originate in the light sources and bounce around
+until they hit the sensor. \\
+However, the probability that rays will hit the sensor
+is very low, so we usually do the operation in the
+opposite direction, and shoot light rays from the sensor
+until they hit the light sources,
+and then do the calculation in reverse. \\
+
+We have a ray tracing function $x_\mcal(x, \omega)$
+or $r(x, \omega)$, which basically shoots a ray
+from $x$ in direction $\omega$. We use it extensively
+in order to figure out where light rays go and come from. \\
+
+As mentioned earlier, the incoming light $L_i(x, \omega)$
+is the ray of light that leaves $y$ in the direction $-\omega$
+and hits $x$.
+We can write $y$ as $r(x,\omega)$
+since we can get $y$ by shooting a ray in the direction
+$\omega$ from $x$ (recall that $L_i(x, \omega_i)$
+has an incoming ray in direction $-\omega_i$). \\
+So we can write:
+\[ L_i(x, \omega) = L_o(r(x, \omega), -\omega) \]
+Which means that we write $L_i$,
+the light coming into a point $x$ from some direction,
+as the light $L_o$, coming out of a point in
+the opposite direction towards $x$. \\
+
+Energy needs to be conserved, since otherwise light would
+bounce around forever and the scene keeps getting brighter. \\
+
+The property:
+\[ L_i(x, \omega) = L_o(r(x, \omega), -\omega) \]
+Tells us we can write the rendering equation recursively
+in terms of outgoing light only (using a ray tracer). 
+
+The recursion is not infinite, we will eventually hit a
+a point where $L_o = 0$, since energy is conserved,
+which means each bounce decreases the energy. \\
+
+To solve the recursive integral, we can just pretend
+that we have matrices instead of an integral, 
+and then use an infinite sum. \\
+The sum we get, which converges, represent each bounce
+the light makes. \\
+
+When we set a color to a specific pixel, more than
+one ray arrives at this pixel, so we would have to
+average out all the rays to get the final color. \\
+
+\newpage
+
+\subsection*{Radiometry}
+
+This section will expand on the idea of energy
+and how it related to light and the rendering
+equation. \\
+
+Radiometry is the measure of visible light. \\
+
+We can imagine that there exists a function
+$Q$ which calculates the total energy $J$
+on a subset of
+$\pbb = \rbb \times \mcal \times \scal^2 \times \rbb^+$,
+which respectively refer to time ($\rbb$),
+the geometry ($\mcal$),
+all directions ($\scal^2$, a full hemisphere),
+and wavelength $(\rbb^+)$. \\
+
+So for instance, if we have some
+union of time inverals (a set of times):
+\[ \tcal = \cup_i[t_i, t_{i+1}] \]
+Some subset of points from the scene:
+\[ \dcal \sub \mcal \]
+Some subset of directions:
+\[ \Omega \sub \scal^2 \]
+And a union of wavelength intervals (a set of wavelengths):
+\[ \Lambda = \cup_i[\lambda_i, \lambda_{i+1}] \]
+Then the function $Q$ measures the engery
+in this space: 
+\[ Q(\tcal, \dcal, \Omega, \Lambda) \in [0, \infty] \] 
+Which is given in Joules. \\
+
+In order to calculate $Q$, we would need to
+integrate over each of these sets:
+\[ Q(\tcal, \dcal, \Omega, \Lambda)
+= \int_\tcal \int_\dcal \int_{\scal^2} \int_\Lambda
+L(t, x, \omega, \lambda) 
+\; d\lambda \; d\sigma(\omega) \; dA(x) \; dt \]
+The term $L(t, x, \omega, \lambda)$
+is the radiance (light),
+which can be the light coming out of $x$ at time $t$
+in direction $\omega$ on wavelength $\lambda$. \\
+Or it can also be the quantity of 
+light incident at $x$ at time $t$
+in direction $\omega$ on wavelength 
+$\lambda$ (come in from direction $-\omega$). \\
+So depending on what $L$ is
+and whether it is $L_i$ or $L_o$,
+then $Q$ either measures
+the total incident or exitant (outgoing) energy. \\
+
+This means that in order to get the energy
+at any one point $x$, or at one time $t$,
+we would have to differentiate to get rid
+of an integral. \\
+
+Note that technically, $L(t, x, \omega, \lambda)$
+is a spectral radiance $L_\lambda$, 
+since it is a function
+of a wavelength $\lambda$. \\
+This won't be used much since we will
+ignore wavelengths and time for the most part. \\
+
+We will ignore time and wavelengths,
+and just focus on direction and surface area. \\
+This gives us flux;
+the total amount of incident or exitant
+energy/radiance at all points $x$
+on some surface area $\dcal$ in all directions
+$\Omega$ (which is some subset of the sphere $\scal^2$,
+not necessarily the top hemisphere). 
+Recall that flux is the integral of a vector
+field over a surface multiplied by a dot product. \\ 
+
+So we have the exitant flux:
+\[ \Phi^{\to}(\dcal, \Omega)
+= \int_\dcal \int_\Omega L(x \to \omega) \cos(\theta) \;
+d\sigma(\omega) \; dA(x) \]
+Which we can more familiarly write as:
+\[ \Phi^{\to}(\dcal, \Omega) 
+= \int_\dcal \int_\Omega L_o(x, \omega) 
+(\omega \cdot N(x)) \; d\sigma(\omega) \; dA(x)  \]
+Which is the total amount of radiance exitting
+the surface area $\dcal$ in all directions 
+in $\Omega$. \\
+
+We also have the incidant flux:
+\[ \Phi^{\from}(\dcal, \Omega)
+= \int_\dcal \int_\Omega L(x \from \omega) \cos(\theta) \;
+d\sigma(\omega) \; dA(x) \]
+Which we can more familiarly write as:
+\[ \Phi^{\to}(\dcal, \Omega) 
+= \int_\dcal \int_\Omega L_i(x, \omega) 
+(\omega \cdot N(x)) \; d\sigma(\omega) \; dA(x)  \]
+Which is the total amount of radiance incident
+at the surface area $\dcal$ from all directions 
+in $\Omega$ (recall that $L_i(x, \omega)$ 
+is the radiance incident at $x$ from direction $-\omega$,
+that is, $\omega$ is the vector that points out of
+$x$ in the same direction light is coming in). \\
+
+As mentioned earlier, we can differentiate in order
+to find the radiance quantities in terms of one
+point $x$ or one direction $\omega$. \\
+
+For a fixed point $x$, we have:
+\[ B(x, \Omega) = \int_\Omega L(x \to \omega) \cos(\theta) \;
+d\sigma(\omega) = \int_\Omega L_o(x, \omega) \cdot 
+(\omega \cdot N(x)) \; d\sigma(\omega) \]
+which is the total exitant light from one point $x$
+in all directions $\Omega$. \\
+
+For a fixed point $x$, we also have:
+\[ E(x, \Omega) = \int_\Omega L(x \from \omega) \cos(\theta) \;
+d\sigma(\omega) = \int_\Omega L_i(x, \omega) \cdot 
+(\omega \cdot N(x)) \; d\sigma(\omega) \]
+which is the total incident light at one point $x$
+from all directions $\Omega$. \\
+Note that this is the total incoming light
+at a point $x$ that is used in the rendering
+equation (but weighted by the BRDF). \\
+
+We can also fix the direction $\omega$,
+an integrate over all points $x \in \dcal$:
+\[ I^{\to}(\dcal, \omega) 
+= \int_\dcal L(x \to \omega) \cos(\theta) \;
+dA(x) = \int_\dcal L_o(x, \omega) \cdot 
+(\omega \cdot N(x)) \; dA(x) \]
+which is the total exitant radiance from all points
+on a surface $\dcal$ in one directions $\omega$. \\
+
+If we fix the direction $\omega$
+and integrate over all points $x \in \dcal$,
+we can also define:
+\[ I^{\from}(\dcal, \omega) 
+= \int_\dcal L(x \from \omega) \cos(\theta) \;
+dA(x) = \int_\dcal L_i(x, \omega) \cdot 
+(\omega \cdot N(x)) \; dA(x) \]
+which is the total indicent radiance at all points
+on a surface $\dcal$ from one direction $\omega$
+(the light rays coming in have direction $-\omega$
+as discussed). \\
+
+We won't use $I^{\to}$ and $I^{\from}$ much. \\
+
+Note that, by the conservation of energy:
+\[ \dfrac{B(x)}{E(x)} \leq 1 \]
+For all directions $\omega \in \Omega$. \\
+This just means that the total exitant radiance $B(x)$
+can't exceed the incidant radiance $E(x)$
+by the conservation of engery; some of it
+is absorbed by the material, and with each bounce
+the light makes, some of the energy dissapates. \\
+
+The property:
+\[ L_i(x, \omega) = L_o(r(x, \omega), -\omega) \]
+that we saw earlier is the conservation of energy
+along a ray, that is,
+the radiance that leaves $y$ towards $x$
+is the same as the incidant radiance
+at $x$ from $y$. \\
+
+Note that $L_i(x, \omega) \neq L_o(x, \omega)$,
+since light leaving a point $x$ isn't
+necessarily equivalent to the amount of light
+entering it.
+Outgoing light does depend on incident light,
+but it also depends on things like emitted light $L_e$
+and angle and surface as we saw in 
+the rendering equation. \\
+
+\newpage
+
+\subsection*{The Rendering Equation as an Infinte Series}
+
+As mentioned earlier, in order to render a scene,
+we can imagine that we have a quad, which is a
+grid of pixels, in the scene, which acts as
+a sensor. When rays of light hit a pixel,
+we average these rays of lights out,
+and the result is the color that the pixel
+shows. \\
+Those rays of lights originate at sources, bounce
+around the scene, and finally land on the sensor. 
+However, because the likelihood that rays of
+light will hit the sensor are low, we usually
+do it the other way around,
+and originate rays of light at the sensor,
+and then bounce them around the scene until
+they hit a light source, or dissappears into
+the void.
+We then calculate the radiance/light
+backwards. \\
+
+There is an issue with the rendering equation:
+\[ L_{o}(x, \omega_o)
+= L_{e}(x, \omega_o)
++ \int_\Omega L_{i}(x, \omega_i) \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\omega_i \]
+We define the light sources, 
+which give us $L_{e}(x, \omega_o)$.
+We also define the BRDF $f(x, \omega_i, \omega_o)$.
+The geometry of the scene gives us $\omega_i \cdot n$. \\
+But what about $L_{i}(x, \omega_i)$?
+How can we calculate the incident light
+at a point $x$? \\
+
+Now, recall that we mentioned that:
+\[ L_i(x, \omega) = L_o(r(x, \omega), -\omega) \]
+Which means that the incoming light at a point
+is just the outgoing light from the point
+we get if we just follow the light ray
+in the opposite direction until we hit
+an intersection with a surface (light source
+or otherwise). \\
+This implies that we can write the rendering
+equation as such:
+\[ L_{o}(x, \omega_o)
+= L_{e}(x, \omega_o)
++ \int_\Omega L_o(r(x, \omega_i), -\omega_i)  \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\omega_i \]
+Which means that the incident light at $x$
+is just the outgoing (exitant) light 
+from some point $r(x, \omega_i)$.
+And that outgoing light $L_o(r(x, \omega_i), -\omega_i)$
+can itself be calculated using the rendering
+equation, since it by definition
+gives us the value of the exitant randiance
+in some direction $\omega_o$. \\
+
+And this implies a sort of recursion,
+where the outgoing light at one point $x$
+depends on teh outgoings lights from other points $y$,
+which themselves depend on the outgoing light
+from other points... \\
+This creates a recursion, where each recursion
+is a light bounce on a surface. \\
+
+This recursion is not infinite however.
+As light bounces, it loses energy.
+As mentioned before, by the conservation of energy,
+not all light that arrives at a point will exit it. \\
+So after each bounce, the radiance quantity reduces,
+until eventually the amount of light it contributes
+to the scene is negligible. \\
+
+In practice, we don't solve the actual integrals,
+which would be very expensive.
+Instead, we takes some sample of directions
+from $\Omega$ of size $n$, 
+and discretize the integral as a sum. \\
+
+Generally speaking, if we have an integral:
+\[ f(x) = \integral{a}{b}{K(x, y)g(y)}{dy} \]
+We can approximate it as a Riemann sum,
+that is, discretize it
+by taking a sample of size $n$ of columns,
+which we multiply by small steps $\Delta y$:
+\[ f(x_j) \sim \sumof{i = 1}{n} (K(x_j, y_i)g(y_i) \Delta y) \]
+Note here that if we envision
+a vector $g$ that contains all values of $g(y_i)$
+for each $i \in \{1, 2, \dots n\}$,
+then we can rewrite this as a matrix multiplication:
+\[ f = K \cdot g \]
+Where:
+\[ g = \bmat{g(y_1) \\ g(y_2) \\ \vdots \\ g(y_n)} \]
+And $K$ is the approximation of the kernel of the
+integral (basically encodes the multiplication
+by $K(x_j, y_i)$ and $\Delta y$).
+The result is a vector $f$ that contains
+all outputs $f(x_j)$:
+\[ f = \bmat{f(x_1) \\ f(x_2) \\ \vdots \\ f(x_n)} \]
+And this is how we discretize an integral and write
+it as a matrix multiplication for several inputs. \\
+
+This means we can now write the integral
+as a matrix multiplication:
+\[ L_o = L_e + T \cdot L_i \]
+What we've done here is discretize the space $\Omega$ of
+incidant directions $\omega_i$. \\
+
+Here, $L_o$ is the vector of outgoing radiances 
+in several directions $\omega_o^j$ from point $x$:
+\[ L_o = \bmat{L_o(x, \omega_o^1) \\ L_o(x, \omega_o^2) \\
+\vdots \\ L_o(x, \omega_o^d)} \]
+Here, $L_e$ is the vector of emitted radiance 
+in several directions $\omega_o^j$ from point $x$:
+\[ L_e = \bmat{L_e(x, \omega_o^1) \\ L_e(x, \omega_o^2) \\
+\vdots \\ L_o(x, \omega_o^d)} \]
+As for $L_i$, it is the vector of incidant radiances
+from several directions $w_i^k$:
+\[ L_i = \bmat{L_i(x, \omega_i^1) \\ L_i(x, \omega_i^2) \\
+\vdots \\ L_i(x, \omega_i^n)} \]
+Finally, we have the matrix $T$ 
+of dimension $d \times n$, which is the approximation
+of the intergal kernel,
+and basically encodes the cosine of the angle
+and the BRDF for each sample point $\omega_i^k$
+and input $\omega_o^j$. \\
+
+So, at some point $x$, the light output
+in several directions $\omega_o^j$,
+is given by 
+\[ L_o = L_e + T \cdot L_i \]
+As we can recall, we can write $L_i$
+as an outgoing radiance, so:
+\[ L_o - T \cdot L_o = L_e \]
+\[ (I - T)L_o = L_e \]
+\[ L_o = (I - T)\inv L_e \]
+We can expand $(I - T)\inv$ as a Neumann series:
+\[ L_o = \para{\sum_{k = 0}^{\infty} T^k} L_e
+= L_e + TL_e + T^2L_e \dots \]
+Where each term represents a bounce of the light. \\
+
+This makes a lot of intuitive sense;
+the light starts by being emitted at some point
+$x$ in several directions, which is given by $L_e$,
+and then that light propagates throughout the scence,
+bouncing on the geometry. Each time it bounces,
+some light is reflected, which is given by $T^k L_e$.
+Each term $T^k L_e$ is essentially a bounce. \\
+Note that this a geometric series. \\
+
+For numbers, a geometric series:
+\[ \sumof{k = 0}{\infty} q^k \]
+converges if and only if $|q| < 1$. \\
+
+Likewise for a matrix, the sum
+\[ \para{\sum_{k = 0}^{\infty} T^k} \]
+converges if and only if the norm of the matrix
+$\|T\| < 1$. \\
+
+Here, the sum will converge because $\|T\| < 1$. \\
+But more pertinitly, it is because of the conservation
+of enegry; as light bounces around,
+it loses more an more energy, which
+means that the terms $T L_e$ must be smaller than $L_e$,
+and the term $T^2 L_e$ is even smaller...
+Which means that the sum converges. \\
+Otherwise, the scene would keep getting more and more
+light each bounce, which would never abate,
+and it would just be awash with infinite light. \\
+
+\newpage
+
+\end{document}
