@@ -21,6 +21,105 @@
 
 \section*{Learning in Practice}
 
+\subsection*{Linear Algebra}
+
+Some linear algebra properties that
+will be helpful for this chapter. \\
+
+Diagonal matrices commute with other matrices:
+\[ DA = AD \]
+for any matrix $A$ so long as $D$ is diagonal. \\
+
+First note that
+\[ \ebb[\ang{u, v}] = \ang{\ebb[u], \ebb[v]} \]
+holds. \\
+
+Moreover, a matrix $M$ such that:
+\[ wMw^T \geq 0 \]
+for all vectors $w \in \rbb^n$ is called
+positive semi-definite. \\
+A positive semi-definite matrix
+has non-negative eigenvalues. \\
+
+A positive semi-definite matrix is positive-definite
+if it is also invertible. \\
+
+All matrices of the form $A^TA$
+are positive semi-definite since:
+\[ wA^TAw^T = (Aw^T)^TAw^T = \|wA\|^2 \]
+is always positive (norm squared). \\
+
+Moreover, a matrix of the form $A^TA$
+is invertible (positive-definite)
+if $A$ has full column rank (all columns
+are linearly independent). \\
+
+All matrices of the form $A^TA$ are symmetric. \\
+
+A positive semi-definite matrix
+that is also symmetric is always
+diagonalizable, which means we can
+get its eigen decomposition $P\Lambda P^T$
+where $P$ is the orthogonal eigenspace. \\
+
+If $M$ is a symmetric positive-semi definite matrix,
+then the matrix:
+\[ M + aI \]
+for any positive number $a \in \rbb$
+is positive definite. \\
+
+A positive-definite matrix has positive
+eigenvalues and is always diagonalizable. \\
+
+The trace of a matrix $\tr(M)$ is the sum of its
+diagonal entries. \\
+
+The trace of a scalar is just the scalar
+$\tr(a) = a$. \\
+
+The trace has a circular property:
+\[ \tr(ABC) = \tr(CAB) = \tr(BCA) \]
+Which applies for vectors as well as matrices. \\
+
+The inverse of the transpose $(M^T)\inv$
+is equal to the transpose of the inverse 
+$(M\inv)^T$. \\
+
+This property of the transpose holds for vectors:
+\[ (Av)^T = v^TA^T \]
+where $v$ is any column vector. \\
+
+The inverse of a scalar $b$ 
+is just one over the scalar:
+\[ (Ab)\inv = \dfrac{1}{b}A\inv \]
+where $b \in \rbb$ is any scalar. \\
+
+If the eigenvalues of a matrix $M$
+are all smaller or equal to $\dfrac{1}{2}$,
+then:
+\[ w^TMw \leq \dfrac{1}{2} \|w\|^2 \]
+for any vector $w \in \rbb^n$.
+This is because:
+\[ w^TMw = w^T(P\Lambda P^T)w
+= (w^TP)\Lambda(P^Tw)
+= (P^Tw)^T\Lambda(P^Tw) \]
+Now, we can take $z = P^Tw$, and write:
+\[ (P^Tw)^T\Lambda(P^Tw) 
+= z^T \Lambda z = \sum_i \lambda_i z_i^2 \]
+where $\lambda_i$ is the $\nth{i}$ eigenvalue. \\
+Notice that because $\lambda_i \leq \dfrac{1}{2}$,
+this means that:
+\[\sum_i \lambda_i z_i^2 
+\leq \dfrac{1}{2} \sum_i z_i^2 = \dfrac{1}{2} \|z\|^2 \]
+Note that because $P$ is orthogonal:
+\[ \|w\|^2 = \|z\|^2 \]
+Which means that:
+\[w^TMw = \sum_i \lambda_i z_i^2 
+\leq \dfrac{1}{2} \|w\|^2\]
+Proving the theorem. \\
+
+\newpage
+
 \subsection*{Linear Regression}
 
 For linear gression we assume that
@@ -336,8 +435,10 @@ where for each input $Y_i$,
 we've got some noise $\varepsilon_i$. \\
 We assume thatfor all $i$,
 that is, $\ebb[\varepsilon_i] = 0$,
-and we take $\sigma^2 = \ebb[\varepsilon_i^2]$
-to be the variance of any one random noise variable. \\
+and we take have a variance
+\[ \ebb[(\eps_i - \ebb[\eps_i])^2]
+= \ebb[\eps_i^2] = \sigma^2 \]
+for any one random noise variable. \\
 
 At first glance, this makes intuitive sense;
 the optimal set of parameters $\theta^*$
@@ -506,13 +607,25 @@ the convergence rate or excess risk
 of any parameters we have (random or not),
 what parameters can we evaluate? \\
 
+\newpage
+
+\subsection*{Analysis of the Empirical Risk Minimizer}
+
 One very natural choice that we expect
 to do well is linear least squares
 estimator:
-\[ \hat{\theta} = \dfrac{1}{n}\Sigma\inv \Phi^T 
-\bl{Y} \]
+\[ \hat{\theta} = (\Phi^T\Phi)\inv\Phi^T\bl{Y}
+= \dfrac{1}{n}\hat{\Sigma}\inv \Phi^T\bl{Y} \]
 Which we got by minimizing the empirical risk
 in the last section. \\
+Note that
+\[ \hat{\Sigma} = \dfrac{1}{n}\Phi^T\Phi \]
+Which means that:
+\[ {\hat{\Sigma}}\inv 
+= \para{\dfrac{1}{n}\Phi^T\Phi}\inv
+= n\para{\Phi^T\Phi}\inv \]
+Which is why we replace $(\Phi^T\Phi)\inv$
+by $\dfrac{1}{n}\hat{\Sigma}\inv$. \\
 
 First notice that it is unbiased, meaning that:
 \[ \ebb[\hat{\theta}] = \theta^* \]
@@ -522,30 +635,163 @@ So the only term left is the variance. \\
 
 We can prove that $\ebb[\hat{\theta}] = \theta^*$.
 Note that:
-\[  \]
-Which concludes the proof.
+\[ \ebb[\hat{\theta}]
+= \dfrac{1}{n} \hat{\Sigma}\inv \Phi^T \ebb[\bl{Y}] \]
+Recall now that:
+\[ \ebb[\bl{Y}] 
+= \ebb[\Phi \theta^* + \bl{\eps}]
+= \Phi \theta^* + \ebb[\bl{\eps}] = \Phi \theta^* \]
+Which means that:
+\[ \ebb[\hat{\theta}] = 
+\dfrac{1}{n} \hat{\Sigma}\inv \Phi^T \Phi \theta^*
+= (\Phi^T\Phi)\inv \Phi^T \Phi \theta^* 
+= \theta^* \]
+Which concludes the proof. \\
 
-This means that (Talk here about variance).
+This means that the excess risk will have no bias
+term. \\
 
-We can move trace inside the expected value because
-trace is linear, like the inner product (we
-can also talk about it here). \\
+We can also calculate the variance
+of $\hat{\theta}$, which will be helpful
+when calculating the variance term in the 
+excess risk. \\
 
-Note that the formula on the slides for the
-convergence rate tells us that the estimator $\hat{\theta}$
+First note that $\ebb[\bl{\eps} \bl{\eps}^T]
+= \sigma^2I$, which is a diagonal matrix. \\
+In fact, this is the covariance
+matrix of $\bl{\eps}$:
+\[ \ebb[\bl{\eps} \bl{\eps}^T]
+= \ebb\brac{\pmat{\eps_1\eps_1 & \eps_1\eps_2 & \dots 
+& \eps_1\eps_n \\ 
+\eps_2\eps_1 & \eps_2\eps_2 & \dots & \eps_2\eps_n \\ 
+\vdots &\vdots &\ddots & \vdots \\
+\eps_n\eps_1 & \eps_n\eps_2 & \dots 
+& \eps_n\eps_n }}
+= \pmat{\ebb[\eps_1^2] & \ebb[\eps_1\eps_2] 
+& \dots & \ebb[\eps_1\eps_n] \\ 
+\ebb[\eps_2\eps_1] & \ebb[\eps_2^2] & 
+\dots & \ebb[\eps_2\eps_n] \\ 
+\vdots &\vdots &\ddots & \vdots \\
+\ebb[\eps_n\eps_1] & \ebb[\eps_n\eps_2] & \dots & 
+\ebb[\eps_n^2] } \]
+Now note that since 
+$\ebb[\eps_i] = \ebb[\eps_j] = 0$:
+\[ \ebb[\eps_i\eps_j] = \ebb[(\eps_i - \ebb[\eps_i])
+(\eps_j - \ebb[\eps_j])] = \cov(\eps_i, \eps_j) = 0 \]
+when $i \neq j$ since $\eps_i$ and $\eps_j$
+are unrelated. \\
+On the other hand, we have:
+\[ \ebb[\eps_i^2] = \var(\eps_i) = \sigma^2 \]
+So to conclude:
+\[ \ebb[\bl{\eps} \bl{\eps}^T] 
+= \pmat{\sigma^2 & 0 & \dots & 0 \\ 
+0 & \sigma^2 & \dots & 0 \\ 
+\vdots &\vdots &\ddots & \vdots \\
+0 & 0 & \dots & \sigma^2 } = \sigma^2I \]
+Which concludes our proof. \\
+
+The variance of $\hat{\theta}$ is given by:
+\[ \var(\hat{\theta})
+= \ebb[(\hat{\theta} - \ebb[\hat{\theta}])
+(\hat{\theta} - \ebb[\hat{\theta}])^T]
+= \ebb[(\hat{\theta} - \theta^*)
+(\hat{\theta} - \theta^*)^T] \]
+Since it is a vector. \\
+Note that:
+\[ \hat{\theta} - \theta^*
+= \dfrac{1}{n}\hat{\Sigma}\inv 
+\Phi^T\bl{Y} - \theta^*
+= (\Phi^T\Phi)\inv \Phi^T
+(\Phi \theta^* + \bl{\eps}) - \theta^*
+= (\Phi^T\Phi)\inv \Phi^T \bl{\eps} \]
+So we have:
+\multiline{ \var(\hat{\theta})
+& = \ebb[((\Phi^T\Phi)\inv \Phi^T \bl{\eps})
+((\Phi^T\Phi)\inv \Phi^T \bl{\eps})^T] \\
+& = \ebb[(\Phi^T\Phi)\inv \Phi^T \bl{\eps}
+\bl{\eps}^T \Phi ((\Phi^T\Phi)\inv)^T ] \\
+& = (\Phi^T\Phi)\inv \Phi^T 
+\ebb[\bl{\eps}\bl{\eps}^T] 
+\Phi ((\Phi^T\Phi)\inv)^T \\
+& = (\Phi^T\Phi)\inv \Phi^T \sigma^2 I
+\Phi ((\Phi^T\Phi)\inv)^T \\
+& = \sigma^2 (\Phi^T\Phi)\inv (\Phi^T\Phi) 
+((\Phi^T\Phi)\inv)^T \\
+& = \sigma^2 ((\Phi^T\Phi)\inv)^T \\
+& = \sigma^2((\Phi^T\Phi)^T)\inv \\
+& = \sigma^2 (\Phi^T\Phi)\inv \\
+& = \dfrac{\sigma^2}{n}\hat{\Sigma}\inv }
+Whcih gives us that 
+$\var(\hat{\theta}) 
+= \dfrac{\sigma^2}{n}\hat{\Sigma}\inv$. \\
+
+Now we are finally ready to 
+calculate the excess risk of $\hat{\theta}$:
+\[ \ebb[\risk{\ell}(\hat{\theta})] 
+- \riskOptimal{\ell}
+= \| \ebb[\hat{\theta}] - \theta^*
+\|^2_{\hat{\Sigma}} +
+\ebb[\|\hat{\theta} - \ebb[\hat{\theta}] 
+\|^2_{\hat{\Sigma}}] \]
+The first term, the bias, is just $0$. \\
+The second term, the variance, we have to calculate.
+
+So we have:
+\[ \ebb[\|\hat{\theta} - \ebb[\hat{\theta}] 
+\|^2_{\hat{\Sigma}}]
+= \ang{\hat{\theta} - \ebb[\hat{\theta}],
+\hat{\Sigma}(\hat{\theta} - \ebb[\hat{\theta}])}
+= (\hat{\theta} - \ebb[\hat{\theta}])^T
+\hat{\Sigma}(\hat{\theta} - \ebb[\hat{\theta}]) \]
+Notice that this is just a scalar,
+and since the trace of a scalar is just the scalar
+itself, we can take the trace of this:
+\[ \tr\para{(\hat{\theta} - \ebb[\hat{\theta}])^T
+\hat{\Sigma}(\hat{\theta} - \ebb[\hat{\theta}])}\]
+However, the trace has a cyclical property,
+where:
+\[ \tr(ABC) = \tr(CAB) = \tr{BCA} \]
+So we can rewrite the expression:
+\multiline{\tr\para{\hat{\Sigma}
+(\hat{\theta} - \ebb[\hat{\theta}])
+(\hat{\theta} - \ebb[\hat{\theta}])^T}
+& = \tr\para{\hat{\Sigma} \var(\hat{\theta})}
+= \tr\para{\hat{\Sigma} 
+\dfrac{\sigma^2}{n}\hat{\Sigma}\inv} \\
+& = \tr\para{\dfrac{\sigma^2}{n}
+\hat{\Sigma}\hat{\Sigma}\inv}
+= \tr\para{\dfrac{\sigma^2}{n}I} \\
+& = \dfrac{\sigma^2 d}{n}}
+Note that $d$ showed up here
+since the trace is the sum of the diagonal
+elements, and $\Sigma$
+is a $d\times d$ matrix (the number of features). \\
+
+So the excess risk, or convergence rate,
+which tells us how good $\hat{\theta}$
+is compared to the optimal parameters $\theta^*$,
+is the value:
+\[ \dfrac{\sigma^2 d}{n} \]
+The smaller the convergence rate is,
+the better $\hat{\theta}$ is. \\
+
+This convergence rate implies that the
+the estimator $\hat{\theta}$
 is closer to being optimal if $n$ is large;
-if it is trained on more data, it will be more accurate. \\
+if it is trained on more data, 
+it will be more accurate. \\
 
 Also the more dimensions we have $d$,
-the harder it is to approach Baye's optimal 
-risk (we multiply by $d$). \\
-
+the worse the convergence is.
+We can think of this as the data becoming
+more complex to learn. \\
 If $d$ is large, then $n$ would need to be extremly
 large in order to compensate for that. \\
 This makes sense; the more complex our data is,
 the more of it we need to learn it. \\
 
-The empirical risk estimator is actually the best
+The empirical risk estimator
+$\hat{\theta}$ is actually the best
 one out of all unbiased estimators. \\
 
 Note that we imposed on $\riskOptimal{\ell}$
@@ -591,6 +837,10 @@ in the convergence rate, the bound depends less
 on the noise in the data than in non-regularized 
 risk. \\
 
+Note that we have an upper bound for the excess risk,
+at the end, not an equality, because of the way
+we bounded $\lambda$ (typo on power point). \\
+
 \newpage
 
 \subsection*{Statistical Analysis in the Random 
@@ -604,6 +854,54 @@ instead of the fixed design setting. \\
 where we have random datasets $\bl{X}$ and $\bl{Y}$. \\
 
 I will not do this section. \\
+
+\newpage
+
+\subsection*{LASSO}
+
+This section introduces a new regularizer. \\
+
+1-norm regularization penalizes small and large
+weights equally. \\
+
+We compare 2-norm and 1-norm regularization. \\
+Visually, it will be a square shape,
+while the other is more of a circle. \\
+
+It is not smooth, and does not have
+a closed form solution. \\
+We can still solve it, using iterative
+optimization algorithms. \\
+
+It is very sparse, meaning that it does
+feature selection, such that $\Phi \theta$
+will have many missing terms (less overhead). \\
+
+Many other (non-smooth) regularizers also
+induce sparsity. \\
+They belong to a whole family
+depending on norms used. \\
+
+Typo (first regularizer should be 
+$|x|^2 + |y|^2$). \\
+
+Infinity norm does not induce sparsity
+(looks like a square, but straight). \\
+
+Note that many of these "norms"
+when $p < 1$, it is not actually a norm
+mathematically (triangle inequality
+not satisfied). \\
+
+We now just give the convergence rate of
+several different norm regularizers,
+no proofs, just the value. \\
+
+Another type of sparsity besides
+norms, we have group sparsity.
+Then we just have a very high level
+description. \\
+They are also given by regularizers. \\
 
 \newpage
 
