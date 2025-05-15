@@ -184,7 +184,8 @@
 \newcommand{\indicator}{\mathbbm{1}}
 % Laplace transform
 \newcommand{\laplace}[1]{\mathcal{L}}
-
+% Epsilon shorthand
+\newcommand{\eps}{\varepsilon}
 
 %===============================================================================
 %================================== OPERATORS ==================================
@@ -217,6 +218,9 @@
 
 % Piece wise (use \\ between cases)
 \newcommand{\piecewise}[1]{\begin{cases} #1 \end{cases}}
+
+% Bold symbol shorthand
+\newcommand{\bl}{\boldsymbol}
 
 
 %===============================================================================
@@ -355,6 +359,19 @@
 %================================ LARGE OBJECTS ================================
 %===============================================================================
 
+% Multiple lines
+\newcommand{\multiline}[1]{
+\begin{align*}
+    #1
+\end{align*}
+}
+
+% Multiple lines with equation numbers
+\newcommand{\eqmultiline}[1]{
+\begin{align*}
+    #1
+\end{align*}
+}
 
 % Color
 \newcommand{\colorText}[2]{

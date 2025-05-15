@@ -252,9 +252,10 @@ the total amount of incident or exitant
 energy/radiance at all points $x$
 on some surface area $\dcal$ in all directions
 $\Omega$ (which is some subset of the sphere $\scal^2$,
-not necessarily the top hemisphere). 
+not necessarily the top hemisphere).  \\
 Recall that flux is the integral of a vector
-field over a surface multiplied by a dot product. \\ 
+field over a surface multiplied by the dot product
+with the normal of the surface. \\ 
 
 So we have the exitant flux:
 \[ \Phi^{\to}(\dcal, \Omega)
@@ -468,21 +469,21 @@ incidant directions $\omega_i$. \\
 Here, $L_o$ is the vector of outgoing radiances 
 in several directions $\omega_o^j$ from point $x$:
 \[ L_o = \bmat{L_o(x, \omega_o^1) \\ L_o(x, \omega_o^2) \\
-\vdots \\ L_o(x, \omega_o^d)} \]
+\vdots \\ L_o(x, \omega_o^n)} \]
 Here, $L_e$ is the vector of emitted radiance 
 in several directions $\omega_o^j$ from point $x$:
 \[ L_e = \bmat{L_e(x, \omega_o^1) \\ L_e(x, \omega_o^2) \\
-\vdots \\ L_o(x, \omega_o^d)} \]
+\vdots \\ L_o(x, \omega_o^n)} \]
 As for $L_i$, it is the vector of incidant radiances
-from several directions $w_i^k$:
+from several directions $w_i^j$:
 \[ L_i = \bmat{L_i(x, \omega_i^1) \\ L_i(x, \omega_i^2) \\
 \vdots \\ L_i(x, \omega_i^n)} \]
-Finally, we have the matrix $T$ 
-of dimension $d \times n$, which is the approximation
+Finally, we have the square matrix $T$ 
+of dimension $n \times n$, which is the approximation
 of the intergal kernel,
 and basically encodes the cosine of the angle
 and the BRDF for each sample point $\omega_i^k$
-and input $\omega_o^j$. \\
+and $\omega_o^j$. \\
 
 So, at some point $x$, the light output
 in several directions $\omega_o^j$,
@@ -490,6 +491,7 @@ is given by
 \[ L_o = L_e + T \cdot L_i \]
 As we can recall, we can write $L_i$
 as an outgoing radiance, so:
+\[ L_o = L_e + T \cdot L_o \]
 \[ L_o - T \cdot L_o = L_e \]
 \[ (I - T)L_o = L_e \]
 \[ L_o = (I - T)\inv L_e \]
@@ -512,7 +514,7 @@ For numbers, a geometric series:
 converges if and only if $|q| < 1$. \\
 
 Likewise for a matrix, the sum
-\[ \para{\sum_{k = 0}^{\infty} T^k} \]
+\[ \sum_{k = 0}^{\infty} T^k \]
 converges if and only if the norm of the matrix
 $\|T\| < 1$. \\
 
@@ -520,12 +522,62 @@ Here, the sum will converge because $\|T\| < 1$. \\
 But more pertinitly, it is because of the conservation
 of enegry; as light bounces around,
 it loses more an more energy, which
-means that the terms $T L_e$ must be smaller than $L_e$,
-and the term $T^2 L_e$ is even smaller...
-Which means that the sum converges. \\
+means that the norm of the term $\|T L_e\|$
+must be smaller than $\|L_e\|$,
+and the norm of the term $\|T^2 L_e\|$ is even smaller... \\
+This means that the sum converges.
 Otherwise, the scene would keep getting more and more
 light each bounce, which would never abate,
 and it would just be awash with infinite light. \\
+
+In fact, we mentioned earlier that each bounce of
+the light corresponded to one regression in the rendering
+equation, rewritten recursively:
+\[ L_{o}(x, \omega_o)
+= L_{e}(x, \omega_o)
++ \int_\Omega L_o(r(x, \omega_i), -\omega_i)  \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\omega_i \]
+So intuitively, each recursion here should correspond
+to one term in the Neumann expansion.
+We can show that this is the case. \\
+Since we have the exitant light 
+$L_o(r(x, \omega_i), -\omega_i)$
+in the integral, we can replace it
+by the rendering equation.
+We have:
+\[ L_o(r(x, \omega_i), -\omega_i)
+= L_{e}(r(x, \omega_i), -\omega_i)
++ \int_\Omega L_i(r(x, \omega_i), \omega_j) \cdot
+f(x, \omega_j, -\omega_i) \cdot
+(\omega_j \cdot n) \; d\omega_j \]
+But we now have another term
+$L_o(r(x, \omega_i), \omega_j)$
+which we can also write as an outgoing light,
+which means it will also recurse. \\
+We can now write the rendering equation as such:
+\multiline{
+L_{o}(x, \omega_o)
+& = L_{e}(x, \omega_o) \\
+& + \int_\Omega \bigg( L_e(r(x, \omega_i), -\omega_i)
++ f(x, \omega_i, \omega_o) \cdot 
+(\omega_i \cdot n) \\
+& + \int_\Omega 
+\bigg( L_e(r(r(x, \omega_i), \omega_j), -\omega_j) 
++ f(x, \omega_j, -\omega_i) \cdot 
+(\omega_j \cdot n) \\
+& + \int_\Omega \bigg( 
+L_e(r(r(r(x, \omega_i), \omega_j), \omega_k), -\omega_k)
++ f(x, \omega_k, -\omega_j) \cdot 
+(\omega_k \cdot n) \\ 
+& + \int_\Omega \dots \bigg)
+\; d\omega_k \bigg) \; d\omega_j \bigg) \; d\omega_i }
+If we were to discretize these integrals,
+and then write them as a matrix multiplication,
+we would get:
+\[ L_o = L_e + T( L_e + T( L_e + T (L_e + \dots))) \]
+\[ L_o = L_e + TL_e + T^2L_e + T^3L_e \dots \]
+Which is the Neumann series we derived earlier. \\
 
 \newpage
 

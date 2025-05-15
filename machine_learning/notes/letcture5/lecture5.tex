@@ -65,22 +65,32 @@ $\theta_d$, is just a shift in this case;
 a $b$ offset,
 turning the function into an affine function
 (since it now has a simple shift element constant). \\
+So if we have:
+\[ \varphi(x) = \pmat{x \\ 1} \qquad
+\theta = \pmat{w \\ b} \] 
+Then $f_\theta(x) = \ang{x, w} + b$. \\
 
 One example of a $\varphi(x)$ is:
 \[ \varphi(x) = (1, x, x^2, x^3, \dots, x^{d-1})^T \]
 This gives us a polynomial prediction function:
-\[ f\theta = \sumof{i=1}{d}\theta_i x^i \]
+\[ f\theta(x) = \sumof{i=1}{d}\theta_i x^i \]
 This is a monomial basis, where the function
 is polynomial in terms of $x$,
 but linear or affine in terms of $\theta$. \\
 
-There is also a fourrier basis.
+If we define $\xcal = [0, 2\pi]$,
+then we can also have a fourrier basis:
+\[ f_\theta(x)
+= \sum_{j = 1}^{m} \theta_{2j-1}\sin(jx) 
++ \theta_{2j}\cos(jx) \]
+Where $\varphi(x) = (\sin(x), \cos(x),
+\sin(2x), \cos(2x), \sin(3x), \dots)$. \\
 
 We should be careful not to use a basis with too
 high a dimension as it would increase the number
 of features by a lot. \\
 
-We are using squared loss; we can think
+When we are using squared loss; we can think
 of the result as finding the values of $\theta$
 that averages out over all $y$ values.
 This makes sense when you look at the
@@ -88,45 +98,52 @@ empirical risk and what it calculates. \\
 
 Note that we can write $\riskEmpirical{\ell}{n}
 (f_\theta)$ as $\riskEmpirical{\ell}{n}
-(\theta)$. \\
+(\theta)$,
+since $\theta$ is the only changing thing
+(the one thing we optimize in $f_\theta$). \\
 
 We can rewrite risk in vector and matrix
 notation. \\
 We define $\Phi$ to be the matrix
 where each row is $\varphi(x_i)^T$
-of the $\nth{i}$ input in the dataset $x_i$. \\
-So we get $\Phi \theta - \boldsymbol{y}$
-where $\boldsymbol{y}$ is the vector of all
+of the $\nth{i}$ input in the dataset $x_i$:
+\[ \Phi = \pmat{
+\varphi_1(x_1) & \varphi_1(x_2) & \dots & \varphi_1(x_n) \\
+\varphi_2(x_1) & \varphi_2(x_2) & \dots & \varphi_2(x_n) \\
+\vdots & \vdots & \ddots & \vdots \\
+\varphi_d(x_1) & \varphi_d(x_2) & \dots & \varphi_d(x_n)} \]
+So we get $\Phi \theta - \bl{y}$
+where $\bl{y}$ is the vector of all
 outputs $(y_1, y_2, \dots y_n)^T$. \\
 Which means that the risk would look like:
-\[ \dfrac{1}{n}\|\Phi \theta - \boldsymbol{y}\|^2 \]
+\[ \dfrac{1}{n}\|\Phi \theta - \bl{y}\|^2 \]
 Which makes it clear we are finding the $\theta$
 that minimizes the distance expressed above. \\
 
 Now how do we solve:
-\[ \dfrac{1}{n}\|\Phi \theta - \boldsymbol{y}\|^2 = 0 \]
+\[ \dfrac{1}{n}\|\Phi \theta - \bl{y}\|^2 = 0 \]
 We know that we can just differentiate and finding
 the gradient of the expression and setting
 it to $0$. \\
 We know that:
 \[ \nabla \riskEmpirical{\ell}{n}(f_{\theta}) 
 = \nabla \dfrac{1}{n}
-\|\Phi \theta - \boldsymbol{y}\|^2 
-= \dfrac{2}{n}\Phi^T(\Phi \theta - \boldsymbol{y}) \]
+\|\Phi \theta - \bl{y}\|^2 
+= \dfrac{2}{n}\Phi^T(\Phi \theta - \bl{y}) \]
 So setting it to $0$ we get:
-\[ \theta = (\Phi^T\Phi)^{-1} \Phi^T 
-\boldsymbol{y} \]
-This $\theta$ is the set of arguments
-that minimizes the empitical risk. \\
+\[ \hat{\theta} = (\Phi^T\Phi)^{-1} \Phi^T 
+\bl{y} \]
+This $\hat{\theta}$ is the set of arguments
+that minimizes the empitical risk.
+It is called the ordinary least square
+estimator.
+It is also called the empirical risk minimizer. \\
 Note that this only works if $\Phi$
 is full column rank to begin with;
 that is, all its columns must linearly
 independent. \\
 We call $(\Phi^T\Phi)^{-1} \Phi^T$
 the pseudo inverse. \\
-
-Note that this is just the normal form
-from the Numerical Algorithms course. \\
 
 So if $\Phi$ has full column rank,
 we have a unique closed form solution. \\
@@ -139,8 +156,11 @@ if all the columns in $\Phi$
 are linearly independent. \\
 The full proof is on the slides. \\
 
-Note that $\dfrac{1}{n}\Phi^T\Phi$ is the
-empirical covariance matrix (of what?).
+Note that 
+\[ \dfrac{1}{n}\Phi^T\Phi \] 
+is the empirical covariance matrix of the feature
+vectors $(\varphi_1(x_i), \varphi_2(x_i),
+\dots, \varphi_d(x_i))^T$. \\
 
 Instead of using matrix and vector gradients,
 we can try finding the partial derivatives
@@ -171,21 +191,21 @@ Sometimes imposing regularization on function
 or parameters is not the same. \\
 
 Putting everything together, we have Ridge Regression:
-\[ \min_{\theta} = \nabla \dfrac{1}{n}
-\|\Phi \theta - \boldsymbol{y}\|^2 
+\[ \min_{\theta} = \dfrac{1}{n}
+\|\Phi \theta - \bl{y}\|^2 
 + \lambda \|\theta\|^2 \]
 We can also minimize this,
 and it does have a unique closed form solution that
 we can find analytically:
 \[ \hat{\theta}_\lambda = 
-(n\lambda I + \Phi^T\Phi)\inv \Phi^T\boldsymbol{y} \]
+(n\lambda I + \Phi^T\Phi)\inv \Phi^T\bl{y} \]
 Note that $n\lambda I + \Phi^T\Phi$ is always
 invertible, no need to impose any column rank
 rules on $\Phi$. \\
 The proof comes from the fact that:
 \[ \left\| \pmat{x \\ y} \right\|^2 
 = \|x^2\| + \|y^2\| \]
-The full proof is on the slides. \\
+Which we will see used later. \\
 
 Note that we can take our regularized
 Ridge Regression risk, and rewrite as an 
@@ -204,6 +224,38 @@ which is always invertible. \\
 That is why Ridge Regression always has a
 solution regardless of $\Phi$'s column rank. \\
 
+The way it works is that we have:
+\[ \dfrac{1}{n}
+\|\Phi \theta - \bl{y}\|^2 
++ \lambda \|\theta\|^2 \]
+First we can enter the coefficients into the norm:
+\[ \left\| \sqrt{\dfrac{1}{n}} (\Phi \theta 
+- \bl{y}) \right\|^2
++ \| \sqrt{\lambda} \theta \|^2  \]
+Using the fact we mentioned above, we can
+rewrite this as a single norm:
+\[ \left\| \pmat{\sqrt{\dfrac{1}{n}} 
+(\Phi \theta - \bl{y})
+\vspace{10pt} \\ \sqrt{\lambda} \theta } \right\|^2
+= \left\| \pmat{\sqrt{\dfrac{1}{n}} \Phi
+\vspace{10pt} \\ \sqrt{\lambda}I} \theta
+- \pmat{\sqrt{\dfrac{1}{n}} \bl{y} 
+\vspace{10pt} \\ 0} \right\|^2 \]
+Finally, we can take out $\sqrt{\dfrac{1}{n}}$
+from inside the norm:
+\[ \dfrac{1}{n} \left\| 
+\pmat{\Phi \vspace{5pt} \\ \sqrt{n\lambda}I} \theta
+- \pmat{\bl{y} \vspace{5pt} \\ 0} \right\|^2 \]
+Which is just another normal equation we can solve,
+highlighting the fact that this is just
+some unregularized least square problem with:
+\[ \tilde{\Phi} = 
+\pmat{\Phi \vspace{5pt} \\ \sqrt{\lambda}I}
+\qquad \AND \qquad 
+\bl{\tilde{y}} = 
+\pmat{\bl{y} \vspace{5pt} \\ 0} \]
+As the new feature matrix and output vector. \\
+
 \newpage
 
 \subsection*{Statistical Analysis of Least Square
@@ -217,109 +269,341 @@ So we will basically measure how close we
 can get to the theoretical best output. \\
 
 We have two settings. \\
-In the first one, we assume we have a random
-data set. \\
-In the second one we have a fixed dataset that
-we want to analyze and try to best predict the 
-outputs of these fixed inputs. \\
-This is like the difference between
-$\riskEmpirical{\ell}{S}$ 
-and $\riskEmpirical{\ell}{n}$
-where $S$ is the random dataset variable. \\
+\begin{enumerate}
+    \item 
+    \textbf{Random design:} 
+    We assume we have a random
+    input and output data set.
+    \item 
+    \textbf{Fixed design:} 
+    We assume we have a fixed input dataset that
+    we want to analyze and try to best predict the 
+    outputs of these fixed inputs. 
+\end{enumerate}
 
 We will make our life a little easier and
-focus on the fixed design setting. \\
+focus on the fixed design setting.
+Note that while the input is fixed,
+the output is still a random dataset $\bl{Y}$. \\
+
+The main goal of this section is to
+find Baye's optimal risk for our hypothesis
+$\ffrak$ class. \\
+We want to compare the risk of some
+set of parameters $\theta$ we have to
+the optimal risk we can get
+for our hypothesis class (given a fixed
+input data). \\
+That way, we can compare Baye's optimal risk
+with that of some chosen parameter $\theta$,
+which would then give us the rate of convergence
+(how far off we are),
+which is only possible if Baye's optimal risk
+was for the same family of learning rules. \\
+That means that we will need to find
+Baye's optimal risk for the linear least square
+problem, which means it will be given
+by a set of optimal parameters $\theta^*$. \\
 
 We can calculate the true (non-empirical)
 risk:
 \[ \risk{\ell}{}(f_\theta) = 
-\dfrac{1}{n}\ebb[\|\Phi \theta - \boldsymbol{Y}\|] \]
-Where $\boldsymbol{Y}$
+\dfrac{1}{n}\ebb[\|\Phi \theta - \bl{Y}\|^2] \]
+Where $\bl{Y}$
 is the random variable of the vector of outputs:
-\[ \boldsymbol{Y} = (Y_1,Y_2, \dots, Y_n)^T \]
-where each $\boldsymbol{Y_i}$
+\[ \bl{Y} = (Y_1,Y_2, \dots, Y_n)^T \]
+where each $\bl{Y_i}$
 is the random variable of one output in the dataset. \\
+As mentioned, the goal of this section
+is to compare this risk with the optimal risk
+(restricted to our linear hypothesis class). \\
 
 We assume that $\Phi^T\Phi$ is invertible. \\
 
-We will also assume that the optimal classifier
-belongs to our hypothesis class $\ffrak$,
-and impose that. \\
-In other words, we assume that
-$\boldsymbol{Y} = \Phi \theta^* + \varepsilon$
-where $\varepsilon$ is some random noise
-with a known mean and variance (look at slides). \\
+We will write $\hat{\Sigma} = \dfrac{1}{n}\Phi^T\Phi$
+as a shorthand (the covariance matrix of the feature
+vectors). This is a deterministic quantity since we
+fixed the input data. \\
 
-Note that $\varepsilon$ is also a vector. \\
+Now to find Baye's optimal risk,
+restricted to our linear hypothesis class,
+we will first assume (and then prove)
+that the optimal vector of parameters $\theta^*$,
+is given by:
+\[ \bl{Y} = \Phi \theta^* + \bl{\eps} \]
+where $\bl{\eps}$ is some random noise vector,
+where for each input $Y_i$, 
+we've got some noise $\varepsilon_i$. \\
+We assume thatfor all $i$,
+that is, $\ebb[\varepsilon_i] = 0$,
+and we take $\sigma^2 = \ebb[\varepsilon_i^2]$
+to be the variance of any one random noise variable. \\
 
-We can use this fact to rewrite the expectation
-in terms of the noise $\theta^*$ and the noise 
-$\varepsilon$. \\
+At first glance, this makes intuitive sense;
+the optimal set of parameters $\theta^*$
+is the one such that $\Phi \theta^*$
+returns the correct set of labels,
+which are given by the random dataset
+of output labels $\bl{Y}$.
+Of course, in non-ideal settings,
+like the real world, we would also have noise,
+which is where the randomness of $\bl{Y}$
+comes from ($\Phi$ and $\theta^*$ are fixed). \\
+But we still need to prove it. \\
 
-We can prove that if 
-$\boldsymbol{Y} = \Phi \theta^* + \varepsilon$,
-then this $\theta^*$ gives us Baye's optimal
-risk and classifier. \\
+Recall that in the case of square loss
+$\ell(z, y) = \|z - y\|^2$,
+Baye's optimal predictor would output
+the mean of $y$, which is just the expected
+value when we have a random $\bl{Y}$. \\
+We can do that here and rewrite $\bl{Y}$
+as $\Phi \theta^* + \bl{\eps}$:
+\[ f_{\theta}^*(x_i)
+= \ebb[\bl{Y} \mid X = x_i] \]
+However, because $X$, the input, is fixed,
+as not random, we can get rid of the condition:
+\[ \ebb[\bl{Y}] = \ebb[\Phi \theta^* + \bl{\eps}]
+= \Phi \theta^* + \ebb[\bl{\eps}] = \Phi \theta^* 
+= f_{\theta^*}(x_i) \]
+So this proves that Baye's 
+optimal predictor $f_{\theta}^*(x_i)$
+is equal to $f_{\theta^*}(x_i)$,
+which proves that $\theta^*$
+is the optimal set of parameters. \\
 
-The next part we compare Baye's risk with
-any $\theta$ to the optimal $\theta^*$
-that we defined above. \\
-If we calculate some $\tilde{\theta}$
-using the random output $\boldsymbol{Y}$,
-we can calculate the expected risk
-of this $\tilde{\theta}$,
-and comapre that to Baye's risk. \\
-We can decompose this risk into two parts,
-the bias and the variance,
-which is basically the average performance
-of these parameters that we found. \\
+We can also recalculate the risk:
+\[ \risk{\ell}{}(\theta) = 
+\dfrac{1}{n}\ebb[\|\Phi \theta - \bl{Y}\|^2]
+= \dfrac{1}{n}\ebb[\|\Phi \theta 
+- (\Phi \theta^* + \bl{\eps}) \|^2]
+= \dfrac{1}{n}\ebb[\|\Phi (\theta - \theta^*) 
+- \bl{\eps} \|^2] \]
+This time with respect to the randomness of 
+$\bl{\eps}$ instead of that of $\bl{Y}$,
+and in terms of the parameters $\theta^*$
+we defined. \\
 
-The bias is teh distance between $\tilde{\theta}$
-and $\theta^*$. \\
-A low bias means that we have a too simple
+Now that we know that $\theta^*$ is the
+optimal set of parameters, it means that:
+\[ \riskOptimal{\ell} = \risk{\ell}(\theta^*) \]
+And we know that since:
+\[ \risk{\ell}{}(\theta) =
+\dfrac{1}{n}\ebb[\|\Phi (\theta - \theta^*) 
+- \bl{\eps} \|^2] \]
+This means that:
+\[ \risk{\ell}{}(\theta^*) =
+\dfrac{1}{n}\ebb[\|\Phi (\theta^* - \theta^*) 
+- \bl{\eps} \|^2] = \dfrac{1}{n}\ebb[\|\bl{\eps}\|^2]
+= \dfrac{1}{n}\ebb\brac{\sum_{i=1}^{n}\eps_i^2} \]
+Using the linearity of the expected value:
+\[ \dfrac{1}{n}\sum_{i=1}^{n} \ebb[\eps_i^2]
+= \dfrac{1}{n}\sum_{i=1}^{n} \sigma^2
+= \dfrac{1}{n} n\sigma^2 = \sigma^2 \]
+So $\riskOptimal{\ell} = \sigma^2$,
+the variance of each random noise. \\
+
+Now we can compare
+the risk of some parameter $\theta$
+to Baye's optimal risk (restricted
+to the same hypothesis class of
+linear least square):
+\[ \risk{\ell}(\theta) - \riskOptimal{\ell}
+= \ang{\theta - \theta^*, 
+\hat{\Sigma}(\theta - \theta^*) }
+= \|\theta - \theta^* \|_{\hat{\Sigma}}^2 \]
+This gives us how far off our set
+of parameters are from being optimal. \\
+
+We can prove that the excess is
+what we said it was by calculating
+the risk $\risk{\ell}(\theta)$:
+\[ \risk{\ell}(\theta) =
+\dfrac{1}{n}\ebb[\|\Phi (\theta - \theta^*) 
+- \bl{\eps} \|^2]
+= \dfrac{1}{n}\ebb[\|\Phi (\theta - \theta^*) \|^2
++ \|\bl{\eps} \|^2 
+- 2\ang{\theta - \theta^*, \bl{\eps}}] \]
+Then using the linearity of the expected value:
+\[ \dfrac{1}{n} (\|\Phi (\theta - \theta^*) \|^2
++ \ebb[\|\bl{\eps} \|^2 ]
+- 2\ebb[\ang{\theta - \theta^*, \bl{\eps}}])
+= \dfrac{1}{n} (\|\Phi (\theta - \theta^*) \|^2
++ \sigma^2 - 
+2\ang{\theta - \theta^*, \ebb[\bl{\eps}]}) \]
+The last term is just $0$, so:
+\[ \dfrac{1}{n} \|\Phi (\theta - \theta^*) \|^2
++ \sigma^2
+= \ang{\theta - \theta^*,
+\dfrac{1}{n}\Phi^T\Phi(\theta - \theta^*)}
++ \sigma^2 \]
+When we subtract the two risks,
+the variance vanishes, and we are left
+with the excess risk we described above:
+\[ \ang{\theta - \theta^*,
+\dfrac{1}{n}\Phi^T\Phi(\theta - \theta^*)}
+= \ang{\theta - \theta^*,
+\hat{\Sigma}(\theta - \theta^*)} \]
+Which completes the proof. \\
+
+However, as we know, when derive a set
+of parameters $\tilde{\theta}$ in the process
+of fitting the data, we usually use the output
+(such was the case when we calculated the
+optimal estimator $\hat{\theta}$). \\
+So in the case where our estimator depends
+on the randomness of $\bl{Y}$,
+we would have to use the expected value
+of the risk, in order to get the convergence
+rate, and we have:
+\[ \ebb[\risk{\ell}(\tilde{\theta})] 
+- \riskOptimal{\ell} = \underbrace{
+\| \ebb[\tilde{\theta}] - \theta^*
+\|^2_{\hat{\Sigma}}}_{\text{Bias}}
++ \underbrace{
+\ebb[\|\tilde{\theta} - \ebb[\tilde{\theta}] 
+\|^2_{\hat{\Sigma}}]}_{\text{Variance}} \]
+We will prove this later. \\
+
+First, note that the bias is the 
+distance between $\tilde{\theta}$
+and $\theta^*$.
+We have $\ebb[\tilde{\theta}]$
+because it is random (depends on $\bl{Y}$),
+meaning we need to put an expected value
+around it to get its mean value. \\
+A high bias means that we have too simple a
 learning rule, and we have an underfit.\\
 
-The variance measures the variation between them. \\
+The variance is pretty self explanatory;
+it's just the formula for the variance
+of $\tilde{\theta}$, the random variable.
 If it's too high, it means we have overfitting. \\
 
-The slides have a proof of this decomposition. \\
+Now to show the value is true:
+\[ \ebb[\risk{\ell}(\tilde{\theta})] 
+- \riskOptimal{\ell}
+= \ebb[\risk{\ell}(\tilde{\theta}) - \riskOptimal{\ell}] \]
+Using the result we got earlier, we have:
+\[ \ebb[\|\tilde{\theta} - \theta^* \|_{\hat{\Sigma}}^2] \]
+We can now add and subtract $\ebb[\tilde{\theta}]$:
+\[\ebb[\|\tilde{\theta} - \ebb[\tilde{\theta}]
+- \ebb[\tilde{\theta}] + \theta^* \|_{\hat{\Sigma}}^2]
+= \ebb[\|\ebb[\tilde{\theta}] - \theta^* \|_{\hat{\Sigma}}^2]
+-\ebb[\|\tilde{\theta} - \ebb[\tilde{\theta}] \|_{\hat{\Sigma}}^2] \]
+Note that in $\ebb[\|\ebb[\tilde{\theta}] 
+- \theta^* \|_{\hat{\Sigma}}^2]$,
+both $\theta^*$ and $\ebb[\tilde{\theta}]$
+are deterministic ($\tilde{\theta}$ is random,
+but it already has an expected value around it
+$\ebb[\tilde{\theta}]$),
+so we can drop the outer expected value, getting:
+\[ \|\ebb[\tilde{\theta}] - \theta^* \|_{\hat{\Sigma}}^2
+-\ebb[\|\tilde{\theta} - \ebb[\tilde{\theta}] \|_{\hat{\Sigma}}^2 ] \]
+Which completest the proof of the decomposition. \\
 
-We now propose a linear least squares
-estimator 
-$\hat{\theta} = \dfrac{1}{n}\Sigma\inv \Phi^T 
-\boldsymbol{Y}$. \\
-This is the formula we saw before. \\
-It is unbiased, and often gives us:
+Now that we've given formulas that calculate
+the convergence rate or excess risk
+of any parameters we have (random or not),
+what parameters can we evaluate? \\
+
+One very natural choice that we expect
+to do well is linear least squares
+estimator:
+\[ \hat{\theta} = \dfrac{1}{n}\Sigma\inv \Phi^T 
+\bl{Y} \]
+Which we got by minimizing the empirical risk
+in the last section. \\
+
+First notice that it is unbiased, meaning that:
 \[ \ebb[\hat{\theta}] = \theta^* \]
-So it often gives us the best prameters. \\
-Notice that unbiased means the bias
-term we saw earlier would go to $0$
-(so no bias). \\
-
+What this means is that the bias term in
+the excess risk decomposition will be $0$. \\
 So the only term left is the variance. \\
-The difference between expected risk and
-Baye's risk is given by the variance formula
-that is basically our convergence rate
-(how far off we are). \\
+
+We can prove that $\ebb[\hat{\theta}] = \theta^*$.
+Note that:
+\[  \]
+Which concludes the proof.
+
+This means that (Talk here about variance).
+
+We can move trace inside the expected value because
+trace is linear, like the inner product (we
+can also talk about it here). \\
 
 Note that the formula on the slides for the
-convergence rate tells us that we get closer
-to Baye's optimal risk with more data
-(we divide by $n$). \\
+convergence rate tells us that the estimator $\hat{\theta}$
+is closer to being optimal if $n$ is large;
+if it is trained on more data, it will be more accurate. \\
 
 Also the more dimensions we have $d$,
 the harder it is to approach Baye's optimal 
 risk (we multiply by $d$). \\
 
-NOTE: we use expected risk for a value
-if that value depends on a random variable,
-which is why we do that for $\tilde{\theta}$
-and $\hat{\theta}$. \\
+If $d$ is large, then $n$ would need to be extremly
+large in order to compensate for that. \\
+This makes sense; the more complex our data is,
+the more of it we need to learn it. \\
 
-Note that this is best estimator among all
-unbiased estimators. \\
+The empirical risk estimator is actually the best
+one out of all unbiased estimators. \\
 
+Note that we imposed on $\riskOptimal{\ell}$
+that it be the optiaml risk for functions
+from our linear hypothesis class. \\
+We also assumed that we had a loss $\ell$
+that is the quadratic, or squared loss. \\
+All of the statistical analysis that we did 
+here, including the convergence rate we got,
+only apply if our assumptions hold. \\
 
+\newpage
+
+\subsection*{Statistical Analysis of Ridge Regression}
+
+This part is the same as last part, but this time
+with ridge regression. \\
+
+Recall that ridge regression is just
+a linear least square problem.
+
+We have our ridge regression estimator 
+$\hat{\theta}_\lambda$,
+which also depends on the output
+(which is random in this setting). \\
+
+There may be the a $\lambda$ sweet spot,
+since it creates a tradeoff between bias
+and variance. \\
+
+The excess risk will give us the best
+tradeoff that we can find. \\
+
+Once we have the optimal value of $\lambda$,
+we can use it to write the convergence
+rate again, but better. \\
+
+Note that $d$, the number of dimensions of the feature
+vector, does not affect the convergence rate. \\
+
+Because we have $\sigma$ instead of $\sigma^2$
+in the convergence rate, the bound depends less
+on the noise in the data than in non-regularized 
+risk. \\
+
+\newpage
+
+\subsection*{Statistical Analysis in the Random 
+Design Setting}
+
+This is an optional section. \\
+
+We can repeat the same steps we did in the last
+two sections, but in the random design setting
+instead of the fixed design setting. \\
+where we have random datasets $\bl{X}$ and $\bl{Y}$. \\
+
+I will not do this section. \\
 
 \newpage
 
