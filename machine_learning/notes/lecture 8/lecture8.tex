@@ -1,0 +1,211 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture VIII
+}
+\date{2025-05-26}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Linear Classiciation}
+
+\subsection*{Support Vector Machine}
+
+The best linear seperator is going to be the
+one that maximizes the distance between the
+seperator and the data.
+We can think of it as the seperator that allows
+the fattest plane in between the data. \\
+
+The idea behind SVM is that we want
+to find a linear seperator that maximizes
+the margin between the data and the seperator. \\
+
+What we mean by margin is the distance
+between the seperator and the closest
+data point.
+We can write the margin between the seperator $H$ 
+and the dataset $S$ as:
+\[ m_S(H) = \text{dist}(S, H) \]
+This is the same as the minimal distance
+between a point $x_i$ in the dataset and the 
+seperator:
+\[ m_S(H) = \min_i \text{dist}(x_i, H) \]
+And to find the distance between $x_i$
+and $H$, we just find the distance between 
+$x_i$ and the closest point to it on $H$,
+which we can call $z$:
+\[ m_S(H) = \min_i (\min_{z \in H} \text{dist}(x_i, z))
+= \min_i (\min_{z \in H} \text{dist}\|z - x_i\|) \]
+Note that $z$, the closest point to some $x_i$
+on $H$, is the orthogonal projection. \\
+
+The goal of SVM is to maximize the size of the
+margin:
+\[ \max_H m_S(H) \]
+such that $H$ correctly classified the
+dataset of course
+(we obviously don't consider linear seperators
+that don't correctly classify the training data). \\
+The reason behind this is that the larger the
+margin is, the more likely the classification is
+to generalize; since the margin is so large,
+new points that belong to the clusters are very
+likely to be classified correctly. \\
+
+Another very nice thing about SVM is that if we add
+points to the dataset that are far from the seperator,
+they won't affect the margin, and nothing must be
+recalculated. \\
+The points that won't change the seperator 
+are the points that lie outside the margin,
+for obvious reasons. \\
+
+Another point is this; we are maximizing the margin,
+and the margin is the minimal distance, so we have the
+maximal minimal value. This implies that the margin
+will be in the middle, equidistant from both clusters. \\
+Why? Assume that the line is closer to one cluster;
+the minimal margin is the distance to the closest point,
+so the margin is the distance to the closer dataset.
+So in order to maximize the margin,
+it is always better for the margin to be equidistant
+to the clusters,
+since we will always take the minimal distance. \\
+
+Now the dataset may not be linearly seperable;
+this gives rise to a hard and soft margin. \\
+
+In a hard margin scenario, where
+$S$ is linearly seperable, we can just
+mazimize the margin of all seperators $H$
+that correctly seperate the dataset. \\
+
+Now suppose we have a seperator:
+\[ H = \{ x \in \xcal \mid \ang{w, x} + b = 0 \} \]
+We say it has a canonical form with respect
+to a datset $S$ if the following holds:
+\[ \min_i |\ang{w, x_i} + b \; |
+= \min_i y_i(\ang{w, x_i} + b) = 1 \]
+Note that the minimum being $1$ just means
+that all points are classified correctly,
+since the product of $y_i$
+and the prediction is $1$ at the least. \\
+
+So why do we need the canonical form?
+We can show that if $H$ is canonical
+with respect to $S$, then:
+\[ m_S(H) = \dfrac{1}{\|w\|} \]
+This makes the margin calculation this simple;
+no need to optimize or find the double minimum anymore. \\
+
+So for SVM, with a hard margin, we just want to
+optimize:
+\[ \max_{w, b} \dfrac{1}{\|w\|} \quad \text{such that}
+\quad y_i(\ang{w, x_i} + b) \geq 1 \;\; \forall i \]
+(since we want it to be a correct classification
+to begin with). \\
+
+We can also just minimize the denominator:
+\[ \min_{w, b} \dfrac{1}{2}\|w\|^2 \quad \text{such that}
+\quad y_i(\ang{w, x_i} + b) \geq 1 \;\; \forall i \]
+we used the squared norm since it is easier to 
+optimize and gives the same result
+(since it is monotonically increasing),
+and the $\dfrac{1}{2}$ doesn't affect the optimization
+and is there to cancel out the coefficient when we
+differentiate. \\
+
+This does not have a closed form solution,
+and needs some numerical method. \\
+
+But what happens if the dataset is not linearly
+seperable, that is, the soft margin case? \\
+What we do is to relax the constraint:
+\[ y_i(\ang{w, x_i} + b) \geq 1 \]
+We included this in the hard margin-case as a constraint
+to ensure we only consider seperators that actually
+seperate the data. \\
+We have to relax this constraint since it
+is not achievable in the soft margin case.
+What we do instead is try to get as close as possible
+to meeting the constraint, that is, introduce a cost
+to not meeting it. \\
+
+The penalty is of course done using a loss function,
+specifically a margin-based loss with input:
+\[ y_i(\ang{w, x_i} + b) = y_ig_\theta(x_i) \]
+We can use any loss we want; the choice of 
+loss function tells us how we penalize
+breaking the constraint. \\
+
+Support Vector Machine, or SVM, uses 
+the hinge loss:
+\[ \Phi(t) = \max(0, 1-t) \]
+Basically, it assigns no cost to a correct
+classification, and a cost that grows the wronger
+the classification is. \\
+
+SVM also uses quadratic L2 regularization. \\
+So finding an optimal soft margin can be achieved
+by minimizing the empirical risk with the hinge loss
+and the regularization:
+\[ \min_{w, b} \dfrac{1}{n}
+\sum_{i=1}^n \max(0, y_i(\ang{w, x_i} + b))
++ \lambda\|w\|^2 \]
+This classifier will be wrong in some classifications,
+but will attempt to maximize the margin similar
+to the hard margin case. \\
+Note that we have $\|w\|^2$,
+not $\|\theta\|^2$,
+which is what we had in the logistic regression problem. \\
+
+Note that the soft-margin case also doesn't
+have a closed form solution. \\
+
+Note that if we have data that is not linearly seperable,
+we can actually define a feature vector that increases
+the dimensionality, and allows it to be linearly seperable
+in a higher dimension (one such feature was in the
+exercises). \\
+So we can do that instead of relaxing the constraint
+and using a soft margin. \\
+
+\newpage
+
+\subsection*{Conclusion}
+
+So to conclude, teh advantage of LDA is
+that despit it being worse performing than the others,
+is it the only optimization problem
+with a closed form solution. \\
+
+LDA is also the only one that doesn't have a margin-based
+loss. \\
+
+Logistic regression is more robust for points that lie
+far away from the seperator, and can easily be
+extended to multiclass classification. \\
+
+SVM is the best classifier out of them. \\
+
+The hard margin case is the only constrained
+optimization problem: a minimization over
+all hyperplanes that actually meet a constraint
+(that the seperator correctly seperates the dataset). \\
+
+\newpage
+
+\end{document}

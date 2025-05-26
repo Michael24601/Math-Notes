@@ -1,0 +1,459 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture IX
+}
+\date{2025-05-19}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Area Formulation}
+
+Instead of integrating over all the directions
+$\omega$ in $\Omega$, the hemisphere
+above $x$,
+then we can use an area formulation;
+The idea behind it is to integrate
+in terms of all the points $y$
+from which a light ray can be projected
+towards $x$. \\
+
+We can take each small area $d\sigma(\omega)$
+on the hemisphere and project them.
+They will hit points on the surfaces
+of the scene $\mcal$. \\
+
+We can use a visibility function $V(x, y)$
+to ensure that we have the first surface we project
+onto (the rest aren't visible and are hidden
+when we project). \\
+
+We would then have $d\sigma(\omega)
+= \dfrac{\cos(\theta)y}{\|x-y\|^2}dA(y)$
+where $y$ is the point intersected
+when we project from $x$ in the $\omega$
+direction, and $dA(y)$ is a small area around it
+on the surface in $\mcal$. \\
+
+We can absorb these terms into the
+term $G(x, y)$:
+\[ G(x, y) = \dfrac{((y-x)\cdot N(x))((x-y)\cdot N(y))}
+{\|x-y\|^4} \]
+Note that we also added the term $(y-x)\cdot N(x)$
+which also appears in the original integral. \\
+
+So instead of:
+\[  L_{o}(x, \omega_o)= L_{e}(x, \omega_o) +
+\int_\Omega L_{i}(x, \omega_i) \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\sigma(\omega_i) \]
+We will have:
+\[  L_{o}(x, \omega_o)= L_{e}(x, \omega_o) +
+\int_\mcal L_{i}(x, y) \cdot
+f(x, xy, \omega_o) G(x, y) V(x, y) \; dA(y) \]
+So we now have the same integral
+for the rendering equation, but instead
+of thinking in terms of directions, we think
+in terms of points on the scene $x$ and $y$,
+and light bouncing between them. \\
+So we can get the outgoing light $L_o$
+at a point $x$ in the direction towards a point $y$,
+which is $0$ if the visibility function
+determines we can't see $x$ from $y$ and vice-versa. \\
+
+\newpage
+
+\subsection*{Neumann Expansion}
+
+We know that:
+\[ \sum_i^{\infty} k^i = \dfrac{1}{1 - k} \]
+converges so long as $|k| < 1$. \\
+
+Now, to generalize this idea to matrices,
+we can use the Neumann series:
+\[ \sum_i^{\infty} K^i = (I - K)\inv \]
+Where the eigenvalues of $K$
+all satisfy $|\lambda_i| < 1$. \\
+Notice here that this is the same result
+it converges to as before, but written in matrix
+notation. \\
+
+So how can we prove that this work?
+We will use the diagonalization:
+\[ K = P\Lambda P\inv \]
+In both the left and right hand sides,
+and then show that they are equal. \\
+
+For the right hand side:
+\[ \sum_i^{\infty} K^i
+= \sum_i^{\infty} (P\Lambda P\inv)^i \]
+Notice that because this is the eigen decomposition
+and $P$ is orthogonal,
+that $(P\Lambda P\inv)^i = P\Lambda^i P\inv$.
+So we have:
+\[ \sum_i^{\infty} P\Lambda^i P\inv
+= P \para{\sum_i^{\infty}\Lambda^i} P\inv \]
+Notice that because $\Lambda$ 
+is diagonal, we can distribute both the 
+sum and the power to the diagonal elements:
+\[ P \bmat{ 
+\sum_i^{\infty} \lambda_1^i & 0 & \dots & 0 \vs{5} \\
+0 & \sum_i^{\infty} \lambda_2^i & \dots & 0 \vs{5} \\
+\vdots & \ddots & \ddots & \vdots \vs{5} \\
+0 & \dots & 0 & \sum_i^{\infty} \lambda_n^i } P\inv \]
+Because we assumed $|\lambda| < i$,
+we can write the geometric sums
+as the value they converge to:
+\[ P \bmat{ 
+\dfrac{1}{1-\lambda_1} & 0 & \dots & 0 \vs{5} \\
+0 & \dfrac{1}{1-\lambda_2} & \dots & 0 \vs{5} \\
+\vdots & \ddots & \ddots & \vdots \vs{5} \\
+0 & \dots & 0 & \dfrac{1}{1-\lambda_n} } P\inv \]
+We can stop here. \\
+
+Now for the left hand side, note that we have:
+\multiline{ (I - K)\inv = (I - P\Lambda P\inv)\inv
+& = (PIP\inv - P\Lambda P\inv)\inv 
+= (P (I - \Lambda) P\inv)\inv \\
+& = P (I - \Lambda)\inv P\inv }
+Note that $I - \Lambda$
+is a diagonal matrix with diagonal entries
+$1 - \lambda_i$. This means that
+we can distribute the inverse (since it is
+diagonal):
+\[ P \bmat{ 
+\dfrac{1}{1-\lambda_1} & 0 & \dots & 0 \vs{5} \\
+0 & \dfrac{1}{1-\lambda_2} & \dots & 0 \vs{5} \\
+\vdots & \ddots & \ddots & \vdots \vs{5} \\
+0 & \dots & 0 & \dfrac{1}{1-\lambda_n} } P\inv \]
+This is the same as the result we got before. \\
+This proves the Neumann series of $(I - K)\inv$
+is correct. \\
+
+Note that $\rho(K)$
+is the spectral radius or largest eigenvalue
+of $K$. \\
+
+We need $|\rho(K)| < 1$ to be satisfied
+in order for the Neumann series to work,
+so that each geometric series in the diagonal
+converges.
+This means that $\|K\| < 1$. \\
+
+In the last section, we already
+showed how the recursive nature of the
+rendering equation,
+we could write it as an integral of an integral
+of an integral...
+\multiline{
+L_{o}(x, \omega_o)
+& = L_{e}(x, \omega_o) \\
+& + \int_\Omega \bigg( L_e(r(x, \omega_i), -\omega_i)
++ f(x, \omega_i, \omega_o) \cdot 
+(\omega_i \cdot n) \\
+& + \int_\Omega 
+\bigg( L_e(r(r(x, \omega_i), \omega_j), -\omega_j) 
++ f(x, \omega_j, -\omega_i) \cdot 
+(\omega_j \cdot n) \\
+& + \int_\Omega \bigg( 
+L_e(r(r(r(x, \omega_i), \omega_j), \omega_k), -\omega_k)
++ f(x, \omega_k, -\omega_j) \cdot 
+(\omega_k \cdot n) \\ 
+& + \int_\Omega \dots \bigg)
+\; d\omega_k \bigg) \; d\omega_j \bigg) \; d\omega_i }
+Which is equal to the Neumann series:
+\[ L_o = L_e + T( L_e + T( L_e + T (L_e + \dots))) \]
+\[ L_o = L_e + TL_e + T^2L_e + T^3L_e \dots \]
+But, what if we want to have a non-recursive
+formula for each term $T^kL_e$? \\
+
+As we will see later in Monte-Carlo integration,
+we will need each term individually
+written out as an integral. For simplcity
+we will use the area formulation of the rendering
+equation. \\
+
+First, note that each term is a function
+in terms of $x_0$ and $x_1$,
+that is:
+\[ T^kL_e = (T^kL_e)(x_0, x_1) \]
+This term just outputs the light that $x_0$
+gets through $x_1$, after $k$ bounces. \\
+
+So the first term is directly
+just the ligth emitted from $x_1$
+towards $x_0$:
+\[ L_e(x_0, x_1) = L_e(x_1 \to x_0) \]
+which is to say, this is just
+light that is 1 bounce away. \\
+Now, $T$ is just the integral
+over all the points $x_2$
+from whence light might arrive.
+What $TL_e$ does is output
+the radiance $L_e$ that comes from
+light emmitted from all the points $x_2 \in \mcal$
+that arrive at $x_1$:
+\[ TL_e (x_0, x_1) = \int_\mcal L_e(x_2 \to x_1)
+\cdot f(x_1, x_1x_2, x_1x_0) \cdot G(x_1, x_2)
+\cdot V(x_1, x_2) \; dA(x_2) \]
+This is why we have $L_e(x_2 \to x_1)$
+in the integral; it gives us all the radiance
+at $x_1$ emitted from all points $x_2$,
+which is then reflected in the direction of $x_0$
+(two bounces in total). \\
+Now for the third term, we have
+$T^2L_e$. Note that this is just
+$T(TL_e)$,
+which means that we want to wrap another
+integral around our earlier term.
+What this does mathematically is calculate
+all the emitted light from all points $x_3$
+that arrive at each point $x_2$,
+which then all contribute to $x_1$,
+which then emits light in the direction of $x_0$.
+So we are just calculating light from $2$
+bounces away:
+\multiline{ TL_e (x_0, x_1) = 
+\int_\mcal & \para{ \int_\mcal L_e(x_3 \to x_2)
+\cdot f(x_2, x_2x_3, x_2x_1) \cdot G(x_2, x_3)
+\cdot V(x_2, x_3) \; dA(x_3)} \\
+& f(x_1, x_1x_2, x_1x_0) \cdot G(x_1, x_2)
+\cdot V(x_1, x_2) \; dA(x_2) }
+The inner integral integrates over
+all points $x_3$ that emit light
+towards all points $x_2$,
+which then reflect the light towards $x_1$,
+which then relect the light towards $x_0$,
+which is 3 bounces away. \\
+
+Intuitively, this makes perfect sense;
+the light that exists in a scene is
+dependent only on the emitted light, as
+incidant or exitant light originates 
+as emitted light somewhere else. \\
+Each term in the Neumann series is just
+emitted light that takes $k$ bounces to arrive. \\
+The larger the $k$, the fainter the light,
+as it some light is usually absorbed
+by the surface as per the conservation
+of enegery. \\
+
+The general formula for a term is now thus:
+\multiline{TL_e (x_0, x_1) = 
+& \int_{\mcal^k} L_e(x_2 \to x_1) \\
+& \productof{n=1}{k} \big(
+f(x_{n-1}, x_{n-1}x_{n}, x_{n-1}x_{n-2}) 
+\cdot G(x_{n-1}, x_{n})
+\cdot V(x_{n-1}, x_{n}) \; dA(x_{n}))}
+Which has no recursion, and only
+depends on emitted light.
+This is the proper integral format we need
+to do Monte-Carlo integration. \\
+Note that $\int_{\mcal^k}$
+is just $k$ integrals nested in each other. \\
+
+\newpage
+
+\subsection*{Monte-Carlo Integration}
+
+In this section, we explain how to use Monte-Carlo
+integration to compute each term $T^kL_e$. \\
+
+First of all, why do we use Monte-Carlo
+integration, instead of just using any
+other integration method, like Riemann
+Sums or the Trapezoidal rule? \\
+These methods work fine for a small
+dimension, but as the dimension of a scene
+increases, they become less and less efficient. 
+For example, Riemann sums use rectangles in
+$\rbb^2$, but columns in $\rbb^3$.
+Recall that some of our integrals
+$T^kL_e$ have dimensions $k$,
+which can grow very large. \\
+Monte-Carlo integration is probabilistic
+and has far less of a dependency
+on the dimension. \\
+
+Now for some motivation;
+we know that the average is just the
+sum divided by the number of elements:
+\[ \mu(x) = \dfrac{1}{n}\sum_{i=1}^n x_i \]
+Intuitively, this means that we can write
+the sum as the average multilplied the number
+of elements:
+\[ n\mu(x) = \sum_{i=1}^n x_i \]
+This is the intuition behind Monte-Carlo
+integration. \\
+
+As we know, integration is just a sum,
+over an interval instead of a number of elements.
+So we can do the same thing here:
+\[ \mu(x) = \dfrac{1}{b-a}\int_a^b x \; dx \]
+Which means that:
+\[ (b-a)\mu(x) = \int_a^b x \; dx \]
+Here we use the measure (length)
+of the interval, since we don't have a number
+of elements, in order to calculate the intergal
+using the average. \\
+
+In a more general case, if we have:
+\[ \int_\dcal f(x) \; dx \]
+Then we would need the generalization
+of the volume or length to $\dcal$,
+whatever dimension $d$ it may be,
+which we can write as $v_d(\dcal)$. \\
+So we can approximate the integral as:
+\[ \int_\dcal f(x) dx
+= v_d(\dcal)\mu(f(x)) \]
+Where we can get the average by just taking
+$N$ random samples and dividing by $N$:
+\[ \int_\dcal f(x) dx
+= \dfrac{v_d(\dcal)}{N} \sum_{i=1}^N f(x_i) \]
+This is how Monte-Carlo integration works. \\
+
+However, one trick we can use
+is to map the coordinates int $\dcal$
+to a $d$-dimensional unit hypercube,
+which always has a measure of $1$.
+In $\rbb^2$ this is a unit square,
+and in $\rbb^3$ this is a unit cube. \\
+We can the unit hypercube in $\rbb^n$ 
+as $[0, 1]^d$. \\
+So if we can transform the variables
+such that they span a hypercube,
+we will have:
+\[ \int_{[0, 1]^d} f(u) du
+= \dfrac{1}{N} \sum_{i=1}^N f(u_i)  \]
+Where the volume of the space is just $1$. \\
+
+So, how can we do this mapping?
+We can show it using an example. \\
+Suppose we have an integral over a hemisphere:
+\[ \int_\Omega f(\omega) \; d\sigma(\omega) \]
+Which uses solid angles ($\sigma(\omega)$). \\
+Now, we can use a mapping:
+\[ T: [0, \sfrac{\pi}{2}] \times [0, 2\pi] \to \Omega \]
+Which maps the angles to parametric coordinates:
+\[ T(\phi, \theta) = \pmat{
+    \cos(\phi)\sin(\theta) \\
+    \sin(\phi)\sin(\theta) \\
+    \cos(\theta)
+} \]
+Notice that the new coordinate space is a rectangle,
+since we have $\theta \in [0, \sfrac{\pi}{2}]$
+and $\phi \in [0, 2\pi]$. \\
+Now note that the infinitessimal $d\sigma(\omega)$
+will change to this when we perform the transformation:
+\[ d\sigma(\omega) = |\det(J_T)| \; d\phi \; d\theta \]
+Where $J_T$ is the Jacobian of the transformation,
+and $\det(J_T)$ is calculated the same way
+we calculate the determinant of any rectangular
+matrix:
+\[ \det(J_T) = \sqrt{(J_T)^TJ_T}
+\qquad \AND \qquad J_T = \pmat{
+-\sin\theta \sin\phi & \cos\theta \cos\phi  \\
+\sin\theta \cos\phi  & \cos\theta \sin\phi\\
+0 & -\sin\theta } \]
+So in total, we get:
+\[ \int_\Omega f(\omega) \; d\sigma(\omega)
+= \int_0^{2\pi} \int_0^{\sfrac{\pi}{2}} 
+f(T(\phi, \theta)) \cdot |\det(J_T)| 
+\; d\theta \; d\phi\]
+Which is the integration with a change
+of variables. \\
+
+Now, this is a rectangle with length $2\pi$
+and width $\dfrac{\pi}{2}$,
+and we need a unit square,
+so we can just do a second transformation,
+this time:
+\[ F: [0, 1]^2 \to [0, \sfrac{\pi}{2}] \times [0, 2\pi] \]
+Where:
+\[ F(u, v) = \pmat{2\pi u \vs{10} \\ \dfrac{\pi}{2}v} \]
+Which will also have a Jacobian $J_F$,
+and which gets us a new integral:
+\[ \int_0^{1} \int_0^{1} 
+f(T(F(u, v))) \cdot
+|\det(J_T)| \cdot
+|\det(J_F)| \; du \; dv \]
+Which we can also write as:
+\[ \int_{[0, 1]^2}
+f(T(F(u, v))) \cdot
+|\det(J_T)| \cdot
+|\det(J_F)| \; d(u, v) \]
+Where $[0, 1]^2$
+has area that is just $1$. \\
+
+Note that the transformation has to be 
+differentiable for this change of variables
+to work. \\
+
+If we are asked to calculate the
+Monte-Carlo estimator of:
+\[ \int_\Omega f(\omega) \; d\sigma(\omega) \]
+We apply the change of variable
+and end up with:
+\[ \int_0^{1} \int_0^{1} 
+f(T(F(u, v))) \cdot
+|\det(J_T)| \cdot
+|\det(J_F)| \; du \; dv \]
+Which we can then turn into an estimator
+by averaging (average times volume,
+but the volume is 1):
+\[ \dfrac{1}{N} \sumof{i = 1}{N}
+f(T(F(u_i, v_i))) \cdot
+|\det(J_T)| \cdot |\det(J_F)| \]
+This is the final result. \\
+
+So in summary;
+our goal is to take each indiviual integral
+$T^kL_e$,
+find a differentiable transformation
+that maps the variables to the unit hypercube
+$[0, 1]^d$,
+then find $N$ samples in $[0, 1]^d$,
+which we then average out by dividing by $N$. \\
+
+Note that sampling points from $[0, 1]^d$
+is very easy; we just find $d$ random numbers
+between $0$ and $1$. \\
+
+That's why we needed to write the rendering
+equation as a series, since we can't apply
+Monte-Carlo integration to an integral
+which itself depends on an integral term in it. \\
+
+Note that in practice,
+when doing this to the entire series:
+\[ L_e + TL_e + T^2L_e + T^3L_e \dots \]
+What we do is take $N = 1$,
+which means that we only sample one point
+each time. \\
+We then calculate each term,
+though having taken $N = 1$,
+this means that we are just
+tracing the bounces and path of a single
+light ray as it bounces around. \\
+We then average out several paths. 
+So instead of averaging out
+on each integral of $T^kL_e$,
+we calculate several paths with one ray,
+and then average them out. \\
+
+\newpage
+
+\end{document}

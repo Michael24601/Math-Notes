@@ -1,0 +1,335 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Machine Learning \\
+    \Large Assignment V
+}
+\date{2025-05-16}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Ex 1}
+
+\begin{enumerate}[label = \letters]
+\item 
+We have:
+\[ \riskEmpirical{\ell}{f} = \ebb[(f(X) - Y)^2] \]
+We can add then substract the term $f^*(X)$,
+and then expand the square term:
+\[ \ebb[(f(X)- f^*(X) + f^*(X) - Y)^2] \]
+\[ \ebb[((f(X)- f^*(X)) + (f^*(X) - Y))^2] \]
+\[ \ebb[(f(X)- f^*(X))^2]
++ \ebb[(f^*(X) - Y)^2]
++ 2\ebb[(f(X)- f^*(X))(f^*(X) - Y)] \]
+The result we want is the first two terms.
+We can show the last term is just $0$
+by decomposing the joint expected value into
+a conditional over $Y$ and a marginal over $X$:
+\[ 2\ebb[\ebb[(f(X)- f^*(X))(f^*(X) - Y) \mid X ]] \]
+Notice that the term $(f(X)- f^*(X))$
+does not depend on the randomness of $Y$,
+so we can take it out of the inner expected value:
+\[ 2\ebb[(f(X)- f^*(X))\ebb[f^*(X) - Y \mid X ]] \]
+We can now also take out $f^*(X)$:
+\[ 2\ebb[(f(X)- f^*(X)) (f^*(X) - \ebb[Y \mid X ])] \]
+But recall that $f^*(X) = \ebb[Y \mid X ]$
+by definition, so:
+\[ \ebb[(f(X)- f^*(X)) ( \ebb[Y \mid X ] - \ebb[Y \mid X ])]
+= \ebb[(f(X)- f^*(X)) \cdot 0 ] = 0 \]
+So our final result is:
+\[  \risk{\ell}(f) =  \ebb[(f^*(X) - f(X))^2]
++ \ebb[(Y - f^*(X))^2] \]
+Which is what we needed to find.
+\item
+We need to caluclate this expected value,
+for a risk that depends on the randomness of training
+data $D$:
+\[ \ebb[\risk{\ell}(f_D)] \]
+We can mark the outer expected value over $D$
+with a $D$ for clarity:
+\[ \ebb_D[\risk{\ell}(f_D)] 
+= \ebb_D[\ebb[(f^*(X) - f_D(X))^2] + \ebb[(Y - f^*(X))^2]] \]
+The second term does not depend on $D$
+so we can take it out. This will be the noise term:
+\[ \ebb_D[\risk{\ell}(f_D)] 
+= \ebb_D[\ebb[(f^*(X) - f_D(X))^2]] + \ebb[(Y - f^*(X))^2] \]
+Now we will decompose the first term into
+variance and bias. First we use Fubini's theorem
+to flip the expected value order,
+and focus on the inner one (the one over $D$):
+\[\ebb_D[\ebb[(f_D(X) - f^*(X))^2]] 
+= \ebb[\ebb_D[(f_D(X) - f^*(X))^2]] \]
+Now, to do the bias-variance decomposition
+(on the inner expected value)
+we add and then subtract the expected value of $f_D(X)$:
+\[ \ebb_D[(f_D(X) - \ebb_D[f_D(X)]
++ \ebb_D[f_D(X)] - f^*(X))^2] \]
+\[ \ebb_D[((f_D(X) - \ebb_D[f_D(X)])
++ (\ebb_D[f_D(X)] - f^*(X)))^2] \]
+\multiline{\ebb_D[((f_D(X) - \ebb_D[f_D(X)])^2]
+& + \ebb_D[(\ebb[f_D(X)] - f^*(X)))^2] \\
+& + 2\ebb_D[(f_D(X) - \ebb_D[f_D(X)]) 
+(\ebb_D[f_D(X)] - f^*(X))] }
+Notice that the third term is $0$.
+We can factor out the second part
+since it doesn't depend on $D$:
+\[ 2\ebb_D[(f_D(X) - \ebb_D[f_D(X)])] 
+\cdot (\ebb_D[f_D(X)] - f^*(X)) \]
+We then also take out $\ebb_D[f_D(X)]$
+from the expected valye since it's a constant:
+\[ 2(\ebb_D[f_D(X)] - \ebb_D[f_D(X)]) 
+\cdot (\ebb_D[f_D(X)] - f^*(X))
+= 0 \cdot (\ebb_D[f_D(X)] - f^*(X)) = 0 \]
+So we take our remaining two terms
+and wrap them back in the outer expected
+value over $X, Y$,
+and then also add the noise:
+\multiline{ \ebb[\ebb_D[(f_D(X) - \ebb_D[f_D(X)])^2]]
+& + \ebb[\ebb_D[(\ebb_D[f_D(X)] - f^*(X)))^2] \\
+& + \ebb[(Y - f^*(X))^2] }
+Note that we can remove $\ebb_D$ from around the 
+bias, as it does not depend on $D$:
+\multiline{ \ebb[\ebb_D[(f_D(X) - \ebb_D[f_D(X)])^2]]
+& + \ebb[(\ebb_D[f_D(X)] - f^*(X))^2] \\
+& + \ebb[(Y - f^*(X))^2] }
+This is the same result as the one in the
+question sheet, but with the only difference
+being that they also have all three
+expected value over $D$ terms wfrrrerritten with
+as a conditional over $X$:
+\[ \ebb_D[ \cdot ] \to \ebb_D[\; \cdot \mid X] \]
+We can do that in our answer as well since
+$D$ and $X$, the testing and training data,
+are assumed to be independent,
+so adding the condition should change nothing. \\
+\item
+A simpler model that underfits the data will have
+a higher bias, while a more complex model that overfits
+the training data will have a higher variance. \\
+It's usually a tradeoff between the two;
+shrinking one usually increases the other. \\
+So to get the minimal risk, we need to find the
+minimal value of their sum (and the noise). \\
+\item
+Not sure if we're supposed to calculate anything,
+but in theory the bias would increase with a smaller
+$k$, and the variance would increase with a
+larger $k$. \\
+\end{enumerate}
+
+\colorText{red}{
+    \begin{enumerate}[label = \letters]
+        \item 
+        The noise is not optimizable, it is the part of
+        the risk that we can't minimize, and will be
+        the difference between the best achievable risk
+        and the best theoretical risk
+        that minimizes variance and bias.
+        \item 
+        Not a correction, just a note;
+        what I did was correct, and it should always be done;
+        noting with a subscript what the expected value
+        is summing over is integral to correctly
+        solving the problem. In a test we should do that,
+        but the given may not have subscripts,
+        we would need to figure them out ourselves. \\
+        Also, for Fubini's theorem,
+        which is about decomposing joint expected
+        values and about flipping the order
+        of the expected values, works only for
+        independent variables; so we can switch the order
+        of expected value $\ebb_D$ and $\ebb_{X, Y}$,
+        but we need to note that they are independent. \\
+        \item 
+        \item 
+    \end{enumerate}
+}
+
+\newpage
+
+\subsection*{Ex 2}
+
+\begin{enumerate}[label=\letters]
+    \item 
+    First note that:
+    \[ f'(x) = (w_0 + w_1x)' = w_1 \]
+    So:
+    \[ \integral{0}{1}{|f'(x)|^2}{dx}
+    = \integral{0}{1}{w_1^2}{dx} = w_1^2 \]
+    Notice that what we are doing is penalizing
+    using a quadratic term $w_1^2$,
+    the slope of $x$ in the prediction function $f(x)$. \\
+    This is essentially ridge regression,
+    where $\|\theta\|^2$
+    is the norm squared of the weights $\theta$
+    representing the slope. \\
+    \item 
+    First note that:
+    \[ f''(x) = (w_0 + w_1x + w_2x^2)'' = 2w_2 \]
+    So:
+    \[ \integral{0}{1}{|f'(x)|^2}{dx}
+    = \integral{0}{1}{(2w_2)^2}{dx} = 4w_2^2 \]
+    Notice that this regression only penalizes
+    the term a large weight $w_2$
+    for the quadratic term $w_2x^2$,
+    so in pratice, what it does is ensure that
+    the function has low curvature,
+    and is more linear. \\
+\end{enumerate}
+
+\colorText{red}{
+    \begin{enumerate}[label = \letters]
+        \item 
+        Not a correction, just a note;
+        the ridge regression is also called
+        the L2 norm.
+        \item 
+        Not a correction, just a note;
+        when we minimize the risk and regularizer,
+        we ned up minimizing the terms we found
+        in parts a and b, which is why
+        these terms become close to and remove the
+        slope/curvature.
+    \end{enumerate}
+}
+
+\newpage
+
+\subsection*{Ex 3}
+
+\begin{enumerate}[label=\letters]
+    \item 
+    First, we want to maximize:
+    \[ \arg \max_\theta p(\theta \mid \dcal) \]
+    Essentially, we want the parameters
+    theta such that the probability that
+    $f_\theta(x_i) = y_i$ generates the dataset
+    $\dcal$ is highest. \\
+    First note that by Baye's rule:
+    \[ p(\theta \mid \dcal) =
+    \dfrac{p(\dcal \mid \theta)p(\theta)}{p(\dcal)} \]
+    Here i am assuming that the prior assumption
+    $p(\theta)$ is the regularization and form
+    of $\theta$. \\
+    Notice that:
+    \[ p(\dcal \mid \theta) = \prod_i p(y_i \mid x_i, \theta)\]
+    Why? As mentioned in the given, the dataset $\dcal$
+    is given by $p(y_i \mid x_i, \theta)$,
+    so we expect that the probability that $\dcal$
+    is generate using $\theta$ parameters,
+    is the probability that each individual $y_i$
+    is generated using $f_\theta(x_i)$. 
+    Note that multiplying the posteriors like that
+    only works because we assumed all data points
+    are independent (independent and identically
+    distributed). \\
+    So we have:
+    \[ p(\theta \mid \dcal) =
+    \dfrac{\para{\prod_i p(y_i \mid x_i, \theta)}
+    p(\theta)}{p(\dcal)} \]
+    Now notice that the denominator is a constant,
+    so it won't affect the maximization:
+    \[ \arg \max_\theta \para{\prod_i p(y_i \mid x_i, \theta)}
+    p(\theta) \]
+    Moreover, notice that maximizing this
+    is the same as minimizing the inverse:
+    \[ \arg \min_\theta \dfrac{1}{\para{\prod_i p(y_i \mid x_i, \theta)}
+    p(\theta)} \]
+    Beccause $\log$ is a monotonic increasing function,
+    we can apply it to the formula and it won't change
+    the optimization:
+    \[ \arg \min_\theta \log\para{\dfrac{1}{\para{\prod_i p(y_i \mid x_i, \theta)}
+    p(\theta)}} \]
+    Notice that $\log$ turns products to sums of logs,
+    and inverses to negative logs:
+    \[ \hat{\theta}_\text{MAP} = 
+    \arg \min_\theta -\sum_i\log\para{p(y_i \mid x_i, \theta)}
+    -\log(p(\theta)) \]
+    Which completes the proof. \\
+    \item 
+    Our prior assumption about $\theta$ is that:
+    \[ p(\theta) = \exp(-\lambda \rcal(\theta)) \]
+    Where $\rcal(\theta)$ is some regularization term.
+    This means that we now have:
+    \[ \arg \min_\theta -\sum_i\log\para{p(y_i \mid x_i, \theta)}
+    -\log(\exp(-\lambda \rcal(\theta))) \]
+    Which reduces to:
+    \[ \arg \min_\theta -\sum_i\log\para{p(y_i \mid x_i, \theta)}
+    + \lambda \rcal(\theta) \]
+    We are then given $\ell(y, f_\theta(x)) = 
+    -\log\para{p(y_i \mid x_i, \theta)}$,
+    So we can write:
+    \[ \hat{\theta}_\text{MAP} = 
+    \arg \min_\theta \sum_i \ell(y, f_\theta(x))
+    + \lambda \rcal(\theta) \]
+    Which is what we needed to show. \\
+\end{enumerate}
+
+\colorText{red}{
+    \begin{enumerate}[label = \letters]
+        \item 
+        Note that in reality:
+        \[ p(D \mid \theta) = 
+        \prod_i p(y_i \mid x_i, \theta)p(x \mid \theta) \]
+        We also need to consider the probability
+        of $x$ in this situation,
+        since we are conditioning over it;
+        but in this case $p(x \mid \theta) $
+        is constant, so we can ignore it.
+        We are told so in the given.
+        \item 
+        Note that this exercise
+        is about showing how Bayesian Learning
+        is based on MAP estimation. \\
+        In Maximum Likelihood Estimation MLE,
+        what we do is try to maximize
+        $\pbb(D \mid \theta)$;
+        basically finding the parameters $\theta$
+        of the classifier 
+        most likely to generate $D$:
+        \[ \arg \max_\theta \pbb(D \mid \theta) \]
+        This differs from Maximum A Posteriori
+        estimation,
+        where we consider the posterior
+        as well as the prior.
+        Maximum A Posteriori estimation is what
+        leads to Bayesian Learning as we know it. \\
+        In MAP, we want the most likely $\theta$ parameters
+        given the dataset:
+        \[ \arg \max_\theta \pbb(\theta \mid D) \]
+        We can decompose the probability
+        using Baye's rule:
+        \[ \pbb(\theta \mid D) \propto 
+        \pbb(D \mid \theta)\pbb(\theta) \] 
+        Which is when the prior shows up.
+        Here we use proportional to $\propto$
+        because we ignore $\pbb(D)$,
+        which is a constant with respect to $\theta$. \\
+        Here $\pbb(\theta)$ is a prior assumption 
+        about $\theta$, which is essentially
+        the regularization; this is the approach we
+        use in this course. \\
+        In the exercise we then
+        derive the minimization of the risk
+        and regularization,
+        which is Bayesian Learning as we know it,
+        and is based on MAP. \\
+
+    \end{enumerate}
+}
+
+\newpage
+
+\end{document}

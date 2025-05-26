@@ -1,0 +1,191 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture X
+}
+\date{2025-05-21}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Code}
+
+In this lecture, we look at the code
+for a ray tracer. \\
+
+First we have gamma correction of the pixels,
+which is done at the end, and is only done
+for visual purposes. \\
+
+In Monte-Carlo integration, instead
+of shooting several rays each
+frame, we calculate the integral
+using several samples and then average out. \\
+This is far more efficient, and is done
+for each term $T^kL_e$. \\
+
+However, in practice,
+instead of averaging out at each
+bounce $T^kL_e$, we just choose a single sample,
+and follow a single ray's path.
+We then average out all of the paths
+later, when we have several paths. \\
+
+If we have an average:
+\[ S_{n-1} = \sum_{i = 1}^{n-1} r_{i} \]
+Then:
+\[ S_{n} = \sum_{i = 1}^{n} r_{i} \]
+But we don't need to store or recalulate
+each new average, because:
+\[ S_{n} = (n-1)S_{n-1} + r_n \]
+We don't generate and average out several
+ray paths in a single frame; we do it
+frame by frame, and use the above method to
+average out. \\
+When we move the camera, we have to reset
+and start from the beginning. \\
+
+We then build the scene using ray intersections. \\
+
+For Monet-Carlo, we need a random number generator;
+but we do Monte-Carlo for each pixel,
+and we need a different random number generator
+for each, so we have to use a seed,
+which is a hash from the pixel coordinate. \\
+
+We use one sample per pixel in Monte-Carlo. \\
+
+We shoot a ray through several points in our
+pixel, and see what it intersects. \\
+
+At this point, we can do several color options. \\
+
+The first is just black and white, 
+if there is or isn't intersection. \\
+
+Another is depth, which gets brighter the closer
+the intersection is. \\
+
+Another is normal coloring. \\
+Don't forget to rescale normal, since it's
+-1 to 1 (should be 0 to 1). \\
+
+Now for the ray tracer, we have a function
+that send a ray and returns the point it hit. \\
+If we hit nothing, return background color,
+else if we hit something, we generate the normal,
+and we generate random rays in the upper hemisphere
+around the normal. We then set the new origin
+and direction of the ray, and send it again. \\
+In practice we only send one ray (have several
+series consiting of one ray, which we all
+average out). \\
+Also when we intersect, we add an epsilon
+along the normal, to ensure our intersected
+point isn't inside the geometry. \\
+
+Before we send the new ray, we
+add the $L_e$ of the point we intersect
+if it exists, and apply Monte-Carlo integration,
+using a double integral with variable change
+(unit hypercube range). \\
+So we have:
+\[ L_e + L_e \times \text{BRDF} \]
+Note that the determinants of the Jacobians,
+and the $\cos(\theta)$ terms cancel out;
+this is by design of our map. \\
+This gets rid of variance/noise in the function,
+which is useful. 
+We call it a cosine weighted hemisphere
+for this reason; it cancels the terms. \\
+Notice that we don't have an integral
+since we only want one sample per ray
+intersection as explained. \\
+We then continue, adding a term $T^kL_e$
+for each new bounce,
+and add it to the accumulated color
+($L_e + TL_e + T^2L_e, \dots$).
+For $T^k$, we would need to multiply
+$L_e$ by an accumulated product
+(called throughput). \\
+If we eventually hit nothing,
+it just becomes the background color
+multiplied by the accumulated color up
+to this point (or background texture).
+If it hits the limit of bounces (since bounces
+contribute less and less due to the BRDF
+absorbing light). \\
+If some surface we hit has no emitted light,
+it adds nothing to the accumulated light. \\
+
+Small note about Monte-Carlo;
+in theory, when we integrate over several
+rays, the throughput, which is BRDF
+and other terms such as the $\cos$,
+would decrease with more bounces, to conserve
+energy. \\
+However, in Monte-Carlo integration,
+instead of sending several rays of light
+each bounce, we have one ray of light
+that we follow for a whole path,
+and then average out several paths. 
+However, each individual path may not converge,
+and the throughput may continue increase;
+the average has to converge, but any one
+individual path may increase in energy. \\
+
+Note that we can do a coloring
+with just a single bounce, where we don't
+have to save the accumulated color
+and the accumulated product. \\
+
+Note that when we do the Hemisphere map
+to spherical coordinates, we are calculating
+the coordinates of a Hemisphere pointing up,
+but the geometry may have a hemisphere in any direction;
+the answer is that because $R^TR = I$,
+rotations being orthogonal,
+the Jacobian is calculated the same way;
+translations and rotations don't affect the
+Jacobian. \\
+
+The mapping that turns $[0, 2\pi] 
+\times [0, \sfrac{\pi}{2}]$
+does not have to be linear, where
+$\phi$ and $\theta$
+each only depend on $u$ and $v$,
+and where we only apply a linear map. \\
+But it does make things simpler. \\
+Also note that for this transformation,
+the Jacobian is square, do we can just calculate
+$|\det(J)|$. \\
+
+If we are asked to find a Monte-Carlo estimator of
+an intergral:
+\[ \int_\Omega f(x) dx \]
+We need to change the variables,
+and compute the integral as an average:
+\[ \dfrac{1}{n}\sum_{i=1}^n f(T_1(T_2(u, v)))
+\cdot |\det(T_1)| \cdot |\det(T_2)| \]
+Where we removed the outer integrals
+from $0$ to $1$ as per Monte-Carlo. \\
+Note that in practice, we don't average
+out at each bounce, but follow one ray
+and then average out all the ray paths,
+though we do it frame by frame. \\
+
+\newpage
+
+\end{document}

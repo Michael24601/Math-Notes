@@ -79,7 +79,22 @@ $\tr(a) = a$. \\
 
 The trace has a circular property:
 \[ \tr(ABC) = \tr(CAB) = \tr(BCA) \]
-Which applies for vectors as well as matrices. \\
+Which applies for vectors as well as 
+rectangular matrices.
+Note however that if the matrices are not
+square, that we should be able to multiply $CA$
+in order for this work
+(their dimensions should allow them to 
+multiply cyclically $n \times m$, $m \times d$,
+$d \times n$). \\
+Note that this only works for cyclical
+arrangement, we can't arbitrarily
+scramble the matrices in the trace. \\
+
+The expected value of the trace
+is the trace of the expected value:
+\[ \ebb[\tr(A)] = \tr(\ebb[A]) \]
+Which holds for all $A$. \\
 
 The inverse of the transpose $(M^T)\inv$
 is equal to the transpose of the inverse 
@@ -94,35 +109,11 @@ is just one over the scalar:
 \[ (Ab)\inv = \dfrac{1}{b}A\inv \]
 where $b \in \rbb$ is any scalar. \\
 
-If the eigenvalues of a matrix $M$
-are all smaller or equal to $\dfrac{1}{2}$,
-then:
-\[ w^TMw \leq \dfrac{1}{2} \|w\|^2 \]
-for any vector $w \in \rbb^n$.
-This is because:
-\[ w^TMw = w^T(P\Lambda P^T)w
-= (w^TP)\Lambda(P^Tw)
-= (P^Tw)^T\Lambda(P^Tw) \]
-Now, we can take $z = P^Tw$, and write:
-\[ (P^Tw)^T\Lambda(P^Tw) 
-= z^T \Lambda z = \sum_i \lambda_i z_i^2 \]
-where $\lambda_i$ is the $\nth{i}$ eigenvalue. \\
-Notice that because $\lambda_i \leq \dfrac{1}{2}$,
-this means that:
-\[\sum_i \lambda_i z_i^2 
-\leq \dfrac{1}{2} \sum_i z_i^2 = \dfrac{1}{2} \|z\|^2 \]
-Note that because $P$ is orthogonal:
-\[ \|w\|^2 = \|z\|^2 \]
-Which means that:
-\[w^TMw = \sum_i \lambda_i z_i^2 
-\leq \dfrac{1}{2} \|w\|^2\]
-Proving the theorem. \\
-
 \newpage
 
-\subsection*{Linear Regression}
+\subsection*{Linear Least Squares Regression}
 
-For linear gression we assume that
+For regression we will assume that
 we have $\xcal$ and $\ycal = \rbb$
 (the output is continuous). \\
 
@@ -130,13 +121,14 @@ For now we assume that $\rcal(f) \equiv 0$. \\
 
 We will use the squared loss $\ell = (z- y)^2$. \\
 
-Roughly, what we mean by linear regression is that
-the prediction function is linear in its parameters. \\
+Roughly, what we mean by linear least square 
+regression is that
+the prediction function is linear in the feature space. \\
 It can still be non-linear with repsect to
 the input! \\
 
-The first step of Linear Regression is 
-to take the input data $\xcal$ and use a feature
+In Linear Regression, we can actually take the 
+input data $\xcal$ and use a feature
 map that maps the data to $\rbb^d$:
 \[ \varphi: \xcal \to \rbb^d \]
 This is representation of $\xcal$ 
@@ -149,7 +141,7 @@ repsect to its parameters $\theta \in \Theta$:
 \[ f_\theta(x) = \ang{\theta, \varphi(x)}
 = \sum_{i = 1}^d \theta_i \varphi_i(x) \]
 Where $f_\theta$ is linear in terms of the
-$\theta$ parameters, but not $x$,
+$\varphi$ parameters, but not $x$,
 since we don't know what $\varphi$ does. \\
 
 Note that instead of having $\varphi(x)$
@@ -189,6 +181,17 @@ We should be careful not to use a basis with too
 high a dimension as it would increase the number
 of features by a lot. \\
 
+Linear Least Squares Regression 
+is a machine learning model where
+we attempt to fit a feature vector of (possibly)
+non-linear functions $\varphi(x)$ to the training
+data, using a linear combination with a parameter
+vector $\theta$:
+\[ f_\theta
+= \sum_{i=1}^{d} \varphi_i(x) \theta_i \]
+The function is linear in terms of $\varphi$
+but can be non-linear in term of $x$. \\
+
 When we are using squared loss; we can think
 of the result as finding the values of $\theta$
 that averages out over all $y$ values.
@@ -200,6 +203,12 @@ Note that we can write $\riskEmpirical{\ell}{n}
 (\theta)$,
 since $\theta$ is the only changing thing
 (the one thing we optimize in $f_\theta$). \\
+
+Now to calculate the empirical risk:
+\[ \riskEmpirical{\ell}{n} (\theta)
+= \dfrac{1}{n}\sumof{i=1}{n}
+\sumof{j=1}{d} \varphi_j(x_i) \theta_j \]
+We just have to evaluate this sum.
 
 We can rewrite risk in vector and matrix
 notation. \\
@@ -357,8 +366,8 @@ As the new feature matrix and output vector. \\
 
 \newpage
 
-\subsection*{Statistical Analysis of Least Square
-Regression}
+\subsection*{Statistical Analysis of Linear Least 
+Square Regression}
 
 This section is about analyzing how close we can
 get using real data to the optimal classifiers
@@ -588,19 +597,66 @@ Using the result we got earlier, we have:
 \[ \ebb[\|\tilde{\theta} - \theta^* \|_{\hat{\Sigma}}^2] \]
 We can now add and subtract $\ebb[\tilde{\theta}]$:
 \[\ebb[\|\tilde{\theta} - \ebb[\tilde{\theta}]
-- \ebb[\tilde{\theta}] + \theta^* \|_{\hat{\Sigma}}^2]
-= \ebb[\|\ebb[\tilde{\theta}] - \theta^* \|_{\hat{\Sigma}}^2]
--\ebb[\|\tilde{\theta} - \ebb[\tilde{\theta}] \|_{\hat{\Sigma}}^2] \]
+- \ebb[\tilde{\theta}] + \theta^* \|_{\hat{\Sigma}}^2] \]
+\[ \ebb[\|\ebb[\tilde{\theta}] - \theta^* \|_{\hat{\Sigma}}^2]
++ \ebb[\|\tilde{\theta} - \ebb[\tilde{\theta}] \|_{\hat{\Sigma}}^2]
++ 2\ebb\brac{\ang{\tilde{\theta} - \ebb[\tilde{\theta}],
+\hat{\Sigma}(\ebb[\tilde{\theta}] + \theta^*)}} \]
+Now notice that this term will amount to $0$,
+this is because the right side of the inner
+product is a constant as far as the expected
+value is concerned:
+\[ \ebb\brac{\ang{\tilde{\theta} - \ebb[\tilde{\theta}],
+\hat{\Sigma}(\ebb[\tilde{\theta}] + \theta^*)}} 
+= 2\ebb\brac{\para{\tilde{\theta} - \ebb[\tilde{\theta}]}^T
+\para{\hat{\Sigma}(\ebb[\tilde{\theta}] + \theta^*)}} \]
+\[ = 2\ebb\brac{\para{\tilde{\theta} - \ebb[\tilde{\theta}]}^T}
+\para{\hat{\Sigma}(\ebb[\tilde{\theta}] + \theta^*)} \]
+The transpose of the expected vallue is just
+the expected value of the transpose, so we have:
+\[ \para{\ebb\brac{\tilde{\theta} - \ebb[\tilde{\theta}]}}^T
+\para{\hat{\Sigma}(\ebb[\tilde{\theta}] + \theta^*)} 
+=(\ebb[\tilde{\theta}] - \ebb[\tilde{\theta}])^T
+\para{\hat{\Sigma}(\ebb[\tilde{\theta}] + \theta^*)} = 0 \]
+So since the third term is $0$, the decomposition
+looks like:
+\[ \ebb[\|\ebb[\tilde{\theta}] - \theta^* 
+\|_{\hat{\Sigma}}^2]
++ \ebb[\|\tilde{\theta} - \ebb[\tilde{\theta}] 
+\|_{\hat{\Sigma}}^2] \]
 Note that in $\ebb[\|\ebb[\tilde{\theta}] 
 - \theta^* \|_{\hat{\Sigma}}^2]$,
 both $\theta^*$ and $\ebb[\tilde{\theta}]$
-are deterministic ($\tilde{\theta}$ is random,
+are constant ($\tilde{\theta}$ is random,
 but it already has an expected value around it
 $\ebb[\tilde{\theta}]$),
 so we can drop the outer expected value, getting:
 \[ \|\ebb[\tilde{\theta}] - \theta^* \|_{\hat{\Sigma}}^2
 -\ebb[\|\tilde{\theta} - \ebb[\tilde{\theta}] \|_{\hat{\Sigma}}^2 ] \]
 Which completest the proof of the decomposition. \\
+
+This is actually a more general theorem,
+which is always true:
+\[ \ebb[(X-a)^2] = (\ebb[X] - a)^2
++ \ebb[(X - \ebb[X])^2]
+= (\ebb[X] - a)^2 + \var(X) \]
+Which we can prove the exact same
+way we proved the statement above. \\
+This of course assumes $a$
+is a constant. \\
+This is called the Bias-Variance
+decomposition, and can be used
+even when $X$
+is a random vector. \\
+
+Note that we imposed on $\riskOptimal{\ell}$
+that it be the optiaml risk for functions
+from our linear hypothesis class. \\
+We also assumed that we had a loss $\ell$
+that is the quadratic, or squared loss. \\
+All of the statistical analysis that we did 
+here, including the excess risk decomposition we got,
+only applies if our assumptions hold. \\
 
 Now that we've given formulas that calculate
 the convergence rate or excess risk
@@ -609,7 +665,8 @@ what parameters can we evaluate? \\
 
 \newpage
 
-\subsection*{Analysis of the Empirical Risk Minimizer}
+\subsection*{Analysis of the Linear Least Square 
+Estimator}
 
 One very natural choice that we expect
 to do well is linear least squares
@@ -618,6 +675,7 @@ estimator:
 = \dfrac{1}{n}\hat{\Sigma}\inv \Phi^T\bl{Y} \]
 Which we got by minimizing the empirical risk
 in the last section. \\
+
 Note that
 \[ \hat{\Sigma} = \dfrac{1}{n}\Phi^T\Phi \]
 Which means that:
@@ -794,114 +852,7 @@ The empirical risk estimator
 $\hat{\theta}$ is actually the best
 one out of all unbiased estimators. \\
 
-Note that we imposed on $\riskOptimal{\ell}$
-that it be the optiaml risk for functions
-from our linear hypothesis class. \\
-We also assumed that we had a loss $\ell$
-that is the quadratic, or squared loss. \\
-All of the statistical analysis that we did 
-here, including the convergence rate we got,
-only apply if our assumptions hold. \\
 
-\newpage
-
-\subsection*{Statistical Analysis of Ridge Regression}
-
-This part is the same as last part, but this time
-with ridge regression. \\
-
-Recall that ridge regression is just
-a linear least square problem.
-
-We have our ridge regression estimator 
-$\hat{\theta}_\lambda$,
-which also depends on the output
-(which is random in this setting). \\
-
-There may be the a $\lambda$ sweet spot,
-since it creates a tradeoff between bias
-and variance. \\
-
-The excess risk will give us the best
-tradeoff that we can find. \\
-
-Once we have the optimal value of $\lambda$,
-we can use it to write the convergence
-rate again, but better. \\
-
-Note that $d$, the number of dimensions of the feature
-vector, does not affect the convergence rate. \\
-
-Because we have $\sigma$ instead of $\sigma^2$
-in the convergence rate, the bound depends less
-on the noise in the data than in non-regularized 
-risk. \\
-
-Note that we have an upper bound for the excess risk,
-at the end, not an equality, because of the way
-we bounded $\lambda$ (typo on power point). \\
-
-\newpage
-
-\subsection*{Statistical Analysis in the Random 
-Design Setting}
-
-This is an optional section. \\
-
-We can repeat the same steps we did in the last
-two sections, but in the random design setting
-instead of the fixed design setting. \\
-where we have random datasets $\bl{X}$ and $\bl{Y}$. \\
-
-I will not do this section. \\
-
-\newpage
-
-\subsection*{LASSO}
-
-This section introduces a new regularizer. \\
-
-1-norm regularization penalizes small and large
-weights equally. \\
-
-We compare 2-norm and 1-norm regularization. \\
-Visually, it will be a square shape,
-while the other is more of a circle. \\
-
-It is not smooth, and does not have
-a closed form solution. \\
-We can still solve it, using iterative
-optimization algorithms. \\
-
-It is very sparse, meaning that it does
-feature selection, such that $\Phi \theta$
-will have many missing terms (less overhead). \\
-
-Many other (non-smooth) regularizers also
-induce sparsity. \\
-They belong to a whole family
-depending on norms used. \\
-
-Typo (first regularizer should be 
-$|x|^2 + |y|^2$). \\
-
-Infinity norm does not induce sparsity
-(looks like a square, but straight). \\
-
-Note that many of these "norms"
-when $p < 1$, it is not actually a norm
-mathematically (triangle inequality
-not satisfied). \\
-
-We now just give the convergence rate of
-several different norm regularizers,
-no proofs, just the value. \\
-
-Another type of sparsity besides
-norms, we have group sparsity.
-Then we just have a very high level
-description. \\
-They are also given by regularizers. \\
 
 \newpage
 

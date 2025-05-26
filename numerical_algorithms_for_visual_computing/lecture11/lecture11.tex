@@ -1,0 +1,179 @@
+
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture XI
+}
+\date{2025-05-26}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Monte-Carlo Integration}
+
+In the last lecture, we mentioned that
+we can design our change of variable transformations
+such that certain terms, like $\cos$
+or $\sin$, cancel out.
+This is done for performance and simplicty
+and numerical accuracy. \\
+
+The idea of cancelling out terms from
+an integral when changing variables
+is that we have an integral:
+\[ \int g(x)h(x) dx \]
+Where $h(x)$ is nearly flat (near its average
+value), so integrating it with Monte-Carlo
+only requires a couple samples. \\
+So if we eliminate $g(x)$ using the above method,
+we could easily do Monte-Carlo. \\
+
+Suppose we want to cancel out a term 
+$g(x)$. \\
+Then we can note that by the Fundamental
+Theorem of Calculus, if:
+\[ g(x) = \int P(x) dx \]
+then $|\det(J_P)| = g(x)$. \\
+We know that:
+\[ \det(J_{P\inv}) =  \det(J_{P}\inv)
+= \dfrac{1}{\det(J_{P})}
+= \dfrac{1}{g(x)} \]
+So in order to cancel out a term $g(x)$,
+we would want to have the term
+$|J_{P\inv}|$ after our change of variables. \\
+
+So we want some transformation $P$ such that:
+\[ J_{P} = g(x) \cdot c \]
+for some constant $c$. 
+We can find $P$ using the anti-derivative. \\
+This leads us to $J_{P\inv}$, which
+will cancel out the term $g(x)$,
+and leaves a constant. \\
+
+Why do we need a constant? \\
+The transform that yields $|J_{P\inv}|$
+must have variable range at $[0, 1]^d$
+so our range is a unit hypercube.
+This constraint can be used to set $c$. \\
+Note that this transformation is done 
+after the initial transformation into a 
+unit hypercube. \\
+If we have $x \in [a, b]$ in the original
+integral, we want that $P(a) = 0$
+and $P(b) = 1$,
+which is to say:
+\[ G(x) = \dfrac{P(x) - P(a)}{P(b) - P(b)} \]
+where $G(x)$ is our transformation
+whose inverse keeps the variables 
+in $[0, 1]$. \\
+
+Note that this makes the second transformation
+redundant, where we turn rectangular
+interval into a square (linear map).
+This transformation eliminates the
+noisy term, and turns the variable range
+into a unit hypercube, so there is no need
+for that linear map. \\
+
+Note that we will actually have a double
+integral over $\phi$ and $\theta$,
+but only $\theta$ is in the $\cos$
+and $\sin$ term, so we functionally
+have a single integral. \\
+We still need a linear map to map $\varphi$
+to $[0, 1]$. \\
+So we combine the two in one transform. \\
+
+We do have to assume $g(x)$ is non-negative,
+since we have an absolute value around the
+determinant $|J_{P\inv}|$. \\
+
+If we have:
+\[ \int_0^{2\pi}|\sin(\theta)|d\theta \]
+then we divide the interval:
+\[ \int_0^{\pi} \sin(\theta) d\theta 
++ \int_{\pi}^{2\pi} -\sin(\theta) d\theta\]
+in this way. \\
+
+We can drop the absolute value if we are
+in an interval where the value is always
+positive. \\
+
+So all the steps: \\
+First turn the integral into a Neumann
+series without recursion. \\
+Then turn each integral into a rectangular
+coordinate space using parameterization. \\
+Then do a map that gets rid of a noisy term
+and turns the rectangle into a unit square/hypercube. \\
+
+Be careful not to confuse the $\theta$
+we get from parameterization,
+and the special $\theta$
+we get from $\omega_i \cdot n$,
+the direction of the incident light. \\
+
+Note that we often have to eliminate the
+term $\cos^n(x)\sin(x)$,
+where $\cos(x)\sin(x)$
+the $n$ power comes from the BRDF. \\
+
+This sampling method gets rid of the BRDF
+and the $\cos$ and $\sin$ terms. \\
+
+\newpage
+
+\subsection*{Next Event Estimation}
+
+If we have a very small light source, that is very
+strong, we get a lot of noise; when it does
+hit the light, which is rare, we get a lot of light. \\
+
+So to solve this issue, we can directly send rays
+onto the light source; on each bounce,
+we can explicitely send a second ray onto
+the light source. Usually we just pick one
+random direction (Monte-Carlo with one sample).
+But now we branch out, and have two rays
+shoot out each time. \\
+
+Note that this does not cause a tree,
+since the ray that hits the light source
+doesn't bounce further.
+If we did bounce again, this would
+become very inefficient. \\
+
+The area formulatiom helps in this case,
+since we can explicitely take a point on the
+light source to where we want the ray
+to hit. \\
+
+So one of our rays will have the area formulation,
+and the other uses solid angles.
+We then combine the two at each bounce
+each weighted by $w_0$ and $w_1$. \\
+
+If we have multiple light sources,
+we can at each point pick a random light
+source to send a ray to (not all of them
+at once). \\
+
+The point on the light source we sample
+must be random too. \\
+Also note that we need the visibility used
+here too to ensure nothing obstructs the
+ray from the point on the light source. \\
+
+\end{document}

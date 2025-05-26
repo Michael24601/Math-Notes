@@ -1,0 +1,558 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture VII
+}
+\date{2025-05-19}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Linear Classiciation}
+
+\subsection*{Introduction}
+
+In the last lecture, we saw Linear Least Squares
+Regression,
+which was a machine learning algorithm concerned
+with fitting the data with a function $f_\theta$
+that was linear in terms of $\theta$
+(but not neccesarily the inputs $x$,
+due to the use of a feature map $\varphi(x)$). \\
+
+In this section, we will explore
+linear classification, where we attempt
+to classify data by seperating the input space
+into two half-spaces using a linear 
+hyperplane. \\
+
+We assume the output space is binary
+$\ycal = \{-1, 1\}$. \\
+
+Why do we seperate the data instead of fitting it?
+We can't really fit data using linear functions;
+they are too simple. We can instead
+find a linear function $\ang{w, x} + b$
+such that $\sign(\ang{w, x} + b)$
+matches that of the output.
+Notice that what this does is seperate
+the data points on each side of the line
+depending on the label. \\
+
+The idea is simple; if we can find a hyperplane
+$H$, which is linear, which seperates the input
+data with label $-1$ and label $1$
+such that the margin between the classification
+hyperplane and the data is maximal
+(the hyperplane is right in the middle),
+we assume that it will generalize well
+to unseen data, and expect that data will
+correctly fall into their half-space. \\
+
+We assume that we have $\xcal = \rbb^d$ and that
+$\ycal = \{-1, 1\}$,
+and that the hyperplane $H$
+is an $d-1$-dimensional hyperplane. \\
+If $\xcal = \rbb^2$, then we use a
+line to divide $\rbb^2$ into two halfspaces. \\
+
+First, note that a hyperplane can be written
+as an implicit function:
+\[ H = \{ x \in \xcal \mid \ang{w, x} + b = 0  \} \]
+Where $w$ is a vector of slopes,
+and $b$ is the offset. The vector $x$
+is the vector of variables in $\rbb^d$.
+For example:
+\[ ax_1 + bx_2 + c = 0 \]
+is a line in $\rbb^2$. \\
+
+Note that the vector $w$ of slopes
+is the gradient of the hyperplane,
+which makes it the normal $\nabla (\ang{w, x} + b)$
+of the hyperplane (it is constant
+since the hyperplane has the same normal
+at all points). \\
+
+Note that this implict function is not unique;
+if we multiply $w$ and $b$ by a scalar $\alpha$
+that is not $0$, we get the exact same
+hyperplane. \\
+
+We can also write a hyperplane
+as a parametric function:
+\[ H = \{ \olsi{x} + z \mid \olsi{x} \in H
+\AND z \in w^\perp \} \]
+Where $w$ is a vector of slopes,
+or normal,
+which makes $w^\perp$
+orthogonal to $w$, which is to say,
+any vector on the plane.
+Moreover, $\olsi{x}$ any point on the plane. \\
+Basically, we take some point $\olsi{x}$
+as our origin, and then offset it by any
+vector $w^\perp$ that belongs to the
+plane to get any point on the plane. \\
+
+Note that we can find $w^\perp$
+by just generating all vectors $z$ such that
+$\ang{z, w} = 0$. \\
+
+The two halfspaces defined by the hyperplane are
+the positive halfspace:
+\[ H_+ = \{ x \in \xcal \mid \ang{w, x} + b > 0 \}
+= \{ x \in \xcal \mid \sign(\ang{w, x} + b) = 1 \} \]
+and the negative halfspace:
+\[ H_- = \{ x \in \xcal \mid \ang{w, x} + b < 0 \}
+= \{ x \in \xcal \mid \sign(\ang{w, x} + b) = -1 \} \]
+Where $H_+$ is the halfspace in the same direction
+as the normal $w$ is pointing to. \\
+
+Can we always find a linear classifier for a dataset?
+The answer is no; it has to be linearly seperable. \\
+
+A dataset $S = (x_i, y_i)^n \in (\xcal \times \ycal)^n$
+is called linearly seperable if there exists
+a hyperplane that can seperate the inputs $x_i$
+of the datapoints
+with $y_i = 1$ and $y_i = -1$. \\
+Essentially, if there exists a hyperplane $H$
+such that:
+\[ \{x_i \mid y_i = -1\} \subset H_- \]
+\[ \{x_i \mid y_i = 1\} \subset H_+ \]
+Not all datasets have this property. \\
+
+Note that if a dataset is linearly seperable,
+there are usually more than one seperating hyperplane;
+it is not unique. \\
+
+Another way of saying we want a hyperplane
+to seperate the datapoints that have labels
+$-1$ and $1$ is to say that we want to find
+$w$ and $b$ such that:
+\[ y_i(\ang{w, x} + b) > 0 \]
+for all $i \in \{1, 2, \dots, n\}$. \\
+
+If we define 
+\[ g_{(w, x)}(x) = \ang{w, x} + b \]
+then our classifier is $f(x) = \sign(g_{(w, x)}(x))$. \\
+Note that the hyperplane where $g_{(w, x)}(x) = 0$
+is the decision boundary. \\
+
+Now, there is a small note to make.
+We will use a feature map $\varphi(x)$,
+so the hyperplane won't be linear in terms of
+the input space $\xcal$,
+but it will be linear in terms of the
+variables $\varphi(x)$. \\
+
+Increasing the dimensionality of $\varphi(x)$,
+like for example,
+a cubic $\varphi(x) = (1, x, x^2, x^3)^T$
+is able to capture subtle patterns in the data. \\
+
+We again have the same class of functions $\ffrak$
+with parameters $\theta \in \Theta$. \\
+
+Note here that $\theta = (w, b)$,
+where $b$ will show up because on top of 
+$\varphi(x)$, our feature also has a $1$ 
+in its features. \\
+
+We use regularized empirical risk minimization
+to find the weights $\theta$ of the classifier $g_\theta$. \\
+
+In principle, we use 0-1-loss, but it is hard to
+optimize, so we prefer to use surrogate loss functions. \\
+
+We will start with no regularization $\rcal(g) \equiv 0$. \\
+
+There are three different methods to optimize
+the empirical risk and find the learning rule;
+each uses a loss function:
+\begin{enumerate}
+    \item 
+    Linear Discriminant Analysis:
+    where we use the squared loss $(z - y)^2$.
+    \item 
+    Logistic Regression:
+    where we use the logistic loss $\log(1+e^{-yz})$.
+    \item 
+    Support Vector Machines:
+    where we use the hinge loss $\max(0, 1-yz)$,
+    typically with quadratic regularization.
+\end{enumerate}
+They get better as we go further down. \\
+
+The last two loss functions are margin-based,
+meaning that they have $yz$ in them:
+\[ \ell(z, y) = \Phi(zy) \]
+Where we have a product $zy$. \\
+
+\newpage
+
+\subsection*{Linear Discriminant Analysis}
+
+In the LDA method, we have the squared 
+loss $\ell(z, y) = (z-y)^2$,
+which makes it similar to linear least square regression,
+except that our output is binary. \\
+
+So we again have to minimize:
+\[ \dfrac{1}{2}\|\Phi \theta - \bl{y}\|^2 \]
+We already know how to solve this,
+but for our own understanding,
+we will reformulate this problem. \\
+
+First note that we have:
+\[ \theta = \pmat{w \\ b} \]
+where we have $d$ $w$ weights, one for each feature 
+$\varphi(x_j)$, and a $b$ offset,
+which multiplies the $1$ in the features vectors.
+This means that $\theta \in \rbb^{d+1}$. \\ 
+
+This also means that $\Phi$ is an 
+$\rbb^{n \times (d+1)}$
+dimensional matrix, where we have $d+1$
+because we have $d$ features in $\varphi(x)$
+and we have $1$ for the offset $b$. \\
+
+We have:
+\[ \bl{y} = \pmat{y_1 \\ \vdots \\ y_n} \]
+which is the vector of binary outputs in the training
+data set, and belongs to $\{-1, 1\}^n$. \\
+
+We can also define:
+\[ \bl{x_i} = \varphi(x_i) \]
+Which is the feature vector of $x_i$ in $\rbb^d$. \\
+We can also define:
+\[ \bl{X} = \pmat{\bl{x_1} & \bl{x_2} \dots & \bl{x_n}} \]
+where the columns are teh feature vectors of each $x_i$. \\
+
+This means that we can write:
+\[ \Phi = \pmat{\bl{X}^T & \bl{1}} \]
+where $\bl{1}$ is a vector of only $1$s, of length $n$:
+\[ \bl{1} = \pmat{1 \\ \vdots \\ 1} \]
+This means that we can write:
+\[ \Phi^T = \pmat{\bl{X} \\ \bl{1}^T} \]
+Both of which we will be using later. \\
+
+We know that to minimize the risk,
+the solution is given by the system:
+\[ \Phi^T\Phi \theta = \Phi^T \bl{y} \]
+Which we can rewrite using our new notation
+as a block matrix:
+\[ \pmat{\bl{X} \\ \bl{1}^T}\pmat{\bl{X}^T & \bl{1}}
+\theta = \pmat{\bl{X} \\ \bl{1}^T}\bl{y} \]
+\[ \pmat{\bl{X}\bl{X}^T & \bl{X}\bl{1} \\ 
+\bl{1}^T\bl{X}^T & \bl{1}^T\bl{1}}
+\pmat{w \\ b}= \pmat{\bl{X}\bl{y} \\ \bl{1}^T \bl{y}} \]
+Where $\bl{1}^T\bl{1}$ is just $n$
+(the dot product of two vectors of $1$s with $n$
+entries). \\
+Note that we can also write $\bl{1}^T\bl{X}^T$
+as $(\bl{X}\bl{1})^T$:
+\[ \pmat{\bl{X}\bl{X}^T & \bl{X}\bl{1} \\ 
+(\bl{X}\bl{1})^T & n}
+\pmat{w \\ b}= \pmat{\bl{X}\bl{y} \\ \bl{1}^T \bl{y}} \]
+This is just a linear system with a matrix and a vector
+of $d+1$ unknowns, which we will treat as a block matrix
+with a vector of $2$ block element unknowns. \\
+
+We will use substitution (instead of elimination)
+to solve this matrix. So, we start
+with the second equation:
+\[ (\bl{X}\bl{1})^T w + nb = \bl{1}^T\bl{y} \]
+\[ b = \dfrac{1}{n}(\bl{1}^T\bl{y} - (\bl{X}\bl{1})^T w) \]
+We can now plug this into the first equation:
+\[ \bl{X}\bl{X}^T w + \bl{X}\bl{1}b = \bl{X}\bl{y} \]
+\[ \bl{X}\bl{X}^T w + \bl{X}\bl{1} 
+\dfrac{1}{n}(\bl{1}^T\bl{y} - (\bl{X}\bl{1})^T w)
+= \bl{X}\bl{y} \]
+\[ \bl{X}\bl{X}^T w + \dfrac{1}{n}
+(\bl{X}\bl{1} \bl{1}^T\bl{y} - (\bl{X}\bl{1})^T w)
+= \bl{X}\bl{y} \]
+\[ \bl{X}\bl{X}^T w + \dfrac{1}{n}\bl{X}\bl{1} \bl{1}^T\bl{y} - 
+\dfrac{1}{n}(\bl{X}\bl{1})^T w
+= \bl{X}\bl{y} \]
+\[ (\bl{X}\bl{X}^T - \dfrac{1}{n}(\bl{X}\bl{1})^T) w
+= (\bl{X} - \dfrac{1}{n}\bl{X}\bl{1} \bl{1}^T) \bl{y} \]
+We will stop here. \\
+
+Now, recall that in our training dataset, some inputs
+$x_i$ corresponded to the $-1$ label, and others to the
+$1$ label.
+We will now reflect this division in the data. \\
+
+We can rearrange the data in these matrices and
+vectors as such. \\
+In $\bl{X}$, we will have the feature vector columns
+of the $x_i$ points with labal $-1$ on the left:
+\[ \bl{X} = \pmat{\bl{X}_- & \bl{X}_+} \]
+We can do the same for the outputs $\bl{y}$:
+\[ \bl{y} = \pmat{\bl{y}_- \\ \bl{y}_+}
+= \pmat{-(\bl{1}_-) \\ \bl{1}_+} \]
+Note here that the output is binary,
+so $\bl{y}$ just contains $1$s and $-1$s,
+which we arrange such that the $-1$s are first.
+Note that $\bl{1}_-$ is the vector of $1$s
+corresponding to the $-1$ labels, but it itself
+contains $1$s; the point of it is that its length
+matches that of $\bl{y}_-$, the negative labels. \\
+Likewise, we can divide our vector of $1$s:
+\[ \bl{1} = \pmat{\bl{1}_- \\ \bl{1}_+} \]
+Which is still just a vector of $1$s,
+but we write it like this to differentiate the $1$s
+that correspond to the negative class outputs
+in the $\bl{y}$ vector, so that our vectors are
+matrices are consistently written. \\
+
+Now using block matric arithmetic, we have:
+\[ \bl{X}\bl{1} = \pmat{\bl{X}_- & \bl{X}_+}
+\pmat{\bl{1}_- \\ \bl{1}_+} 
+= \bl{X}_-\bl{1}_- + \bl{X}_+\bl{1}_+ \]
+Note that what we are doing
+when we multiply $\bl{X}_-$ by $\bl{1}_-$
+here is just summing the feature vectors of each $x_i$,
+so we can write these sums as the avergage times
+the number of elements (which is what a sum is):
+\[ \bl{X}_-\bl{1}_- + \bl{X}_+\bl{1}_+ 
+= n_-\bl{m}_- + n_+\bl{m}_+ \]
+Where $n_-$ is the number of negative data-points,
+and $\bl{m}_-$ is the mean of the feature vectors
+of the inputs $x_i$ of the negative datapoints,
+or just the mean of the columns of $\bl{X}_-$. \\
+For that same reason, we can write:
+\[ \bl{X}\bl{y} = \pmat{\bl{X}_- & \bl{X}_+}
+\pmat{-(\bl{1}_-) \\ \bl{1}_+} 
+= \bl{X}_+\bl{1}_+ - \bl{X}_-\bl{1}_-
+= n_+\bl{m}_+ - n_-\bl{m}_- \]
+Finally we have:
+\[ \bl{X}\bl{X}^T = \bl{X}_-\bl{X}^T_- + \bl{X}_-\bl{X}^T_- \]
+Again we're just doing block matrix arithmetic here. \\
+
+Now, we can define two new values.
+The first is the within-class covariance, 
+which is the covariance within each of the two
+classes, the one corresponding to the negative
+and the one corresponding to the positive data points. \\
+The second one is the between-class covariance,
+which is the variance between the two classes. \\
+
+Note that the covariance is calculated
+using the feature vectors of each $x_i$,
+that is, the columns of $\bl{X}_-$ and $\bl{X}_+$,
+and their respective means $\bl{m}_-$ and $\bl{m}_+$,
+using the same formula we know from before,
+but without the expected value since these quantities 
+are deterministic. \\
+
+Now, intuitively, the within-class covariance
+is just the sum of the covariance of the positive
+and negative class of datapoints:
+\[ \hat{\Sigma}_w 
+= (\bl{X}_- - \bl{m}_-\bl{1}^T_-)(\bl{X}_- 
+- \bl{m}_-\bl{1}^T_-)^T
++ (\bl{X}_+ - \bl{m}_+\bl{1}^T_+)(\bl{X}_+ 
+- \bl{m}_+\bl{1}^T_+)^T \]
+We can then do some arithmetic and get:
+\[ \hat{\Sigma}_w = \bl{X}_+\bl{X}^T_+
++ \bl{X}_-\bl{X}^T_- -n_+\bl{m}_+\bl{m}^T_+
+-n_-\bl{m}_-\bl{m}^T_- \]
+Here we use $\hat{\Sigma}_w$ to denote the within-class
+covariance. \\
+
+The between-class covariance is:
+\[ \hat{\Sigma}_b = (\bl{m}_+ - \bl{m}_-)(\bl{m}_+ - \bl{m}_-)^T \]
+which is denoted using $\hat{\Sigma}_b$. \\
+
+Now, going back to our solution using substitution, we had:
+\[ (\bl{X}\bl{X}^T - \dfrac{1}{n}(\bl{X}\bl{1})^T) w
+= (\bl{X} - \dfrac{1}{n}\bl{X}\bl{1} \bl{1}^T) \bl{y} \]
+We can rewrite the right hand side
+using the division of the classes
+that we created:
+\[ (\bl{X} - \dfrac{1}{n}\bl{X}\bl{1} \bl{1}^T)\bl{y}
+= \dfrac{2n_+n_-}{n_+ + n_-}(\bl{m}_+ - \bl{m}_-) \]
+Which we can derive arithmetically. \\
+We can do the same with the left hand side:
+\[ (\bl{X}\bl{X}^T - \dfrac{1}{n}(\bl{X}\bl{1})(\bl{X}\bl{1})^T)
+= \hat{\Sigma}_w + \dfrac{n_+n_-}{n_+ + n_-}\hat{\Sigma}_b \]
+Which contains the covariances;
+so solving the linear system for the weights $w$
+depends on these covariances. \\
+
+Now, we can derive the following from our equation
+for the weight $w$:
+\[ \para{\hat{\Sigma}_w + 
+\dfrac{n_+n_-}{n_+ + n_-}\hat{\Sigma}_b}w
+= \dfrac{2n_+n_-}{n_+ + n_-}(\bl{m}_+ - \bl{m}_-) \]
+\[ \dfrac{n_+ + n_-}{2n_+n_-}\pmat{\hat{\Sigma}_w + 
+\dfrac{n_+n_-}{n_+ + n_-}\hat{\Sigma}_b}w
+= (\bl{m}_+ - \bl{m}_-) \]
+\[ \para{\dfrac{n_+ + n_-}{2n_+n_-}\hat{\Sigma}_w + 
+\dfrac{1}{2}\hat{\Sigma}_b}w
+= (\bl{m}_+ - \bl{m}_-) \]
+Now we can multiply both sides by the inverse
+of the within class covariance:
+\[ \hat{\Sigma}\inv_w
+\para{\dfrac{n_+ + n_-}{2n_+n_-}\hat{\Sigma}_w + 
+\dfrac{1}{2}\hat{\Sigma}_b}w
+= \hat{\Sigma}\inv_w(\bl{m}_+ - \bl{m}_-) \]
+\[\para{\dfrac{n_+ + n_-}{2n_+n_-}\hat{\Sigma}\inv_w\hat{\Sigma}_w + 
+\dfrac{1}{2}\hat{\Sigma}\inv_w\hat{\Sigma}_b}w
+= \hat{\Sigma}\inv_w(\bl{m}_+ - \bl{m}_-) \]
+\[\para{\dfrac{n_+ + n_-}{2n_+n_-}I + 
+\dfrac{1}{2}\hat{\Sigma}\inv_w\hat{\Sigma}_b}w
+= \hat{\Sigma}\inv_w(\bl{m}_+ - \bl{m}_-) \]
+This will lead to:
+\[ w = \alpha \hat{\Sigma}\inv_w (\bl{m}_+ - \bl{m}_-) \]
+Where:
+\[ \alpha =  \]
+
+Now note that the weight $w$
+only depends on where the centroids (means)
+of the two clusters/classes are, and the within-class
+covariance. \\
+This illuminates how LDA finds a seperator. \\
+
+Alternatively, we can show that the optimal weight we found:
+\[ w = \alpha \hat{\Sigma}\inv_w (\bl{m}_+ - \bl{m}_-) \]
+is proportional to the Fischer criterion:
+\[ \arg \max_w = \dfrac{\ang{w, \hat{\Sigma}_b w}}
+{\ang{w, \hat{\Sigma}_w w}} \]
+Where
+\[ \ang{w, \hat{\Sigma}_b w} = (\ang{\bl{m}_+ - \bl{m}_-, w})^2 \]
+and
+\[ \ang{w, \hat{\Sigma}_w w} = 
+\|(\bl{X}_- - \bl{m}_-\bl{1}^T_-)^Tw\|^2
++ \|(\bl{X}_+ - \bl{m}_+\bl{1}^T_+)^Tw\|^2 \]
+Still unsure how we can show it is proportional. \\
+
+We can interpret the result better now;
+notice how $w$ is proportional to the Fischer
+criterion, which means that it increases as the numerator 
+icnreases, and decreases as the denominator increases. \\
+This means that $w$ grows proportionally with
+$\ang{w, \hat{\Sigma}_b w}$,
+which means that $w$ wil align with direction of
+the centroids (direction connecting the centroids). \\
+On the other hand, $w$ is inverse proportional to 
+$\ang{w, \hat{\Sigma}_w w}$,
+which means that it will not align well with the 
+within-class variation. \\
+
+The intuition behind this is simple;
+we want our projected centroids to be as far
+away from each other as possible;
+this leads to the two clusters optimally
+being seperated. \\
+
+One disadvantage of using LDA however is that it is
+vert strongly affected by the within class
+covariance, which it won't align with;
+so if we have a seperator thats seperates two clusters
+well, and one cluster had some mroe data points added to it,
+this would change the seperator's direction, even if
+the added data points were completely on the correct
+side; it's because the covariance changed. \\
+
+So LDA is just about maximizing the Fischer criterion. \\
+
+It also does dimensionality reduction. \\
+
+\newpage
+
+\subsection*{Logistic Regression}
+
+In logistic regression, we use logistic loss,
+which is given by:
+\[ \ell(z, y) = \log(1 + e^{-zy}) \]
+It is classification calibrated, convex,
+and is margin-based. \\
+Note that solving for the optimal $\theta$
+has no closed form solution. \\
+
+Instead of maximizing $\log$,
+we can minimize $-\log$,
+which does the same thing. \\
+
+Using logistic loss is equivalent to assuming
+that the probability density follows sigmoid function
+in space:
+\[ p_{Y \mid X = x, \theta}(y) 
+= \dfrac{1}{1 + e^{-y\ang{\varphi(x), \theta}}} \]
+The sigmoid shape tells us that optimizing the logistic
+loss will get us a seperator that prioritizes having 
+data points with the correct label the furthest away
+from the seperator. 
+This makese sense; the sigmoid function
+takes as input $y\and{\varphi(x), \theta}$.
+If the input is negative, the sigmoid has
+value $0$, and if the input is positive, 
+it has value $1$, with a transitional phase
+at $y\and{\varphi(x), \theta} = 0$
+which can be as sharp or smooth as we want. \\
+So if $y\and{\varphi(x), \theta}$ share the same sign,
+the input is positive, and the density is nearly $1$,
+and if they have opposite signs, the density is nearly $0$. \\
+This means that our assumption is that we want a $\theta$
+with a probability of assigning a correct
+label being very high (density $1$),
+and the probability of assigning a wrong label
+being very low (density $0$). \\
+
+This is why logistic regression is better than LDA;
+the boundary is more centered between the
+two clusters; this is because LDA cares too much
+about the within-class covariances of the two
+classes, and is easily skewed, and not often centered. \\
+
+We can think of logistic regression as ensuring
+that if a point is further away than another
+point in terms of the seperator,
+then it will have lower loss and will surely be
+classified correctly. \\
+So irrelevant data far away from the seperator
+influences logistic regression's seperator
+far less. \\
+
+We often use quadratic regularization in logistic
+regression:
+\[ \min_\theta \sum_{i=1}^n 
+\log(1 + e^{-y\ang{\varphi(x), \theta}}) 
++ \lambda \|\theta\|^2 \]
+This is a formula showing the empirical risk
+and regularization minimization. \\
+Note that $|\theta\|^2 = \|w^2\| + b^2$. \\
+
+Logistic regression generalizes very well
+to multi-class classification. \\
+For a $K$ multi-class classification, we assume the density
+follows:
+\[ p_{Y \mid X = x, \theta}(y)
+= \dfrac{e^{\ang{\theta_y, \varphi(x)}}}
+{\sum_{i = 1}^K e^{\ang{\theta_i, \varphi(x)}}} \]
+This is accompanied by the multi-class loss function:
+\[ \ell(z, y) = -\log\para{\dfrac{e^{\ang{\theta_y, z}}}
+{\sum_{i = 1}^K e^{\ang{\theta_i, z}}}} \]
+As described earlier; the output of the classifier
+is a vector containing the confidence in each ouput.
+The softmax evaluates the predictions; if the
+correct label has high confidence and the rest have low
+confidence, it gets lower. \\
+It is called the softmax. \\
+
+\newpage
+
+\end{document}

@@ -1,0 +1,549 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture VI
+}
+\date{2025-05-15}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Learning in Practice}
+
+\subsection*{Linear Algebra}
+
+This section contains some useful Linear
+Algebra rules. \\
+
+The trace of a matrix is the sum of its eigenvalues:
+\[ \tr(M) = \tr(P\Lambda P^T) = \tr(\Lambda) \]
+This is true because of a more general rule,
+which states that for any matrix $A$
+and orthogonal matrix $P$:
+\[ \tr(PAP^T) = \tr(A) \]
+Which we can prove as such:
+\[ \tr(PAP^T) = \tr(P^TPA) = \tr(IA) = \tr(A) \]
+Using the cyclical property. \\
+
+If the eigenvalues of a matrix $M$
+are all smaller or equal to $\dfrac{1}{2}$,
+then:
+\[ w^TMw \leq \dfrac{1}{2} \|w\|^2 \]
+for any vector $w \in \rbb^n$.
+This is because:
+\[ w^TMw = w^T(P\Lambda P^T)w
+= (w^TP)\Lambda(P^Tw)
+= (P^Tw)^T\Lambda(P^Tw) \]
+Now, we can take $z = P^Tw$, and write:
+\[ (P^Tw)^T\Lambda(P^Tw) 
+= z^T \Lambda z = \sum_i \lambda_i z_i^2 \]
+where $\lambda_i$ is the $\nth{i}$ eigenvalue. \\
+Notice that because $\lambda_i \leq \dfrac{1}{2}$,
+this means that:
+\[\sum_i \lambda_i z_i^2 
+\leq \sum_i \dfrac{1}{2} z_i^2 = \dfrac{1}{2} \|z\|^2 \]
+Note that because $P$ is orthogonal,
+multiplying $w$ by it won't change its length
+(norm), so:
+\[ \|w\|^2 = \|z\|^2 \]
+Which means that:
+\[w^TMw = \sum_i \lambda_i z_i^2 
+\leq \dfrac{1}{2} \|w\|^2\]
+Proving the theorem. \\
+
+In one of the assignments we proved the
+more general theorem of:
+\[ \dfrac{x^TAx}{x^Tx} \leq \lambda_{\text{max}} \]
+Where $\text{max}$ is the largest
+eigenvalue of $A$. \\
+
+We can prove a similar theorem applies for the trace. \\ 
+If the eigenvalues of a matrix $M$
+are all smaller or equal to $\dfrac{1}{2}$, then:
+\[ \tr(BM) \leq \dfrac{\tr(B)}{2} \]
+for any matrix $B$. \\
+First note that
+by the circular property of the trace:
+\[ \tr(BM) = \tr(B P\Lambda P^T) = \tr(\Lambda P^T B P) \]
+Now $\Lambda$ is just a diagonal matrix,
+which means that its eigenvalues
+$\lambda_i$ each multiply the diagonal
+elements of $P^T B P$,
+which then get summed by the trace.
+Moreover, $\lambda_i \leq \dfrac{1}{2}$.
+So we can write:
+\[ \tr(\Lambda P^T B P) 
+= \sum_i{\lambda_i (P^T B P)_{ii}}
+\leq \sum_i{\dfrac{1}{2} (P^T B P)_{ii}} = 
+\dfrac{\tr(P^T B P)}{2} \]
+However, recall that since $P$ is orthogonal:
+\[ \tr(P^T B P) = \tr(B) \]
+Which means that:
+\[ \tr(BM) \leq \dfrac{\tr(B)}{2} \]
+Which completes the proof. \\
+
+The matrix inversion lemma states that:
+\[ {\displaystyle \left(A+UCV\right)^{-1}=
+A^{-1}-A^{-1}U\left(C^{-1}+VA^{-1}U\right)^{-1}
+VA^{-1}} \]
+Which applies for any matrices. \\\
+
+\newpage
+
+\subsection*{Statistical Analysis of the 
+Ridge Regression Estimator}
+
+In this section,
+we focus on analyzing the estimator 
+$\hat{\theta}_\lambda$
+that minimizes the ridge regression:
+\[ \|\Phi \theta - \bl{y} \|^2 + \lambda\|\theta\|^2 \]
+Which itself reduces to a linear least square
+regression. \\
+
+Recall that in our statistical analysis
+of the linear least square regression,
+we found that the excess risk
+of an estimator $\tilde{\theta}$
+that depends on the output data randomness 
+$\bl{Y}$ decomposes into:
+\[ \ebb[\risk{\ell}(\tilde{\theta})] 
+- \riskOptimal{\ell} = \underbrace{
+\| \ebb[\tilde{\theta}] - \theta^*
+\|^2_{\hat{\Sigma}}}_{\text{Bias}}
++ \underbrace{
+\ebb[\|\tilde{\theta} - \ebb[\tilde{\theta}] 
+\|^2_{\hat{\Sigma}}]}_{\text{Variance}}\]
+Where $\riskOptimal{\ell} = \sigma^2$. \\
+
+Now, we will try to find the excess risk,
+or convergence rate, of the ridge regression
+estimator, which is given by:
+\[ \hat{\theta}_\lambda
+= \dfrac{1}{n}(\hat{\Sigma} + \lambda I)\inv
+\Phi^T \bl{Y} \]
+Where $\bl{Y}$ is the random dataset output
+we used to compute the estimator. \\
+
+The ridge regression estimator is not
+unbiased; both the bias and the variance
+will contribute to the total excess risk. \\
+
+First note that:
+\[ \ebb[\hat{\theta}_\lambda]
+= \ebb\brac{\dfrac{1}{n}(\hat{\Sigma} 
++ \lambda I)\inv \Phi^T \bl{Y}}
+= \dfrac{1}{n}(\hat{\Sigma} 
++ \lambda I)\inv \Phi^T \ebb\brac{\bl{Y}} \]
+Where recall that 
+$\bl{Y} = \Phi \theta^* + \bl{\eps}$.
+So we get:
+\[ \dfrac{1}{n}(\hat{\Sigma} 
++ \lambda I)\inv \Phi^T 
+\ebb\brac{\Phi \theta^* + \bl{\eps}} = 
+\dfrac{1}{n}(\hat{\Sigma} 
++ \lambda I)\inv \Phi^T 
+(\Phi \theta^* + \ebb[\bl{\eps}]) \]
+Where $\ebb[\bl{\eps}] = 0$, so:
+\[  \ebb[\hat{\theta}_\lambda] 
+= \dfrac{1}{n}(\hat{\Sigma} 
++ \lambda I)\inv \Phi^T \Phi \theta^*
+= (\hat{\Sigma} + \lambda I)\inv 
+\hat{\Sigma} \theta^* \]
+Using the matrix inversion lemma,
+we can rewrite this as:
+\[ \theta^* - 
+\lambda(\hat{\Sigma} + \lambda I)\inv \theta^* \]
+Which is our final answer. \\
+
+Now, to calculate the bias $B$:
+\[ B = \| \ebb[\hat{\theta}_\lambda] 
+- \theta^* \|_{\hat{\Sigma}}^2
+= \norm{ \theta^* - \lambda(\hat{\Sigma} 
++ \lambda I)\inv \theta^* - \theta^* }^2
+= \norm{\lambda(\hat{\Sigma} 
++ \lambda I)\inv \theta^*}_{\hat{\Sigma}}^2 \]
+\[ B = (\lambda(\hat{\Sigma} 
++ \lambda I)\inv \theta^*)^T\hat{\Sigma}
+\lambda(\hat{\Sigma} 
++ \lambda I)\inv \theta^*
+= \lambda^2(\theta^*)^T
+((\hat{\Sigma} + \lambda I)\inv)^T\hat{\Sigma}
+(\hat{\Sigma} + \lambda I)\inv \theta^*\]
+Note that because $\hat{\Sigma}$
+is symmetric, so is $\hat{\Sigma} + \lambda I$,
+and in turn, so is $(\hat{\Sigma} + \lambda I)\inv$,
+so we can remove the transpose from on it
+since it won't affect it. \\
+So we can now write:
+\[ \lambda^2(\theta^*)^T
+(\hat{\Sigma} + \lambda I)\inv\hat{\Sigma}
+(\hat{\Sigma} + \lambda I)\inv \theta^* \]
+Now notice that $\hat{\Sigma}$
+and $(\hat{\Sigma} + \lambda I)\inv$ commute:
+\[ \hat{\Sigma}(\hat{\Sigma} + \lambda I)\inv
+= (\hat{\Sigma}\inv)\inv
+(\hat{\Sigma} + \lambda I)\inv
+= (\hat{\Sigma}\hat{\Sigma}\inv 
++ \lambda \hat{\Sigma}\inv)\inv
+= (I + \lambda \hat{\Sigma}\inv)\inv \]
+\[ (\hat{\Sigma} + \lambda I)\inv \hat{\Sigma}
+= (\hat{\Sigma} + \lambda I)\inv 
+(\hat{\Sigma}\inv)\inv
+= (\hat{\Sigma}\inv\hat{\Sigma}
++ \lambda \hat{\Sigma}\inv)\inv
+= (I + \lambda \hat{\Sigma}\inv)\inv \]
+So we can now rewrite the bias as:
+\[ B = \lambda^2(\theta^*)^T
+(\hat{\Sigma} + \lambda I)\inv
+(\hat{\Sigma} + \lambda I)\inv \hat{\Sigma} \theta^*
+= \lambda^2(\theta^*)^T
+(\hat{\Sigma} + \lambda I)^{-2}
+\hat{\Sigma} \theta^* \]
+Which is our bias. \\
+
+Now, for the variance $V$,
+we can just replace the values
+of $\hat{\theta}_\lambda$
+and $\ebb[\hat{\theta}_\lambda]$ directly,
+using the values we derived earlier:
+\[ \ebb[\hat{\theta}_\lambda]
+= \dfrac{1}{n}(\hat{\Sigma} 
++ \lambda I)\inv \Phi^T \Phi \theta^* \]
+Now, we have:
+\[ V = \ebb[\|\hat{\theta}_\lambda 
+- \ebb[\hat{\theta}_\lambda] \|^2_{\hat{\Sigma}}]
+= \ebb\brac{\norm{\dfrac{1}{n}(\hat{\Sigma} + \lambda I)\inv
+\Phi^T \bl{Y}
+- \dfrac{1}{n}(\hat{\Sigma} + \lambda I)\inv 
+\Phi^T \Phi \theta^* }^2_{\hat{\Sigma}}} \]
+We can then replace $\bl{Y}$ by 
+$\Phi \theta^* + \bl{\eps}$:
+\[ V = \ebb\brac{\norm{\dfrac{1}{n}
+(\hat{\Sigma} + \lambda I)\inv \Phi^T \Phi \theta^*
++ \dfrac{1}{n}
+(\hat{\Sigma} + \lambda I)\inv \Phi^T \bl{\eps}
+- \dfrac{1}{n}(\hat{\Sigma} + \lambda I)\inv 
+\Phi^T \Phi \theta^* }^2_{\hat{\Sigma}}} \]
+Which simplifies to:
+\[ V = \ebb\brac{\norm{ \dfrac{1}{n}
+(\hat{\Sigma} + \lambda I)\inv \Phi^T \bl{\eps} 
+}^2_{\hat{\Sigma}}}
+= \ebb\brac{\para{\dfrac{1}{n}
+(\hat{\Sigma} + \lambda I)\inv \Phi^T \bl{\eps}}^T
+\hat{\Sigma} \para{\dfrac{1}{n}
+(\hat{\Sigma} + \lambda I)\inv \Phi^T \bl{\eps}}} \]
+\[ \ebb\brac{ \dfrac{1}{n^2} \bl{\eps}^T \Phi 
+((\hat{\Sigma} + \lambda I)^{-1})^T
+\hat{\Sigma}(\hat{\Sigma} + \lambda I)\inv 
+\Phi^T \bl{\eps}} \]
+Note that since $(\hat{\Sigma} + \lambda I)\inv$
+is symmetric, we can remove the transpose since
+it won't affect it:
+\[ V = \ebb\brac{ \dfrac{1}{n^2} \bl{\eps}^T \Phi 
+(\hat{\Sigma} + \lambda I)\inv
+\hat{\Sigma}(\hat{\Sigma} + \lambda I)\inv 
+\Phi^T \bl{\eps}} \]
+Now, for the next step,
+note that what is inside the expected value is
+just a scalar, so we can use the trace on it:
+\[ V = \ebb\brac{ \dfrac{1}{n^2} \tr\para{\bl{\eps}^T 
+\Phi (\hat{\Sigma} + \lambda I)\inv
+\hat{\Sigma}(\hat{\Sigma} + \lambda I)\inv 
+\Phi^T \bl{\eps}}} \]
+This allows us to use the cyclical property
+to shift the elements:
+\[ V = \ebb\brac{ \dfrac{1}{n^2} \tr\para{ \Phi^T \bl{\eps} 
+\bl{\eps}^T \Phi (\hat{\Sigma} + \lambda I)\inv
+\hat{\Sigma}(\hat{\Sigma} + \lambda I)\inv }} \]
+Now, the trace of the expected value is the expected
+value of the trace, so we have:
+\[ V = \dfrac{1}{n^2} \tr\para{ \ebb\brac{ \Phi^T \bl{\eps} 
+\bl{\eps}^T \Phi (\hat{\Sigma} + \lambda I)\inv
+\hat{\Sigma}(\hat{\Sigma} + \lambda I)\inv }} \]
+Of course, with the exception of the noise,
+all of these terms are just constants as far 
+as the expected value is concerned:
+\[ V = \dfrac{1}{n^2} \tr\para{ \Phi^T \ebb\brac{ \bl{\eps} 
+\bl{\eps}^T } \Phi (\hat{\Sigma} + \lambda I)\inv
+\hat{\Sigma}(\hat{\Sigma} + \lambda I)\inv } \]
+Now recall that $\ebb[\bl{\eps} \bl{\eps}^T] = \sigma^2 I$
+and that $\dfrac{1}{n}\Phi^T\Phi = \hat{\Sigma}$, so:
+\[ V = \dfrac{1}{n^2} \tr\para{ \Phi^T  \sigma^2 I \Phi (\hat{\Sigma} + \lambda I)\inv
+\hat{\Sigma}(\hat{\Sigma} + \lambda I)\inv } \]
+\[ V = \dfrac{\sigma^2}{n}
+\tr\para{ \hat{\Sigma} (\hat{\Sigma} + \lambda I)\inv
+\hat{\Sigma}(\hat{\Sigma} + \lambda I)\inv } \]
+Which is our variance $V$. \\
+
+So to recap, the excess risk is:
+\[ \risk{\ell}(\hat{\theta}_\lambda) - \riskOptimal{\ell}
+= B + V \]
+Which is:
+\[ \para{\lambda^2(\theta^*)^T
+(\hat{\Sigma} + \lambda I)^{-2}
+\hat{\Sigma} \theta^*}
++ \para{\dfrac{\sigma^2}{n}
+\tr\para{ \hat{\Sigma} (\hat{\Sigma} + \lambda I)\inv
+\hat{\Sigma}(\hat{\Sigma} + \lambda I)\inv }} \]
+This is the exact value, but it is
+also very difficult to analyze,
+so instead we will find a simpler upper bound
+for the bias and variance. \\
+
+First, recall that if the eigenvalues of a matrix $M$
+are all smaller or equal to $\dfrac{1}{2}$, then:
+\[ w^TMw \leq \dfrac{1}{2} \|w\|^2 \]
+for any vector $w \in \rbb^n$. \\
+We proved this in the last section. \\
+
+For an upper bound on the bias $B$, 
+we can show that the matrix
+$(\hat{\Sigma} + \lambda I)^{-2}\lambda \hat{\Sigma}$
+has eigen values that are all smaller than
+$\dfrac{1}{2}$. \\
+First note that since $\hat{\Sigma}$
+is positive semi-definite and symmetric,
+it will definitely have an eigen decomposition:
+\[ \hat{\Sigma} = P\Lambda P^T = P\Lambda P\inv \]
+where $\Lambda$ is diagonal and $P$ is orthogonal. \\
+This means that we can write 
+$(\hat{\Sigma} + \lambda I)^{-2}\lambda \hat{\Sigma}$ 
+as:
+\[ (\hat{\Sigma} + \lambda I)^{-2}\lambda \hat{\Sigma}
+= (P\Lambda P\inv + \lambda I)^{-2} \lambda( P\Lambda P\inv)\]
+We can then do some matrix arithmetic to get:
+\[ (P\Lambda P\inv + \lambda P I P\inv)^{-2} 
+\lambda( P\Lambda P\inv)
+= (P(\Lambda + \lambda I) P\inv)^{-2} 
+\lambda( P\Lambda P\inv) \]
+We can now distribute the inversion:
+\[ ((P(\Lambda + \lambda I) P\inv)\inv)^2
+\lambda( P\Lambda P\inv)
+= (P(\Lambda + \lambda I)\inv P\inv)^2 
+\lambda( P\Lambda P\inv) \]
+And then multiply the total:
+\[ (P(\Lambda + \lambda I)\inv P\inv)
+(P(\Lambda + \lambda I)\inv P\inv)\lambda( P\Lambda P\inv)
+=  P (\Lambda + \lambda I)^{-2} \lambda \Lambda P\inv\]
+So:
+\[ (\hat{\Sigma} + \lambda I)^{-2}\lambda \hat{\Sigma}
+= P (\Lambda + \lambda I)^{-2} \lambda \Lambda P\inv \]
+This is the eigen decomposition
+of $(\hat{\Sigma} + \lambda I)^{-2}\lambda \hat{\Sigma}$,
+since the matrix $(\Lambda + \lambda I)^{-2} \lambda \Lambda$
+is diagonal. \\
+This means that each eigenvalue $\mu_i$
+of $(\hat{\Sigma} + \lambda I)^{-2}\lambda \hat{\Sigma}$
+will have the form:
+\[ \mu_i = 
+\dfrac{\lambda \sigma_i}{(\lambda + \sigma_i)^2} \]
+Where $\sigma_i$ is an eigenvalue in $\Lambda$. \\
+Notice that this is always smaller than $\dfrac{1}{2}$
+because:
+\[ \dfrac{\lambda \sigma_i}{(\lambda + \sigma_i)^2}
+\leq \dfrac{1}{2} \]
+\[ 2\lambda \sigma_i
+\leq (\lambda + \sigma_i)^2 \]
+\[ 2\lambda \sigma_i
+\leq \lambda^2 + \sigma_i^2 + 2\lambda \sigma_i \]
+\[ 0 \leq \lambda^2 + \sigma_i^2 \]
+Which is always true since $\lambda^2 + \sigma_i^2$
+is always positive
+(sum of two square numbers). \\
+
+So now, we have an upperbound on our bias:
+\[ B = \lambda^2(\theta^*)^T
+(\hat{\Sigma} + \lambda I)^{-2}
+\hat{\Sigma} \theta^*
+= \lambda(\theta^*)^T (
+(\hat{\Sigma} + \lambda I)^{-2} 
+\lambda\hat{\Sigma}) \theta^* 
+\leq \dfrac{\lambda}{2}\|\theta^*\|^2 \]
+Which is much simpler to analyze. \\
+
+Now, recall that our variance was:
+\[ \dfrac{\sigma^2}{n}
+\tr\para{ \hat{\Sigma} (\hat{\Sigma} + \lambda I)\inv
+\hat{\Sigma}(\hat{\Sigma} + \lambda I)\inv } \]
+And because $\hat{\Sigma}$ and 
+$(\hat{\Sigma} + \lambda I)\inv$
+commute, we can rewrite this as:
+\[ \dfrac{\sigma^2}{n}
+\tr\para{ \hat{\Sigma}^2 (\hat{\Sigma} + \lambda I)^{-2}}
+= \dfrac{\sigma^2}{\lambda n}
+\tr\para{ \hat{\Sigma}\lambda\hat{\Sigma} 
+(\hat{\Sigma} + \lambda I)^{-2}}\]
+Which we can now find an upperbound for. \\
+
+Similar to the norm, 
+if the eigenvalues of a matrix $M$
+are all smaller or equal to $\dfrac{1}{2}$, then:
+\[ \tr(BM) \leq \dfrac{\tr(B)}{2} \]
+for any matrix $B$. \\
+This was shown to be true in the last section. \\
+
+Like before, using the exact same
+argument, we can show that $\hat{\Sigma} 
+(\hat{\Sigma} + \lambda I)^{-2}$
+has eigenvalues that are smaller or equal 
+to $\dfrac{1}{2}$. 
+This in turn will give us the upperbound:
+\[ B = \dfrac{\sigma^2}{\lambda n}
+\tr\para{ \hat{\Sigma} \para{ \lambda\hat{\Sigma} 
+(\hat{\Sigma} + \lambda I)^{-2}}}
+\leq \dfrac{\sigma^2 \tr(\hat{\Sigma})}{2\lambda n}\]
+Which is similar to the argument we made before,
+but the with trace instead of the norm squared. \\
+
+Now, we have an upperbound:
+\[ \risk{\ell}(\hat{\theta}_\lambda) - \riskOptimal{\ell}
+\leq \dfrac{\lambda}{2}\|\theta^*\|^2 +
+\dfrac{\sigma^2 \tr(\hat{\Sigma})}{2\lambda n} \]
+For the excess risk. \\
+
+Notice that a larger $\lambda$ increases
+the bias, but a smaller $\lambda$
+increases the variance. \\
+This is because, as we mentioned earlier,
+the bias is higher if we have a simple 
+underfitting model,
+and the variance is higher if we have a
+complex overfitting model.
+The regularization, which is modulated by 
+the parameter $\lambda$,
+is what controls the simplicty
+and complexity of the model,
+with more regularization equalling
+more simplicity. \\
+
+There may be the a $\lambda$ sweet spot
+for the optimal tradeoff between bias
+and variance. \\
+We can get it by trying to minimize
+excess risk upperbound by setting its derivative
+with respect to $\lambda$ equal to $0$:
+\[ \dd{}{\lambda}\para{ \dfrac{\lambda}{2}\|\theta^*\|^2 +
+\dfrac{\sigma^2 \tr(\hat{\Sigma})}{2\lambda n}} = 0 \]
+\[ \dfrac{1}{2}\|\theta^*\|^2 -
+\dfrac{\sigma^2 \tr(\hat{\Sigma})}{2\lambda^2 n} = 0 \]
+\[ \|\theta^*\|^2 =
+\dfrac{\sigma^2 \tr(\hat{\Sigma})}{\lambda^2 n} \]
+\[ \lambda^2 =
+\dfrac{\sigma^2 \tr(\hat{\Sigma})}{\|\theta^*\|^2 n} \]
+\[ \lambda_* =
+\dfrac{\sigma \sqrt{\tr(\hat{\Sigma})}}
+{\|\theta^*\| \sqrt{n}} \]
+Where $\lambda_*$ is the optimal 
+regularization parameter. \\
+
+Placing $\lambda_*$
+back inside the upperbound, we get:
+\[ \risk{\ell}(\hat{\theta}_\lambda) - \riskOptimal{\ell}
+\leq \dfrac{\sigma \sqrt{\tr(\hat{\Sigma})} \|\theta^*\| }
+{\sqrt{n}} \]
+Which is the convergence rate given the optimal
+regularization parameter $\lambda_*$ was chosen. \\
+
+Note that $\lambda_*$ is not exactly
+optimal since we've used
+the upper bound of the excess risk,
+and not the actual excess risk,
+to calculate it. \\
+
+Note that $d$, the number of dimensions of the feature
+vector, does not affect the convergence rate
+for ridge regression. \\
+
+Because we have $\sigma$ instead of $\sigma^2$
+in the convergence rate, the bound depends less
+on the noise in the data than in non-regularized 
+risk. \\
+
+Note that because we have $\sqrt(n)$
+in the denominator instead of $n$,
+with a higher number of data points, the
+the function converges slower towards optimality. \\
+
+\newpage
+
+\subsection*{Statistical Analysis in the Random 
+Design Setting}
+
+This is an optional section. \\
+
+We can repeat the same steps we did in the last
+two sections, but in the random design setting
+instead of the fixed design setting. \\
+where we have random datasets $\bl{X}$ and $\bl{Y}$. \\
+
+I will not do this section. \\
+
+\newpage
+
+\subsection*{LASSO}
+
+This section introduces a new regularizer. \\
+
+It is the 1-norm regularizer, given by:
+\[ \rcal{\theta} = \|\theta\|_1
+= \sum_i |\theta_i| \]
+Which is just the sum of the asbolute value
+of the parameters. \\
+
+The 1-norm regularization penalizes small and large
+weights equally. \\
+It leads to a non-smooth optimization problem,
+and does not have a closed form solution. \\
+We can still solve it, using iterative
+optimization algorithms. \\
+
+It induces sparcity in the $\theta$
+parameter vector, meaning that it does
+feature selection, such that $\Phi \theta$
+will have many missing terms (less overhead). \\
+
+Many other (non-smooth) regularizers also
+induce sparsity. \\
+\[ \|\theta\|_p \]
+Where $p$ can even be smaller or equal to $1$. \\
+They belong to a whole family
+depending on norms used. \\
+
+Infinity norm does not induce sparsity
+(looks like a square, but straight). \\
+
+Note that many of these "norms"
+when $p < 1$, are not actually norms
+mathematically (triangle inequality not satisfied). \\
+We can still use them however. \\
+
+We now just give the convergence rate of
+several different norm regularizers,
+no proofs, just the value. \\
+For example:
+\[ k \sqrt{\dfrac{\log(d)}{n}} \]
+is the convergence rate of the $1$-norm
+regularizer, where $k$ is the number of non-zero
+coefficients in the true $\theta$ vector
+(the optimal one). Moreover,
+\[ \dfrac{\sigma^2 k \log(d)}{n} \]
+is the convergence rate for the $0$-norm. \\
+
+Another type of sparsity besides
+is group sparsity. \\
+
+\newpage
+
+\end{document}

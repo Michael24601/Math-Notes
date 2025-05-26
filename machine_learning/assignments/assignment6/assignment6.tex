@@ -1,0 +1,343 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Machine Learning \\
+    \Large Assignment VI
+}
+\date{2025-05-24}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Ex 1}
+
+\begin{enumerate}[label = \letters]
+\item 
+    \begin{enumerate}
+    \item 
+        We have an equation:
+        \[ x - y +2 = 0 \]
+        One way to draw it would be to
+        find the $y$ when $x= 0$,
+        which is $y = 2$,
+        and the $x$ when $y = 0$,
+        which is $x = -2$.
+        We then connect the points.
+    \item
+        The point $(2, 1)$ is in $H_-$,
+        the point $(2, 5)$ is in $H_+$,
+        and the point $(-3, -1)$
+        is actually on the hyperplane. \\
+        In order to determine, we can just
+        plot them and notice if they lie within
+        the $w$ normal direction, or we can
+        just plug them in and check the sign
+        of the function.
+    \end{enumerate}
+\item 
+     \begin{enumerate}
+    \item 
+        We again just plot them.
+    \item
+        We just draw a line,
+        which looks like it passes through
+        $(1, 1)$ and $(3, 2)$.
+    \item 
+        Since we have points $(1, 1)$ and $(3, 2)$,
+        we have:
+        \[ y = ax + b \]
+        where:
+        \[ a = \dfrac{2-1}{3-1} = 0.5 \]
+        We now have $y = 0.5x + b$,
+        and if we plug in $(1, 1)$,
+        we would find that $b = 0.5$. \\
+        So all in all, we have:
+        \[ 0.5x - y + 0.5 = 0 \]
+        where $w = (0.5, -1)^T$, and $b = 0.5$.
+    \item 
+        For $(1,2)$, we have $-1$. \\
+        For $(2,3)$, we have $-1.5$. \\
+        For $(3,3)$, we have $-1$. \\
+        For $(2,1)$, we have $0.5$. \\
+        For $(3,0)$, we have $2$. \\
+        For $(4,1)$, we have $1.5$. \\
+        For $(5,2)$, we have $1$.
+    \item 
+        No, this is because the
+        point $(3, 1)$ is surrounded by the cluster
+        of points with negative labels,
+        so there is no linear classifier
+        that can seperate them.  
+    \end{enumerate}
+\end{enumerate}
+
+\newpage
+
+\subsection*{Ex 2}
+
+We have points in $(\xcal, \ycal)$:
+\[ ((x_1, x_2), y) \]
+where:
+\[ y = \piecewise{ -1 \quad 
+\IF x_1^2 + x_2^2 \leq 1 \\ 1 \qquad \text{else}} \]
+The input space is thus $\xcal = \rbb^2$,
+and the output space is binary $\ycal = \{-1, 1\}$. \\
+\begin{enumerate}[label = \letters]
+\item 
+    This dataset has data points with labels
+    $-1$ that are inside a circle of radius $1$,
+    and data points with labels $1$
+    that are outside the circle.
+    This is because:
+    \[ x_1^2 + x_2^2 < 1 \]
+    is the boundary that seperates the two classes,
+    which describes the unit circle in $\rbb^2$. \\
+    Notice that the seperator:
+    \[ x_1^2 + x_2^2 - 1 = 0 \]
+    does seperate the two clusters,
+    but is not linear, since it has a square. \\
+\item 
+    We alreadt know that:
+    \[ y = \piecewise{ -1 \quad 
+    \IF x_1^2 + x_2^2 \leq 1 \\ 1 \qquad \text{else}} \]
+    Which means that if $x_1^2 + x_2^2 \leq 1$,
+    we can label the point $-1$. \\
+    In this new feature map, we have:
+    \[ \varphi(x) = (x_1, x_2, x_1^2 + x_2^2) \]
+    We can ignore the first two coordinates,
+    and just look at the third: notice
+    that if we just focus on seperating
+    the halfspaces where $\varphi_3(x)$
+    is smaller or larger than $1$,
+    we will have the seperator we want. \\
+    We need a seperator:
+    \[ w_1x_1 + w_2x_2 + w_3(x_1^2 + x_2^2) + b = 0 \]
+    Recall that in part a, we proposed a seperator:
+    \[ x_1^2 + x_2^2 - 1 = 0 \]
+    which was not linear in $\rbb^2$,
+    but is linear now, in $\rbb^3$,
+    since we have a feature $x_1^2 + x_2^2$.
+    So if we just set $w_1$ and $w_2$ to $0$,
+    and $w_3$ to $1$, and $b$ to $-1$, we get:
+    \[ \varphi_3(x) - 1 = 0 \]
+    Notice that the sign is negative when
+    $\varphi_3(x) \leq 1$,
+    which means when $x_1^2 + x_2^2 \leq 1$. \\
+    So, our boundary has weights $(0, 0, 1)^T$,
+    and bias $-1$. \\
+\item 
+    No, we can't, we need to increase the
+    dimensionality.
+\item 
+    Yes, we just update our feature map
+    to accomodate ellipses:
+    \[ \varphi(x) = \para{x_1, x_2, 
+    \dfrac{x_1^2}{a^2} + \dfrac{x_2^2}{b^2}} \]
+    We can then use the same seperator as
+    part b.
+\end{enumerate}
+
+\newpage
+
+\subsection*{Ex 3}
+
+In the lecture, when attempting to solve:
+\[ \Phi^T\Phi \theta = \Phi^T \bl{y} \]
+We rewrote it as:
+\[ \pmat{\bl{X} \\ \bl{1}^T}\pmat{\bl{X}^T & \bl{1}}
+\theta = \pmat{\bl{X} \\ \bl{1}^T}\bl{y} \]
+And then used substitution to derive
+the equation for the weight $w$:
+\[ (\bl{X}\bl{X}^T - \dfrac{1}{n}(\bl{X}\bl{1})(\bl{X}\bl{1})^T) w
+= (\bl{X} - \dfrac{1}{n}\bl{X}\bl{1} \bl{1}^T) \bl{y} \]
+We also divided our input data
+and output data based on whether
+the label was $-1$ or $1$:
+\[ \bl{X} = \pmat{\bl{X}_- & \bl{X}_+} \]
+\[ \bl{y} = \pmat{\bl{y}_- \\ \bl{y}_+}
+= \pmat{-(\bl{1}_-) \\ \bl{1}_+} \]
+\[ \bl{1} = \pmat{\bl{1}_- \\ \bl{1}_+} \]
+Which tells us that:
+\[ \bl{X}\bl{1} = \pmat{\bl{X}_- & \bl{X}_+}
+\pmat{\bl{1}_- \\ \bl{1}_+} 
+= \bl{X}_-\bl{1}_- + \bl{X}_+\bl{1}_+
+= n_-\bl{m}_- + n_+\bl{m}_+ \]
+We also have:
+\[ \bl{X}\bl{X}^T = \bl{X}_-\bl{X}^T_- + \bl{X}_-\bl{X}^T_- \]
+And:
+\[ \bl{X}\bl{y} = \pmat{\bl{X}_- & \bl{X}_+}
+\pmat{-(\bl{1}_-) \\ \bl{1}_+} 
+= \bl{X}_+\bl{1}_+ - \bl{X}_-\bl{1}_-
+= n_+\bl{m}_+ - n_-\bl{m}_- \]
+Where $\bl{m}_-$ is the mean of $\bl{X}_-$,
+and $\bl{m}_+$ is the mean of $\bl{X}_+$. \\
+We then defined the within class covariance:
+\[ \hat{\Sigma}_w 
+= (\bl{X}_- - \bl{m}_-\bl{1}^T_-)(\bl{X}_- 
+- \bl{m}_-\bl{1}^T_-)^T
++ (\bl{X}_+ - \bl{m}_+\bl{1}^T_+)(\bl{X}_+ 
+- \bl{m}_+\bl{1}^T_+)^T \]
+Which we can expand and write as:
+\[ \hat{\Sigma}_w = \bl{X}_+\bl{X}^T_+
++ \bl{X}_-\bl{X}^T_- -n_+\bl{m}_+\bl{m}^T_+
+-n_-\bl{m}_-\bl{m}^T_- \]
+And the between class covariance:
+\[ \hat{\Sigma}_b = (\bl{m}_+ 
+- \bl{m}_-)(\bl{m}_+ - \bl{m}_-)^T \]
+All of this we did in the lecture. \\
+\begin{enumerate}[label = \letters]
+    \item 
+    We can simplify our equation
+    using the definitions we have:
+    \[ (\bl{X}\bl{X}^T - \dfrac{1}{n}(\bl{X}\bl{1})(\bl{X}\bl{1})^T) w
+    = (\bl{X} - \dfrac{1}{n}\bl{X}\bl{1} \bl{1}^T) \bl{y} \]
+    First we will do the right hand side:
+    \[ (\bl{X} - \dfrac{1}{n}\bl{X}\bl{1} \bl{1}^T) \bl{y} \]
+    \[ \bl{X}\bl{y} - \dfrac{1}{n}(\bl{X}\bl{1}) \bl{1}^T \bl{y} \]
+    \[ n_+\bl{m}_+ - n_-\bl{m}_- 
+    - \dfrac{1}{n}(n_-\bl{m}_- + n_+\bl{m}_+) 
+    \pmat{\bl{1}_- & \bl{1}_+}\pmat{-(\bl{1}_-) \\ \bl{1}_+} \]
+    Note that:
+    \[ \pmat{\bl{1}_- & \bl{1}_+}\pmat{-(\bl{1}_-) \\ \bl{1}_+}
+    = -n_- + n_+ \]
+    Since we are just summing $1$s and $-1$s. So:
+    \[ n_+\bl{m}_+ - n_-\bl{m}_-
+    - \dfrac{1}{n}(n_-\bl{m}_- + n_+\bl{m}_+)(-n_- + n_+) \]
+    \[ n_+\bl{m}_+ - n_-\bl{m}_-
+    - \dfrac{1}{n}({n_+}^2\bl{m}_+ - {n_-}^2\bl{m}_-
+    + (n_+n_-)\bl{\bl{m_-}} - (n_+n_-)\bl{\bl{m_+}} ) \]
+    We can then group the $\bl{\bl{m_-}}$ and $\bl{\bl{m_+}}$ elements:
+    \[ \bl{\bl{m_+}} \para{n_+ - \dfrac{{n_+}^2}{n} + \dfrac{n_+n_-}{n}}
+    + \bl{\bl{m_-}} \para{-n_- + \dfrac{{n_-}^2}{n} - \dfrac{n_+n_-}{n}} \]
+    \[ \bl{\bl{m_+}} \para{\dfrac{nn_+ - {n_+}^2 + n_+n_-}{n}}
+    + \bl{\bl{m_-}} \para{\dfrac{-nn_- + {n_-}^2 - n_+n_-}{n}} \]
+    Now note that $n = n_+ + n_-$ for obvious reasons, so:
+    \[ \bl{\bl{m_+}} \para{\dfrac{(n_+ + n_-)n_+ - {n_+}^2 + n_+n_-}{n}}
+    + \bl{\bl{m_-}} \para{\dfrac{-(n_+ + n_-)n_- + {n_-}^2 - n_+n_-}{n}} \]
+    \[ \bl{\bl{m_+}} \para{\dfrac{{n_+}^2 + n_+n_- - {n_+}^2 + n_+n_-}{n}}
+    + \bl{\bl{m_-}} \para{\dfrac{-{n_-}^2 - n_+n_- + {n_-}^2 - n_+n_-}{n}} \]
+    \[ \bl{\bl{m_+}} \para{\dfrac{2n_+n_-}{n}}
+    + \bl{\bl{m_-}} \para{\dfrac{-2n_+n_-}{n}} \]
+    \[ (\bl{\bl{m_+}} - \bl{\bl{m_-}})\dfrac{2n_+n_-}{n} \]
+    Which is the right hand side we wanted. \\
+
+    Now for the left hand side, we have:
+    \[ \bl{X}\bl{X}^T - 
+    \dfrac{1}{n}(\bl{X}\bl{1})(\bl{X}\bl{1})^T \]
+    \[ \bl{X}_-\bl{X}^T_- + \bl{X}_-\bl{X}^T_-
+    - \dfrac{1}{n}( n_-\bl{m}_- + n_+\bl{m}_+)
+    ( n_-\bl{m}_- + n_+\bl{m}_+)^T \]
+    \[ \bl{X}_-\bl{X}^T_- + \bl{X}_-\bl{X}^T_-
+    - \dfrac{{n_-}^2\bl{m}_-\bl{m}_-^T}{n}
+    - \dfrac{{n_+}^2\bl{m}_+\bl{m}_+^T}{n}
+    - \dfrac{{n_+n_-}}{n}(\bl{m_-}\bl{m_+}^T + \bl{m_+}\bl{m_-}^T) \]
+    Now recall that since $n = n_+ + n_-$, this means that:
+    \[ \dfrac{n_+}{n} = \dfrac{n - n_-}{n} = 1 - \dfrac{n_-}{n}
+    \quad \AND \quad 
+    \dfrac{n_-}{n} = \dfrac{n - n_+}{n} = 1 - \dfrac{n_+}{n} \]
+    So these terms can be rewritten as:
+    \[-\dfrac{{n_-}^2\bl{m}_-\bl{m}_-^T}{n}
+    - \dfrac{{n_+}^2\bl{m}_+\bl{m}_+^T}{n} \]
+    \[-\dfrac{n_-}{n}(n_-\bl{m}_-\bl{m}_-^T)
+    - \dfrac{n_+}{n}(n_+\bl{m}_+\bl{m}_+^T) \]
+    \[(\dfrac{n_+}{n} - 1)(n_-\bl{m}_-\bl{m}_-^T)
+    +(\dfrac{n_-}{n} - 1)(n_+\bl{m}_+\bl{m}_+^T) \]
+    \[-(n_-\bl{m}_-\bl{m}_-^T) - (n_+\bl{m}_+\bl{m}_+^T)
+    + \dfrac{n_-n_+}{n}\bl{m}_+\bl{m}_+^T 
+    + \dfrac{n_-n_+}{n}\bl{m}_-\bl{m}_-^T \]
+    Now placing this back in the equation:
+    \multiline{& \bl{X}_-\bl{X}^T_- + \bl{X}_-\bl{X}^T_-
+    -(n_-\bl{m}_-\bl{m}_-^T) - (n_+\bl{m}_+\bl{m}_+^T) \\
+    & + \dfrac{n_-n_+}{n}\bl{m}_+\bl{m}_+^T 
+    + \dfrac{n_-n_+}{n}\bl{m}_-\bl{m}_-^T
+    - \dfrac{{n_+n_-}}{n}(\bl{m_-}\bl{m_+}^T + \bl{m_+}\bl{m_-}^T)}
+    We notice
+    that the within-class covariance $\hat{\Sigma}_w$ emerges:
+    \[ \hat{\Sigma}_w + \dfrac{n_-n_+}{n}\bl{m}_+\bl{m}_+^T 
+    + \dfrac{n_-n_+}{n}\bl{m}_-\bl{m}_-^T
+    - \dfrac{{n_+n_-}}{n}(\bl{m_-}\bl{m_+}^T + \bl{m_+}\bl{m_-}^T)\]
+    We can then factor out $\dfrac{n_-n_+}{n}$:
+    \[ \hat{\Sigma}_w + \dfrac{n_-n_+}{n}(\bl{m}_+\bl{m}_+^T 
+    + \bl{m}_-\bl{m}_-^T -\bl{m_-}\bl{m_+}^T - \bl{m_+}\bl{m_-}^T) \]
+    \[ \hat{\Sigma}_w + \dfrac{n_-n_+}{n}
+    (\bl{m_+} - \bl{m_-})(\bl{m_+} - \bl{m_-})^T \]
+    Which we recognize as the between-class covariance:
+    \[ \hat{\Sigma}_w + \dfrac{n_-n_+}{n} \hat{\Sigma}_b \]
+    And this is the left hand side we wanted. 
+    \item 
+    We have:
+    \[ \hat{\Sigma}_b w 
+    = (\bl{m_+} - \bl{m_-})(\bl{m_+} - \bl{m_-})^T w 
+    = (\bl{m_+} - \bl{m_-})((\bl{m_+} - \bl{m_-})^T w) \]
+    Notice that $(\bl{m_+} - \bl{m_-})^T w$
+    is a dot product, and just a scalar,
+    so out result is:
+    \[ \beta (\bl{m_+} - \bl{m_-}) \]
+    where $\beta$ is a scalar. \\
+    So when we add $\hat{\Sigma}_b w $
+    to the right hand side, we are just rescaling it,
+    since the right hand side itself is:
+    \[ (\bl{\bl{m_+}} - \bl{\bl{m_-}})\dfrac{2n_+n_-}{n} \]
+    Which is in the direction $(\bl{\bl{m_+}} - \bl{\bl{m_-}})$.
+    \item 
+    We have:
+    \[ \para{\hat{\Sigma}_w + 
+    \dfrac{n_-n_+}{n} \hat{\Sigma}_b} w
+    = \dfrac{2n_+n_-}{n}(\bl{\bl{m_+}} - \bl{\bl{m_-}}) \]
+    We can plug in:
+    \[ w = \alpha 
+    \hat{\Sigma}_w\inv(\bl{\bl{m_+}} - \bl{\bl{m_-}})\]
+    And get:
+    \[ \alpha\para{\hat{\Sigma}_w + 
+    \dfrac{n_-n_+}{n} \hat{\Sigma}_b}
+    \hat{\Sigma}_w\inv(\bl{\bl{m_+}} - \bl{\bl{m_-}})
+    = \dfrac{2n_+n_-}{n}(\bl{\bl{m_+}} - \bl{\bl{m_-}}) \]
+    We can simplify:
+    \[ \alpha(\bl{\bl{m_+}} - \bl{\bl{m_-}}) 
+    + \alpha\dfrac{n_-n_+}{n} 
+    \hat{\Sigma}_b\hat{\Sigma}_w\inv
+    (\bl{\bl{m_+}} - \bl{\bl{m_-}}) 
+    = \dfrac{2n_+n_-}{n}(\bl{\bl{m_+}} - \bl{\bl{m_-}}) \]
+    \[ \alpha(I + \dfrac{n_-n_+}{n} 
+    \hat{\Sigma}_b\hat{\Sigma}_w\inv)
+    (\bl{\bl{m_+}} - \bl{\bl{m_-}}) 
+    = \dfrac{2n_+n_-}{n}(\bl{\bl{m_+}} - \bl{\bl{m_-}}) \]
+    Since $(I + \dfrac{n_-n_+}{n} 
+    \hat{\Sigma}_b\hat{\Sigma}_w\inv)
+    (\bl{\bl{m_+}} - \bl{\bl{m_-}})$ is a vector,
+    we can't move it to the other side,
+    so we have to multiply both sides
+    the transpose so we get a scalar:
+    \[ \alpha (\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
+    (I + \dfrac{n_-n_+}{n}\hat{\Sigma}_b\hat{\Sigma}_w\inv)
+    (\bl{\bl{m_+}} - \bl{\bl{m_-}}) 
+    = \dfrac{2n_+n_-}{n}(\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
+    (\bl{\bl{m_+}} - \bl{\bl{m_-}}) \]
+    \[ \alpha
+    = \dfrac{2n_+n_- (\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
+    (\bl{\bl{m_+}} - \bl{\bl{m_-}})}{n(\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
+    (I + \dfrac{n_-n_+}{n}\hat{\Sigma}_b\hat{\Sigma}_w\inv)
+    (\bl{\bl{m_+}} - \bl{\bl{m_-}})} \]
+    \[ \alpha
+    = \dfrac{2n_+n_- (\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
+    (\bl{\bl{m_+}} - \bl{\bl{m_-}}) }{(\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
+    (nI + n_-n_+\hat{\Sigma}_b\hat{\Sigma}_w\inv)
+    (\bl{\bl{m_+}} - \bl{\bl{m_-}})} \]
+    \item
+    Not sure how to solve this.
+\end{enumerate}
+
+\newpage
+
+\end{document}
