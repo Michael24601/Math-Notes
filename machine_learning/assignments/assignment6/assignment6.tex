@@ -35,8 +35,8 @@
         which is $x = -2$.
         We then connect the points.
     \item
-        The point $(2, 1)$ is in $H_-$,
-        the point $(2, 5)$ is in $H_+$,
+        The point $(2, 1)$ is in $H_+$,
+        the point $(2, 5)$ is in $H_-$,
         and the point $(-3, -1)$
         is actually on the hyperplane. \\
         In order to determine, we can just
@@ -81,6 +81,15 @@
         that can seperate them.  
     \end{enumerate}
 \end{enumerate}
+
+\colorText{red}{
+    \subsection*{Correction}
+    Note that it is possible the seperator
+    seperates the data, but the labels are flipped.
+    In that case we just multiply $\ang{w, x} + b = 0$
+    by $-1$, which is the same seperator but
+    with opposite half-spaces, or normal. \\
+}
 
 \newpage
 
@@ -148,6 +157,25 @@ and the output space is binary $\ycal = \{-1, 1\}$. \\
     part b.
 \end{enumerate}
 
+\colorText{red}{
+    \subsection*{Correction}
+    \begin{enumerate}[label = \letters]
+        \item 
+        It is enough to explain with words. \\
+        One proof involves showing that a line
+        can't intersect all quadrants.
+        \item 
+        \item 
+        The answer is actually yes, since
+        we didn't use weights $w_1$
+        and $w_2$, we actually only need
+        one dimension: $\varphi(x_1, x_2) = x_1^2 + x_2^2$
+        and where $w = (1)^T$. 
+        \item 
+    \end{enumerate}
+}
+
+
 \newpage
 
 \subsection*{Ex 3}
@@ -174,7 +202,7 @@ Which tells us that:
 = \bl{X}_-\bl{1}_- + \bl{X}_+\bl{1}_+
 = n_-\bl{m}_- + n_+\bl{m}_+ \]
 We also have:
-\[ \bl{X}\bl{X}^T = \bl{X}_-\bl{X}^T_- + \bl{X}_-\bl{X}^T_- \]
+\[ \bl{X}\bl{X}^T = \bl{X}_-\bl{X}^T_- + \bl{X}_+\bl{X}^T_+ \]
 And:
 \[ \bl{X}\bl{y} = \pmat{\bl{X}_- & \bl{X}_+}
 \pmat{-(\bl{1}_-) \\ \bl{1}_+} 
@@ -235,10 +263,10 @@ All of this we did in the lecture. \\
     Now for the left hand side, we have:
     \[ \bl{X}\bl{X}^T - 
     \dfrac{1}{n}(\bl{X}\bl{1})(\bl{X}\bl{1})^T \]
-    \[ \bl{X}_-\bl{X}^T_- + \bl{X}_-\bl{X}^T_-
+    \[ \bl{X}_-\bl{X}^T_- + \bl{X}_+\bl{X}^T_+
     - \dfrac{1}{n}( n_-\bl{m}_- + n_+\bl{m}_+)
     ( n_-\bl{m}_- + n_+\bl{m}_+)^T \]
-    \[ \bl{X}_-\bl{X}^T_- + \bl{X}_-\bl{X}^T_-
+    \[ \bl{X}_-\bl{X}^T_- + \bl{X}_+\bl{X}^T_+
     - \dfrac{{n_-}^2\bl{m}_-\bl{m}_-^T}{n}
     - \dfrac{{n_+}^2\bl{m}_+\bl{m}_+^T}{n}
     - \dfrac{{n_+n_-}}{n}(\bl{m_-}\bl{m_+}^T + \bl{m_+}\bl{m_-}^T) \]
@@ -257,7 +285,7 @@ All of this we did in the lecture. \\
     + \dfrac{n_-n_+}{n}\bl{m}_+\bl{m}_+^T 
     + \dfrac{n_-n_+}{n}\bl{m}_-\bl{m}_-^T \]
     Now placing this back in the equation:
-    \multiline{& \bl{X}_-\bl{X}^T_- + \bl{X}_-\bl{X}^T_-
+    \multiline{& \bl{X}_-\bl{X}^T_- + \bl{X}_+\bl{X}^T_+
     -(n_-\bl{m}_-\bl{m}_-^T) - (n_+\bl{m}_+\bl{m}_+^T) \\
     & + \dfrac{n_-n_+}{n}\bl{m}_+\bl{m}_+^T 
     + \dfrac{n_-n_+}{n}\bl{m}_-\bl{m}_-^T
@@ -313,30 +341,101 @@ All of this we did in the lecture. \\
     \hat{\Sigma}_b\hat{\Sigma}_w\inv)
     (\bl{\bl{m_+}} - \bl{\bl{m_-}}) 
     = \dfrac{2n_+n_-}{n}(\bl{\bl{m_+}} - \bl{\bl{m_-}}) \]
-    Since $(I + \dfrac{n_-n_+}{n} 
-    \hat{\Sigma}_b\hat{\Sigma}_w\inv)
-    (\bl{\bl{m_+}} - \bl{\bl{m_-}})$ is a vector,
-    we can't move it to the other side,
-    so we have to multiply both sides
-    the transpose so we get a scalar:
-    \[ \alpha (\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
-    (I + \dfrac{n_-n_+}{n}\hat{\Sigma}_b\hat{\Sigma}_w\inv)
-    (\bl{\bl{m_+}} - \bl{\bl{m_-}}) 
-    = \dfrac{2n_+n_-}{n}(\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
-    (\bl{\bl{m_+}} - \bl{\bl{m_-}}) \]
     \[ \alpha
-    = \dfrac{2n_+n_- (\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
-    (\bl{\bl{m_+}} - \bl{\bl{m_-}})}{n(\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
-    (I + \dfrac{n_-n_+}{n}\hat{\Sigma}_b\hat{\Sigma}_w\inv)
-    (\bl{\bl{m_+}} - \bl{\bl{m_-}})} \]
-    \[ \alpha
-    = \dfrac{2n_+n_- (\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
-    (\bl{\bl{m_+}} - \bl{\bl{m_-}}) }{(\bl{\bl{m_+}} - \bl{\bl{m_-}})^T
-    (nI + n_-n_+\hat{\Sigma}_b\hat{\Sigma}_w\inv)
-    (\bl{\bl{m_+}} - \bl{\bl{m_-}})} \]
+    = \dfrac{2n_+n}{
+    (I + \dfrac{n_-n_+}{n}\hat{\Sigma}_b\hat{\Sigma}_w\inv)} \]
     \item
-    Not sure how to solve this.
+    Recall that:
+    \[ \para{\dfrac{u(x)}{v(x)}}'
+    = \dfrac{u'(x)v(x) - v(x)u'(x)}{v^2(x)} \]
+    And that:
+    \[ \nabla w^TMw = (M + M^T)w \]
+    So if we have the Fischer criterion:
+    \[ \max_w \dfrac{w^T\hat{\Sigma}_b w}
+    {w^T\hat{\Sigma}_w w} \]
+    This is equivalent to differentiating with
+    respect to $w$ and setting the gradient to $0$:
+    \[ \nabla \dfrac{w^T\hat{\Sigma}_b w}
+    {w^T\hat{\Sigma}_w w} \]
+    Here we just have $u(w) = {w^T\hat{\Sigma}_b w}$
+    and $v(w) = {w^T\hat{\Sigma}_w w}$.
+    Also note that:
+    \[ \hat{\Sigma}_b + \hat{\Sigma}_b^T = 2\hat{\Sigma}_b
+    \qquad \AND \qquad \hat{\Sigma}_w + 
+    \hat{\Sigma}_w^T = 2\hat{\Sigma}_w \]
+    since covariance matrices are always symmetric
+    (as $\cov(X, Y) = \cov(Y, X)$).
+    So the gradient is:
+    \[ \dfrac{2\hat{\Sigma}_b w (w^T\hat{\Sigma}_w w)
+    - 2\hat{\Sigma}_w w (w^T\hat{\Sigma}_b w)}
+    {(w^T\hat{\Sigma}_w w)^2} \]
+    Now, setting it to $0$, we have:
+    \[ \dfrac{2\hat{\Sigma}_b w (w^T\hat{\Sigma}_w w)
+    - 2\hat{\Sigma}_w w (w^T\hat{\Sigma}_b w)}
+    {(w^T\hat{\Sigma}_w w)^2} = 0 \]
+    \[ \hat{\Sigma}_b w (w^T\hat{\Sigma}_w w)
+    = \hat{\Sigma}_w w (w^T\hat{\Sigma}_b w) \]
+    \[  (\bl{m}_+ - \bl{m}_-)(\bl{m}_+ - \bl{m}_-)^T w 
+    (w^T\hat{\Sigma}_w w)
+    = \hat{\Sigma}_w w (w^T\hat{\Sigma}_b w) \]
+    \[  \dfrac{(\bl{m}_+ - \bl{m}_-)(\bl{m}_+ - \bl{m}_-)^T w 
+    (w^T\hat{\Sigma}_w w)}{(w^T\hat{\Sigma}_b w)}
+    = \hat{\Sigma}_w w \]
+    Since the term $(\bl{m}_+ - \bl{m}_-)^T w $
+    is a scalar, we just have:
+    \[ \mu (\bl{m}_+ - \bl{m}_-) =  \hat{\Sigma}_w w \]
+    for some scalar $\mu$,
+    which means that:
+    \[ w = \mu
+    \hat{\Sigma}_w\inv(\bl{\bl{m_+}} - \bl{\bl{m_-}}) \]
+    Which is proportional to the $w$ from part c. \\
+    Note that while $\mu$ itself does contain and depends
+    on $w$, this doesn't matter, since $\mu$
+    is a scalar, and we don't care about its value.
 \end{enumerate}
+
+\colorText{red}{
+    \subsection*{Correction}
+    \begin{enumerate}[label = \letters]
+        \item 
+        \item 
+        Generally, we can write a projection of $x$
+        on $v$ as:
+        \[ P_v(x) = \ang{v, x}v \]
+        This is because the dot product is the
+        length of the projection times the length
+        of $x$.
+        \item 
+        Note that we can write:
+        \[ \hat{\Sigma}_b\hat{\Sigma}_w\inv
+        = \ang{m_+ - m_-, \hat{\Sigma}_w\inv
+        (m_+ - m_-)}
+        = \|m_+ - m_-\|^2_{\hat{\Sigma}_w\inv} \]
+        \item 
+        The idea behind the Fischer Criterion
+        is that we want to maximize the ratio,
+        which would maximize the between-class
+        covariance, and minimize the within class 
+        covariance. \\
+        We can imagine projecting the points in each cluster
+        onto the normal direction to the seperator;
+        in a good seperator, there would be no overlap,
+        which means the distance between the two clusters
+        is large (the scatter given by 
+        the between-class covariance $w^T \hat{\Sigma}_b
+        w$ which is a norm $\|w\|^2_{\hat{\Sigma}_b}$),
+        and the breadth of the projections are small
+        (the scatter given by 
+        the within-class covariance $w^T \hat{\Sigma}_w
+        w$ which is a norm $\|w\|^2_{\hat{\Sigma}_w}$). \\
+        This is what LDA attempts to do. It is also why
+        we say that it has dimensionality reduction;
+        when we project, ensuring the points remain
+        seperated when projected, we essentially reduced
+        the dimension, while keeping the classification 
+        valid.
+    \end{enumerate}
+}
 
 \newpage
 

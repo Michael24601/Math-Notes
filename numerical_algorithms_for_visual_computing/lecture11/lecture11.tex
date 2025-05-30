@@ -9,7 +9,7 @@
 
 \title{%
     \Huge Numerical Algorithms \\
-    \Large Lecture XI
+    \Large Lecture XI, XII
 }
 \date{2025-05-26}
 \author{Michael Saba}
@@ -175,5 +175,233 @@ must be random too. \\
 Also note that we need the visibility used
 here too to ensure nothing obstructs the
 ray from the point on the light source. \\
+
+Note that when choosing a point randomly
+on the ligh source, we must also parametrize
+and have some space $[0, 1]^d$. \\
+
+NEE is is a special case of Multiple Important
+Sampling:
+\[ \int f(x)dx = \int 1 \cdot f(x) dx 
+= \int w_1 f(x) dx + \int w_2 f(x) dx \]
+Where $w_1 + w_2 = 1$. \\
+In NEE, one of the pieces is the integral
+on the light, and the other is the integral
+for the normal ray bounce.
+We can apply different changes of variables
+for each part and get different estimators. \\
+Note that we can have $n$ pieces,
+not just $2$, but for NEE, we want just $2$,
+one will be light sampling, the other will
+be the normal bounce. \\
+
+The only issue is that this will usually
+cause having more calculations. \\
+
+Note that having a point on the light's hemisphere
+is enough to give us a direction (area formulation)
+instead of the ray. This is better because we can
+use the visibility function instead of using
+the ray, which is more expensive when computing
+intersections. The visibility function cares
+not for normals, angles, etc... only visibility. \\
+
+Note that there is a heuristic for the weights.
+Once we do the change of variables and
+get densities $p_i(x)$:
+\[ w_1 = \dfrac{p_1(x)}{p_1(x) + p_2(x)} \]
+\[ w_2 = \dfrac{p_2(x)}{p_1(x) + p_2(x)} \]
+where $p_1(x)$ and $p_2(x)$ are the densities
+inside the two integrals after the change
+of variables. \\
+The general heuristic is:
+\[ w_1 = \dfrac{p_i(x)^n}{\sum_j^m p_j(x)^n} \]
+The power is for the power heuristic. \\
+
+Bidirectional path tracing:
+Like in NEE, we want to sample the light directly.
+But instead of sampling from light at each bounce
+by shooting a ray onto the light, 
+we trace a ray from the light first
+onto a point, then connect it to path. \\
+
+Light tracing is when we do the entire path
+starting from light sources and then ending
+up at the sensor; we avoid that because the
+sensor is small. \\
+
+We also talked a little about photon mapping. \\
+
+Note that if we want to combine integrals,
+it is always best to have the same measure
+(both solid angles or both area formulation). \\
+Note that the visibility is only used with
+area formulation. \\
+
+Note that NEE always fails with mirrors, 
+because mirrors always reflect in just one
+direction the light, so light coming from some
+other ray is not contributing as per the BRDF. \\
+
+\newpage
+
+\subsection*{Probability}
+
+The probability of an outcome is the number
+of favorable outcomes divided by the
+number of all outcomes $\Omega$. \\
+
+In a continuous space, like a hemisphere,
+the same applied, we just use measures
+(like the area).
+So the probability of an outcome
+is the area of the space of all points
+in teh outcome over the total area
+(assuming all points have an equal probability). \\
+
+We should normalize the probabilties by the
+total measure (area) of the total space;
+this is because $P(\Omega)$ must be $1$. \\
+
+The probability of one point in the continuous
+setting is 0. Doesn't mean it's impposible,
+it's just that the likelihood is impossible. \\
+
+The expected value of some random variable
+$f(X)$ is the average or mean:
+\[ E(f(X)) = \dfrac{1}{N}\sum_i^N P(x_i)f(x_i) \]
+And in the continuous one:
+\[ E(f(X)) = \int_\Omega p(x_i)f(x_i) dx \]
+where $p(x_i)$ is the density function.
+This is not the probability, but the integral is:
+\[P(x \in A) = \int_A p(x)dx \]
+
+We also have variance of a random variable
+$f(X)$, which is:
+\[ \var(f(X)) = E((f(X) - E(f(X))^2)) \]
+This tell us how much the data varies. \\
+
+This is where the $\dfrac{1}{N}$ error
+comes from in our convergence of the Monte-Carlo
+estimator (by taking the variance
+of a sum of identically distirbuted but
+independent estimators averaged,
+$\var(\dfrac{1}{N}\sum_i^N I_i)$). \\
+
+Note that when we do change of variables:
+\[ \int f(x) |\det(J_g)| dx \]
+The term $|\det(J_g)|$ is basically our
+density. \\
+
+If we have an estimator $I_n$ for an integral $I$,
+then the bias is:
+\[ | E(I_n) - I | \]
+Which tells us how far off it is.
+As $N$ increases to infinity, we 
+expect the bias to go to $0$. \\
+
+Bias shows up as noise, or blur. \\
+
+First we can derive the Monte-Carlo integration
+method using these notions. \\
+Suppose we have:
+\[ I = \int_\Omega f(x)dx \]
+Then we know that:
+\[ I = \int_\Omega f(x) dx 
+= \int_\Omega \dfrac{p(x)}{p(x)}f(x) dx  \]
+So if we consider $p(x)$ to be the 
+density of $x$, then we have:
+\[ I = 
+\int_\Omega \dfrac{p(x)}{p(x)}f(x) dx 
+= E\para{\dfrac{f(x)}{p(x)}} \]
+We can approximate the avergae:
+\[ I \approx
+\dfrac{1}{N}\sum_i^N\dfrac{f(x_i)}{p(x_i)} \]
+And since we assume we will be sampling points
+uniformally in our ray tracer, we assume that the
+density is uniform, so:
+\[ I \approx
+\dfrac{1}{N}\sum_i^N\dfrac{f(x_i)}{\alpha} \]
+\[ I \approx
+\dfrac{\sfrac{1}{\alpha}}{N}\sum_i^N f(x_i) \]
+Notice that this is the same estimator we got before,
+where $\dfrac{1}{\alpha}$ is the measure of the interval
+(this makes sense since the density of a uniform
+distribution is 1 over the interval). \\
+
+Now suppose we do some change of variables,
+same as before, and get the integral:
+\[ I = \int_{[0, 1]^d} f(T(u)) |\det(J_T)|du  \]
+Where the estimator is:
+\[ I \approx \dfrac{|\det(J_T)|}{N}\sum_i^N f(u_i) \]
+Notice that if we assume that $u_i$
+is uniformally distributed, then
+\[ \alpha = \dfrac{1}{|\det(J_T)|} \]
+is the density function of $x$.
+This makes sense; when we change variables from
+$x$ to $u$, where $u$ is uniformally
+sampled from a unit hypercube,
+the interval changes size, and the way 
+samples $x$ are generated 
+depends on the transform and the 
+way the interval changes. \\
+
+So the inverse of the terms we get
+when we change variables will be the density
+of the generated points. \\
+Here $f(x)$ is basically the BRDF,
+and visbility... \\
+
+So we can think of the change of variables
+as changing the density of the points $x$,
+and how we generate the points
+(in such a way that we have a uniform
+distirbution in the unit hypercube).
+In that sense, the generated determinants
+of Jacobians give us the density. \\
+
+So this is how we will get the density
+of $x$, which we will use in our heuristic 
+$w_1$ and $w_2$. \\
+
+\newpage
+
+\subsection*{Change of Variables}
+
+When we wanted to get rid of
+$\cos(\theta)\sin(\theta)$,
+this only depends on one variable, so
+we only have a single integral (the integral
+over $\phi$ we can ignore). \\
+
+But what if we had some function $p(\theta, \phi)$,
+that depends on them both, or more than $2$? \\
+
+We would have to find a single map for each 
+coordinate, such that the determinant of the Jacobian
+cancels out $p(\theta, \phi)$. \\
+
+Notice that when we have:
+\[ I = \int f(\theta, \phi)p(\theta, \phi) 
+\; d\theta d\phi \]
+We can treat $p(\theta, \phi)$
+like the density function, and decompose it
+into $p(\theta) \cdot p(\phi \mid \theta)$. \\
+So we then use individual
+maps for $\theta$ and $\phi$
+based on cancelling each of the marginal
+and conditional. \\
+
+However, in order for $p(x)$
+to truly be a density function, we need:
+\[ \int p(x)dx = 1 \]
+We can ensure that by normalizing it:
+\[ p_{\text{new}}(x) = \dfrac{p(x)}{\int p(x) dx} \]
+Which ensure that $p_{\text{new}}$
+is the density of $x$. \\ 
+
+This allows us to then get rid of the term,
+and sample $\theta$ and $\phi$ without
+its weight. \\
 
 \end{document}

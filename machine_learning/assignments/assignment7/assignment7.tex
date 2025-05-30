@@ -1,0 +1,171 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Machine Learning \\
+    \Large Assignment VII
+}
+\date{2025-05-29}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Ex 1}
+
+\begin{enumerate}[label = \letters]
+\item 
+    In order for a function to be classification
+    calibrated, it needs to be convex,
+    and it has to have a derivative at $x=0$,
+    which is negative. \\
+    We have:
+    \[ \Phi(x) = \log(1 + e^{-x}) \]
+    \[ \Phi'(x) = \dfrac{-e^{-x}}{1 + e^{-x}} \]
+    \[ \Phi''(x) = \dfrac{e^{-x}(1 + e^{-x})
+    - e^{-x}e^{-x}}{(1 + e^{-x})^2}
+    = \dfrac{e^{-x}}{(1+e^{-x})^2} \]
+    Both the numerator and denominator
+    of the second derivative are positive,
+    so the function is convex. \\
+    Moreover, $\Phi'(x)$
+    is defined at $x = 0$, and 
+    $\Phi'(0) = -\dfrac{1}{2}$, which is negative.
+\item 
+    If we have the model:
+    \[ p(y \mid x, \theta) = \dfrac{1}
+    {1 + e^{-y\ang{\varphi(x), \theta}}} \]
+    The negative logarithm of the model is:
+    \[ -\log\para{\dfrac{1}
+    {1 + e^{-y\ang{\varphi(x), \theta}}}}
+    = \log\para{
+    {1 + e^{-y\ang{\varphi(x), \theta}}}} \]
+    Which is the logistic loss 
+    $\Phi(y\ang{\varphi(x), \theta})$.
+\item 
+    We have:
+    \[ p(y \mid x, \theta) = \dfrac{1}{1 + e} \]
+    \[ \ell(y\ang{\varphi(x), \theta}) 
+    = \log(1 + e) \]
+    The model's prediction is the sign of the
+    surrogate function $\ang{\varphi(x), \theta}$,
+    which is $-1$, which has a negative sign.
+\item 
+    We have the softmax for $K$ classes:
+    \[ p(y = k \mid x, \theta)
+    = \dfrac{e^{\ang{\varphi(x), \theta_k}}}
+    {\sum_i^K e^{\ang{\varphi(x), \theta_i}}}\]
+    The gradient with respect to $\theta_k$ is:
+    \[ \partialdd{}{\theta_k}
+    = \dfrac{(e^{\ang{\varphi(x), \theta_k}})'
+    \sum_i^K e^{\ang{\varphi(x), \theta_i}}
+    - (\sum_i^K e^{\ang{\varphi(x), \theta_i}})'
+    e^{\ang{\varphi(x), \theta_k}}}
+    {(\sum_i^K e^{\ang{\varphi(x), \theta_i}})^2} \]
+    \[ \partialdd{}{\theta_k}
+    = \dfrac{\varphi(x)e^{\ang{\varphi(x), \theta_k}}
+    \sum_i^K e^{\ang{\varphi(x), \theta_i}}
+    - \varphi(x)e^{\ang{\varphi(x), \theta_k}}
+    e^{\ang{\varphi(x), \theta_k}}}
+    {(\sum_i^K e^{\ang{\varphi(x), \theta_i}})^2} \]
+    \[ \partialdd{}{\theta_k}
+    = \varphi(x) \dfrac{
+    e^{\ang{\varphi(x), \theta_k}}}
+    {\sum_i^K e^{\ang{\varphi(x), \theta_i}}}
+    \dfrac{\sum_i^K e^{\ang{\varphi(x), \theta_i}}
+    - e^{\ang{\varphi(x), \theta_k}}}
+    {\sum_i^K e^{\ang{\varphi(x), \theta_i}}} \]
+    \[ \partialdd{}{\theta_k}
+    = \varphi(x) p(y = k \mid x, \theta)
+    \para{1 - p(y = k \mid x, \theta)} \]
+    We can now set $K = 2$,
+    and see that we get the normal binary
+    classification:
+    \[  p(y = k \mid x, \theta) = 
+    \dfrac{e^{\ang{\varphi(x), \theta_k}}}
+    {\sum_i^K e^{\ang{\varphi(x), \theta_i}}}
+    = \dfrac{e^{\ang{\varphi(x), \theta_k}}}
+    {e^{\ang{\varphi(x), \theta_1}}
+    + e^{\ang{\varphi(x), \theta_2}}}\]
+    But we have two parameter vectors here,
+    and we need one, so we can take
+    $\theta = \theta_1 - \theta_2$,
+    and set $k = 1$ for now:
+    \multiline{p(y = 1 \mid x, \theta) & = 
+    \dfrac{e^{\ang{\varphi(x), \theta_1}}}
+    {e^{\ang{\varphi(x), \theta_1}}
+    + e^{\ang{\varphi(x), \theta_2}}}
+    = \dfrac{1}
+    {1 + \dfrac{e^{\ang{\varphi(x), \theta_2}}}
+    {e^{\ang{\varphi(x), \theta_1}}}} \\
+    & = \dfrac{1}
+    {1 + e^{\ang{\varphi(x), \theta_2 - \theta_1}}}
+    = \dfrac{1}
+    {1 + e^{-\ang{\varphi(x), \theta_1 - \theta_2}}}
+    = \dfrac{1}
+    {1 + e^{-y\ang{\varphi(x), \theta_1 - \theta_2}}}}
+    This is just the binary case. \\
+\end{enumerate}
+
+\newpage
+
+\subsection*{Ex 3}
+
+\begin{enumerate}[label = \letters]
+    \item 
+    The recall is the percentage of positive
+    predictions among all data points that are actually
+    posisve:
+    \[ \text{Recall}_P = \dfrac{tp}{tp + fn} 
+    = \dfrac{40}{40 + (5 + 5)}  = \dfrac{4}{5} \]
+    \[ \text{Recall}_T = \dfrac{tp}{tp + fn} 
+    = \dfrac{30}{30 + (6 + 4)}  = \dfrac{3}{4} \]
+    \[ \text{Recall}_L = \dfrac{tp}{tp + fn} 
+    = \dfrac{53}{53 + (3 + 4)}  = \dfrac{53}{60} \]
+    The precision is the percentage of positive
+    predictions among all data points that are
+    predicted to be positive:
+    \[ \text{Precision}_P = \dfrac{tp}{tp + fp} 
+    = \dfrac{40}{40 + (4 + 3)}  = \dfrac{40}{47} \]
+    \[ \text{Precision}_T = \dfrac{tp}{tp + fp} 
+    = \dfrac{30}{30 + (4 + 5)}  = \dfrac{30}{39} \]
+    \[ \text{Precision}_L = \dfrac{tp}{tp + fp} 
+    = \dfrac{53}{53 + (5 + 6)}  = \dfrac{53}{64} \]
+    The F-score is the harmonic mean:
+    \[ \text{F-score}_P = 
+    \dfrac{2 * \text{Recall}_P * \text{Precision}_P}
+    {\text{Recall}_P + \text{Precision}_P} \approx
+    0.824 \]
+    \[ \text{F-score}_T = 
+    \dfrac{2 * \text{Recall}_T * \text{Precision}_T}
+    {\text{Recall}_T + \text{Precision}_T} \approx
+    0.759 \]
+    \[ \text{F-score}_L = 
+    \dfrac{2 * \text{Recall}_L * \text{Precision}_L}
+    {\text{Recall}_L + \text{Precision}_L} \approx
+    0.855 \]
+\item 
+    The accuracy is the rate of correct
+    predictions (one accuracy for all classes):
+    \[ \text{Accuracy} = \dfrac{\sum (tp + tn)}
+    {\sum (tp + tn + fp + fn)} = \dfrac{\sum (tp + tn)}{n}
+    = \dfrac{40 + 30 + 53}{150} = \dfrac{123}{150} \]
+    The error is just the rate of incorrect predictions:
+    \[ \text{Error} = 1 - \text{Accuracy} = \dfrac{27}{150} \]
+    The true positive rate is just the recall
+    (the positive predicted value is the precision). \\
+
+\end{enumerate}
+
+\newpage
+
+\end{document}
