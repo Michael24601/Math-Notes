@@ -1,0 +1,203 @@
+
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture XIV
+}
+\date{2025-06-04}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Heat diffusion}
+
+Generally particles move from higher to lower concentration
+parts; as time goes on, the enture image blurs, as
+the heat diffuses in space, and the heat distributes. \\
+The color at the steady state
+(equilibrium) is a constant, mean, color. \\
+
+Works not just for heat, but for pressure, and for
+mass... \\
+
+We can express the heat
+in some region $\Om$ at time $t$
+as $Q(t, \Om)$, where:
+\[ Q(t, \Om) = \int_\Om p(t, x, y, z) 
+\; dx \; dy \; dz
+= \int_\Om p(t, x, y, z) \; dV \]
+Where $p$ is the density at a point. \\
+
+The change in heat in the region $\Om$
+with respect to the time is given by:
+\[ \partialdd{}{t} \int_\Om p(t, x, y, z) \; dV \]
+We can bring in the differntial
+since $t$ and $V$ are not related:
+\[ \int_\Om \partialdd{}{t} p(t, x, y, z) \; dV \]
+It can be decomposed into the generated
+heat in the region minus the heat
+leaving the region $\Om$,
+which means the heat leaving in the direction
+of the normal at each point
+on the boundary of the region $\partial \Om$:
+\[ \int_\Om  \partialdd{}{t}p(t, x, y, z) \; dV
+= \int_\Om F \; dV
+- \int_{\partial \Om} j \cdot n \; dA \]
+Where the heat leaving the region is
+given by a flux integral (dot product
+of vector field with normal). \\
+
+The divergence is just the gradient
+accompanied by a dot product:
+\[ \text{Div}(f(x, y, z))
+= \nabla \cdot f(x, y, z)
+= \partial_x f_x + \partial_y f_y
++ \partial_z f_z \]
+We can think of it as a measure of how much
+a vector field is a sink or source at 
+some point. \\
+
+The divergence theorem
+says that the flux around the boundary
+of some region $\partial \Om$ 
+is equal to the sum of the divergence at each 
+individual point in the region $\Om$:
+\[ \int_{\partial \Om} j \cdot n \; dA
+= \int_{\Om} \nabla \cdot j \; dV\]
+Recall that the flux is the measure of
+the vector field exitting the region
+at the bounds (sum of dot product with normals),
+so what we are saying is that the amount
+of the vector field exitting a region
+is equal to the amount of divergence
+(how much of a source each point is)
+at each point in the region. \\
+
+It is simialr to Green's Theorem,
+which is about circulation and curl;
+both are generalized by Stoke's Theorem. \\
+
+So using the divergence theorem, we get:
+\[ \int_\Om \partialdd{}{t} p(t, x, y, z) \; dV
+= \int_\Om F \; dV
+- \int_{\Om} \nabla \cdot j \; dV \]
+We can take out the integral since it
+is over the same region, which we assume is
+continuous:
+\[  \partialdd{}{t} p(t, x, y, z)
+= F - \nabla \cdot j \]
+Which is our change of heat in terms of $t$. \\
+
+Here we have $j$ as the vector
+field of change of density $p$:
+\[ j = -D\nabla p \]
+Here, the matrix $D$
+decides how much change we have in each
+direction, and $\nabla p$ is the gradient
+(rate of change in each direction). \\
+However, by Fick's law,
+we can assume we have constant change
+in each direction, which means that
+$D = kI$, so we can write:
+\[ j = -k\nabla p \]
+There are other diffusions we can have,
+but this is the simplest case. \\
+
+Now, replacing in the original formula
+using Fick's law, we get:
+\[  \partialdd{}{t} p(t, x, y, z)
+= F - \nabla \cdot (-k\nabla p) \]
+\[  \partialdd{}{t} p(t, x, y, z)
+= F + k \nabla \cdot \nabla p \]
+\[  \partialdd{}{t} p(t, x, y, z)
+= F + k \Delta p \]
+Where $\Delta = \nabla^2$ which is
+the laplacian. \\
+
+The laplacian is the dot product of
+the gradient with itself:
+\[ \Delta = \para{\partialdd{}{x}, 
+\partialdd{}{y}, \partialdd{}{z}}
+\cdot \para{\partialdd{}{x}, 
+\partialdd{}{y}, \partialdd{}{z}} \]
+\[ \Delta = \partialdd{^2}{x^2} +
+\partialdd{^2}{y^2} + \partialdd{^2}{z^2} \]
+Which uses second partial derivatives, so:
+\[ \Delta f = \partial_{xx} f + 
+\partial_{yy} f + \partial_{zz} f \]
+This is the laplacian of some function $f$. \\
+
+Now, in our equation,
+we can assume there is no generated
+heat, which gets us:
+\[ \partialdd{}{t} p(t, x, y, z) = k \Delta p \]
+This is our partial differential equation,
+called the heat equation. \\
+
+Everything we wrote in this section was
+in $3$ dimensions, but can be generalized
+easily to any dimension. \\ 
+
+\newpage
+
+\subsection*{Discretizing the Heat Equation}
+
+We have the heat equation PDE:
+\[ \partialdd{}{t} u = k \Delta u \]
+This is sometimes solvable. \\
+
+However, in general we want to discretize it
+the PDE in order to solve it. \\
+
+We will start with a one dimensional example
+in order to keep it simple.
+So we have a one dimensional function $u(x)$,
+which gives us the PDE:
+\[ \partial_t u = k \partial_{xx} u\]
+We can ignore the constant $k$
+now which only modulates the speed of 
+the diffusion. \\
+
+So how can we solve $\partial_t u =\partial_{xx} u$?
+We will discretize $u(x)$. \\
+we can imagine $u(x)$ as a line of points,
+each with a value $u(x_i)$;
+we can imagine this as a bunch of discrete,
+non continuous points
+on the line $x_1, x_2, \dots x_n$. \\
+We then end up with a vector of values:
+\[ (u(x_1), u(x_2), \dots u(x_n)) \]
+If this were the 2 dimensional case, 
+we would have had a 2 dimensional array
+represented by our image pixels. \\
+
+We now have to express $\partial_{xx} u$
+using this new discretization of the $u(x)$. \\
+But what is the second order rate of change of $u(x_i)$
+in terms of $x$? After all this is just a set of
+values that are in no way continuous or differentiable. \\
+
+So, we have to interpolate between the points;
+using linear interpolation is not especially useful,
+since the derivative will just be a single
+number that doesn't tell us much,
+so we use quadratic interpolation. \\
+So for each point $u_i$,
+we want to fit the triplet $u_{i-1}$, $u_{i}$,
+$u_{i+1}$ with a quadratic.
+
+
+
+\end{document}

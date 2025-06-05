@@ -1,0 +1,112 @@
+
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture XIII
+}
+\date{2025-06-02}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Inverse-Discrete Sampling}
+
+Inverse sampling was done in the continuous case,
+where we wanted to get rid of a term $p(x)$
+in the intgeral. \\
+
+In the discrete case, we have the probabilities:
+\[ \{p_1, p_2 \dots p_n \} \]
+Which sum up to $1$. \\
+This is the discrete analog to $p(x)$. \\
+
+If the sum of $p_i$ is $M \neq 1$, we just divide
+all probabilities by $M$. \\
+
+We define:
+\[ P_i = \sum_{k=1}^i p_k \]
+And we map the intervals:
+\[ \brac{ P_i,  P_{i+1}} \to i+1 \]
+to these indices. \\
+This is the integration in the continuous case. \\
+
+We then try to fit $u \in [0, 1]$ 
+into one of the buckets we have,
+using binary search for efficiency
+(we can also use linear search), which is our
+inversion that we did in the continuous case. \\
+
+The funciton is not injective (piece-wise constant function), 
+which is why we can't
+invert it, which is why we have buckets that map to
+indexes. \\
+
+For the $2$ dimensional case, we have rows and columns,
+we can then sum all the rows (or columns),
+and get a $1$ dimensional array. \\
+
+Video: My favorite samples | SIGGRAPH courses 1:42:20. \\
+
+\newpage
+
+\subsection*{Heat diffusion}
+
+Generally particles move from higher to lower concentration
+parts; as time goes on, the enture image blurs, as
+the heat diffuses in space, and the heat distributes. \\
+The color at the steady state
+(equilibrium) is a constant, mean, color. \\
+
+Works not just for heat, but for pressure, and for
+mass... \\
+
+We can express the heat
+in some region $\Om$ at time $t$
+as $Q(t, \Om)$, where:
+\[ Q(t, \Om) = \int_\Om p(t, x, y, z) 
+\; dx \; dy \; dz
+= \int_\Om p(t, x, y, z) \; dV \]
+Where $p$ is the density at a point. \\
+
+The change in heat in the region $\Om$
+with respect to the time is given by:
+\[ \partialdd{}{t} \int_\Om p(t, x, y, z) \; dV \]
+It can be decomposed into the generated
+heat in the region minus the heat
+leaving the region $\Om$,
+which means the heat leaving in the direction
+of the normal at each point
+on the boundary of the region $\partial \Om$:
+\[ \partialdd{}{t} \int_\Om p(t, x, y, z) \; dV
+= \int_\Om F \; dV
+- \int_{\partial \Om} j \cdot n \; dA \]
+Where the heat leaving the region is
+given by a flux integral (dot product
+of vector field with normal). \\
+
+Here we have $j$ as the vector
+field of change of density $p$:
+\[ j = D\nabla p \]
+Here, the matrix $D$
+decides how much change we have in each
+direction. \\
+However, by Fick's law,
+we can assume we have constant change
+in each direction, which means that
+$D = kI$, so we can write:
+\[  \]
+
+
+\end{document}

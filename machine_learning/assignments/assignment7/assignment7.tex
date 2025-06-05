@@ -53,7 +53,7 @@
     $\Phi(y\ang{\varphi(x), \theta})$.
 \item 
     We have:
-    \[ p(y \mid x, \theta) = \dfrac{1}{1 + e} \]
+    \[ p(y = 1 \mid x, \theta) = \dfrac{1}{1 + e} \]
     \[ \ell(y\ang{\varphi(x), \theta}) 
     = \log(1 + e) \]
     The model's prediction is the sign of the
@@ -116,6 +116,111 @@
     This is just the binary case. \\
 \end{enumerate}
 
+\colorText{red}{
+\subsection*{Correction}
+\begin{enumerate}[label = \letters]
+    \item Not a correction, but a note; the theorem
+    that says a convex margin-based loss
+    function is classification calibrated
+    if it's derivative at $0$ is negative
+    is sufficient but not necessary to show a function
+    is classification clibrated. \\
+    Also we should have noted that the function is
+    margin-based (has $yg(x)$ as input). \\
+    Another note is that applying a monotonically
+    increasing function to a convex term results
+    in a convex function, which we could have used
+    instead of doing the second derivative. \\
+    Also to show that the derivative exists,
+    we should technically show that the limit
+    from the left and right side is equal to $\Phi'(0)$.
+    \item 
+    \item 
+    For the model predition, we should have just noted
+    that $p(y = 1 \mid x, \theta) < 0.5$.
+    \item 
+    Should have calculated the gradient of the loss,
+    not the density:
+    \[ p(y = k \mid x, \theta)
+    = \dfrac{e^{\ang{\varphi(x), \theta_k}}}
+    {\sum_i^K e^{\ang{\varphi(x), \theta_i}}}\]
+    We consider $z_k = \ang{\varphi(x), \theta_k}$"
+    \[ \ell(y, z_k) =
+    -\log(p(y = k \mid x, \theta))
+    =\log\para{\dfrac{\sum_i^K e^{\ang{\varphi(x), \theta_i}}}
+    { e^{\ang{\varphi(x), \theta_k}} }} \]
+    \[ \ell(y, z_k) = \log\para{\sum_i^K e^{\ang{\varphi(x), \theta_i}}}
+    - \log\para{{e^{\ang{\varphi(x), \theta_k}}}} \]
+    \[ \ell(y, z_k) = \log\para{\sum_i^K e^{\ang{\varphi(x), \theta_i}}}
+    - \ang{\varphi(x), \theta_k} \]
+    Then we calculate the gradient
+    in terms of $\theta_k$:
+    \[ \nabla \ell(y, z_k)
+    = \varphi(x) + 
+    \dfrac{\varphi(x)e^{\ang{\varphi(x), \theta_k}}}
+    {\sum_i^K e^{\ang{\varphi(x), \theta_i}}} \]
+    Note that when he solved it, he solved it
+    for a general case: the derivative with respect to
+    $\theta^k$ of teh softmax where $y = j$,
+    not necessarily $y = k$, so in that case
+    the first term may or may not be $0$
+    depending on whether the $k = j$,
+    so we use an indicator function: 
+    $\varphi(x) \indicator_{k = j}$. \\
+    Also for th second part, I computed
+    $p(y = 1 \mid x, \theta)$,
+    but should have also computed
+    $p(y = -1 \mid x, \theta)$,
+    and shown that they lead to the same function
+    with the sign flipped
+    (in the last step, multiplying by $y$
+    would flip the order for $\theta_2 - \theta_1$).
+\end{enumerate}
+}
+\newpage
+
+\subsection*{Ex 2}
+
+\begin{enumerate}[label = \letters]
+    \item 
+    The issue with LDA assumes that the within-class
+    covariances are equal, and they are not here,
+    so we can exclude it. \\
+    The only issue with SVM hard margin is if the
+    data is not linearlly seperable. But this doesn't
+    apply here. \\
+    Logistic regression is far too sensitive to outliers.
+    (If we have ont point from class A close to class B
+    that is an outlier, logistic regression
+    would be sensitive to the outlier and overfit). 
+    The only advantage of logistic regression is that the
+    output is a probability, which gives us
+    a confidence score for the classifier. \\
+    So we can go with a hard-margin SVM
+    or maybe even logistic regression. \\ 
+    \item 
+    LDA and hard margin-SVM would not work since they
+    are not linearlly seperable. But logistic regression
+    and soft-margin SVM work.
+    \item 
+    Regularization works to mitigate overfitting.
+    So it would help penalize overfitting,
+    which would make the models reistant to outliers. \\
+    In SVM, the soft-margin is the regularization. \\
+    In Logistic regression, we can use L1 or L2 norms.
+\end{enumerate}
+
+\colorText{red}{
+\subsection*{Correction}
+\begin{enumerate}[label = \letters]
+    \item We can choose SVM or logistic regression,
+    so long as our reasoning is sound. But LDA is
+    wrong.
+    \item
+    \item
+\end{enumerate}
+}
+
 \newpage
 
 \subsection*{Ex 3}
@@ -161,7 +266,10 @@
     = \dfrac{40 + 30 + 53}{150} = \dfrac{123}{150} \]
     The error is just the rate of incorrect predictions:
     \[ \text{Error} = 1 - \text{Accuracy} = \dfrac{27}{150} \]
-    The true positive rate is just the recall
+    The true positive rate is just the recall,
+    so we need the average of the recalls:
+    \[ \text{Average True Positive Rate}
+    \approx 0.811 \]
     (the positive predicted value is the precision). \\
 
 \end{enumerate}
