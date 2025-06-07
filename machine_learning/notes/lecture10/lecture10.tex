@@ -160,7 +160,11 @@ if $(\theta^{(k)})_{k \in \nbb}$
 converges towards the solution as $k \to \infty$. \\
 We are often interested in the convergence rate
 of a given algortithm. \\
-\colorText{red}{TODO: epsilon.} \\
+
+An $\eps$-solution is a solution that is at
+most $\eps$ off from the true global minimizer:
+\[ \olsi{\theta} \leq \theta^* + \eps \]
+This can be used to induce the convergence rate. \\
 
 We can only really compare the performance of algorithms
 that follow the same rules (solve problems from the
@@ -188,7 +192,11 @@ Notice that there is no constraint on the
 optimization variable $\theta$,
 so this is an unconstrained optimization problem. \\
 
-\colorText{red}{TODO: Properties.} \\
+We will call:
+\[ L = \|\Phi^T \Phi\| \quad \AND
+\quad m = \lambda_{\min}(\Phi^T\Phi) \geq 0 \]
+Which are respecively the largest and smallest
+eigenvalues of $\Phi^T\Phi$. \\
 
 There are several algorithms that we can use to solve
 problems of this class, including
@@ -196,7 +204,8 @@ a direct solver using a closed form epxression (as we
 have seen before), gradient descent, and conjugate
 gradient method. \\
 
-\colorText{red}{TODO: Closed form solution.} \\
+The direct solver has a closed form solution
+as we saw in the last two chapters. \\
 
 \newpage
 
@@ -210,6 +219,22 @@ This is a first-order algorithm, as we need the gradient
 in order to find the direction $d$ of steepest descent
 (we minimize the inner product). \\
 
+Recall that the speed of descent at $\theta^{(k)}$
+in some direction $d$ is the directional
+derivative:
+\[ \frac{f(\theta^{(k)} + t d) - 
+f(\theta^{(k)})}{|t|} = 
+\langle \nabla f(\theta^{(k)}), 
+d \rangle + \frac{o(|t|)}{|t|} \]
+We can then solve for the direction $d^{(k)}$
+that maximizes the descent speed:
+\[ \min_{d \in \mathbb{R}^d} 
+\langle \nabla f(\theta^{(k)}), 
+d \rangle \quad \SUCHTHAT \quad \|d\| = 1\]
+\[ d^{(k)} = -\nabla f(\theta^{(k)}) \]
+So this is the direction of steepest descent,
+and it is given by the gradient. \\
+
 We choose some step length $\tau$ to move in the direction
 of steepest descent:
 \[ \theta^{(k+1)} = \theta^{(k)} -\tau \nabla f(\theta^{(k)}) \]
@@ -217,17 +242,28 @@ We repeat these steps until the error is acceptable. \\
 
 We choose some starting point $\theta^{(0)}$. \\
 
-A heuristic for the step size is $\dfrac{2}{L + m}$. \\
+A heuristic for the step size is $\tau = \dfrac{2}{L + m}$. \\
 
-\colorText{red}{TODO: Algorithm and convergence rate.} \\
+The update step is thus:
+\[ \theta^{(k+1)} = \theta^{(k)} - \tau 
+\nabla f(\theta^{(k)})
+\quad \WHERE \quad \nabla 
+f(\theta^{(k)}) = \Phi^\top 
+(\Phi \theta^{(k)} - y)\]
+For $k \geq 1$. \\
 
-We have a linear rate of convergence, where $\omega^k$
+The convergence rate for the $\tau$
+we heuristically set is:
+\[ \|\theta^{(k)} - \theta^*\| 
+\leq \omega^k \|\theta^{(0)} - \theta^*\| 
+= O(\omega^k) \quad \WHERE
+\quad \omega = \frac{L/m - 1}{L/m + 1} \]
+We have a linear rate of convergence, 
+where $\omega^k$
 decreases since $\omega < 1$. \\
 Note that the convergence rate we have
 here does depend on the step size, but here the formula
 assumes that we use $\dfrac{2}{L + m}$. \\
-
-\colorText{red}{TODO: Condition Number.} \\
 
 The condition number $\kappa = \dfrac{L}{m}$
 impacts convergence. \\
@@ -246,15 +282,46 @@ This method was first created to solve linear systems
 where $Q$ is positive semi-definite and $b \in \rbb^d$. \\
 
 This can be shown to be equivalent to solving
-thq quadratic minimization problem:
+the quadratic minimization problem:
+\[ \theta \in \mathbb{R}^d 
+\quad \frac{1}{2} \langle \theta 
+Q \theta \rangle - \langle b, \theta \rangle \]
+This will help us accelerate gradient descent
+but only using first order information. \\
 
-\colorText{red}{TODO: All of this.} \\
+Our problem is equivalent to the form
+we showed above, with $Q = \Phi^\top \Phi$ and 
+$b = \Phi^\top y$:
+\[ \frac{1}{2} \|\Phi \theta - y\|^2 
+= \frac{1}{2} \langle \theta 
+\Phi^\top \Phi \theta \rangle 
+- \langle \theta, \Phi^\top y 
+\rangle + \frac{1}{2} \|y\|^2 \]
+Which is the same form. \\
 
-This can be shown to be the best first-order algorithm
-to solve convex quadratic minimization problems. \\
+The idea behind the algorithm that minimizes
+this is to move in directions that are conjugates,
+which ensures faster convergence. \\
 
-\colorText{red}{TODO: Conjugate direction method.} \\
-
+For the first point $\theta^{(0)}$,
+we start with a direction:
+\[ d^{(0)} = r^{(0)} = b - Q \theta^{(0)}\]
+Then the update step
+updates the direction $d^{(k)}$ 
+and $\theta^{(k)}$:
+\[ \alpha_k = \frac{\langle r^{(k)}, r^{(k)} 
+\rangle}{\langle d^{(k)}, Q d^{(k)} \rangle} 
+\quad \text{(optimal step size)}\]
+\[ \theta^{(k+1)} = \theta^{(k)} + \alpha_k 
+d^{(k)} \quad \text{(main update step)} \]
+\[ r^{(k+1)} = r^{(k)} - \alpha_k Q d^{(k)} 
+\quad \text{(compute gradient)} \]
+\[ \beta_{k+1} = \frac{\langle r^{(k+1)}, 
+r^{(k+1)} \rangle}{\langle r^{(k)}, r^{(k)} 
+\rangle} \quad \text{(projection coefficient)} \]
+\[ d^{(k+1)} = r^{(k+1)} + \beta_{k+1} 
+d^{(k)} \quad \text{(project onto Q-conjugate 
+direction)} \] \\
 The idea is that we generate directions for our
 descent that are optimal in order to get to the solution
 in an optimal number of iterations. \\
@@ -262,66 +329,141 @@ in an optimal number of iterations. \\
 The generated directions span the whole space.
 We can show the chosen directions are optimal. \\
 
-We have a main update step, which uses several
-parameters that are also computed each step. \\
-We also compute a new direction. \\
-
-\colorText{red}{TODO: Cost and convergence rate.} \\
-
+The convergence rate is:
+\[ \|\theta^{(k)} - \theta^*\| \leq 2 
+\sqrt{\frac{L}{m}} \, \omega^k \|\theta^{(0)} 
+- \theta^*\| = O(\omega^k) 
+\quad \WHERE \quad \omega = 
+\frac{\sqrt{L/m} - 1}{\sqrt{L/m} + 1} \]
 The convergence rate is also linear, but it is much faster
 since $\sqrt{\dfrac{L}{m}}$ is much smaller 
 than $\dfrac{L}{m}$. \\
-
-It does not generalize to non-linear problems. \\
-
 \newpage
 
-\subsection*{Smoothness}
+\subsection*{Gradient Descent Generalization}
 
-Can we generalize Gradient Descent to non-quadratic
-functions? \\
+We can't generalize the conjugate graident method
+for non-quadratic methods. \\
+There are non-linear generalizations, 
+but they won't be nearly as powerful. \\
+
+We can however, generalize Gradient Descent
+for any problem, since it only needs
+to compute the gradient. \\
+
+The goal will be to minimize any function $f$:
+\[ \min_{\theta \in \mathbb{R}^d} f(\theta) \]
+where $f$ is convex and continuously 
+differentiable. \\
 
 The first algorithm that can do that is called
-gradient descent with line search,
+gradient descent with line search. \\
+The goal is to find a step size $\tau_k > 0$
+each step such that the update step:
+\[ \theta^{(k+1)} = \theta^{(k)} 
+- \tau_k \nabla f(\theta^{(k)})\]
+satisfies the Armijo condition for $\gamma$:
+\[ f(\theta^{(k+1)}) \leq f(\theta^{(k)}) 
+- \gamma \tau_k \|\nabla f(\theta^{(k)})\|^2 \]
 however, we avoid it because it is too
-costly, has no convergence rate because it
-does not have a constant step size. \
+costly; it has no convergence rate because it
+does not have a constant step size. \\
 
 The other methos is to 
 bound the function at each point
-by two quadratics, one below and one above.
-This is done using strong convexity
-and Lipschitz continuity. \\
+by two quadratics, one below and one above. \\
 
-L-smoothness gives us a bound on the function
-by the Descent Lemma. 
-So we rephrase it as a function
-bounded by two quadratics. \\
+We will make use of two properties
+a function can have. \\
 
-The constant $L$ is used to control the
-constant. \\
+The first is $L$-smoothness,
+which is the same as saying the gradient
+of the function $\nabla f$ is $L$-Lipschitz
+continuous:
+\[ \|\nabla f(\theta) - \nabla f(\bar{\theta})\| 
+\leq L \|\theta - \bar{\theta}\| 
+\quad \forall \theta, \bar{\theta}\]
+This will be a necessary condition. \\
+
+The second condition is that $f$
+is $m$-strongly convex, which means that:
+\[ f(m) - \dfrac{m}{2} \|\theta\|^2 \]
+is convex (we assume that $m \geq 0$). \\
+This condition is not necessary, but gives
+desirable results. \\
+
+If we assume the first condition
+is true for all $\olsi{\theta} \in \rbb^d$,
+then by the descent lemma:
+\[ \left| f(\theta) - \left( f(\bar{\theta}) 
++ \langle \nabla f(\bar{\theta}), \theta - 
+\bar{\theta} \rangle \right) \right| 
+\leq \frac{L}{2} \|\theta - \bar{\theta}\|^2 
+\quad \forall \theta \in \mathbb{R}^d \]
+Which we can reformulate as:
+\[ f(\bar{\theta}) + \langle \nabla 
+f(\bar{\theta}), \theta - \bar{\theta} 
+\rangle - \frac{L}{2} \|\theta - 
+\bar{\theta}\|^2 \leq f(\theta) \leq 
+\underbrace{
+f(\bar{\theta}) + \langle \nabla f(\bar{\theta}), 
+\theta - \bar{\theta} \rangle + \frac{L}{2} 
+\|\theta - \bar{\theta}\|^2}
+_{=: f_L(\theta; \bar{\theta})}\]
+This gives us an upper and lower bound at
+each point $\olsi{\theta}$ that are both
+quadratic functions. \\
+
+Now what this means is that we can use
+gradient descent to minimize any function
+$f$, so long as $\nabla f$
+is $L$-Lipschitz continuous,
+and $f$ is at least convex. \\
+We again choose any $\theta^{(0)}$
+to start. \\
+We don't need to do line search for the step
+size, and can instead just use a fixed
+size, so long as
+\[ 0 < \tau < \dfrac{2}{L}\]
+which yields the same update step as before:
+\[ \theta^{(k+1)} = \theta^{(k)} 
+- \tau \nabla f(\theta^{(k)}) \]
+Which now works for any function $f$
+so long as it is convex and $\nabla f$
+is $L$-Lipschitz continuous. \\
+
+This will give us a sub linear convergence rate:
+\[ f(\theta^{(k)}) - \inf f \leq 
+\frac{\|\theta^{(0)} - \theta^*\|^2}{2 \tau k} 
+= O\left(\frac{1}{k}\right) \]
+When we assume that $f$ is convex. \\
+
+On the other hand, if we further assume
+that $f$ is $m$-strongly convex, then
+we get a linear rate of convergence
+to a global minimizer $\theta^*$:
+\[ \|x^{(k)} - x^*\|^2 \leq \omega^k 
+\|x^{(0)} - x^*\|^2 = O(\omega^k) 
+\quad \WHERE \quad \omega = 1 - \tau m \]
+Which can be improved to:
+\[ \omega = \frac{L/m - 1}{L/m + 1}\]
+If we further assume that
+$\tau = \dfrac{2}{L + m}$. \\
 
 Note that if the original function $f$ was
+not convex, then it is bounded from 
+above by a convex quadratic (cup),
+and from below by a concave quadratic (cap). \\
+
+If the original function $f$ was
 convex, which we assume it is by default,
 then it is bounded from above by a quadratic,
-and from below by a linear function! \\
+and from below by a linear function. \\
 
 And if $f$ is strongly convex, then it is
 bounded from above and below by quadratics
-that are both turned up (convex)
+that are both convex (cups)
 instead of having the lower bound turned down. \\
-
-The slides have the cases. \\
-
-We don't need to do line search for the step
-size, and can instead just use a fixed
-size, so long as $0 < \tau < \dfrac{2}{L}$. \\
-
-We now have a convergence rate
-of $O\para{\dfrac{1}{k}}$. \\
-
-This becomes a linear rate if the function
-is strongly convex. \\
 
 \newpage
 
@@ -332,54 +474,86 @@ what the optimal first order iterative
 numerical method is for solving
 optimization problems. \\
 
-Note that $\kappa = \dfrac{L}{m}$
-is called the conditional. \\
-
-After that we have lower bounds on the
-function given some prior assumptions. \\
+This gives us the lower bounds on the
+convergence rate given some prior assumptions. \\
 
 Optimal methods are those that have a convergence
-rate proportional to the lower bound. \\
+rates proportional to the lower bound. \\
 
-Conjugate gradient and heavy-ball method
-are both optimal (in the strongly convex and 
-L-smooth cases). \\
+If we assume that the function $f$
+is $m$-strongly convex and that $\nabla f$
+is $L$-Lipschitz continuous,
+then the lower bound on the convergence 
+rate is 
+\[ O(\omega^k)\] 
+where $\omega$ depends on 
+\[ \dfrac{\sqrt{L/m} - 1}{\sqrt{L/m} + 1} \]
+The conjugate gradient and heavy-ball method
+are both optimal in that case. \\
 
-Heavy ball method is gradient descent 
+The heavy ball method is gradient descent 
 with momentum. \\
 
-Gradient descent is not optimal
-in the convex and L-smooth case,
-but Nesterov Accelerated Gradient method
+On the other hand, if we only assume that $f$
+is convex, and that $\nabla f$
+is $L$-Lipschitz continuous,
+then the convergence rate is 
+\[ O\para{\dfrac{1}{k^2}} \]
+Gradient descent is not optimal in this case,
+but the Nesterov Accelerated Gradient method
 is optimal. \\
-
-We obviously don't consider the non-convex case. \\
 
 \newpage
 
 \subsection*{Nesterov's Accelerated Gradient
 Method}
 
-It is at least as costly as gradient descent
+It is an improved Gradient Descent method.
+Each iteration is at least as costly 
+as gradient descent
 since it also uses the gradient. \\
 
-It has an extrapolation step where
-we find $\eta^{(k)}$, which is like
-a small extra step
+In Nesterov's Accelerated Gradient
+Method, we want to minimize $f$:
+\[ \min_{\theta \in \mathbb{R}^d} f(\theta) \]
+And we assume that $f$
+is convex and that $\nabla f$
+is $L$-Lipschitz continuous. \\
+We then choose two starting values:
+\[ \theta^{(0)} = \theta^{(-1)} \in \rbb^d \]
+A starting time $t_0 = 0$,
+and a step size $\tau > 0$. \\
+This yields the update steps:
+\[ t_{k+1}^2 - t_{k+1} \leq t_k^2 \]
+\[ \eta^{(k)} = \theta^{(k)} 
++ \frac{t_k - 1}{t_{k+1}} \left( \theta^{(k)} 
+- \theta^{(k-1)} \right) \quad 
+\text{(extrapolation step)} \]
+\[ \theta^{(k+1)} = \eta^{(k)} - \tau \nabla 
+f(\eta^{(k)}) \quad \text{(gradient 
+descent step)} \]
+Which is similar to gradient descent,
+but with an extra $\eta(x)$ term. \\
+
+This term is calculated in the extrapolation 
+step. It is like a small extra step
 we take in a specific direction
-we take each iteration. \\
+we take each iteration,
+which gets us closer to the answer. \\
 
-Here we can also choose $t_k = \dfrac{k + 1}{2}$
-which gets rid of
-the first step in the iteration where we calculate
-$t_{k+1}$, which is what gives
-us the convergence rate. \\
+This yields the convergence rate:
+\[ f(\theta^{(k)}) - f(\theta^*) \leq 
+\frac{1}{2\tau} \frac{\|\theta^* - 
+\theta^{(0)}\|^2}{t_k^2} \]
+If we further assume that $t_k = \frac{k+1}{2}$,
+we can bound the convergence rate further:
+\[ \frac{2}{\tau} \frac{\|\theta^* - 
+\theta^{(0)}\|^2}{(k+1)^2} = 
+O\left(\frac{1}{k^2}\right) \]
+Which is optimal as mentioned earlier. \\
 
-This $t_k$ is not optimal, but it allows
-us to have a new, tighter convergence rate. \\
-
-The gradient is the only costly part of this
-algorithm. \\
+The gradient calculation is the only costly 
+part of this algorithm. \\
 
 Note that it works for even non quadratic-functions,
 so long as the smoothness and convexity
@@ -389,96 +563,198 @@ conditions are met. \\
 
 \subsection*{Proximal mapping}
 
-But what about non-smooth problems,
-where $f$ is not smooth?
-Can we generalize the methods that
-we already have? \\
+If we want to generalize our optimization
+methods to non-smooth functions, we need
+to first calculate their proximal mappings. \\
 
-In gradient descent we have:
-\[ \theta^{(k+1)} = 
-\theta^{(k)} - \tau\nabla f(\theta^{(k)}) \]
-Which we can consider it to be the
-discretization of the dynamical system:
-\[ \theta(t) = -\nabla f(\theta(t)) \]
-We can imagine that as the time step
-becomes smaller and smaller, this defines
-a curve each time walking in th direction
-of the gradient. \\
+The formula for the proximal mapping of $f$
+with step size $\tau$ of the point $\theta^{(k)}$
+is:
+\[ \text{prox}_{\tau f}(\theta^{(k)}) 
+= \arg\min_{\theta} \left[ f(\theta) 
++ \frac{1}{2\tau} \|\theta - \theta^{(k)}\|^2 
+\right] \]
+Notice that this will need to be done
+each iteration. \\
 
-This is called explicit euler discretization. \\
+If the proximal mapping of $f$ is easy to find,
+we say that $f$ is prox-friendly. \\
 
-\colorText{red}{We can do implicit euler discretization
-where we instead have a point $\theta^{(k)}$,
-and we want to find a $\theta^{(k+1)}$
-in terms of only $\theta^{(k)}$.} \\
+Note that the function $\delta_C(\theta)$
+is defined as:
+\[ \delta_C(\theta)
+= \piecewise{
+    0, \qquad \;\; \IF  \theta \in C \\
+    \infty, \qquad \IF \theta \notin C
+} \]
+It is the inicator function of a convex set $C$,
+and it has infinite value if the point
+is not in the convex set $C$. \\
 
-We can then take our step:
-\[ \theta^{(k+1)} = 
-\theta^{(k)} - \tau\nabla f(\theta^{(k)}) \]
-and set it equal to $0$,
-and reinterpret it in a way that lets
-us do steps that don't require the gradient,
-and thus works for non smooth functions. \\
-It instead uses the proximal mapping. \\
+So, for example, if we have
+to find the proximal mapping of an indicator
+function for some convex set:
+\[ \text{prox}_{\tau \delta_C}(\theta^{(k)})
+= \arg\min_{\theta} \left[ \delta_C(\theta) 
++ \frac{1}{2\tau} \|\theta - \theta^{(k)}\|^2 
+\right] \]
+Notice that the indictaor function is infinite
+if we allow that $\theta \notin C$,
+which dominates all other terms, so in order
+to minimize we sort of have ot have $\theta$
+be in $C$, which means that:
+\[ \text{prox}_{\tau \delta_C}(\theta^{(k)})
+= \arg\min_{\theta \in C} \left[ \frac{1}{2\tau} 
+\|\theta - \theta^{(k)}\|^2 \right] \]
+Where $\delta_C(\theta)$ became $0$.
+Notice what we are saying here;
+we want to find the $\theta$
+in $C$ such that the distance between 
+$\theta^{(k)}$ and $\theta$ is minimal. \\
+So if $\theta^{(k)}$ is in $C$,
+we just set $\theta = \theta^{(k)}$. \\
+Otherwise, if $\theta^{(k)}$ is not in $C$,
+then the closest point to $\theta^{(k)}$
+on $C$ is the projection of $\theta^{(k)}$
+on the convex set $C$. \\
 
-Note that $\delta_{C}(\theta)$
-means the outputs are all $\theta$ is in $C$. \\
-
-The intuitition is that we want to find the
-closest point in a set $C$ to a point $\theta^{(k)}$,
-which is just a projection. \\
-
-The proximal mapping method is nice
-is we can solve the optimization problem
-we have instead of the gradient nicely. \\
-
-We now have some examples of simple
-proximal mappings. We can derive the solutions
-of these proximal mappings. \\
-
-\newpage
-
-\subsection*{Proximal Gradient Descent}
-
-Structured/Additive Composite optimization is 
-when we assume the function we are trying
-to optimize or minimize is split into
-$f(\theta) + g(\theta)$
-where the first is L-smooth and convex,
-and the second is convex. \\
-
-This fits nicely with the empirical risk
-+ regularization model we have. \\
-
-So we can do two steps, one for $f$
-with gradient descent, one for $g$
-with proximal mapping.
-This is called proximal gradient descent. \\
-
-We now have an example with the LASSO problem. \\
-The 1-norm proximal mapping is 
-some shrinkage operator we are given. \\
-
-Then we are given the full algorithm. \\
-
-Then we have convergence rates. \\
-
-We can also use accelerated gradient descent 
-here, where we use Nestorov instead of vanilla 
-gradient descent. \\
-
-Note that we don't call these
-descent methods because there is no descent;
-there is convergence, but not every step
-gets us closer. \\
-
-It is also called FISTA. \\
+Some examples of proximal mappings:
+\begin{enumerate}
+    \item For $f(\theta) = \|\theta\|^2_2$:
+    \[ \left[ \text{prox}_{\tau \|\cdot\|_2^2}
+    (\bar{\theta}) \right]_i = 
+    \frac{\bar{\theta}_i}{1 + 2\tau}, 
+    \quad \forall i = 1, \ldots, d \]
+    \item For $f(\theta) = 
+    \delta_{\|\theta \|_2 \leq 1}(\theta)$,
+    where the convex set is the unit disk,
+    the proximal mapping is:
+    \[ \text{proj}_{\{\theta \mid 
+    \|\theta\|_2 \leq 1\}}
+    (\bar{\theta}) = \frac{\bar{\theta}}
+    {\max(1, \|\bar{\theta}\|)}\]
+    Which just means that we either set
+    $\olsi{theta}$ to $\theta$ or the projection
+    onto the unit circle $\|\theta\|_2 \leq 1$.
+    \item For $f(\theta) = \|\theta\|_1$,
+    also called the soft shrinkage-thresholding 
+    operator:
+    \[ \left[ \text{prox}_{\tau \|\cdot\|_1}
+    (\bar{\theta}) \right]_i = 
+    \max(0, |\bar{\theta}_i| - \tau) \cdot 
+    \text{sign}(\bar{\theta}_i) 
+    \quad \forall i = 1, \ldots, d \]
+\end{enumerate}
+We prove these are true in an assignment. \\
 
 Note that while $\|\theta\|_1$
 is prox-friendly, and can have proximal mapping
 done to it,
 this isn't true for $\|A \theta\|_1$
 for some arbitrary matrix $A$. \\
+
+\newpage
+
+\subsection*{Proximal Gradient Descent}
+
+Structured/Additive Composite optimization
+is used in order to split an optimization problem. \\
+If we have:
+\[ \min_\theta h(\theta) \]
+And we know that we can split $h$ such that:
+\[ h(\theta) = f(\theta) + g(\theta)\]
+where $f$ is $L$-smooth and convex,
+and $g$ is convex,
+non-smooth, and prox-friendly,
+then we just need to minimize each
+function individually. \\
+
+Notice that this form
+resembles the formula we get
+when we want to minimize the empirical risk
+plus the regularization term. \\
+The empirical risk is smooth, and the regularizer
+may be non-smooth, such as in LASSO. \\
+
+Each step, we can update $\theta$
+with respect to $f$ using the gradient
+descent method (forward step):
+\[ \theta^{(k)} = \theta^{(k)} - 
+\tau \nabla f(\theta^{(k)}) \]
+And then follow it up by an update
+with respect to $g$ using proximal mapping
+(backwards step):
+\[ \theta^{(k+1)} = \text{prox}_{\tau g}
+(\bar{\theta}^{(k)}) \]
+Putting both of them together,
+we get a single proximal-gradient step:
+\[ \theta^{(k+1)} = \text{prox}_{\tau g} 
+\left( \theta^{(k)} - \tau \nabla 
+f(\theta^{(k)}) \right) \]
+This algorithm converges towards
+the minimum of $h(\theta)$,
+and is called proximal-gradient descent. \\
+
+So we just have to assume that $f$
+is $L$-smooth (meaning that $\nabla f$
+is $L$-Lipschitz continuous)
+and convex, and that $g$
+is convex and prox friendly. \\
+We can pick any starting variable 
+$\theta^{(0)} \in \rbb^d$,
+and a step size:
+\[ 0 < \tau < \dfrac{2}{L} \]
+Then, we can apply the proximal gradient step
+repeatedly. \\
+
+This yields a sub-linear convergence rate
+$O\para(\dfrac{1}{k})$. \\
+
+If we further assume that $f$
+is $m$-strongly convex, then we
+get a linear convergence rate
+$O(\omega^k)$ where:
+\[ \omega = \frac{L/m - 1}{L/m + 1} \quad 
+\FOR \quad \tau = \frac{2}{L + m}\]
+Recall that a linear convergence rate
+is faster than sublinear. \\
+
+We can also use accelerated gradient descent 
+here, where we use Nestorov's algorithm
+instead of vanilla gradient descent. \\
+
+We again make the same assumptions
+about $f$ and $g$,
+and pick any starting variables:
+\[ \theta^{(0)} = \theta^{(-1)} \in \rbb^d \]
+And some step size $\tau > 0$,
+which gives us the update steps:
+\[ t_{k+1}^2 - t_{k+1} \leq t_k^2 \]
+\[ \eta^{(k)} = \theta^{(k)} + 
+\frac{t_k - 1}{t_{k+1}} \left( \theta^{(k)} 
+- \theta^{(k-1)} \right) \]
+\[ \theta^{(k+1)} = \text{prox}_{\tau g} 
+\left( \eta^{(k)} - \tau \nabla f(\eta^{(k)}) 
+\right)\]
+Which converges towards the minimizer. \\
+
+This yields a convergence rate:
+\[ h(\theta^{(k)}) - h(\theta^*) 
+\leq \frac{1}{2\tau} \frac{\|\theta^* - 
+\theta^{(0)}\|^2}{t_k^2} \]
+And if we take $t_k = \dfrac{k+1}{2}$,
+then the convergence rate becomes:
+\[ \frac{2}{\tau} \frac{\|\theta^* - 
+\theta^{(0)}\|^2}{(k+1)^2} = 
+O\left(\frac{1}{k^2}\right) \]
+Note that we don't call this a gradient
+descent method because there is no descent;
+there is convergence, but not every step
+gets us closer. \\
+
+So it is simpy called Accelerated Proximal 
+Gradient Method.
+It is also called FISTA. \\
 
 \newpage
 
