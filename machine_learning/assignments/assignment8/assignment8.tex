@@ -1,0 +1,571 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Machine Learning \\
+    \Large Assignment VIII
+}
+\date{2025-06-07}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Ex 1}
+
+\begin{enumerate}[label = \letters]
+\item
+When plotting an ROC curve, we essentially
+use different thresholds that determine when
+we should choose the positive or negative class
+(not just when the probability is larger or equal
+to 0.5). \\
+We will consider the thresholds:
+\[ 0.3 \quad 0.4 \quad 0.5 \quad 0.6 \quad 0.7
+\quad 0.8 \quad 0.9 \]
+Where if the probability
+of the class being positive is larger or equal to these
+thresholds, we pick the positive class. \\
+Now for the ROC curve, we plot the true positive
+rate against the false positive rate:
+\[ tpr = \dfrac{tp}{tp + fn} = \dfrac{tp}{P} \]
+\[ fpr = \dfrac{fp}{fp + tn} = \dfrac{fp}{N} \]
+Where $P$ are the actually positive patients,
+and $N$ are the actually negative ones.
+We have $P = 3$ and $N = 3$.
+\begin{enumerate}[label = \numbers]
+    \item 
+    So for $0.9$, only patient A is predicted
+    to have pneumonia, while the rest are predicted not to.
+    So we have:
+    \[ tp = 1 \quad fp = 0 \implies 
+    tpr = \dfrac{1}{3} \quad 
+    fpr = \dfrac{0}{3} = 0 \]
+    \item For $0.8$:
+    \[ tp = 1 \quad fp = 1 \implies 
+    tpr = \dfrac{1}{3} \quad 
+    fpr = \dfrac{1}{3} \]
+    \item For $0.7$:
+    \[ tp = 2 \quad fp = 1 \implies 
+    tpr = \dfrac{2}{3} \quad 
+    fpr = \dfrac{1}{3} \]
+    \item For $0.6$:
+    \[ tp = 2 \quad fp = 2 \implies 
+    tpr = \dfrac{2}{3} \quad 
+    fpr = \dfrac{2}{3} \]
+    \item For $0.5$:
+    \[ tp = 2 \quad fp = 2 \implies 
+    tpr = \dfrac{2}{3} \quad 
+    fpr = \dfrac{2}{3} \]
+    \item For $0.4$:
+    \[ tp = 3 \quad fp = 2 \implies 
+    tpr = \dfrac{3}{3} = 1 \quad 
+    fpr = \dfrac{2}{3} \]
+    \item For $0.3$:
+    \[ tp = 3 \quad fp = 3 \implies 
+    tpr = \dfrac{3}{3} = 1 \quad 
+    fpr = \dfrac{3}{3} = 1 \]
+\end{enumerate}
+And we are done. \\
+\item 
+Now we just sketch it with the $x$-axis
+representing the $tpr$ and the $y$-axis
+representing the $fpr$.
+It will look like a stair case.
+\item 
+We can connect the points and calculate the area
+under the curve. We end up with several
+rectangles and trapezoids, with a total area 
+of $\dfrac{15}{18}$.
+\item 
+Notice that in the $tpr$ and the $fpr$,
+the denominator never changes when the thresholds
+change, since $tp + fn$ and $fp + tn$
+are just the number of actual positive and negative
+cases. \\
+So we just focus on the numerator:
+when the number $tp$ increases,
+it's only because we've made new predictions
+that are positive; this either doesn't
+change the $fp$, or also makes it increase,
+since both are calculating the number of
+"positives". \\  
+\end{enumerate}
+
+\colorText{red}{
+    \subsection*{Correction}
+    \begin{enumerate}[label = \letters]
+        \item 
+        \item 
+        \item 
+        the area should be $\dfrac{2}{3}$,
+        draw the ROC again with TPR as the $y$-axis.
+        \item
+    \end{enumerate}
+}
+
+\newpage
+
+\subsection*{Ex 2}
+We have:
+\[ f(x) = \int_{\omega \in \Omega} \|\omega - x\|_2^2 
+\, p(\omega) \, d\omega \]
+Where $\Omega \in \rbb^d$, 
+and $p$ is a density function such that:
+\[\int_{\omega \in \Omega} p(\omega) \, d\omega = 1\]
+\begin{enumerate}[label = \letters]
+    \item 
+    Notice that:
+    \[ f(x) = \int_{\omega \in \Omega} \|\omega - x\|_2^2 
+    \, p(\omega) \, d\omega \]
+    is just the expected value:
+    \[ f(x) = \ebb[\|\Omega - x\|_2^2] \]
+    To show that a solution exists for:
+    \[ \text{inf}_{x\in \rbb^d} f(x) \]
+    We need to show that a global minimizer exists,
+    that is, that the function is coercive:
+    \[ \limit{\|x\|}{\infty}{f(x)} = \infty \]
+    This is easy to see. Since $f(x)$
+    is the expected value of $ \ebb[\|\Omega - x\|_2^2]$,
+    as $\|x\|$ tends towards towards infinity,
+    does does $\|\Omega - x\|_2^2$,
+    and since the expected value is just the weighted
+    average of the function $\|\Omega - x\|_2^2$
+    (where the weight $p(\omega)$ is positive),
+    it too tends towards infinity. \\
+    So the function is coercive.
+    \item 
+    We want to show that the solution is unique
+    by proving that the function is convex. \\
+    First we note that $\|\omega - x\|_2^2$
+    is convex, since it is quadratic. \\
+    Next we note that:
+    \[ f(x) = \ebb[\|\Omega - x\|_2^2] \]
+    The expected value is just the weighted average
+    of the function, that is, each term 
+    $\|\omega - x\|_2^2$ is scaled by a positive
+    weight $p(\omega)$ and summed together with the other
+    terms. \\
+    Since positive scaling and summation
+    of convex functions yields convex functions,
+    the expected value of a convex function must
+    be convex.
+    \item 
+    Now to find this unique solution,
+    we can just differentiate
+    with respect to $x$ and set the gradient
+    equal to $0$, since the function is differentiable:
+    \[ \nabla f = \nabla \para{
+    \int_{\omega \in \Omega} \|\omega - x\|_2^2 
+    \, p(\omega) \, d\omega} \]
+    \[ \nabla f = \int_{\omega \in \Omega} 
+    \nabla \|\omega - x\|_2^2 \, p(\omega) \, d\omega \]
+    \[ \nabla f = \int_{\omega \in \Omega} 
+    2(x - \omega) \, p(\omega) \, d\omega \]
+    \[ \nabla f = \ebb[2(x - \Omega)] 
+    = 2x - 2\ebb[\Omega] \]
+    Setting the gradient equal to $0$, we get:
+    \[ \nabla f = 0 \]
+    \[ 2x - 2\ebb[\Omega] = 0 \]
+    \[ x = \ebb[\Omega] \]
+    And the mean of $\Omega$ is our minimizer. \\
+\end{enumerate}
+
+\colorText{red}{
+    \subsection*{Correction}
+    \begin{enumerate}[label = \letters]
+        \item 
+        We could also mention that we have a bounded
+        set. But proving it's coercive
+        is correct. \\
+        It's also valid to just give the solution
+        (which is also part c).
+        \item 
+        Instead of an expected value,
+        we can also expand the term $\|\omega - x\|^2$,
+        and show that each of the 3 resulting
+        terms is convex:
+        \[ \|x\|^2 - 2\ang{\int_\Omega 
+        \omega p(\omega)d\omega, x}
+        + \int_\Omega \|\omega\|^2p(\omega)d\omega\]
+        The first term is a quadratic, the second
+        is linear, so both are convex
+        (all linear functions, going down or up,
+        are convex), and the third
+        term is just a constant. So the sum
+        of the terms is a convex function.
+        \item 
+    \end{enumerate}
+}
+
+
+\newpage
+
+\subsection*{Ex 3}
+We have $x \in \rbb^d$ and:
+\[ f_\infty(x) = \max(x_1, x_2, \dots, x_d) \]
+\[ f_\lambda(x) = \dfrac{1}{\lambda}
+\log\para{\sum_{i}^d e^{\lambda x_i}} \]
+Where $\lambda \in \rbb$ and $\lambda > 0$. 
+\begin{enumerate}[label = \letters]
+    \item 
+    Constant valued functions like:
+    \[ x_1, \quad x_2, \quad \dots, \quad x_d \]
+    Are all convex, 
+    which means that their maximum is also
+    convex, so $f_\infty$ must be convex.
+    \item 
+    We have:
+    \[ f_\lambda = \dfrac{1}{\lambda}
+    \log\para{\sum_{i}^d e^{\lambda x_i}} \]
+    We want to show that:
+    \[ f_\infty \leq f_\lambda \leq  f_\infty 
+    + \dfrac{1}{\lambda}\log(d) \]
+    First we can show that:
+    \[ f_\infty \leq  f_\lambda \]
+    We can do that by starting with the
+    inequality:
+    \[ \max(x_1, x_2, \dots, x_d)
+    \leq \dfrac{1}{\lambda}
+    \log\para{\sum_{i}^d e^{\lambda x_i}} \]
+    And deriving a an inequality we know holds:
+    \[ \lambda \max(x_1, x_2, \dots, x_d)
+    \leq \log\para{\sum_{i}^d e^{\lambda x_i}} \]
+    \[ e^{\lambda \max(x_1, x_2, \dots, x_d)}
+    \leq \sum_{i}^d e^{\lambda x_i} \]
+    Notice that the left hand side
+    is the exponential of $\lambda$
+    times the largest $x_i$,
+    while the right hand side is the sum
+    of the exponential of all terms
+    of the form $\lambda x_i$,
+    including the max, so the right hand
+    side is at least larger or equal. \\
+    On the other hand, we can show that
+    this inequality holds using the same method:
+    \[ f_\lambda \leq  f_\infty 
+    + \dfrac{1}{\lambda}\log(d) \]
+    \[ \dfrac{1}{\lambda}
+    \log\para{\sum_{i}^d e^{\lambda x_i}} 
+    \leq \max(x_1, x_2, \dots, x_d)
+    + \dfrac{1}{\lambda}\log(d) \]
+    \[ \log\para{\sum_{i}^d e^{\lambda x_i}} 
+    \leq \lambda \max(x_1, x_2, \dots, x_d) + \log(d) \]
+    \[ \sum_{i}^d e^{\lambda x_i}
+    \leq e^{\lambda \max(x_1, x_2, \dots, x_d) + \log(d)} \]
+    \[ \sum_{i}^d e^{\lambda x_i}
+    \leq e^{\lambda \max(x_1, x_2, \dots, x_d)}
+    e^{\log(d)} \]
+    \[ \sum_{i}^d e^{\lambda x_i}
+    \leq d \cdot e^{\lambda\max(x_1, x_2, \dots, x_d)} \]
+    \[ \sum_{i}^d  e^{\lambda x_i}
+    \leq \sum_{i}^d e^{\lambda\max(x_1, x_2, \dots, x_d)} \]
+    The function $e^{\lambda x}$
+    is monotonically increasing since $\lambda > 0$,
+    which means that the right hand side
+    is the sum of terms that are always larger or
+    equal to the terms being summed on the left hand side.
+    So the right hand side must be larger or equal.
+    \item
+\end{enumerate}
+
+\colorText{red}{
+    \subsection*{Correction}
+    \begin{enumerate}[label = \letters]
+        \item 
+        We can't do what I did,
+        since $x_1, x_2, \dots$
+        are not constants.  \\
+        We must use Jensen's inequality,
+        and note that the maximum of a sum
+        is smaller than the sum of the maximum. \\
+        \item 
+        \item 
+        We just do the second derivative
+        test, and prove the hessian $\nabla^2$
+        is positive-semi definite:
+        \[ \partial_{x_i} f_\lambda(x)
+        = \dfrac{e^{\lambda x_i}}
+        {\sum_k^d e^{\lambda x_k}}
+        = \dfrac{e^{\lambda x_i}}{z} \]
+        We can take $z = \sum_k^d e^{\lambda x_k}$. \\
+        Each element of the gradient we will call 
+        $p_i$. \\
+        Then then second derivative is a matrix
+        with diagonal terms:
+        \[ \partial_{x_ix_i} f_\lambda(x)
+        = \dfrac{z\lambda e^{\lambda x_i} - \lambda 
+        e^{2\lambda x_i}}{z^2}
+        = \lambda p_i(1-p_i) \]
+        And off-diagonal terms:
+        \[ \partial_{x_ix_j} f_\lambda(x)
+        =  \dfrac{-\lambda e^{2\lambda x_i}
+        e^{2\lambda x_j}}{z^2}
+        = -\lambda p_i p_j \]
+        Then the matrix can be written as:
+        \[ (\nabla^2 f_\lambda)_{ij}
+        =\piecewise{\lambda p_i(1-p_i) \quad &\IF
+        i = j \\ -\lambda p_i p_j \quad 
+        &\text{else}} \]
+        Then we will find that:
+        \[ \nabla^2 f_\lambda = \lambda (\text{diag}(p)
+        -pp^T) \]
+        Where:
+        \[ w^t\nabla^2f_\lambda w
+        = \lambda\brac{(p_1w_1^2+ p_2w_2^2 +
+        \dots p_dw_d^2) - (p_1w_1 + p_2w_2 +
+        \dots p_dw_d)^2} \]
+        Which is clearly positive ($p$ is always positive),
+        which makes $\nabla^2 f_\lambda$
+        positive-semi definite.
+    \end{enumerate}
+}
+
+\newpage
+
+\subsection*{Ex 4}
+The proximal map is given by:
+\[ \text{prox}_{\tau f}(\bar{\theta})
+= \arg\min_{\theta} \left[ f(\theta) 
++ \frac{1}{2\tau} \|\theta - \bar{\theta}\|^2 \right] \]
+\begin{enumerate}[label = \letters]
+    \item For $f(\theta) = \|\theta\|^2_2$:
+    \[ \left[ \text{prox}_{\tau \|\cdot\|_2^2}
+    (\bar{\theta}) \right]_i = 
+    \frac{\bar{\theta}_i}{1 + 2\tau}, 
+    \quad \forall i = 1, \ldots, d \]
+    We can prove that by solving:
+    \[ \arg\min_{\theta} \left[ \|\theta\|^2 + 
+    \frac{1}{2\tau} \|\theta - \bar{\theta}\|^2 \right] \]
+    Which we can do by differentiating and setting
+    the gradient to $0$ since the function
+    \[ \|\theta\|^2 + 
+    \frac{1}{2\tau} \|\theta - \bar{\theta}\|^2 \]
+    is convex (it is the sum of two quadratics).
+    \[ \nabla \left[ \|\theta\|^2 + 
+    \frac{1}{2\tau} \|\theta - \bar{\theta}\|^2 \right] \]
+    \[ 2\theta + 
+    \frac{1}{\tau}(\theta - \bar{\theta}) \]
+    Setting it equal to $0$:
+    \[ 2\theta + \frac{1}{\tau}(\theta - \bar{\theta})
+    = 0 \]
+    \[ (2 + \dfrac{1}{\tau})\theta
+    = \frac{\bar{\theta}}{\tau} \]
+    \[ \theta = \frac{\bar{\theta}}
+    {\tau(2 + \dfrac{1}{\tau})} \]
+    \[ \theta = \frac{\bar{\theta}}{2\tau + 1} \]
+\item For $f(\theta) = 
+    \delta_{\|\theta \|_2 \leq 1}(\theta)$,
+    where the convex set is the unit disk,
+    we want to show that the proximal mapping is:
+    \[ \text{prox}_{\tau \delta_{\|\cdot\|_2 \leq 1}}
+    (\bar{\theta}) = \frac{\bar{\theta}}
+    {\max(1, \|\bar{\theta}\|)}\] 
+    We want to solve:
+    \[ \arg\min_{\theta} \left[ 
+    \delta_{\|\cdot\|_2 \leq 0} (\theta) + 
+    \frac{1}{2\tau} \|\theta - \bar{\theta}\|^2 \right] \]
+    Recall that:
+    \[ \delta_C(\theta)
+    = \piecewise{0, \qquad \;\; \IF  \theta \in C \\
+    \infty, \qquad \IF \theta \notin C } \]
+    So in order to minimize the function,
+    the indicator term can't be infinity,
+    which means that $\|\theta\|_2 \leq 1$ must hold,
+    meaning that $\theta$ is in the unit circle. \\
+    So if we assume that $\|\theta\|_2 \leq 1$,
+    the indicator term becomes $0$,
+    and we now want to solve:
+    \[ \arg\min_{\theta \in S} 
+    \frac{1}{2\tau} \|\theta - \bar{\theta}\|^2\]
+    Where $S$ is the unit disk. \\
+    So we want to minimize the distance between
+    $\theta$ and $\bar{\theta}$
+    such that $\theta$ is in the unit circle. \\
+    Now, if $\bar{\theta}$
+    is also in the unit circle,
+    we can just set $\theta = \bar{\theta}$. \\
+    If it is not, the closest point in
+    the unit circle to $\bar{\theta}$
+    will be the projction of $\bar{\theta}$
+    on the unit cirlce, that is:
+    \[ \dfrac{\bar{\theta}}{\|\bar{\theta}\|_2} \]
+    which is just $\bar{\theta}$ normalized,
+    the point in the direction of $\bar{\theta}$
+    on the unit circle. \\
+    So:
+    \[ \theta = \piecewise{
+        \bar{\theta} \qquad \qquad 
+        \IF \|\bar{\theta}\|_2 \leq 1
+        \\  \dfrac{\bar{\theta}}{\|\bar{\theta}\|_2} 
+        \qquad \; \IF \|\bar{\theta}\|_2 > 1
+    } \]
+    Which is precisely:
+    \[ \theta = \frac{\bar{\theta}}
+    {\max(1, \|\bar{\theta}\|_2)} \]
+\item For $f(\theta) = \|\theta\|_1$,
+    also called the soft shrinkage-thresholding 
+    operator:
+    \[ \left[ \text{prox}_{\tau \|\cdot\|_1}
+    (\bar{\theta}) \right]_i = 
+    \max(0, |\bar{\theta}_i| - \tau) \cdot 
+    \text{sign}(\bar{\theta}_i) 
+    \quad \forall i = 1, \ldots, d \]
+    We can prove that by solving:
+    \[ \arg\min_{\theta} \left[ \|\theta\|_1 + 
+    \frac{1}{2\tau} \|\theta - \bar{\theta}\|^2 \right] \]
+    Which we can do by differentiating and setting
+    the gradient to $0$ since the function
+    is convex:
+    \[ \nabla \left[ \|\theta\|_1 + 
+    \frac{1}{2\tau} \|\theta - \bar{\theta}\|^2 \right] \]
+    \[ \nabla \left[ \sum_{i=1}^d |\theta_i| + 
+    \frac{1}{2\tau} \sum_{i=1}^d (\theta_i
+    - \bar{\theta}_i)^2 \right] \]
+    We can differentiate each variable individually:
+    \[ \partial_{\theta_i}
+    \left[ \sum_{i=1}^d |\theta_i| + 
+    \frac{1}{2\tau} \sum_{i=1}^d (\theta_i
+    - \bar{\theta}_i)^2 \right] \]
+    \[ \partial_{\theta_i} |\theta_i| + 
+    \frac{1}{\tau}(\theta_i - \bar{\theta}_i) \]
+    Setting it equal to $0$, we have:
+    \[ \partial_{\theta_i} |\theta_i| + 
+    \frac{1}{\tau}(\theta_i - \bar{\theta}_i) = 0 \]
+    \[ \theta_i = \bar{\theta}_i 
+    - \tau\partial_{\theta_i} |\theta_i| \]
+    We now consider $3$ seperate cases: 
+    \begin{enumerate}[label = \numbers]
+        \item 
+        If $\theta_i > 0$,
+        we have $\partial_{\theta_i} |\theta_i| = 1$, so:
+        \[ \theta_i = \bar{\theta}_i - \tau \]
+        Which is only valid if $\theta_i < 0$,
+        meaning that $\bar{\theta}_i > \tau$.
+        \item
+        And for $\theta_i < 0$,
+        we have $\partial_{\theta_i} |\theta_i| = -1$, so:
+        \[ \theta_i = \bar{\theta}_i + \tau \]
+        Which is only valid if $\theta_i < 0$,
+        meaning that $\bar{\theta}_i < -\tau$.
+        \item
+        And finally, for $\theta_i = 0$,
+        we have $\partial_{\theta_i} |\theta_i|
+        \in [-1, 1]$ (between the slopes of both sides).
+        So instead of writing
+        \[ \theta_i = \bar{\theta}_i 
+        - \tau\partial_{\theta_i} |\theta_i| \]
+        We write
+        \[ \theta_i \in \bar{\theta}_i 
+        - \tau\partial_{\theta_i} |\theta_i| \]
+        \[ \theta_i \in [\bar{\theta}_i - \tau, 
+        \bar{\theta}_i + \tau] \]
+        And since $\theta_i = 0$,
+        in order for $0$ to be in the range 
+        $[\bar{\theta}_i - \tau, 
+        \bar{\theta}_i + \tau]$, we need to have
+        $|\bar{\theta_i}| \leq \tau$.
+        \end{enumerate}
+        We can summarize these 3 cases as:
+        \[ \theta_i = \piecewise{
+            \bar{\theta}_i - \tau \quad 
+            \IF \bar{\theta}_i > \tau \\
+            \bar{\theta}_i + \tau \quad 
+            \IF \bar{\theta}_i < -\tau \\
+            0 \quad \quad \quad \;\, \text{else
+            (if $|\bar{\theta_i}| \leq \tau$)}
+        } \]
+        Which is just $\max(0, |\bar{\theta_i}| - \tau)
+        \cdot \sign(\bar{\theta_i})$.
+    \item
+    For $f(\theta) = \|\theta\|_{J, 2, 1}$,
+    the $\ell_{2, 1}$ norm:
+    \[ \mathrm{prox}_{\tau \|\cdot\|_{J,2,1}}(\bar{\theta}) 
+    = \piecewise{\para{1 - \frac{\tau}{\|\bar{\theta}_J\|_2}} 
+    \bar{\theta}_J & \text{if } \|\bar{\theta}_J\|_2 > 
+    \tau \\ 0 & \text{otherwise}} \]
+    We can show that this is the case.
+    First note that the function is differentiable:
+    \[\arg\min_{\theta} \brac{ \frac{1}{2\tau} \|\theta - 
+    \bar{\theta}\|_2^2 + \sum_{J \in \jcal} 
+    \|\theta_J\|_2} \]
+    So since we care about some subset $J$
+    only, we will minimize it in terms of $\theta_J$:
+    \[ \partialdd{}{\theta_J} 
+    \brac{ \frac{1}{2\tau} \|\theta - 
+    \bar{\theta}\|_2^2 + \sum_{J \in \jcal} 
+    \|\theta_J\|_2} \]
+    \[ \frac{1}{\tau}(\theta_J - 
+    \bar{\theta}_J) + \dfrac{\theta_J}{\|\theta_J\|_2} \]
+    Setting it equal to $0$, we get:
+    \[ \frac{1}{\tau}(\theta_J - \bar{\theta}_J) 
+    + \dfrac{\theta_J}{\|\theta_J\|_2} = 0 \]
+    \[ \para{1+\frac{\tau}{\|\theta_J\|_2}}
+    \theta_J = \bar{\theta}_J \]
+    We need to find the norm of $\theta$,
+    so we can take the norm of both sides:
+    \[ \para{1+\frac{\tau}{\|\theta_J\|_2}}
+    \|\theta_J\|_2 = \|\bar{\theta}_J\|_2 \]
+    \[ \|\theta_J\|_2 +\tau = \|\bar{\theta}_J\|_2 \]
+    \[ \|\theta_J\|_2 = \|\bar{\theta}_J\|_2 - \tau \]
+    Notice that since this is a norm,
+    we have to assume that 
+    $\|\bar{\theta}_J\|_2 - \tau \geq 0$:
+    Replacing it in the original, we get:
+    \[ \para{1+\frac{\tau}{\|\bar{\theta}_J\|_2 - \tau}}
+    \theta_J = \bar{\theta}_J \]
+    \[ \para{\frac{\|\bar{\theta}_J\|_2 - \tau +
+    \tau}{\|\bar{\theta}_J\|_2 - \tau}}
+    \theta_J = \bar{\theta}_J \]
+    \[ \para{\frac{\|\bar{\theta}_J\|_2}
+    {\|\bar{\theta}_J\|_2 - \tau}}
+    \theta_J = \bar{\theta}_J \]
+    \[\theta_J = \para{\frac{\|\bar{\theta}_J\|_2 - \tau}
+    {\|\bar{\theta}_J\|_2}}\bar{\theta}_J \]
+    \[\theta_J = \para{1 -\frac{\tau}
+    {\|\bar{\theta}_J\|_2}}\bar{\theta}_J \]
+    On the other hand, if $\|\bar{\theta}_J\|_2 - \tau < 0$,
+    then $\theta_J$ becomes $0$; if we look at the
+    function we are minimizing, it is always non-negative,
+    so it makes no sense to make it negative;
+    we make it 0 instead. \\
+\end{enumerate}
+
+
+\colorText{red}{
+    \subsection*{Correction}
+    \begin{enumerate}[label = \letters]
+        \item 
+        \item 
+        \item 
+        She did not mention the third case,
+        and only did the two cases $\theta > 0$
+        and $\theta < 0$, and otherwise
+        we just have $\theta = 0$,
+        no need to worry about constraints,
+        since we already have the constraints
+        of the two other cases, and the third case
+        takes place otherwise. \\
+        So we can just ignore the case where $\theta_i = 0$,
+        since it is just $0$ on whatever interval
+        is left after the first two cases. \\
+        \item 
+        She used a different way,
+        setting $\theta_J = \alpha \bar{\theta}_J$,
+        assuming they go in the same direction. \\
+    \end{enumerate}
+}
+
+
+\newpage
+
+\end{document}

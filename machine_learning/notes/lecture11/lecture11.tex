@@ -1,0 +1,449 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture XI
+}
+\date{2025-06-09}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Convex Optimization}
+\subsection*{Lower Bound for the Convergence Rate}
+
+We can show, non-constructively (only in theory)
+what the optimal first order iterative
+numerical method is for solving
+optimization problems. \\
+
+This gives us the lower bounds on the
+convergence rate given some prior assumptions. \\
+
+Optimal methods are those that have a convergence
+rates proportional to the lower bound. \\
+
+If we assume that the function $f$
+is $m$-strongly convex and that $\nabla f$
+is $L$-Lipschitz continuous,
+then the lower bound on the convergence 
+rate is 
+\[ O(\omega^k)\] 
+where $\omega$ depends on 
+\[ \dfrac{\sqrt{L/m} - 1}{\sqrt{L/m} + 1} \]
+The conjugate gradient and heavy-ball method
+are both optimal in that case. \\
+
+The heavy ball method is gradient descent 
+with momentum. \\
+
+On the other hand, if we only assume that $f$
+is convex, and that $\nabla f$
+is $L$-Lipschitz continuous,
+then the convergence rate is 
+\[ O\para{\dfrac{1}{k^2}} \]
+Gradient descent is not optimal in this case,
+but the Nesterov Accelerated Gradient method
+is optimal. \\
+
+\newpage
+
+\subsection*{Nesterov's Accelerated Gradient
+Method}
+
+It is an improved Gradient Descent method.
+Each iteration is at least as costly 
+as gradient descent
+since it also uses the gradient. \\
+
+In Nesterov's Accelerated Gradient
+Method, we want to minimize $f$:
+\[ \min_{\theta \in \mathbb{R}^d} f(\theta) \]
+And we assume that $f$
+is convex and that $\nabla f$
+is $L$-Lipschitz continuous. \\
+We then choose two starting values:
+\[ \theta^{(0)} = \theta^{(-1)} \in \rbb^d \]
+A starting time $t_0 = 0$,
+and a step size $\tau > 0$. \\
+This yields the update steps:
+\[ t_{k+1}^2 - t_{k+1} \leq t_k^2 \]
+\[ \eta^{(k)} = \theta^{(k)} 
++ \frac{t_k - 1}{t_{k+1}} \left( \theta^{(k)} 
+- \theta^{(k-1)} \right) \quad 
+\text{(extrapolation step)} \]
+\[ \theta^{(k+1)} = \eta^{(k)} - \tau \nabla 
+f(\eta^{(k)}) \quad \text{(gradient 
+descent step)} \]
+Which is similar to gradient descent,
+but with an extra $\eta(x)$ term. \\
+
+This term is calculated in the extrapolation 
+step. It is like a small extra step
+we take in a specific direction
+we take each iteration,
+which gets us closer to the answer. \\
+
+This yields the convergence rate:
+\[ f(\theta^{(k)}) - f(\theta^*) \leq 
+\frac{1}{2\tau} \frac{\|\theta^* - 
+\theta^{(0)}\|^2}{t_k^2} \]
+If we further assume that $t_k = \frac{k+1}{2}$,
+we can bound the convergence rate further:
+\[ \frac{2}{\tau} \frac{\|\theta^* - 
+\theta^{(0)}\|^2}{(k+1)^2} = 
+O\left(\frac{1}{k^2}\right) \]
+Which is optimal as mentioned earlier. \\
+
+The gradient calculation is the only costly 
+part of this algorithm. \\
+
+Note that it works for even non quadratic-functions,
+so long as the smoothness and convexity
+conditions are met. \\
+
+\newpage
+
+\subsection*{Proximal mapping}
+
+If we want to generalize our optimization
+methods to non-smooth functions, we need
+to first calculate their proximal mappings. \\
+
+The formula for the proximal mapping of $f$
+with step size $\tau$ of the point $\theta^{(k)}$
+is:
+\[ \text{prox}_{\tau f}(\theta^{(k)}) 
+= \arg\min_{\theta} \left[ f(\theta) 
++ \frac{1}{2\tau} \|\theta - \theta^{(k)}\|^2 
+\right] \]
+Notice that this will need to be done
+each iteration. \\
+
+If the proximal mapping of $f$ is easy to find,
+we say that $f$ is prox-friendly. \\
+
+Note that the function $\delta_C(\theta)$
+is defined as:
+\[ \delta_C(\theta)
+= \piecewise{
+    0, \qquad \;\; \IF  \theta \in C \\
+    \infty, \qquad \IF \theta \notin C
+} \]
+It is the inicator function of a convex set $C$,
+and it has infinite value if the point
+is not in the convex set $C$. \\
+
+So, for example, if we have
+to find the proximal mapping of an indicator
+function for some convex set:
+\[ \text{prox}_{\tau \delta_C}(\theta^{(k)})
+= \arg\min_{\theta} \left[ \delta_C(\theta) 
++ \frac{1}{2\tau} \|\theta - \theta^{(k)}\|^2 
+\right] \]
+Notice that the indictaor function is infinite
+if we allow that $\theta \notin C$,
+which dominates all other terms, so in order
+to minimize we sort of have ot have $\theta$
+be in $C$, which means that:
+\[ \text{prox}_{\tau \delta_C}(\theta^{(k)})
+= \arg\min_{\theta \in C} \left[ \frac{1}{2\tau} 
+\|\theta - \theta^{(k)}\|^2 \right] \]
+Where $\delta_C(\theta)$ became $0$.
+Notice what we are saying here;
+we want to find the $\theta$
+in $C$ such that the distance between 
+$\theta^{(k)}$ and $\theta$ is minimal. \\
+So if $\theta^{(k)}$ is in $C$,
+we just set $\theta = \theta^{(k)}$. \\
+Otherwise, if $\theta^{(k)}$ is not in $C$,
+then the closest point to $\theta^{(k)}$
+on $C$ is the projection of $\theta^{(k)}$
+on the convex set $C$. \\
+
+Some examples of proximal mappings:
+\begin{enumerate}
+    \item For $f(\theta) = \|\theta\|^2_2$:
+    \[ \left[ \text{prox}_{\tau \|\cdot\|_2^2}
+    (\bar{\theta}) \right]_i = 
+    \frac{\bar{\theta}_i}{1 + 2\tau}, 
+    \quad \forall i = 1, \ldots, d \]
+    \item For $f(\theta) = 
+    \delta_{\|\theta \|_2 \leq 1}(\theta)$,
+    where the convex set is the unit disk,
+    the proximal mapping is:
+    \[ \text{prox}_{\tau \delta_{\|\cdot\|_2 \leq 1}}
+    (\bar{\theta}) = \text{proj}_{\{\theta \mid 
+    \|\theta\|_2 \leq 1\}}
+    (\bar{\theta}) = \frac{\bar{\theta}}
+    {\max(1, \|\bar{\theta}\|)}\]
+    Which just means that we either set
+    $\olsi{theta}$ to $\theta$ or the projection
+    onto the unit circle $\|\theta\|_2 \leq 1$.
+    \item For $f(\theta) = \|\theta\|_1$,
+    also called the soft shrinkage-thresholding 
+    operator:
+    \[ \left[ \text{prox}_{\tau \|\cdot\|_1}
+    (\bar{\theta}) \right]_i = 
+    \max(0, |\bar{\theta}_i| - \tau) \cdot 
+    \text{sign}(\bar{\theta}_i) 
+    \quad \forall i = 1, \ldots, d \]
+\end{enumerate}
+We prove these are true in an assignment. \\
+
+Note that while $\|\theta\|_1$
+is prox-friendly, and can have proximal mapping
+done to it,
+this isn't true for $\|A \theta\|_1$
+for some arbitrary matrix $A$. \\
+
+\newpage
+
+\subsection*{Proximal Gradient Descent}
+
+Structured/Additive Composite optimization
+is used in order to split an optimization problem. \\
+If we have:
+\[ \min_\theta h(\theta) \]
+And we know that we can split $h$ such that:
+\[ h(\theta) = f(\theta) + g(\theta)\]
+where $f$ is $L$-smooth and convex,
+and $g$ is convex,
+non-smooth, and prox-friendly,
+then we just need to minimize each
+function individually. \\
+
+Notice that this form
+resembles the formula we get
+when we want to minimize the empirical risk
+plus the regularization term. \\
+The empirical risk is smooth, and the regularizer
+may be non-smooth, such as in LASSO. \\
+
+Each step, we can update $\theta$
+with respect to $f$ using the gradient
+descent method (forward step):
+\[ \theta^{(k)} = \theta^{(k)} - 
+\tau \nabla f(\theta^{(k)}) \]
+And then follow it up by an update
+with respect to $g$ using proximal mapping
+(backwards step):
+\[ \theta^{(k+1)} = \text{prox}_{\tau g}
+(\bar{\theta}^{(k)}) \]
+Putting both of them together,
+we get a single proximal-gradient step:
+\[ \theta^{(k+1)} = \text{prox}_{\tau g} 
+\left( \theta^{(k)} - \tau \nabla 
+f(\theta^{(k)}) \right) \]
+This algorithm converges towards
+the minimum of $h(\theta)$,
+and is called proximal-gradient descent. \\
+
+So we just have to assume that $f$
+is $L$-smooth (meaning that $\nabla f$
+is $L$-Lipschitz continuous)
+and convex, and that $g$
+is convex and prox friendly. \\
+We can pick any starting variable 
+$\theta^{(0)} \in \rbb^d$,
+and a step size:
+\[ 0 < \tau < \dfrac{2}{L} \]
+Then, we can apply the proximal gradient step
+repeatedly. \\
+
+This yields a sub-linear convergence rate
+$O\para(\dfrac{1}{k})$. \\
+
+If we further assume that $f$
+is $m$-strongly convex, then we
+get a linear convergence rate
+$O(\omega^k)$ where:
+\[ \omega = \frac{L/m - 1}{L/m + 1} \quad 
+\FOR \quad \tau = \frac{2}{L + m}\]
+Recall that a linear convergence rate
+is faster than sublinear. \\
+
+We can also use accelerated gradient descent 
+here, where we use Nestorov's algorithm
+instead of vanilla gradient descent. \\
+
+We again make the same assumptions
+about $f$ and $g$,
+and pick any starting variables:
+\[ \theta^{(0)} = \theta^{(-1)} \in \rbb^d \]
+And some step size $\tau > 0$,
+which gives us the update steps:
+\[ t_{k+1}^2 - t_{k+1} \leq t_k^2 \]
+\[ \eta^{(k)} = \theta^{(k)} + 
+\frac{t_k - 1}{t_{k+1}} \left( \theta^{(k)} 
+- \theta^{(k-1)} \right) \]
+\[ \theta^{(k+1)} = \text{prox}_{\tau g} 
+\left( \eta^{(k)} - \tau \nabla f(\eta^{(k)}) 
+\right)\]
+Which converges towards the minimizer. \\
+
+This yields a convergence rate:
+\[ h(\theta^{(k)}) - h(\theta^*) 
+\leq \frac{1}{2\tau} \frac{\|\theta^* - 
+\theta^{(0)}\|^2}{t_k^2} \]
+And if we take $t_k = \dfrac{k+1}{2}$,
+then the convergence rate becomes:
+\[ \frac{2}{\tau} \frac{\|\theta^* - 
+\theta^{(0)}\|^2}{(k+1)^2} = 
+O\left(\frac{1}{k^2}\right) \]
+Note that we don't call this a gradient
+descent method because there is no descent;
+there is convergence, but not every step
+gets us closer. \\
+
+So it is simpy called Accelerated Proximal 
+Gradient Method.
+It is also called FISTA. \\
+
+\newpage
+
+\subsection*{Duality}
+
+Now we still have to find a way to solve
+Hard and soft margin SVM, as well as regularized
+least 1-norm minimization,
+since they are not prox-friendly or are
+non-smooth. \\
+
+A disk is just a collection of points in space. \\
+
+Or we can think of it as the intersection of
+several half-spaces (all tangent to the circle). \\
+
+We can call a closed set $C$
+convex if it is the intersection of
+closed half-spaces that contain it. \\
+
+The same applies to convex functions:
+a convex function $f$ is always the
+pointwise supremum (maximum or largest
+point not in the set) of the
+collection of affine functions $h$
+such that $h \leq f$. \\
+Think of it as lines of tangents below a graph
+of $f$. \\
+
+The conjugate of $f$ is $f^*$,
+and it can be thought of as a function that 
+operates on slopes;
+it takes in a slope as input, and returns
+the part where the affine function
+intersects the $y$-axis.
+It does so by sort of sliding the affine
+function with the slope $\xi$
+until it becomes tangent to $f(\theta)$. \\
+We do that by maximizing the distance
+between $f(\theta)$
+and $\ang{\xi, \theta}$, 
+which is the affine function
+(tangent). \\
+
+The dual of $f(\theta)$,
+which is a function:
+\[ f^* : \rbb^d \to \olsi{\rbb} \]
+Is given by:
+\[ f^*(\xi) = \sup_{\theta \in \rbb^d} 
+\brac{\ang{\xi, \theta} - f(\theta)} \]
+Which is again our way of maximizing
+the distance. \\
+
+One small note on notation:
+\[ \delta_{\|\theta\|_2 \leq 1} = \delta_{B_1^2(0)} \]
+We use $B_1^2$ to refer to the convex set of 
+the unit ball centered at $0$ (in any dimension).\\
+Note that $B_1^n$ refers to the unit ball with
+respect to the $n$-norm, and $B_1^\infty$
+with respect to the infinity norm. \\ 
+If we write $B_1$, we mean $B_1^2$,
+with respect to distance. \\
+
+In other words:
+\[ B_n^r(c) = \{ \theta \mid \| 
+\theta - c \|_r \leq n \} \]
+Is a shorthand that will be used. \\
+
+For example, we have:
+\begin{enumerate}
+    \item $f(\theta) = \dfrac{1}{2}\theta^2
+    \rightsquigarrow f^*(\xi) = \dfrac{1}{2}\xi^2$.
+    \item $f(\theta) = \dfrac{1}{2}\|\theta\|_2^2
+    \rightsquigarrow f^*(\xi) = \dfrac{1}{2}\|\xi\|_2^2$.
+    \item $f(\theta) = \|\theta\|_2
+    \rightsquigarrow f^*(\xi) = \delta_{B_1^2(0)}(\xi)$.
+    \item $f(\theta) = \|\theta\|_1
+    \rightsquigarrow f^*(\xi) = \delta_{B_1^\infty(0)}(\xi)$.
+    \item $f(\theta) = \delta_{\rbb_-^d}(\theta)
+    \rightsquigarrow f^*(\xi) = \delta_{\rbb_+^d}(\xi)$.
+\end{enumerate}
+The goal will be to try and reduce other
+functions' dual to a function one of these,
+as we can see in the slides. \\
+
+The bi-conjugate is the conjugate of the
+conjugate $f^{**}$. \\
+
+The conjugate $f^*$ is always convex. \\
+
+If $f$ is convex, then $f = f^{**}$. \\
+
+The Fenchel-Rockafellar duality tells
+us that if we have some optimization problem
+with some structure:
+\[ \min_\theta f(A\theta) + g(\theta) \]
+then solving the primal problem corresponds
+to solving the dual problem:
+\[ \max_\xi - g^*(-A^T\xi) - f^*(\xi) \]
+We do so by computing the conjugates of $f$
+and $g$ seperately. \\
+Notice that we ignore the $A$
+in the primal problem. \\
+Note that $f$ and $g$ must be convex
+and $A$ must be a linear mapping. \\
+
+To prove that solving a minimization problem
+on the primal is the same as solving a maximization
+on the dual:
+\[ \min_{\theta} f(A\theta) + g(\theta) \]
+Now recall that the dual of a dual is the
+the original function, so:
+\[\min_{\theta} \sup_{\xi} \brac{ \langle \xi, 
+A\theta \rangle - f^*(\xi) + g(\theta)} \]
+\[\max_{\xi}  \inf_{\theta}\brac{ \langle \xi, 
+A\theta \rangle - f^*(\xi) + g(\theta)} \]
+\[\max_{\xi} \brac{ \inf_{\theta} \brac{ \langle \xi, 
+A\theta \rangle + g(\theta)} - f^*(\xi)} \]
+\[ \max_{\xi} - g^*(-A^\top \xi) - f^*(\xi) \]
+This is basically the
+Fenchel-Rockafellar duality. \\
+
+So we may be able to use proximal gradient
+methods on the dual problem.
+First we get the dual, which 
+gets us a form solvable by proximal gradient
+methods. \\
+
+We can use Moreau's identity:
+\[ \theta = \operatorname{prox}_{\tau f}(\theta) 
++ \tau \, \operatorname{prox}_{\frac{1}{\tau} f^*}
+\left(\frac{\theta}{\tau}\right) \]
+when solving the optimization. \\
+
+Note that we can write $\delta_{\rbb_-}(1-t)$
+as a loss function for the hard-margin SVM. \\
+
+\end{document}

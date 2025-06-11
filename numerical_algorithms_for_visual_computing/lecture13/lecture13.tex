@@ -47,7 +47,8 @@ We can bring in the differntial
 since $t$ and $V$ are not related:
 \[ \int_\Om \partialdd{}{t} p(t, x, y, z) \; dV \]
 It can be decomposed into the generated
-heat in the region minus the heat
+heat in the region (either a sink or source
+of heat depending on sign) minus the heat
 leaving the region $\Om$,
 which means the heat leaving in the direction
 of the normal at each point
@@ -103,11 +104,11 @@ Which is our change of heat in terms of $t$. \\
 Here we have $j$ as the vector
 field of change of density $p$:
 \[ j = -D\nabla p \]
-Here, the matrix $D$
+Here, by Fick's Law, the matrix $D$
 decides how much change we have in each
 direction, and $\nabla p$ is the gradient
 (rate of change in each direction). \\
-However, by Fick's law,
+However, for simplicity,
 we can assume we have constant change
 in each direction, which means that
 $D = kI$, so we can write:
@@ -115,8 +116,18 @@ $D = kI$, so we can write:
 There are other diffusions we can have,
 but this is the simplest case. \\
 
+This kind of diffusion, where assume that
+$D = kI$, is called an isotropic homoegenous
+diffusion. It does not vary over space or direction. \\
+On the other hand, if we had $k(x, y)$
+be a function of space, $D$ would vary in space,
+and would not be homoegenous. \\
+Moroever, if $D$ were a constant matrix,
+but not of the form $kI$, it would be homogeneous,
+but anisotropic (varies over direction). \\
+
 Now, replacing in the original formula
-using Fick's law, we get:
+using the formula for $j$ we found, we get:
 \[  \partialdd{}{t} p(t, x, y, z)
 = F - \nabla \cdot (-k\nabla p) \]
 \[  \partialdd{}{t} p(t, x, y, z)
@@ -179,9 +190,22 @@ non continuous points
 on the line $x_1, x_2, \dots x_n$. \\
 We then end up with a vector of values:
 \[ (u(x_1), u(x_2), \dots u(x_n)) \]
+Which we can imagine as an vector of pixels
+with values $u(x_i)$ at each entry:
+\[
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $u(x_1)$ & $u(x_2)$ & $u(x_3)$ & 
+    $\dots$ & $u(x_n)$ \\
+    \hline
+    \end{tabular}
+\]
 If this were the 2 dimensional case, 
-we would have had a 2 dimensional array
+we would have had a 2 dimensional vector
 represented by our image pixels. \\
+
+We will use $u_i$ interchangebly
+with $u(x_i)$ from here on out. \\
 
 We now have to express $\partial_{xx} u$
 using this new discretization of the $u(x)$. \\
@@ -196,8 +220,402 @@ number that doesn't tell us much,
 so we use quadratic interpolation. \\
 So for each point $u_i$,
 we want to fit the triplet $u_{i-1}$, $u_{i}$,
-$u_{i+1}$ with a quadratic.
+$u_{i+1}$ with a quadratic. \\
 
+So we want some quadratic function:
+\[ ax^2 + bx + c \]
+such that:
+\multiline{
+a(x_{i-1})^2 + bx_{i-1} + c &= u(x_{i-1}) \\
+a(x_{i})^2 + bx_{i} + c &= u(x_{i}) \\
+a(x_{i+1})^2 + bx_{i+1} + c &= u(x_{i+1}) }
+Notice that solving for $a$, $b$, and $c$
+requires us to solve the linear system:
+\[ \bmat{(x_{i-1})^2 & x_{i-1} & 1 \\
+(x_{i})^2 & x_{i} & 1 \\
+(x_{i+1})^2 & x_{i+1} & 1 \\} 
+\bmat{a \\ b \\ c} = 
+\bmat{u_{i-1} \\ u_{i} \\ u_{i+1}}\]
+Solving this gets us the quadratic
+at $u_i$. \\
 
+We don't actually need to solve for $b$
+and $c$ however.
+The second derivative $\partial_{xx} u$
+of the quadratic at $u_i$ is just $2a$,
+so we only need to solve for $a$. \\
+We get:
+\[ \partial_{xx} u_i = 2a = 
+\dfrac{u_{i-1} - 2u_{i} + u_{i+1}}{h^2} \]
+Assuming that $u_{i-1}$, $u_i$, and $u_{i+1}$
+are all spaced $h$ apart (the dame distance). \\
+
+Note that we can approximate the first
+derivative of a point using a linear function
+with the point before or after it (since the
+first derivative is just the slope, which is):
+\[ \dfrac{u_{i+1} - u_{i}}{h}
+\quad \OR \quad \dfrac{u_i - u_{i-1}}{h} \]
+Here $h$ is the distance between the two points. \\
+These will correspond to the explicit and implicit
+Euler forms we will see later. \\
+
+Notice that the coefficients for the first
+derivative are $1$ and $-1$,
+then for the second, are $1$, $-2$, and $1$. \\
+These will follow the $\nth{n}$ row of pascal's triangle,
+with the sign alternating:
+\[ (1^{k}) \cdot \comb{n}{k}\]
+Formula using combinations. \\
+
+So we want to calculate this second order partial
+derivative for each $u_i$;
+to make things easier, we can use whats called
+a stencil, which we can slide across the
+one dimensional vector from earlier,
+multiplying the entries with its coefficients:
+\[ \dfrac{1}{h^2}\bmat{1 & -2 & 1} \]
+Of course, one might naturally ask what
+happens when we get to the edges;
+we don't have elements $u_{0}$ and $u_{n+1}$. \\
+
+In order to solve this issue, we will have to pad the
+edges with entries $u_{0}$ and $u_{n+1}$,
+which are only used for the calculation
+of the second derivative at $u_1$ and $u_{n}$. \\
+There are several ways to do this:
+\begin{enumerate}
+    \item Absorbing boundaries:
+    If we were to set $u_0 = 0$
+    and $u_{n+1} = 0$,
+    the heat would leak out from the edges.
+    At equilibrium, the heat in our scene
+    would just be $0$.
+    \item Reflecting boundaries:
+    We set $u_0 = u_1$ and $u_{n+1} = u_{n}$.
+    This prevents the heat from leaking out;
+    we can imagine a boundary that prevents the heat
+    from leaving the scene.
+    \item Periodic boundaries:
+    We set $u_0 = u_n$ and $u_{n+1} = u_{1}$.
+    We can envision this as simply tying the ends
+    of the vector together; heat wouldn't leak out
+    from the scene, but it will diffuse from the
+    left to the right side and vice-versa.
+\end{enumerate}
+We generally prefer using reflecting boundaries:
+\[
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    $u_1$ & $u_1$ & $u_2$ & $u_3$ & 
+    $\dots$ & $u_n$ & $u_n$ \\
+    \hline
+    \end{tabular}
+\]
+We then slide the stencil accross to
+get the second derivative at each point
+from $u_1$ to $u_n$, not including the padding. \\
+
+The vector we had was a discretization of $u$,
+so the discretization of $\partial_{xx} u$
+would have to be:
+\[
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $\partial_{xx} u_1$ & $\partial_{xx} u_2$ 
+    & $\partial_{xx} u_3$ & 
+    $\dots$ & $\partial_{xx} u_n$ \\
+    \hline
+    \end{tabular}
+\]
+Where we already calculated each term using
+quadratic interpolation. \\
+
+The discretization of $\partial_{xx} u$
+is the vector:
+\[ \bmat{
+    \partial_{xx} u_1 = \dfrac{u_1 - 2u_1 + u_2}{h^2} 
+    = \dfrac{-u_1 + u_2}{h^2} \vs{10} \\
+    \partial_{xx} u_2 = \dfrac{u_1 - 2u_2 + u_3}{h^2} \\
+    \vdots \\
+    \partial_{xx} u_n = \dfrac{u_{n-1} - 2u_n + u_n}{h^2}
+    = \dfrac{u_{n-1} -u_n}{h^2}}
+\]
+Which we can write as a matrix multiplication
+of the vector of points $u_i$:
+\[ \dfrac{1}{h^2}
+\bmat{-1 & 1 & 0 & 0 & \dots & 0 \\
+1 & -2 & 1 & 0 & \dots & 0 \\
+0 & 1 & -2 & 1 & \dots & 0 \\
+\vdots & \ddots & \ddots & \ddots & \ddots & \vdots \\
+0 & 0 & \dots & 0 & 1 & -1 }
+\bmat{u_1 \\ u_2 \\ u_3 \\ \vdots \\ u_n}
+= \bmat{\partial_{xx} u_1 \\ \partial_{xx} u_2 \\
+\partial_{xx} u_3 \\ \vdots \\ \partial_{xx} u_n} \]
+This matrix multiplication encodes the entire
+second order derivation process. \\
+
+So, we have:
+\[ \partial_{xx} u(x) \approx Au \]
+Where $A$ is the matrix from before,
+and $u$ is the discretization (vector) of $u(x)$:
+\[ A = \dfrac{1}{h^2}
+\bmat{-1 & 1 & 0 & 0 & \dots & 0 \\
+1 & -2 & 1 & 0 & \dots & 0 \\
+0 & 1 & -2 & 1 & \dots & 0 \\
+\vdots & \ddots & \ddots & \ddots & \ddots & \vdots \\
+0 & 0 & \dots & 0 & 1 & -1 }
+\quad \AND \quad u = 
+\bmat{u_1 \\ u_2 \\ u_3 \\ \vdots \\ u_n} \]
+This is much simpler to solve now. \\
+
+We can now replace $\partial_{xx} u(x)$
+in the original heat equation, which gets us:
+\[\partial_t u = k \partial_{xx} u \]
+\[ \partial_t u = kAu \]
+This is just an ordinary differential equation
+we can solve for $u$:
+\[ u = e^{kAt}u(0) \]
+Where $u(0)$ is the starting condition. \\
+
+Note that solving this ODE requires
+using the diagonalization of $A$, so it must
+be diagonalizable, which it is. \\
+
+\newpage
+
+\subsection*{Discretizing in Higher Dimensions}
+
+In this section, we will show how to
+discretize the heat equation:
+\[ \partialdd{}{t} u = k \Delta u \]
+in higher dimensions than $1$. \\
+
+We will do it in $2$ dimensions to show
+what changes and what stays the same, and this
+can be used as a template to generalize the
+discretization to other dimensions. \\
+
+In $2$ dimensions, we have $u(x, y)$,
+which means that the laplacian term in the
+heat equation evaluates to:
+\[ \partial_t u = 
+k (\partial_{xx}u + \partial_{yy}u) \]
+We will show how to calculate 
+$\partial_{xx}u + \partial_{yy}u$. \\
+
+First note that when discretizing the space,
+we end up with a $2$ dimensional array of entries:
+\[ \begin{tabular}{|c|c|c|c|c|}
+\hline
+$u_{11}$ & $u_{12}$ & $u_{13}$ & $\cdots$ & $u_{1n}$ \\
+\hline
+$u_{21}$ & $u_{22}$ & $u_{23}$ & $\cdots$ & $u_{2n}$ \\
+\hline
+$\vdots$ & $\vdots$ & $\vdots$ & $\ddots$ & $\vdots$ \\
+\hline
+$u_{m1}$ & $u_{m2}$ & $u_{m3}$ & $\cdots$ & $u_{mn}$ \\
+\hline \end{tabular} \]
+We can treat the discretization
+of the $2$D space as just several $1$D
+discretizations of $x$,
+and several $1$D discretizations of $y$,
+which are the rows and columns respecively. \\
+
+We can then use the same stencil as before
+to calculate $\partial_{xx} u$,
+by just sliding the stencil across each row
+individually:
+\[ \dfrac{1}{(h_x)^2}\bmat{1 & -2 & 1} \]
+We can then do the same for $\partial_{yy} u$,
+sliding the stencil:
+\[ \dfrac{1}{(h_y)^2}\bmat{1 & -2 & 1} \]
+across the columns. \\
+
+So for each point $u_{i, j}$, we have:
+\[ \partial_{xx}u_i + \partial_{yy}u_i
+= \dfrac{u_{i, j-1} -2u_{i, j} + u_{i, j+1}}{(h_x)^2} 
++ \dfrac{u_{i+1, j} -2u_{i, j} + u_{i+1, j}}{(h_y)^2} \]
+If we assume that the horizontal intervals between 
+the points are equal to the vertical intervals,
+that is, that $h_x = h_y$,
+then for each point $u_i$, we can write:
+\[ \partial_{xx}u_i + \partial_{yy}u_i
+= \dfrac{u_{i, j-1} + u_{i-1, j} -4u_{i, j} 
++ u_{i, j+1} + u_{i+1, j}}{h^2} \]
+Which induces a stencil that we can slide
+across the entire $2$ dimensional space
+in order to calculate both $\partial_{xx}$
+and $\partial_{yy}$ for each point $u_{ij}$:
+\[ \dfrac{1}{h^2}
+\bmat{0 & 1 & 0 \\ 1 & -4 & 1 \\ 0 & 1 & 0} \]
+We again just slide this across the $2$D array. \\
+
+Of course, we run into the same issue as before,
+where for the points on the boundaries
+of the forms $u_{0, j}$, $u_{i, n+1}$,
+$u_{n, j}$, $u_{i, 0}$ are not defined. \\
+We can use the same techniques talked about before. \\
+In the reflecting boundaries case,
+we include a padding, where each elements
+$u_{0, j} = u_{1, j}$, $u_{n+1, j} = u_{n, j}$,
+$u_{i, 0} = u_{i, 1}$, and $u_{i, n+1} = u_{i, n}$. \\
+In the periodic boundaries case,
+we can imagine gluing two sides together,
+yielding a tube, and then tyring the two ends together,
+which gives us a torus. What this means is that
+we will have:
+$u_{0, j} = u_{n+1, j}$, $u_{n+1, j} = u_{0, j}$,
+$u_{i, 0} = u_{i, n+1}$, and $u_{i, n+1} = u_{i, 0}$. \\
+
+We again go with the repeating boundaries
+case since it won't leak from one side to another:
+\[ \begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+& $u_{11}$ & $u_{12}$ & $u_{13}$ & $\cdots$ 
+& $u_{1n}$ & \\ \hline
+$u_{11}$& $u_{11}$ & $u_{12}$ & $u_{13}$ & 
+$\cdots$ & $u_{1n}$ & $u_{1n}$ \\ \hline
+$u_{21}$& $u_{21}$ & $u_{22}$ & $u_{23}$ & 
+$\cdots$ & $u_{2n}$ & $u_{2n}$ \\ \hline
+$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ 
+& $\ddots$ & $\vdots$ & $\vdots$ \\ \hline
+$u_{m1}$& $u_{m1}$ & $u_{m2}$ & $u_{m3}$ & 
+$\cdots$ & $u_{mn}$ & $u_{mn}$ \\ \hline
+& $u_{m1}$ & $u_{m2}$ & $u_{m3}$ & $\cdots$ 
+& $u_{mn}$ & \\
+\hline \end{tabular} \]
+This is the table we get with padding on all sides. \\
+
+Now, the discretization of $u$, which is a $2$D
+grid, can now be flattened out into a vector,
+which induces a discretization of
+$\partial_{xx} u + \partial_{yy} u$
+which is also a vector:
+\[ \bmat{
+    \partial_{xx} u_{11} + \partial_{yy} u_{11} 
+    = \dfrac{u_{11} + u_{11} - 4u_{11} + u_{12} 
+    + u_{21}}{h^2} = 
+    \dfrac{-2u_{11} + u_{12} + u_{21}}{h^2}  \vs{10} \\
+    \partial_{xx} u_{12} + \partial_{yy} u_{12} 
+    = \dfrac{u_{11} + u_{12} - 4u_{12} + u_{13} 
+    + u_{22}}{h^2} = 
+    \dfrac{u_{11} - 3u_{12} + u_{13} + u_{22}}{h^2} \\
+    \vdots \\
+    \partial_{xx} u_{mn} + \partial_{yy} u_{mn} 
+    = \dfrac{- 2u_{mn} + u_{mn-1} + u_{m-1n}}{h^2}}
+\]
+Which we can write as a matrix multiplication
+of the vector of points $u_ij$:
+\[ \dfrac{1}{h^2}
+\bmat{-2 & 1 & 0 & \dots & 1 & 0 & 0 & \dots & 0 \\
+1 & -3 & 1 & 0 & \dots & 1 & 0 & \dots & 0 \\
+0 & 1 & -3 & 1 & 0 & \dots & 1 & \dots & 0 \\
+\vdots & \ddots & \ddots & \ddots & \ddots 
+& \ddots & \ddots & \ddots & \vdots \\
+0 & 0 & \dots & 1 & 0 & \dots & 0 & 1 & -2 }
+\bmat{u_{11} \\ u_{12} \\ u_{13} \\ \vdots \\ u_{mn}}
+= \bmat{\partial_{xx} u_{11} \\ \partial_{xx} u_{12} \\
+\partial_{xx} u_{13} \\ \vdots \\ \partial_{xx} u_{mn}} \]
+This matrix multiplication encodes the entire
+second order derivation process. \\
+
+And so we end up with:
+\[ \partial_{xx} u(x, y) + \partial_{yy} u(x, y) = Au \]
+Where $A$ and $u$
+are the matrix and vector from before. \\
+We can then replace this in the original heat
+equation, to get:
+\[\partial_t u = k (\partial_{xx} u + \partial_{yy} u) \]
+\[ \partial_t u = kAu \]
+Which is again solved by:
+\[ u = e^{kAt}u(0) \]
+Same as for the one dimensional case, 
+which will again be the same for all dimensions. \\
+
+\newpage
+
+\subsection*{Time Discretization}
+
+We will recall that $u$ is the density function,
+which is a function of space $x, y, z, \dots$,
+as well as time $t$. \\
+It is continuous in terms of both. \\
+
+Thus far we have only discretized the space
+$x, y, z, \dots$, but not time. \\
+The solution we got:
+\[ u = e^{kAt}u(0) \]
+is still continuous in terms of time. \\
+
+We will take $L = kA$ for simplicity. \\
+Notice that the ODE we arrived at last time:
+\[ \partial_t u(x, t) = Lu \]
+Just tells us that $u(x, t)$ changes in terms of $t$
+following $Lu$, which means that we can discretize
+the time $t$. \\
+
+To start, we have:
+\[ \partialdd{u}{t} = Lu \]
+Which we can discretize with small time steps
+$\Delta t$:
+\[ \deltadd{u}{t} = Lu \]
+\[ \dfrac{u^{(k+1)} - u^{(k)}}{\Delta t} = Lu^{(k)} \]
+Note that all this is saying is that
+$u^{(k)}$ moves following this path:
+\[ u^{(k+1)} = u^{(k)} + \Delta t (Lu^{(k)}) \]
+Which is clearly true since $Lu^{(k)}$
+is the rate of change with respect to $t$ 
+at this point. \\
+We will use $\tau = \Delta t$ for our time step,
+which gives us:
+\[ \dfrac{u^{(k+1)} - u^{(k)}}{\tau} = Lu^{(k)} \]
+Which is the explicit Euler form. \\
+
+We can also write:
+\[ u^{(k+1)} = u^{(k)} + \Delta t (Lu^{(k+1)}) \]
+Using the rate of change
+of the point itself that we are trying to find
+(we basically work backwards).
+This yields the discretization:
+\[ \dfrac{u^{(k+1)} - u^{(k)}}{\tau} = Lu^{(k+1)} \]
+Which is the implicit Euler form. \\
+
+Notice that these are just the first derivative
+approximations we showed in one of the last sections,
+which makes sense since $\partial_t$ is
+such a first order partial derivative. \\
+
+This only shows the one dimensional case,
+but the other cases are basically the same. \\
+
+The reason why we discretized space earlier
+was in order to solve the PDE. \\
+The reason why we discretize time on the other hand,
+is in order to update the simulation in practice.
+As we know, in a computer simulation, time is 
+not conitnuous.
+We have discrete frames, with some time step $\tau$
+based on the framerate, and the update steps:
+\[ u^{(k+1)} = u^{(k)} + \Delta t (Lu^{(k)}) \]
+\[ u^{(k+1)} = u^{(k)} + \Delta t (Lu^{(k+1)}) \]
+Simply tell us how to update $u$ the scene each frame. \\
+This is much simpler than solving the ODE
+and using the exponential,
+which we no longer need. \\
+
+Note that the time step needs to be small enough
+in order for the simulation to be stable, otherwise
+the numerical inaccuracies build up and cause
+the scene to explode. \\
+For one dimension, \[ \tau \in \para{0, 
+\dfrac{h^2}{2}}\]
+is the stabiliy condition. \\
+For two dimensions, \[\tau \in \para{0, 
+\dfrac{h^2}{4}}\]
+is the stabiliy condition. \\
+For $n$ dimensions, \[\tau \in \para{0, 
+\dfrac{h^2}{2n}}\]
+is the stabiliy condition. \\
 
 \end{document}

@@ -1,0 +1,125 @@
+
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Numerical Algorithms \\
+    \Large Lecture XIV
+}
+\date{2025-06-04}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Non-homoegenous and Anisotropic Cases}
+
+We show how to discretize the
+non-isotropic and non-homogeneous cases
+for the heat equation. \\
+
+Recall that by Fick's law, we have a diffusion flux:
+\[ j = -D\nabla u \]
+Where $u$, also written $p$ is the density, and $D$ is the
+structure tensor. \\
+
+In the Non-linear (Inhomogeneous) Isotropic Diffusion
+case, the diffusion varies in space but not
+directions. We have a structure tensor which
+is constant, but not of the form $kI$. \\
+In particular this leads to aa diffusion flux:
+\[ j = -g(\|\nabla u\|^2)\nabla u \]
+Which leads to the heat equation
+\[ \partialdd{u}{t} = \nabla \cdot (g(\|\nabla u\|^2) 
+\nabla u) \]
+Here $g$ is called diffusivity. \\
+
+Typical diffusivity functions include the Charbonnier 
+and Perona-Malik diffusivities:
+\[ g_{\text{Ch}}(s^2) = 
+\frac{1}{p \left( 1 + \frac{s^2}{\lambda^2} \right)} 
+\qquad g_{\text{PM}}(s^2) = 
+\frac{1}{1 + \frac{s^2}{\lambda^2}} \]
+They both reduce diffusion at the edges. \\
+
+On the other hand, we can have am Inhomogeneous Anisotropic
+diffusion, where the diffusion depends on direction
+but not space. 
+The structure tensor $D$ is a function of $x$ and $t$,
+position and time. \\
+Here we will have a diffusion flux:
+\[ j = -D(\nabla u)\nabla u \]
+Where $D = \nabla u (\nabla u)^T$. 
+In the $2$ dimesnional case for example:
+\[ D(\nabla u) = \bmat{\partial_{x}\partial_{x} u 
+& \partial_{x}\partial_{y}u \\
+\partial_{y}\partial_{x}u &
+\partial_{y}\partial_{y}u} \]
+This leads to the heat equation:
+\[ \partialdd{u}{t} = \nabla \cdot (D(\nabla u) \nabla u) \]
+It can also be used to
+discourage diffusion across edges. \\
+
+Note that we can approximate the first derivative
+$\partial_x u_i$ with a line
+(here $h$ is the interval):
+\[ \partial_x u_i \approx \dfrac{u_{i + \sfrac{1}{2}}
+- u_{i - \sfrac{1}{2}}}{h} \]
+As mentioned in the last chapter. \\
+
+Note that if we apply the first order derivative
+approximationtwice, we just get the second order 
+derivative we derived last time:
+\[ \partial_{xx} u_i
+= \partial_{x}(\partial_x u_i) 
+\approx \dfrac{(\partial_x u)_{i + \sfrac{1}{2}}
+- (\partial_x u)_{i - \sfrac{1}{2}}}{h} \]
+Now replacing $\partial_x u$ by the
+approximation, we get: 
+\[ \dfrac{\para{\dfrac{u_{i + 1}
+- u_{i - 0}}{h}} - \para{\dfrac{u_{i + 0}
+- u_{i - 1}}{h}}}{h}
+= \dfrac{u_{i-1} - 2u_{i} + u_{i+1}}{h^2} \]
+This is the same quadratic formula. \\
+
+Now to discretize a PDE of the form:
+\[ \partial_t u
+= \partial_x(g(x) \partial_x u) \]
+We can apply the first order derivative
+twice, same as we did earlier:
+\multiline{
+\partial_t u(x_i) &= \partial_x 
+\left( g(x_i) \, \partial_x u(t, x_i) \right) \\
+&\approx \frac{g_{i+\frac{1}{2}} 
+(\partial_x u)_{i+\frac{1}{2}} - 
+g_{i-\frac{1}{2}} (\partial_x u)_{i-\frac{1}{2}}}{h} \\
+&\approx \frac{g_{i+\frac{1}{2}} 
+(u_{i+1} - u_i) - g_{i-\frac{1}{2}} 
+(u_i - u_{i-1})}{h^2} \\
+&= \frac{g_{i+1} + g_i}{2 h^2} u_{i+1} - 
+\frac{g_{i+1} + 2 g_i + g_{i-1}}{2 h^2} u_i + 
+\frac{g_i + g_{i-1}}{2 h^2} u_{i-1}. }
+Now we have the coefficients that we can place
+into a finite difference matrix. \\
+This can be used for any $g(x)$,
+which makes it applicable for the anisotropic
+and isotropic inhomogeneous cases. \\
+
+\newpage
+
+\subsection*{Wave Equation}
+
+We can create small waves on an image. \\
+
+
+
+\end{document}
