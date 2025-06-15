@@ -1,0 +1,303 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Machine Learning \\
+    \Large Assignment IX
+}
+\date{2025-06-13}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Ex 1}
+
+\begin{enumerate}[label = \letters]
+    \item 
+    First we need to show that the Huber Function
+    $f: \rbb \to \rbb$:
+    \[ f(\theta) = \piecewise{
+        \dfrac{\theta^2}{2\eps} \quad & \IF 
+        |\theta| < \eps \vs{10} \\ 
+        |\theta| - \dfrac{\eps}{2} \quad & \ELSE
+    } \]
+    Now, to show that $f(\theta)$
+    is convex, we need to show that all of its
+    pieces are convex, and that $f$ is continuous
+    and differentiable at the boundaries
+    between the pieces, that is at $|\theta| = \eps$. \\
+    To start, both pieces of $f(\theta)$
+    are diffrentiable on their domain,
+    so we can use the second derivative test
+    to show they are convex:
+    \[ \partial_{\theta \theta} \dfrac{\theta^2}{2\eps}
+    = \partial_{\theta} \dfrac{\theta}{\eps} 
+    = \dfrac{1}{\eps} \]
+    And:
+    \[ \partial_{\theta \theta} \para{ |\theta| 
+    - \dfrac{\eps}{2}}
+    = \partial_{\theta} \sign(\theta) = 0 \]
+    Both are non-negative, so both functions are convex. \\
+    Now let's look at the boundaries:
+    \begin{enumerate}[label = \numbers]
+        \item For $\theta = \eps$: \\
+        We have:
+        \[ \limit{\theta}{\eps^-}{f(\theta)}
+        = \dfrac{\eps^2}{2\eps} = \dfrac{\eps}{2} \]
+        \[ \limit{\theta}{\eps^+}{f(\theta)}
+        = \eps - \dfrac{\eps}{2} = \dfrac{\eps}{2} \]
+        \[ f(\eps) = \eps - \dfrac{\eps}{2} 
+        = \dfrac{\eps}{2} \]
+        Since the limits from both sides are equal
+        to $f(\eps)$, the function is continuous
+        at $\theta = \eps$. \\
+        It is also differentiable since the
+        derivative of $f$ at $\eps$ 
+        from the left and right side are equal:
+        \[ f'(\eps, -1) = 
+        \para{\dfrac{\theta^2}{2\eps}}'(\eps)
+        = \dfrac{\eps}{\eps} = 1 \] 
+        \[ f'(\eps, +1) = \para{|\theta| - 
+        \dfrac{\eps}{2}}'(\eps) = \sign(\eps) = 1 \]
+        Since both are equal,
+        the function is continuous
+        at $\theta = \eps$.
+        \item For $\theta = -\eps$:
+        We have:
+        \[ \limit{\theta}{\eps^-}{f(-\theta)}
+        = |-\eps| - \dfrac{\eps}{2} = \dfrac{\eps}{2} \]
+        \[ \limit{\theta}{\eps^+}{f(-\theta)}
+        = \dfrac{(-\eps)^2}{2\eps} = \dfrac{\eps}{2} \]
+        \[ f(-\eps) = |-\eps| - \dfrac{\eps}{2} 
+        = \dfrac{\eps}{2} \]
+        Since the limits from both sides are equal
+        to $f(-\eps)$, the function is continuous
+        at $\theta = \eps$. \\
+        It is also differentiable since the
+        derivative of $f$ at $-\eps$ 
+        from the left and right side are equal:
+        \[ f'(-\eps, -1) = \para{|\theta| - 
+        \dfrac{\eps}{2}}'(-\eps) = \sign(-\eps) = -1 \]
+        \[ f'(-\eps, +1) = 
+        \para{\dfrac{\theta^2}{2\eps}}'(-\eps)
+        = -\dfrac{\eps}{\eps} = -1 \] 
+        Since both are equal,
+        the function is continuous
+        at $\theta = -\eps$.
+    \end{enumerate}
+    So $f$ is convex.
+    \item 
+    We want to find the dual of $f$,
+    which means calculating:
+    \[ f^*(\xi) = \sup_\theta 
+    \brac{ \ang{\xi, \theta} - f(\theta)} \]
+    Now, since $f(\theta)$ is convex, that
+    means that $-f(\theta)$ is concave,
+    which means that:
+    \[ \ang{\xi, \theta} - f(\theta) \]
+    is concave. \\
+    And since it is differentiable everywhere,
+    that means we can find the supremum, or maximum
+    in this case, by differentiating and setting the
+    derivative equal to $0$:
+    We consider $3$ seperate cases:
+    \begin{enumerate}[label = \numbers]
+        \item If $|\theta| < \eps$:
+        \[ \partial_\theta 
+        \brac{ \ang{\xi, \theta} - f(\theta)} \]
+        \[ \partial_\theta \brac{ \ang{\xi, \theta} 
+        - \dfrac{\theta^2}{2\eps}} \]
+        \[ \xi - \dfrac{\theta}{\eps} \]
+        Setting it equal to $0$:
+        \[ \xi - \dfrac{\theta}{\eps} = 0 \]
+        \[ \theta = \eps \xi \]
+        This is valid for all $|\theta| < \eps$,
+        meaning $|\xi| < \dfrac{1}{\eps}$.
+        \item If $\theta > \eps$,
+        notice that the function becomes linear,
+        with a constant derivative:
+        \[ \partial_\theta 
+        \brac{ \ang{\xi, \theta} - f(\theta)} \]
+        \[ \partial_\theta \brac{ \ang{\xi, \theta} 
+        - \theta + \dfrac{\eps}{2}} \]
+        \[ \xi - 1 \]
+        This means that the function will
+        only have a maximum
+        on this interval if the linear function
+        was decreasing, which gives us a maximum
+        at the boundary $\theta = \eps$.
+        This happens if
+        the derivative is negative,
+        that is, if $\xi - 1 < 0$,
+        that is $\xi < 1$. \\
+        \item If $\theta < -\eps$,
+        notice that the function becomes linear,
+        with a constant derivative:
+        \[ \partial_\theta 
+        \brac{ \ang{\xi, \theta} - f(\theta)} \]
+        \[ \partial_\theta \brac{ \ang{\xi, \theta} 
+        + \theta + \dfrac{\eps}{2}} \]
+        \[ \xi + 1 \]
+        This means that the function will
+        only have a maximum
+        on this interval if the linear function
+        was increasing, which gives us a maximum
+        at the boundary $\theta = -\eps$.
+        This happens if
+        the derivative is positive,
+        that is, if $\xi + 1 > 0$,
+        that is $\xi > -1$. \\
+    \end{enumerate}
+    So, we have:
+    \[ \theta^* = \piecewise{
+        \eps \xi \quad &\IF |\xi| < \dfrac{1}{\eps} \\
+        \eps \quad &\ELSE \IF \xi < 1 \\
+        -\eps \quad &\ELSE \IF \xi > -1 \\
+    } \]
+    So replacing that into the conjuagte, we get:
+    \[ f^*(\xi) = \piecewise{
+        \ang{\xi, \eps\xi} - \dfrac{\eps^2\|\xi\|^2}{2\eps}
+        = \dfrac{\eps\|\xi\|^2}{2} 
+        \quad &\IF |\xi| < \dfrac{1}{\eps} \vs{10} \\
+        \ang{\xi, \eps\xi} - \eps + \dfrac{\eps}{2} 
+        = \eps\|\xi\|^2 - \dfrac{\eps}{2} 
+        \quad &\ELSE \IF \xi < 1  \vs{10}\\
+        \ang{\xi, \eps\xi} - \eps + \dfrac{\eps}{2} 
+        = \eps\|\xi\|^2 - \dfrac{\eps}{2}
+        \quad &\ELSE \IF \xi > -1 \\
+    } \]
+    Not sure why this is different. \\
+    \item 
+    Usually, when we want to optimize a regularized
+    empirical risk, we use proximal gradient descent,
+    with the proximal mapping applies to the 
+    regularization term. But in this case, the Huber
+    function is not prox-friendly. This is different
+    from its dual:
+    \[ f^*(\xi) = \frac{\epsilon}{2} \|\xi\|^2 
+    + \delta_{B_1(0)}(\xi)\]
+    Which has a simple proximal mapping (a projection
+    onto the unit sphere). 
+\end{enumerate}
+
+\newpage
+
+\subsection*{Ex 2}
+
+We have the margin-based logistic loss function:
+\[ \tilde{\ell}(t) = \log(1 + e^{-t}) \]
+And we want to find the conjugate:
+\[ \tilde{\ell}^*(s) = \sup_{t}\brac{\ang{s, t} 
+- \tilde{\ell}(t)} \]
+Notice that this function is convex.
+We can show that it is convex by doing the second
+derivative test (since $\tilde{\ell}$
+is twice differentiable):
+\[\partial_{tt}\log(1 + e^{-t}) \]
+\[\partial_{t} \para{\dfrac{-e^{-t}}{1 + e^{-t}}} \]
+\[\dfrac{e^{-t}(1 + e^{-t}) - (-e^{-t})(-e^{-t})}
+{(1 + e^{-t})^2}\]
+\[\dfrac{e^{-t}}{(1 + e^{-t})^2} \geq 0 \]
+Now, since $\tilde{\ell}(t)$
+is convex, that means that $-\tilde{\ell}(t)$
+is concave. \\
+This means that the following function is concave
+(with respect to $t$):
+\[ \ang{s, t} - \tilde{\ell}(t) \]
+This is because the first term is concave
+(all linear functions are convex and concave
+at once), and the second term is concave,
+and the sum of two concave functions is concave. \\
+Now a concave function is known to always have
+a unique global maximizer, and since 
+$\ang{s, t} - \tilde{\ell}(t)$ is differentiable,
+we can find it by differentiating and setting
+the derivative equal to $0$:
+\[ \partial_t\para{\ang{s, t} - \log(1 + e^{-t})} \]
+\[ s - \dfrac{-e^{-t}}{1 + e^{-t}} \]
+\[ s + \dfrac{1}{e^{t} + 1} \]
+Now setting it equal to $0$, we get:
+\[ s + \dfrac{1}{e^t + 1} = 0\]
+\[ -s = \dfrac{1}{e^t + 1} \]
+\[ -\dfrac{1}{s} = e^t + 1 \]
+\[ -\dfrac{1}{s} - 1 = e^t \]
+\[ \log\para{-\dfrac{1}{s} - 1} = t \]
+\[ \log\para{\dfrac{-1 - s}{s}} = t \]
+We can plug this optimal $t$ back into
+the formula to get the supremum:
+\[ \tilde{\ell}^*(s)
+= \ang{s, \log\para{\dfrac{-1 - s}{s}}}
+- \log\para{1+\log\para{\dfrac{-1 - s}{s}}} \]
+This is only valid, or finite, for:
+\[ \dfrac{-1 - s}{s} > 0 \]
+We now need to multiply both sides by $s$,
+so we consider two cases:
+\begin{enumerate}
+    \item If $s > 0$:
+        \[ \dfrac{-1 - s}{s} > 0 \]
+        \[ -1 - s > 0 \]
+        \[ s < -1 \]
+    \item If $s < 0$:
+        \[ \dfrac{-1 - s}{s} > 0 \]
+        \[ -1-s < 0 \]
+        \[ s > -1 \]
+\end{enumerate}
+So we have the interval:
+\[ s \in ((0, \infty) \cap (-\infty, -1))
+\cup ((-\infty, 0) \cap (-1, \infty)) \]
+\[ s \in \emptyset
+\cup (-1, 0) \]
+\[ s \in (-1, 0) \]
+So that is the domain where it is finite. \\
+
+\newpage
+
+\subsection*{Ex 3}
+We will assume that $k: \xcal \times \xcal \to \rbb$
+is a positive definite kernel, and
+will show that $k'(x, y)$ is also positive definite:
+\begin{enumerate}[label = \letters]
+    \item 
+    For $k'(x, y) = \sum_{r=0}^\infty
+    \alpha_r k(x, y)^r$ where $\alpha_r \geq 0$: \\
+    First we will prove that the kernel $k(x, y)^r$
+    for any positive integer $r$, is also positive 
+    definite. If two matrices are positive semi-definite,
+    then their entrywise product is also positive
+    semi-definite. So the Gram matrix of $k(x, y)^r$,
+    which is the elementwise power of
+    $k(x, y)$'s Gram matrix, must be positive semi-definite,
+    making $k(x, y)$ positive definite. \\
+    Now, We know that for some arbitrary vectors $x$
+    and $c$,
+    the following sum is positive:
+    \[ \sum_{j = 1}^m\sum_{i=1}^m c_ic_j k(x_i, x_j) \]
+    Now for $k'$, the sum looks like:
+    \[ \sum_{j = 1}^m\sum_{i=1}^m c_ic_j k(x_i, x_j)
+    = \sum_{j = 1}^m\sum_{i=1}^m c_ic_j 
+    \brac{\sum_{r=0}^\infty \alpha_r k(x_i, x_j)^r} \]
+    Which we can rewrite as:
+    \[ \sum_{j = 1}^m\sum_{i=1}^m
+    \brac{\sum_{r=0}^\infty \alpha_r c_ic_j k(x_i, x_j)^r} \]
+    \[ \sum_{r=0}^\infty \alpha_r \brac{
+     \sum_{j = 1}^m\sum_{i=1}^m
+    \brac{ c_ic_j k(x_i, x_j)^r}} \]
+    Since the inner sum is positive,
+    as $k(x, y)^r$ is positive definite, and
+    the outer sum has positive weights, this remains
+    positive.
+    So $k'(x, y)$ is positive definite. \\
+    \item 
+\end{enumerate}
+
+\end{document}

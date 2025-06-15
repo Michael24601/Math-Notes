@@ -1,0 +1,329 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture XII
+}
+\date{2025-06-12}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Kernel Methods}
+\subsection*{Motivation}
+
+
+We start with quadratic regularized empirical risk
+risk minimization with a margin-based loss 
+function $\tilde{\ell}$:
+\[ \min_{\theta \in \mathbb{R}^d} \frac{1}{n} 
+\sum_{i=1}^n \tilde{\ell}((\Phi \theta)_i y_i) + 
+\frac{\lambda}{2} \|\theta\|_2^2 \] 
+Where $\Phi \in 
+\mathbb{R}^{n \times d}$ is the feature matrix,
+$y_i \in \mathbb{R}^n$ is an output label in the
+training dataset, $\theta \in \mathbb{R}^d$
+is the weights vector, and  $\lambda > 0$
+is the regularization parameter. \\
+Since $\tilde{\ell}$ is margin based, it could for 
+example, be the loss for the hard-margin SVM,
+$\delta_{\rbb_-}(1-t)$. \\
+
+We can place all $y_i$ labels in the diagonals of
+a matrix, and call it $\Upsilon$,
+which allows us to write the regularized risk
+minimization as:
+\[ \min_{\theta \in \mathbb{R}^d} \frac{1}{n} 
+\sum_{i=1}^n \tilde{\ell}((\Upsilon \Phi \theta)_i) + 
+\frac{\lambda}{2} \|\theta\|_2^2\]
+This loss is not nice enough for proximal gradient
+descent, so we use the Fenchel-Rockafellar Duality
+to associate a dual problem to our problem with the
+same objective function:
+\[ \min_{\theta} f(A\theta) + g(\theta) = 
+\max_{\xi} -g^*(-A^\top \xi) - f^*(\xi) \]
+We then take:
+\[ A = \Upsilon \Phi \qquad 
+f(\eta) = \frac{1}{n} \sum_{i=1}^n \tilde{\ell}(\eta_i) 
+\qquad g(\theta) = \frac{\lambda}{2} \|\theta\|^2_2\]
+Which have conjugates:
+\[ f^*(\xi) = \frac{1}{n} \sum_{i=1}^n 
+\tilde{\ell}^*(n\xi_i) \qquad 
+g^*(\xi) = \frac{1}{2\lambda} \|\xi\|^2\]
+Which yields the dual:
+\[ \min_{\xi} \frac{1}{n} \sum_{i=1}^n 
+\tilde{\ell}^*(n\xi_i) + \frac{1}{2\lambda} 
+\|\Phi^\top \Upsilon \xi\|^2\] 
+\[ \min_{\xi} \frac{1}{n} \sum_{i=1}^n 
+\tilde{\ell}^*(n\xi_i) + \frac{1}{2\lambda} \langle 
+\Upsilon \xi, \Phi \Phi^\top \Upsilon \xi \rangle \]
+Which we can minimize to get the optimal $\xi$. \\
+
+Now we know that, by the primal-dual relation:
+\[ \theta = \nabla g^{-1}(-A^\top \xi) \]
+\[ \theta = -\frac{1}{\lambda} \Phi^\top \Upsilon \xi \]
+We can substitute in here the optimal $\xi$
+to get the optimal $\theta$. \\
+
+Now notice that in the minimization
+of the fual problem,
+we have the $n$ by $n$ matrix $K = \Phi\Phi^T$.
+Notice that it is dimension independent,
+meaning that it does not depend on the dimension
+of the feature map $\varphi(x)$. \\
+It is called the Gram Matrix. \\
+
+This matrix will have entries with inner products
+of the feature vector of the input:
+\[ K = \Phi \Phi^\top = 
+\pmat{\langle \varphi(x_1), \varphi(x_1) \rangle 
+& \cdots & \langle \varphi(x_1), \varphi(x_n) \rangle \\
+\vdots & \ddots & \vdots \\
+\langle \varphi(x_n), \varphi(x_1) \rangle & \cdots 
+& \langle \varphi(x_n), \varphi(x_n) \rangle} \]
+Notice that it only has the inner product
+of the feature maps in it, not the features 
+themselves. \\
+
+Now recall that our predictor $g_\theta(x)$
+looks like:
+\[ g_\theta(x) = \sum_{i=1}^n \theta_i \phi_i(x) = 
+\langle \varphi(x), \theta \rangle \]
+Now, if we replace $\theta$ by the optimal one we found,
+which we can rewrite as a sum:
+\[ \theta = -\frac{1}{\lambda} \Phi^\top \Upsilon \xi
+= -\frac{1}{\lambda} \sum_{i=1}^n y_i \xi_i x_i = 
+-\frac{1}{\lambda} \sum_{i=1}^n y_i \xi_i \varphi(x_i) \]
+We get:
+\[ g_{\theta}(x)
+= - \frac{1}{\lambda} \sum_{i=1}^n y_i \xi_i 
+\langle \varphi(x_i), \varphi(x) \rangle \]
+Notice that again, we only need to know the
+inner product of the feature map, not the
+feature map itself. \\
+
+A kernel function $k(x_i, x_j)$
+return these exact inner products,
+with respect to some feature map.
+It measures similarity between $\varphi(x_i)$ 
+and $\varphi(x_j)$. \\
+
+The advantage is that instead of constructing
+a feature map, which can be difficult, it may be
+easier to instead define a function that measures
+similarity intsead. And since we only ever need
+the inner product, and not the feature map itself,
+we can avoid defining it if we have the inner product,
+or kernel. \\
+
+So we will define kernel functions without
+knowing what the feature map is; it is a measures
+of similarity, but no longer an inner product. \\
+
+Unlike feature maps, kernels do not depend on the
+dimensionality of the feature space
+(it is just an inner product, a single scalar output
+given vectors $x$ and $x_i$ with arbitrary dimensions). \\
+
+\newpage
+
+\subsection*{Kernels}
+
+We can't just replace inner products by kernels,
+we need to analyze what is happening under the hood. \\
+
+Positive Definite Kernels have a one to one
+association with a Hilbert space 
+$\hcal_k$, which more specifically,
+is a Reproducing Kernel Hilbert Space,
+or RKHS. \\
+
+For now it is enough to know that a Hilbert Space
+contains functions, including the kernel. \\
+
+The Hilbert class will be our hypothesis
+class for learning. The norm of this class
+yields a natural regularization term
+$\rcal(g) = \|g\|^2_{\hcal_k}$. \\
+
+One advantage is that regularization penalties
+are not applied to weights, but to the function 
+directly. \\
+
+For example, for the Guassian kernel:
+\[ k(x, z) = e^{-{(x - z)^2/2\sigma^2}} \]
+If we were to find its associated Hilbert Space,
+we could prove that its norm is of the form:
+\[ \|g\|^2_{\hcal_k} = \int_{\mathbb{R}} \sum_{s=0}^{\infty} 
+\frac{\sigma^{2s}}{s! \, 2^s} \big( (\partial_x^s g)(x) 
+\big)^2 \, dx\]
+This associated RKHS contains only smooth functions. \\
+
+The kernel is nothing more than an inner product
+in the Hilbert Space:
+\[ k(x, z) = \ang{\varphi(x), \varphi(z)} \]
+Where $\varphi: \xcal \to \hcal$. \\
+It is a similarity measure. \\
+
+We also have a dissimilarity measure between $x$
+and $z$ in the Hilbert Space, given by the norm,
+which makes sense since it measure the distance:
+\[ d(x, z) = \| \phi(x) - \phi(z) \| 
+= \sqrt{ k(x, x) + k(z, z) - 2k(x, z) } \]
+Norm are defined in terms of the inner product,
+which we can replace by the kernel here
+since it is the inner product. \\
+
+A kernel is a function:
+\[ k: \xcal \times \xcal \to \rbb \]
+It is called positive definite if for all
+$m \geq 1$, and for any two sequences:
+\[ x_1, x_2,\dots, x_m \in \xcal 
+\qquad c_1, c_2, \dots, c_m \in \rbb \]
+The following inequality holds:
+\[ \sum_{i=1}^m \sum_{j=1}^m c_i c_j k(x_i, x_j) \geq 0 \]
+If the sum is strictly larger than $0$
+for all distinct sequences that aren't jsut $0$,
+we say the kernel is strictly positive definite. \\
+
+A kernel matrix is the Gram Matrix we saw at the start,
+with the inner product entries, which in the kernel
+matrix are replaced by the kernel of $x_i$
+and $x_j$:
+\[ K = \big( k(x_i, x_j) \big)_{i,j} \]
+A kernel is positive-definite, if every
+kernel matrix for all sequences $x_1, \dots, x_m$
+are all positive 
+semi-definite (any sequence from $\xcal$). \\
+We can use this to check that a kernel is positive
+definite:
+\[ w^TKw \geq 0 \]
+Notice that checking that this is $\geq 0$
+is pretty much the same as checking that the
+inequality above holds. \\
+
+The same applies for strictly positive definite 
+kernels; we just need to prove that the Kernel matrix 
+is positive definite intsead of positive
+semi-definite. \\
+
+Now, if we have two kernels $k_1$ and $k_2$
+on $\xcal \times \xcal$, both of which are
+positive definite, then these kernels $k$
+are also positive definite:
+\begin{enumerate}
+    \item \( k(x, z) = \alpha \, k_1(x, z) \), 
+    for any \(\alpha > 0\).
+    \item \( k(x, z) = k_1(x, z) + k_2(x, z) \) 
+    (pointwise addition).
+    \item \( k(x, z) = k_1(x, z) k_2(x, z) \) 
+    (pointwise multiplication).
+    \item The pointwise limit \( k \) 
+    of a sequence of positive definite kernels 
+    \( k_i \) as \( i \to \infty \).
+    \item \( k(x, z) = f(x) f(z) k_1(x, z) \) 
+    for any \( f : X \to \mathbb{R} \) 
+    (especially \( k(x, z) = f(x) f(z) \)).
+    \item \( k(x, z) = \langle \phi(x), \phi(z) 
+    \rangle \) for any \( \phi : X \to H \) with 
+    Hilbert space \( \hcal \).
+\end{enumerate}
+The first two are trivial to prove, the third
+the lecturer proved in class. \\
+
+\newpage
+
+\subsection*{Hilbert Spaces}
+
+A Hilbert Space is just a complete vector space with
+an inner product. \\
+
+One example of a Hilbert space is the 
+space of square integrable functions $L_2(\xcal)$:
+\[ L^2(\xcal) = \left\{ f : \xcal \to \mathbb{R} \ \bigg| 
+\ \int_\xcal |f(x)|^2 \, dx < \infty \right\} \]
+Together with its inner product:
+\[ \langle f, g \rangle := \int_\xcal f(x) g(x) \, dx \]
+The issue with this space for example,
+is that it is not a space of pointwise defined 
+functions; there is no precise value 
+of points, just the integral, which is a deal breaker
+for us, since we need to be able to make
+pointwise predictions. \\
+
+This is why we need the RKHS family for the
+kernels. \\
+
+A Reproducing Kernel Hilbert Space $\hcal$
+on $\xcal$ is a Hilbert Space of functions
+$f: \xcal \to \rbb$ along with a reproducing kernel
+$k$ on $\xcal \times \xcal$ which satisfies:
+\[ \forall x \in \xcal: \quad k(x, \cdot) \in \hcal \]
+\[ \forall f \in \hcal: \quad 
+\ang{f, k(x, \cdot)}_\hcal = f(x) \]
+The first condition statest that
+if we fix one of the inputs of $k$,
+it becomes a function on $\xcal$, and must
+be part of the Hilbert Space. \\
+The second is the reproducing property. \\
+
+This makes the association clear;
+given a Hilbert Space with kernel $k$,
+$k$ is the kernel of the Hilbert Space,
+which is always going to be positive definite. 
+This side is trivial. \\
+On the other hand, if we have a positive definite
+kernel, then we can always construct a Hilbert
+Space using that kernel, that satisfies the
+above conditions. We can prove this
+Hilbert Space is unique. \\
+
+So we have a one to one association between
+positive definite kernels and RKHS. \\
+Each Hilbert Space is assoicated with one positive
+definite kernel, and given a positive definite
+kernel, we may construct one unique Hilbert Space. \\
+
+For the first side of the association,
+we can prove that the kernel of a RKHS 
+is always positive definite, which the 
+lecturer now does. \\
+
+For the other side, 
+we can show how to contrusct a RKHS using
+some kernel $k$, which induces an inner product,
+which we then show is independent of
+our specific representation we use for $g$
+and $f$ (the choice of $\alpha$ and $\beta$ vectors). \\
+We also check the reproducing property holds. \\
+And finally we check that the norm induced from the
+inner product is that whenever the norm is $0$,
+the function is $0$: if $\|f(x)\|^2_{\hcal} = 0 \implies
+|f(x)| = 0$. We use the Cauchy-Schwartz inequality. \\
+The Hilbert Space is a complete Vector Space,
+so we should show that each cauchy sequence
+converges, but this isn't very insightful. 
+So we need a standard completion argument. \\
+Finally, we need to show the uniqueness of the space;
+if there is another RKHS with the same kernel, we
+can prove that it can't be smaller, since we
+used the span, so the other hilbert space must be
+larger, but we can show the gap between the two
+is 0, so they are the same Hilbert Space. \\
+
+This construction gives us a nice Hilbert space,
+with functions that can be evaluated pointwise;
+note that all the functions are just combinations
+of the kernel at different points. \\
+
+\end{document}

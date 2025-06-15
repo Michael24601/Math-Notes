@@ -437,11 +437,12 @@ First we get the dual, which
 gets us a form solvable by proximal gradient
 methods. \\
 
-We can use Moreau's identity:
-\[ \theta = \operatorname{prox}_{\tau f}(\theta) 
-+ \tau \, \operatorname{prox}_{\frac{1}{\tau} f^*}
-\left(\frac{\theta}{\tau}\right) \]
-when solving the optimization. \\
+Once we have th optimal $\xi$,
+we can get the optimal $\theta$
+using:
+\[ \theta = \nabla g^{-1}(-A^\top \xi) \]
+Which is derived from the 
+Fenchel-Rockafellar duality. \\
 
 Note that we can write $\delta_{\rbb_-}(1-t)$
 as a loss function for the hard-margin SVM. \\

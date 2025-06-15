@@ -11,7 +11,7 @@
     \Huge Numerical Algorithms \\
     \Large Lecture XIV
 }
-\date{2025-06-04}
+\date{2025-06-11}
 \author{Michael Saba}
 
 \begin{document}
@@ -21,7 +21,7 @@
 \setlength{\parindent}{0pt}
 \pagenumbering{arabic}
 
-\subsection*{Non-homoegenous and Anisotropic Cases}
+\subsection*{Inhomogeneous and Anisotropic Diffusion}
 
 We show how to discretize the
 non-isotropic and non-homogeneous cases
@@ -118,8 +118,257 @@ and isotropic inhomogeneous cases. \\
 
 \subsection*{Wave Equation}
 
-We can create small waves on an image. \\
+We can create small waves on an image.
+This is done using the wave equation. \\
+
+The wave equation is a PDE:
+\[ \partialdd{^2u}{t^2} = \nabla^2 u \]
+In the two dimensional case, this is:
+\[ \partial_{tt}u = \partial_{xx} u + \partial_{yy} u \]
+So we have a second order derivative in terms of $t$,
+that is the main difference. \\
+
+Now, we already know how to discretize the right hand
+side:
+\[ \partial_{tt}u = \dfrac{u_{i, j-1}-2u_{i, j}
++u_{i, j+1}}{(h_x)^2} + \dfrac{u_{i-1, j}-2u_{i, j}
++u_{i-1, j}}{(h_y)^2} \]
+But now, instead of using a first derivative discretization
+of the left hand side, like we did last time with
+the explicit and implicit Euler form,
+we just use the quadratic formula for the second derivative
+again, this time interpolating three points in time:
+\[ \dfrac{u^{(k-1)}_{i, j}-2u^{(k)}_{i, j}
++u^{(k+1)}_{i, j}}{\tau} = \dfrac{u^{(k)}_{i, j-1}
+-2u^{(k)}_{i, j} +u^{(k)}_{i, j+1}}{(h_x)^2} 
++ \dfrac{u^{(k)}_{i-1, j}-2u^{(k)}_{i, j} 
++ u^{(k)}_{i-1, j}}{(h_y)^2} \]
+And then we solve for $u^{(k+1)}_{ij}$, the
+next point's update:
+\[ u^{(k+1)}_{i, j}= \tau\dfrac{u^{(k)}_{i, j-1}
+-2u^{(k)}_{i, j} +u^{(k)}_{i, j+1}}{(h_x)^2} 
++ \tau\dfrac{u^{(k)}_{i-1, j}-2u^{(k)}_{i, j} 
++ u^{(k)}_{i-1, j}}{(h_y)^2}
+-u^{(k-1)}_{i, j} + 2u^{(k)}_{i, j} \]
+Notice that we will need to save the last frame,
+and the frame before that one, in order to be able
+to do our update step. \\
+
+Note that an implicit form wouldn't make sense
+in the second derivative case.
 
 
+Having to remember the last two frames also implies
+that we will need to have two starting conditions. \\
+In the heat equation, we only needed to keep track
+of the first frame, and recall that the solution,
+without discretizing time, was:
+\[ u = e^{kAt}u(0) \]
+Where $A$ is the laplacian finite difference matrix. \\
+Notice that we only need one starting condition $u(0)$,
+which is the initial texture before diffusion in the
+code example. \\
+
+On the other hand, if we attempt to solve 
+the wave equation without discretizing time:
+\[ \partialdd{^2u}{t^2} = Lu \]
+Then we can solve it as such:
+\[ \partialdd{}{t}\partialdd{u}{t} = Lu \]
+\[ \partialdd{u}{t} = e^{Lt}u'(0) \]
+Then, the solution to $\partial_t u = e^{f(t)}$
+is very simple, it is the exponential itself:
+\[ u = \para{\dfrac{e^{Lt}u'(0)}{L}}u(0) \]
+Notice that we need two starting conditions, 
+$u'(0)$, and $u(0)$. \\
+
+To give an intuitive example, suppose we have
+the acceleration (a second derivative 
+of the position); to find the position after some time,
+we need the initial velocity and the initial position.
+These are analogs of $u'(0)$ and $u(0)$. \\
+
+\newpage 
+
+\subsection*{The Frequency Domain}
+
+The issue with discretizing the the PDE
+with respect to time is that the time step
+has to be quite small to achieve stability. \\
+Another issue is that we are locked into
+waves that have the same size, or amplitude,
+which does not wane with time. \\
+
+We can instead try solving the PDE
+analytically as we did earlier:
+\[ \partial_{tt}u = Lu \]
+We know that the laplacian finite difference
+matrix is diagonalizable, so we can write:
+\[ \partial_{tt}u = V\Lambda V^T u \]
+Multiplying both sides by $V^T$:
+\[ V^T\partial_{tt}u = V^TV\Lambda V^T u \]
+Now, since $V$ is orthogonal $VV^T = I$,
+and since $V^T$ is constant, we can
+bring it into the second derivative
+with respect to $t$:
+\[ \partial_{tt} V^Tu = \Lambda V^T u \]
+We will take $\hat{u} = V^T u$,
+which nets us the PDE:
+\[ \partial_{tt} \hat{u} = \Lambda \hat{u} \]
+Which, for each $u_i$ in the discretized vector
+of points, is:
+\[ \partial_{tt} \hat{u}_i = \lambda_i \hat{u}_i \]
+We can solve this for $\hat{u}$,
+then multiply the result by $V$,
+the inverse of $V^T$, in order to get $u$. \\
+This $\hat{u}$ is said to be in the frequency 
+domain. \\
+
+So how can we find the eigenspace $V$, 
+and its transpose $V^T$?
+As we know, the finite difference Laplacian matrix
+depends on the boundary conditions we are using,
+be it reflecting boundaries, toroidal boundaries...
+So the eigenspace of $L$
+will depend on which reflecting boundary is
+chosen (and on the size of the matrix of course,
+which is a function of the number of dimensions
+and points in the discretization). \\
+
+The eigenspace $V^T$ of $L$ is given by the 
+discrete sine transform DST, or the discrete
+cosine transform DCT.
+There are several DST and DCT functions;
+for instance, DCT-II is the one that
+corresponds to relfecting boundaries, which is
+what we have been using. \\
+
+The DCT-II of a sequence 
+$x = (x_1, \dots, x_n)$ is defined as:
+\[ {X_{k}=\sum _{n=1}^{N}x_{n}\cos 
+\left[\,{\tfrac {\,\pi \,}{N}}
+\left(n+{\tfrac {1}{2}}\right)k\,
+\right]\qquad {\text{ for }}~k=1,\ 
+\dots \ N}\]
+So if we apply the DCT-II to the vector $u$,
+we would get the eigenspace $V^T$. \\
+Note that it won't be orthogonal however,
+and will need to be normalized by:
+\[ \piecewise{
+    \sqrt{\dfrac{1}{N}} \qquad & \FOR X_1 \vs{10} \\
+    \sqrt{\dfrac{2}{N}} \qquad & \text{otherwise}
+} \]
+So applying the DCT-II, with tyhe normalization
+takes us into the frequency domain, and
+applying the inverse operation gives us the $u$
+we are looking for. \\
+
+We can use this formula to creates waves
+with amplitudes that decrease with time
+as well, but modifying the frequency
+domain differential equation. \\
+
+\newpage
+
+\subsection*{Finite Differences in Higher Dimensions}
+
+We've already seen the laplacian
+finite difference matrix in both 1 and 2
+dimensions. We can generalize this matrix
+by using the Kronecker product. \\
+The intuition is that our space, which
+can be in any dimension $n$,
+is discretized into an $n$-dimensional grid
+of dimensions:
+\[ m_1 \times m_2 \times \dots m_n \] 
+with an $n$-dimensional stencil,
+but can be flattened to look like a vector
+of dimension:
+\[ \prod_{i=1}^n m_i \]
+Then, using a flattened one dimensional
+stencil on said vectors would yield
+a matrix of dimension:
+\[ \prod_{i=1}^n m_i \times \prod_{i=1}^n m_i \]
+Which will multiply our flattened 
+vector of points $u$. \\
+
+Now, we don't usually have to physically
+flatten the grid into a vector, and can
+instead use Kronecker sets
+and products. \\
+
+If $ A $ is an $m \times n$ matrix and $B$ 
+is a $ p \times q$ matrix, 
+then the Kronecker product $A \otimes B$ 
+is the $ pm \times qn$ block matrix:
+\[ \mathbf{A} \otimes \mathbf{B} = 
+\begin{bmatrix}
+a_{11} \mathbf{B} & \cdots & a_{1n} \mathbf{B} \\
+\vdots & \ddots & \vdots \\
+a_{m1} \mathbf{B} & \cdots & a_{mn} \mathbf{B}
+\end{bmatrix} \]
+More explicitly, each block $ a_{ij} \mathbf{B} $ 
+is a scalar multiple of the full matrix $B$, so:
+\[\mathbf{A} \otimes \mathbf{B} =
+\begin{bmatrix}
+a_{11} b_{11} & a_{11} b_{12} & \cdots & a_{11} b_{1q} & \cdots & a_{1n} b_{11} & \cdots & a_{1n} b_{1q} \\
+a_{11} b_{21} & a_{11} b_{22} & \cdots & a_{11} b_{2q} & \cdots & a_{1n} b_{21} & \cdots & a_{1n} b_{2q} \\
+\vdots & \vdots & \ddots & \vdots & & \vdots & \ddots & \vdots \\
+a_{11} b_{p1} & a_{11} b_{p2} & \cdots & a_{11} b_{pq} & \cdots & a_{1n} b_{p1} & \cdots & a_{1n} b_{pq} \\
+\vdots & \vdots & & \vdots & \ddots & \vdots & & \vdots \\
+a_{m1} b_{11} & a_{m1} b_{12} & \cdots & a_{m1} b_{1q} & \cdots & a_{mn} b_{11} & \cdots & a_{mn} b_{1q} \\
+a_{m1} b_{21} & a_{m1} b_{22} & \cdots & a_{m1} b_{2q} & \cdots & a_{mn} b_{21} & \cdots & a_{mn} b_{2q} \\
+\vdots & \vdots & \ddots & \vdots & & \vdots & \ddots & \vdots \\
+a_{m1} b_{p1} & a_{m1} b_{p2} & \cdots & a_{m1} b_{pq} & \cdots & a_{mn} b_{p1} & \cdots & a_{mn} b_{pq}
+\end{bmatrix} \]
+As we can see, it sort of ``flattens"
+matrix multiplication. \\
+Note that the Kronecker product
+does not require both matrices
+to be of the same dimensions. \\
+
+On the other hand, a Kronecker
+sum of two square matrices $A$
+and $B$ of dimensions $n \times n$
+and $m \times m$ respectively
+is:
+\[ A \otimes I_m + I_n \otimes B \]
+Notice that we end up with an $mn \times mn$
+matrix. \\
+
+So, if we have a two dimensional grid of points,
+we can find the finite difference Laplacian
+matrix for each direction (a row
+and a column), and then just
+use the Kronecker sum on the two. \\
+Recall that when we had a $3 \times 4$ grid,
+we ended up with a $12 \times 12$ matrix, 
+which matches the result of the Kronecker
+sum of the two finite difference matrices,
+and matches what we would have gotten
+had we flattened the grid first into
+a vector, and then found the finite
+difference matrix. \\
+
+This allows us to generalize the finite differences
+method to higher dimensions without having
+to bother with $n$-dimensional stencils. \\
+So if we have $n$ dimensions for our
+grid of points, each with $m_i$
+points and an induced finite difference
+Laplacian $A_i$, our $n$-dimensional
+finite difference matrix $A$ is:
+\[ A = \sum_{i=1}^n \para{A_i \otimes 
+\bigotimes_{\substack{j=1 \\ j \neq i}}^n I_{m_j}}  \]
+This works for any dimension. \\
+
+Note that one big advantage of this method
+when it comes to using the DST and DCT is that
+we don't have to bother with the DST and DCT
+of higher dimensional finite difference laplacian 
+matrices, and can instead just use the one 
+dimensional  matrix's DCT or DST, and then 
+generalize it to $n$-dimensions. \\
+
+\newpage
 
 \end{document}
