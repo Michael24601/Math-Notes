@@ -1,0 +1,189 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Machine Learning \\
+    \Large Assignment X
+}
+\date{2025-06-20}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Ex 1}
+By Moore's theorem, all positive deifnite kernels
+have a unique RKHS.
+So we just need to show that $k(x, y)$ is positive
+definite. \\
+The kernel we showed was positive definite
+in the last assignment looks a lot like this one,
+so we may use the same method. \\
+
+\newpage
+
+\subsection*{Ex 2}
+
+We already know that in the Hilbert Space, we can
+decompose our function $f$ into $f_0 + f_1$, where
+$f_0$ is in some linear subspace of dimension $n$,
+which we can call $G$,
+and $f_1$ is orthogonal to $G$.
+This in turn implies that $f_1(x) = 0$
+for any $x \in \rbb^d$. By extension,
+we can write the empirical risk in terms of just
+$f_0$, and disregard $f_1$. \\
+Furthermore, we showed that if $\tilde{\rcal}$
+was a strictly increasing function, it's always
+better to remove $f_1$ than to include it,
+since the following inequality holds:
+\[ \|f_0+f_1\|^2_{\hcal} > \|f_0\|^2_{\hcal} \] 
+This is possible since $f_1$ is not present
+anywhere else in the term we are trying to minimize. \\
+Now, if instead of being strictly increasing,
+$\tilde{\rcal}$ was non-decreasing, we would have:
+\[ \|f_0+f_1\|^2_{\hcal} \geq \|f_0\|^2_{\hcal} \]
+So now it is possible that keeping $f_1$
+would not harm the minimization, but keeping it
+doesn't improve it either; so we can still just
+get rid of it, and either improve the minimization,
+or at worst, not affect it. \\
+So the Representer Theorem still holds even
+if $\tilde{\rcal}$ is just non-decreasing. \\
+
+\colorText{red}{
+    \subsection*{Correction}
+    We can and should add that the solution is no
+    longer unique (since we have $f_1$ that we
+    can keep) when 
+    $\|f_0+f_1\|^2_{\hcal} = \|f_0\|^2_{\hcal}$,
+    but that one of the solutions does lie in the
+    subspace. \\
+
+}
+
+\newpage
+
+\subsection*{Ex 3}
+We have a regularized least square regression
+minimization problem with squared loss and L2
+regularization:
+\[ \min_{w \in \rbb^n} \dfrac{1}{n}\sum_{i=1}^n 
+\para{y_i - w^Tx_i}^2 + \dfrac{\lambda}{2}\|w\|^2 \]
+Here we have a dataset $\{(x_i, y_i)\}^n$
+where $x_i \in \rbb^d$ and $y_i \in \rbb$.
+Also, $\lambda > 0$. \\
+\begin{enumerate}[label = \letters]
+    \item 
+    We can rewrite the expression as a matrix
+    multiplication:
+    \[ \min_{w \in \rbb^n} \dfrac{1}{n}\|y - Xw\|^2
+    + \dfrac{\lambda}{2}\|w\|^2
+    = \min_{w \in \rbb^n} \dfrac{1}{n}\para\|Xw - y\|^2
+    + \dfrac{\lambda}{2}\|w\|^2 \]
+    Which is:
+    \[ \min_{w \in \rbb^n} f(Xw) + g(w) \]
+    Where:
+    \[ f(\eta) = \dfrac{1}{n}\|\eta - y\|^2
+    \qquad \AND \qquad g(w) = \dfrac{\lambda}{2}\|w\|^2 \]
+    Here $X$ is a $n\times d$ matrix with columns $x_i$. \\
+    \item 
+    We want to calculate:
+    \[ f^*(\alpha) = \sup_{\alpha \in \rbb^n} 
+    \ang{\alpha, \eta} - f(\eta) \]
+    Notice that $f$ is convex since its Hessian
+    is positive semi-definite:
+    \[ \nabla^2 f(\eta) 
+    = \nabla^2 \dfrac{1}{n}\|\eta - y\|^2
+    = \dfrac{2}{n} \nabla (\eta_1 - y_1, \dots, 
+    \eta_2 - y_2)
+    = \dfrac{2}{n}\pmat{1 & 0 & \dots & 0 \\
+    0 & 1 & \ddots & \vdots \\
+    \vdots & \ddots & \ddots & 0 \\
+    0 & \dots & 0 & 1} \]
+    Where $\dfrac{2}{n} > 0$. \\
+    We can also note that $f$ is quadratic, and therefore
+    convex. \\
+    Either way, this means that:
+    \[ \ang{\alpha, \eta} - f(\eta) \]
+    Is concave, since $\ang{\alpha, \eta}$
+    is linear, and therefore concave, and $-f(\eta)$
+    is concave. So to find the supremum, we just
+    differentiate and set the gradient to $0$:
+    \[ \nabla \brac{\ang{\alpha, \eta} - f(\eta)} 
+    = \alpha - \dfrac{2}{n} (\eta - y) \]
+    \[ \alpha - \dfrac{2}{n} (\eta - y) = 0 \]
+    \[ \eta = \dfrac{n}{2}\alpha + y \]
+    So placing this back in the expression, we have:
+    \[ f^*(\alpha) = \ang{\dfrac{n}{2}\alpha + y, 
+    \alpha} - \dfrac{1}{n}
+    \left\| \dfrac{n}{2}\alpha + y - y\right\|^2 \]
+    \[ f^*(\alpha) = \dfrac{n}{2}\left\| \alpha\right\|^2 
+    + \ang{y, \alpha} - 
+    \dfrac{n}{4}\left\|\alpha\right\|^2 \]
+    \[ f^*(\alpha) = \dfrac{n}{4}\left\|\alpha\right\|^2 + 
+    \ang{y, \alpha} \]
+    We also want to calculate:
+    \[ g^*(\alpha) = \sup_{\alpha \in \rbb^n} 
+    \ang{\alpha, w} - g(w) \]
+    Likewise, $g(w)$ is convex, because it is quadratic,
+    which we can show by showing that the Hessian
+    matrix is positive semi-definite:
+    \[ \nabla^2 g(w) 
+    = \nabla^2 \dfrac{\lambda}{2}\|w\|^2
+    = \lambda  \nabla (w_1, \dots, w_n)
+    = \lambda \pmat{1 & 0 & \dots & 0 \\
+    0 & 1 & \ddots & \vdots \\
+    \vdots & \ddots & \ddots & 0 \\
+    0 & \dots & 0 & 1} \]
+    Where $\lambda > 0$. \\
+    So we can differentiate $g$ and set the gradient
+    to $0$ in order to find the maximum:
+    \[ \nabla \brac{\ang{\alpha, w} - g(w)}
+    = \alpha - \lambda w \]
+    \[ \alpha - \lambda w = 0 \]
+    \[ w = \dfrac{1}{\lambda} \alpha \]
+    Placing it back, we get:
+    \[ g^*(\alpha) = \dfrac{1}{2\lambda}\|\alpha\|^2\]
+    \item
+    Now the Fenchel-Rockafellar duality is:
+    \[ \max_{\alpha} \left\{ -g^*(-X^\top \alpha) 
+    - f^*(\alpha) \right\} \]
+    Which is:
+    \[ \max_{\alpha} \left\{ 
+    -\dfrac{1}{2\lambda}\|-X^\top\alpha\|^2
+    - \dfrac{n}{4}\left\|\alpha\right\|^2
+    - \ang{y, \alpha} \right\} \]
+    \[ \min_{\alpha} \left\{ 
+    \dfrac{1}{2\lambda}\|X^\top\alpha\|^2
+    + \dfrac{n}{4}\left\|\alpha\right\|^2
+    + \ang{y, \alpha} \right\} \]
+    \item 
+    Since $g$ is differentiable, given an optimal $\alpha$,
+    we can get an optimal $w$ by solving:
+    \[\arg\min_{w} \, g(w) 
+    + \langle \alpha, Xw\rangle\]
+    Since $g$ is differentiable and convex,
+    we can just differentiate:
+    \[\nabla g(w) + Xw^\top \alpha \]
+    Then setting it to $0$ and solving for $w$:
+    \[ \nabla g(w) + X^\top \alpha = 0 \]
+    \[ w* = \nabla g^{-1}(-X^\top \alpha*) \]
+    So we need the inverse of the gradient
+    (NOT the gradient of the inverse):
+    \[ \nabla g(w) = \lambda w \]
+    \[ \nabla g\inv = \dfrac{1}{\lambda}w \]
+    So we have:
+    \[ w* = -\dfrac{1}{\lambda}X^\top \alpha* \]
+\end{enumerate}
+
+\end{document}

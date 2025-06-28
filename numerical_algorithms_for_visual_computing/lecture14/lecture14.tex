@@ -77,7 +77,7 @@ $\partial_x u_i$ with a line
 As mentioned in the last chapter. \\
 
 Note that if we apply the first order derivative
-approximationtwice, we just get the second order 
+approximation twice, we just get the second order 
 derivative we derived last time:
 \[ \partial_{xx} u_i
 = \partial_{x}(\partial_x u_i) 
@@ -107,12 +107,14 @@ g_{i-\frac{1}{2}} (\partial_x u)_{i-\frac{1}{2}}}{h} \\
 (u_i - u_{i-1})}{h^2} \\
 &= \frac{g_{i+1} + g_i}{2 h^2} u_{i+1} - 
 \frac{g_{i+1} + 2 g_i + g_{i-1}}{2 h^2} u_i + 
-\frac{g_i + g_{i-1}}{2 h^2} u_{i-1}. }
+\frac{g_i + g_{i-1}}{2 h^2} u_{i-1} }
 Now we have the coefficients that we can place
 into a finite difference matrix. \\
 This can be used for any $g(x)$,
-which makes it applicable for the anisotropic
-and isotropic inhomogeneous cases. \\
+which makes it applicable for the isotropic
+inhomogeneous case,
+where we have a $g(x)$,
+but not a matrix. \\
 
 \newpage
 

@@ -1,0 +1,250 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture XIV
+}
+\date{2025-06-23}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Unsupervised Learning}
+\subsection*{Clustering}
+
+When we have an unlabled sataset, we can use
+unsupervised learning. \\
+The dataset is fixed ans only has inputs $x$. \\
+
+The goal is to disover the intrinsic structure of
+the data. One way to do this is using clustering. \\
+We assume there is some underlying probability space,
+and our goal is to try and reverse engineer it using the
+data. \\
+
+We will use $K$-means clustering, which is actually not
+very efficient, but can be imporved. \\
+
+The idea behind clustering is that we will group
+points together based on similarity measure.
+This can be the distance for example; there is no
+specific goal however. the objective is ill-defined. \\
+
+We want to find $K$ prototypes $\mu_i$ that represent
+similar data points in an optimal way
+(for distance, this is the mean). \\
+We call $C_i$ the $\nth{i}$ cluster. \\
+
+So our goal is to optimize the sum over all
+clusters, the sum over all points in each cluster,
+the similarity measure between the points
+and each proptotype $\mu_i$ for each cluster. \\
+This similarity measure is the Euclidian norm
+squared for the distance. \\
+
+So we need a prototype, and a similarity measure;
+for instance: mean and distance. \\
+
+The sum is:
+\[ \arg \min_{(C_k, \mu_k)} \sum_{i=1}^K \sum_{j=1}^K
+\|x_j - \mu_i\|^2 \]
+We can minimize this and get the clusters and prototype
+pairs that are optimal. \\
+
+This will lead us to find sphere like clusters; non
+sphere like clusters require other similarity measures,
+and are harder to fit. \\
+
+Clustering is heavily influenced by outliers, 
+since we are using means (the squared distance
+is highly sensitive). \\
+
+Lloyd's algorithms is used to solve the
+sum minimization problem. \\
+We first initialize the prototypes (not their true values). \\
+Then we will compute the clusters such that the points
+are assigend to nearest prototypes; we then use
+these clusters to recompute the prototypes.
+We then repeat the update step until the prototypes
+stop changing (converged to solution). \\
+
+This is the same as performing alternating minimization
+on the double sum; that means fixing some variables
+and minimize some free variables, then fix the optimized
+variables and minimize using the others. \\
+
+Clustering with $K$-means works, but only for simple
+cluster shapes. \\
+
+We only need to define a prototype (cluster centers)
+and a similarity measure compatible with (notion of
+a distance). \\
+
+For example, we can also use medians (coordinate-wise,
+that is, the median of an $N$ dimensional point
+is the point of coordinate-wise medians), along with 
+the 1-norm distance. This is less sensitive to
+outliers. \\
+
+Really for any metric space, with a distance function,
+we can define $K$-means clustering. \\
+Likewise there exists $K$-medoids. \\
+
+It is quite a challenge to generalize the shape
+of the clusters; each distance metric has a shape
+that is naturally easier to fit. \\
+
+Local consistency can however be used.
+We will first look at semi-supervised learning. \\
+
+\newpage
+
+\subsection*{Semi-Supervised Learning}
+
+Some of our data is labled, while a much larger part
+of it is unlabled.
+We have $n = n_L + n_U$. \\
+
+There are two steps. \\
+transductive learning; predicting the
+lavels of the unlabled data using the labled data. \\
+And the second step is SSL, where we construct the
+classifier using our entire dataset. \\
+
+For the transduction step:
+first we take the labled data points, build a classifier,
+and use it on the unlabled data, to give them labels;
+this is called self training. \\
+We apply this step only to the unlabled data
+the classifier is most confident about,
+making them labeled. \\
+We then repeat this step untill all points are labeled
+(each time we become more confident as we have
+more labeled data and better classifiers). \\
+
+The problems are that bad labels at the start ruin the
+whole of the learning process. \\
+We also need a way to measure confidence. \\
+
+\newpage
+
+\subsection*{Graph}
+
+So how can we improve clustering shapes
+in semi-supervised learning? \\
+
+Clustering assumption; if we can find a path from
+a point to another throigh a high density
+region (density of points), then these points
+must have the same label. \\
+
+Another asumption is the Manifold Assumption:
+Points that have the same label lie on the same manifold;
+seperate classes belong on seperate manifolds. \\
+
+We can combine both assumption: points that can be
+connected by a path through a high density region
+on the data manifold should have the same label. \\
+We can achieve this using a regularizer that prefers
+functions that vary very smoothly and do not vary in
+high density regions much (the label must be the same). \\
+
+In practice we don't have the data manifold. \\
+So we generate an approximation of the manifold
+and the density on it by building a graph of our
+points. \\
+
+A weighted graph is a triplet $(\vcal, \ecal, w)$,
+which represent the points, edges, and the weights
+on the edges. \\
+
+The datapoints are going to be our graph points $\vscr$. \\
+
+We will call kNN($x_i$) the $k$ least dissimilar
+points to $x_i$ ($k$ nearest neighbors). \\
+
+We connect point $x_i$ to $x_j$ if $x_j \in 
+\text{kNN}(x_i)$.
+Same for $x_j$ and $x_i$. \\
+We can reuire one at least, or both, to create
+an edge. These are called mutual and symmetric. \\
+
+We can also use an epsilon-graph, where
+we connect points if the dissimilarity measure
+$d$ is smaller than some $\eps$. \\
+
+So now that we have the points and edges, we need
+the weights. What weights to use when two points
+$x_j$ and $x_i$ connect? \\
+
+One idea is Gaussian weights, with a variance
+$\sigma^2$. \\
+There is the single-scale case and an adaptive
+scaling case. \\
+
+Now that we have a graph, we need a learning
+rule:
+\[ f: \vcal \to \ycal \]
+It takes in the datapoints, and outputs
+the correct labels, using the whole graph. \\
+
+The regularization we use is one that prefers smooth
+functions, and penalizes variance in high density
+regions. \\
+The dissimilarity measure used in the
+regularizer (like norm squared) is weighted by
+the edge weight between the two points
+$x_i$ and $x_j$ we are using the dissimilarity
+measure against. \\
+
+So our goal is to minimize the regularization
+term $\rcal(f)$, such that $f(x_i) = y_i$
+(if there is a label, that is,
+if $(x_i, y_i) \in S_L$). \\
+So we have a regularization and constraint. \\
+
+Then we apply transductive learning to
+the data, labeling unlabeled data, which in turn
+gives us the clusters we want.
+Recall that transduction is about labeling unlabeled
+data using a learning rule. \\
+
+There are two other strategies that use different
+regularizations and constraints. \\
+
+The regularization functions defines the graph
+laplacian $\Delta$. \\
+This will be useful when we move back to
+fully unsupervised learning. \\
+
+We can use that to define our regularization
+sum term we tried to minimize as $\ang{f, \Delta f}$. \\
+
+This is related to the laplacian of a function
+(sum of second derivatives $\nabla^2$, the trace
+of the Hessian matrix). \\
+
+We can see in the epsilon graph that the regularizer
+scales with teh gradient; meaning $f$ should not
+change the label when the gradient is large. \\
+the formula uses the density $p$ of the data. \\
+
+There is a normalized graph Laplacian $\tilde{\Delta}$,
+which is actually given by the third method we saw
+earlier. \\
+
+We then use the compact form of the regularization
+with the graph laplacians for all three methods. \\
+They all become quadratic minimizations. \\
+
+\end{document}

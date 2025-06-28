@@ -7,7 +7,7 @@
 
 \title{%
     \Huge Machine Learning \\
-    \Large Lecture XII
+    \Large Lecture XII, XIII
 }
 \date{2025-06-12}
 \author{Michael Saba}
@@ -321,9 +321,316 @@ used the span, so the other hilbert space must be
 larger, but we can show the gap between the two
 is 0, so they are the same Hilbert Space. \\
 
+Basically, the main steps of the
+constructive proof are:
+\begin{enumerate}
+    \item Construct the Hilbert Space
+    from the span of the kernel:
+    \[\ucal := 
+    \left\{ \sum_{i=1}^{m} \alpha_i k(x_i, \cdot) 
+    \,\middle|\, m \in \mathbb{N},\ x_i \in X,\ 
+    \alpha_i \in \mathbb{R},\ i = 1, \ldots, 
+    m \right\}\]
+    \item Define the inner product of the Hilbert
+    Space to be:
+    \[ \langle f, g \rangle_{\ucal} =
+    \sum_{i,j=1}^{m} \alpha_i \beta_j k(x_i, x_j) 
+    \FOR f = \sum_{i=1}^{m} \alpha_i 
+    k(x_i, \cdot)\AND g = \sum_{j=1}^{m} 
+    \beta_j k(x_j, \cdot) \]
+    \item Make sure everything is 
+    well-defined and compatible with completion.
+\end{enumerate}
 This construction gives us a nice Hilbert space,
 with functions that can be evaluated pointwise;
 note that all the functions are just combinations
 of the kernel at different points. \\
+
+\newpage
+
+\subsection*{More on RKHS}
+
+The main objective of kernels
+is that we can avoid having to define
+a feature map explicitely. \\
+
+As we mentioned in the last lecture,
+there is a unique RKHS associated with each
+kernel, which is a complet vector space
+of functions at pointwise defined points. \\
+This makes it very useful for us, and we
+will use the associated Hilbert Space
+as our hypothesis class. \\
+We can also use the norm of this
+Hilbert Space as our regularizer.
+It usually connects with the smootheness
+of $g$ directly, instead of the parameters
+$\theta$, which makes it very natural
+and suitable. \\
+
+So for a kernel $k$, we have the minimization problem:
+\[ \min_{g \in \hcal_k} \dfrac{1}{n}\sum_{i=1}^n 
+\ell(g(x_i), y_i) + \lambda \| g \|_{\hcal_k}^2 \]
+when trying to find a classifier $g$. \\
+
+Being able to minimize and optimize the smootheness
+of $g$ directly and not have to involve the parameters
+will be invaluable. \\
+
+But isn't the Hilbert Space huge? How
+can we optimize the above term?
+By the representer theorem, 
+the solution has to lie on an $n$-dimensional
+linear subspace of $\hcal_k$. \\
+
+We already showed how to construct a Hilbert Space
+given a kernel. \\
+But there exists an alternative characterization
+of RKHS. \\
+If $\hcal$ is a Hilbert Space from $\xcal$ to $\rbb$,
+then $\hcal$ is an RKHS if and only if all evaluation
+functionals $\delta_x: \hcal \to \rbb$, 
+$\delta_x(f) = f(x)$ are continuous. \\
+Equivalently, for all $x \in \xcal$,
+there exists an $M_x < \infty$ such that:
+\[ \forall f \in \hcal: \quad |f(x)| \leq 
+M_x\|f\|_{\hcal}  \]
+This implies that:
+\[ \forall x \in \xcal, 
+\quad \|f\|_{\hcal} = 0 \implies f(x) = 0 \]
+This show that if $\|f-g\|_{\hcal} = 0$,
+then $f(x) = g(x)$ for any $f, g \in \hcal$
+and $x \in \xcal$. This is what causes the RKHS
+to have pointwise defined functions. \\
+
+The same would not apply for the space of 
+square integrable functions $L_2(\xcal)$. \\
+
+\newpage
+
+\subsection*{The Representer Theorem}
+
+Since Hilbert Spaces are usually high dimensional,
+functions from $\hcal$ are in danger of overfitting.
+This is why we use the norm to regularize. \\
+For the regularization, we can use a wrapper
+around the norm:
+\[ \lambda \tilde{\rcal}(\|g\|^2_{\hcal_k}) \]
+which is monotonically increasing. \\
+
+The representer theorem tells us that the
+solution of:
+\[ \min_{g \in \hcal_k} \dfrac{1}{n}\sum_{i=1}^n 
+\ell(g(x_i), y_i) + \lambda 
+\tilde{\rcal}(\|g\|^2_{\hcal_k}) \]
+is on an $n$-dimensional subspace of $\hcal_k$,
+that is:
+\[ \hat{g}(x) = \sum_{i=1}^n \theta_i k(x_i, x) \]
+Here each $x_i$ is one of our training data inputs.
+Our solution is a linear combination of $n$
+kernels, for $n$ data points in our training data. \\ 
+
+We can then derive a new optimization problem,
+using the fact that:
+\[ g(x) = g_\theta(x) = 
+\sum_{i=1}^{n} \theta_i k(x_i, x) \]
+Which is:
+\[ \min_{\theta \in \mathbb{R}^n} \ \frac{1}{n} 
+\sum_{i=1}^{n} \ell\left( \sum_{j=1}^{n} 
+\theta_i k(x_i, x_j),\ y_i \right) + \lambda\, 
+\tilde{R} \left( \sum_{i,j=1}^{n} \theta_i 
+\theta_j k(x_i, x_j) \right) \]
+We can more compactly write this as:
+\[ \min_{\theta \in \mathbb{R}^n} \frac{1}{n} 
+\sum_{i=1}^{n} \ell((K\theta)_i, y_i) + \lambda\, 
+\tilde{R}(\langle \theta, K\theta \rangle) \]
+Where $K$ is the Gram matrix of the kernel $k$. \\
+
+Note that the representer theorem only applies 
+if we have 
+$\tilde{\rcal}: \rbb^+ \to \rbb^+$ 
+is strictly increasing. \\
+
+So while we have an infinite dimensional
+optimization problem,
+the solution is finite dimensional, 
+which alleviates the danger of overfitting. \\
+
+But how can we prove this result? \\
+We use the fact that in any Euclidian vector space, 
+including Hilbert spaces, 
+we can decompose each element into
+a part that lies on some $n$-dimensional
+subspace, and a part that is orthogonal to
+the subspace. \\
+
+So to prove the statement,
+we let:
+\[ G = \text{span}\{k(x_i, \cdot) 
+\mid i = 1, 2, \dots, n\}\] 
+be a finite dimensional subspace of a hilbert 
+space $\hcal$. \\
+We then take any $f \in \hcal$,
+and decompose it into:
+\[ f = f_0 + f_1 \]
+Where $f_0$ is on $G$, and $f_1$ is orthogonal
+to $G$. \\
+Here $f_0$ can be written as a linear combination
+of each kernel $k(x_i, \cdot)$ that span $G$. \\
+And we know that $\ang{f_1, g}_{\hcal} = 0$
+for any element of $g \in G$, which are 
+themselves just linear combinations of
+$k(x_i, \cdot)$. \\
+But, since $\hcal$ is a Repreoducing Kernel
+Hilbert space, this implies that:
+\[ f_1(x_i) = 0 \]
+Since $f_1(x_i) = \ang{f_1, k(x_i, \cdot)}_{\hcal}$,
+where $k(x_i, \cdot) \in G$. \\
+So instead of $\ell(f(x_i), y_i)$,
+we can just write $\ell(f_0(x_i), y_i)$,
+as the orthogonal part is just $0$. \\
+Now, $f_1$ will nonetheless be part of the $f$
+in the regularization term. 
+But, by the strict monotonicity of $\tilde{\rcal}$,
+we will see that $f_1$
+also becomes $0$:
+\[ \tilde{\rcal}(\|f\|^2_{\hcal})
+= \tilde{\rcal}(\|f_0\|^2_{\hcal}
++ \|f_1\|^2_{\hcal}
++ 2\ang{f_0, f_1)}_{\hcal}) \]
+The third term is $0$ as they are othrogonal,
+so we have:
+\[ \tilde{\rcal}(\|f_0\|^2_{\hcal}
++ \|f_1\|^2_{\hcal}) \]
+Our goal is to minimize the regularized
+empirical risk, but $f_1$
+does not appear in the loss term,
+only the regularizer, and the regularizer
+is strictly increasing, which means that
+it is always in our best interest
+to set $f_1$ to $0$
+when minimizing.
+We can't say the same for $f_0$,
+since it features in the loss $\ell$,
+so we can't say for sure that setting it to $0$
+would minimize the term as a whole. \\
+
+So our solution is always some $f_0$,
+which is in $G$, the finite dimensional subspace. \\
+The $\theta_i$ terms are used in the representation
+of $g$ as a linear combination of the kernels 
+in the $n$-dimensional subspace. \\
+
+We can use this to solve kernel least 
+squares, kernel logistic regression, kernel
+hard and soft SVM... \\
+
+\newpage
+
+\subsection*{Translation Invariant Kernels
+and the Fourrier Transform}
+
+The Guassian kernel can be used to linearlly seperate
+data that is not linearlly seperable in the input space,
+similar to a feature map, which can be hard to
+find. \\
+
+A translation invariant kernel is one that does
+not depend on the absolute positions of inputs $x$
+and $z$, but rather, on their relative position. \\
+That is to say, there exists a $k'$ function
+such that:
+\[ k(x, z) = k'(x - z) \]
+Notice that $k'$ returns the same measure of
+similarity as $k$, but only needs the difference
+between $x$ and $z$, implying that $k(x + a, z+a)$
+for any $a \in \rbb^d$ would yield the same
+result:
+\[ k(x + a, z+a) = k'(x+a - (z + a)) 
+= k'(x - z) = k(x, z) \]
+So, translation invariant kernels measure 
+relative properties instead of absolute ones. \\
+
+Translation invariant kernels can just be
+expressed as $k(x -z)$, with one input only,
+expected to be the difference. \\
+
+A Fourrier Transform is a way to represent a function
+using frequencies. \\
+One property we care about is that
+derivatives becomes multiples in the Fourrier domain;
+so derivatives are easier in teh Fourrier domain;
+we can then go back using the inverse Fourrier 
+Transform. \\
+
+So we have the fourrier transform,
+which takes our function and expresses it as
+a sum of frequencies:
+\[ \hat{f}(\omega) = \frac{1}{\sqrt{2\pi}} 
+\int_{\mathbb{R}} f(x)\, e^{-i x \omega} \, dx\] 
+Where $\hat{f}$ is the function in the Fourrier
+domain. \\
+And the inverse fourrier transform then
+transforms the function back to its original
+form, possibly after some modifications to it
+in the Fourrier domain:
+\[ f(x) = \frac{1}{\sqrt{2\pi}} \int_{\mathbb{R}} 
+\hat{f}(\omega)\, e^{i x \omega} \, d\omega\]
+This is used extensively in signal processing. \\
+
+One property we care about is that the
+Fourrier Transformed function $g(\omega)$
+can turn derivatives into multiplications:
+\[ \dd{g(x)}{x} = \frac{d}{dx} 
+\left( \frac{1}{\sqrt{2\pi}} 
+\int_{\mathbb{R}} \hat{g}(\omega)\, e^{i x \omega} 
+\, d\omega \right) = \frac{1}{\sqrt{2\pi}} 
+\int_{\mathbb{R}} i \omega\, \hat{g}(\omega)\, 
+e^{i x \omega} \, d\omega \]
+So the derivative of $g(x)$
+is $i\omega \hat{g}(\omega)$ in the Fourrier
+domain. \\
+
+Bochner's theorem tells us that a translation
+invariant kernel is positive definite
+if and only if it can be expressed
+as the inverse Fourrier transform of a
+positive, semmytric function $v(\omega)$:
+\[ k(x - z) = \frac{1}{\sqrt{2\pi}} 
+\int_{\mathbb{R}} v(\omega)\, 
+e^{-i (x - z)\omega} \, d\omega \]
+This gives us a way to define a translation
+invariant kernel using a poisitive summetric
+function $v(\omega)$. \\
+
+This also gives us that:
+\[ \|g\|_{\mathcal{H}_k}^2 = \frac{1}{2\pi} 
+\int_{\mathbb{R}} \frac{|\hat{g}(\omega)|^2}
+{v(\omega)} \, d\omega \]
+Which is how we can express the norm squared
+of a kernel given by $v(\omega)$. \\
+
+For example, using:
+\[ v(\omega) = \sigma e^{-\frac{\sigma^2 \omega^2}{2}} \]
+We get the kernel:
+\[ k(x - z) = e^{-\frac{(x - z)^2}{2\sigma^2}} \]
+With the norm:
+\[ \|g\|_{\mathcal{H}_k}^2 = \int_{\mathbb{R}} 
+\sum_{s=0}^{\infty} \frac{\sigma^{2s}}{s! \, 2^s} 
+\left( (\partial_x^s g)(x) \right)^2 \, dx \]
+Which is the Guassian kernel
+(written as a translation invariant kernel). \\
+
+\newpage
+
+\subsection*{Kernels on structured domains}
+
+We can define kernels on any set,
+not just $\rbb^d$. \\
+
+It can be quite hard to define
+a similairty measure on an unstructured set,
+with the intersection between two parts being one
+of the few. \\
 
 \end{document}

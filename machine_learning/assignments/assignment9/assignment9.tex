@@ -112,7 +112,7 @@
     derivative equal to $0$:
     We consider $3$ seperate cases:
     \begin{enumerate}[label = \numbers]
-        \item If $|\theta| < \eps$:
+        \item If $|\theta| \leq \eps$:
         \[ \partial_\theta 
         \brac{ \ang{\xi, \theta} - f(\theta)} \]
         \[ \partial_\theta \brac{ \ang{\xi, \theta} 
@@ -121,8 +121,9 @@
         Setting it equal to $0$:
         \[ \xi - \dfrac{\theta}{\eps} = 0 \]
         \[ \theta = \eps \xi \]
-        This is valid for all $|\theta| < \eps$,
-        meaning $|\xi| < \dfrac{1}{\eps}$.
+        This is valid for all $|\theta| \leq \eps$,
+        meaning $|\eps\xi| \leq \eps$,
+        meaning that $|\xi| \leq 1$.
         \item If $\theta > \eps$,
         notice that the function becomes linear,
         with a constant derivative:
@@ -134,12 +135,12 @@
         This means that the function will
         only have a maximum
         on this interval if the linear function
-        was decreasing, which gives us a maximum
-        at the boundary $\theta = \eps$.
+        was increasing, which gives us a maximum
+        which we can reach at infinity $\theta = \infty$.
         This happens if
-        the derivative is negative,
-        that is, if $\xi - 1 < 0$,
-        that is $\xi < 1$. \\
+        the derivative is positive,
+        that is, if $\xi - 1 > 0$,
+        that is $\xi > 1$. \\
         \item If $\theta < -\eps$,
         notice that the function becomes linear,
         with a constant derivative:
@@ -151,32 +152,29 @@
         This means that the function will
         only have a maximum
         on this interval if the linear function
-        was increasing, which gives us a maximum
-        at the boundary $\theta = -\eps$.
+        was decreasing, which gives us a maximum
+        at minus infinity $\theta = -\infty$.
         This happens if
-        the derivative is positive,
-        that is, if $\xi + 1 > 0$,
-        that is $\xi > -1$. \\
+        the derivative is negative,
+        that is, if $\xi + 1 < 0$,
+        that is $\xi < -1$. \\
     \end{enumerate}
     So, we have:
     \[ \theta^* = \piecewise{
-        \eps \xi \quad &\IF |\xi| < \dfrac{1}{\eps} \\
-        \eps \quad &\ELSE \IF \xi < 1 \\
-        -\eps \quad &\ELSE \IF \xi > -1 \\
+        \eps \xi \quad &\IF |\xi| \leq 1 \\
+        \infty \quad &\ELSE \IF \xi > 1 \\
+        -\infty \quad &\ELSE \IF \xi < -1 \\
     } \]
     So replacing that into the conjuagte, we get:
     \[ f^*(\xi) = \piecewise{
         \ang{\xi, \eps\xi} - \dfrac{\eps^2\|\xi\|^2}{2\eps}
         = \dfrac{\eps\|\xi\|^2}{2} 
-        \quad &\IF |\xi| < \dfrac{1}{\eps} \vs{10} \\
-        \ang{\xi, \eps\xi} - \eps + \dfrac{\eps}{2} 
-        = \eps\|\xi\|^2 - \dfrac{\eps}{2} 
-        \quad &\ELSE \IF \xi < 1  \vs{10}\\
-        \ang{\xi, \eps\xi} - \eps + \dfrac{\eps}{2} 
-        = \eps\|\xi\|^2 - \dfrac{\eps}{2}
-        \quad &\ELSE \IF \xi > -1 \\
+        \quad &\IF |\xi| \leq 1 \\
+        \infty \IF |\xi| > 1
     } \]
-    Not sure why this is different. \\
+    Which we can write as:
+    \[\dfrac{\eps}{2}\|\xi\|^2 + \delta_{B_1(0)}(\xi) \]
+    Where $B_1(0) = \|\cdot\|_2 \leq 1$.
     \item 
     Usually, when we want to optimize a regularized
     empirical risk, we use proximal gradient descent,
@@ -184,11 +182,27 @@
     regularization term. But in this case, the Huber
     function is not prox-friendly. This is different
     from its dual:
-    \[ f^*(\xi) = \frac{\epsilon}{2} \|\xi\|^2 
+    \[ f^*(\xi) = \frac{\eps}{2} \|\xi\|^2 
     + \delta_{B_1(0)}(\xi)\]
     Which has a simple proximal mapping (a projection
     onto the unit sphere). 
 \end{enumerate}
+
+\colorText{red}{
+    \subsection*{Correction}
+    
+    \begin{enumerate}[label = \letters]
+        \item 
+        \item She did a special case for $|\theta| = 1$,
+        but I included it in the first case 
+        $|\theta| \leq 1$, which we can do.
+        \item We should probably say that it is
+        useful for regularization as it
+        imposes certain restrictipns on the
+        term $\xi$, by constraining it to the unit ball
+        (the second term).
+    \end{enumerate}
+}
 
 \newpage
 
@@ -237,7 +251,7 @@ We can plug this optimal $t$ back into
 the formula to get the supremum:
 \[ \tilde{\ell}^*(s)
 = \ang{s, \log\para{\dfrac{-1 - s}{s}}}
-- \log\para{1+\log\para{\dfrac{-1 - s}{s}}} \]
+- \log\para{1+ \dfrac{-1 - s}{s}} \]
 This is only valid, or finite, for:
 \[ \dfrac{-1 - s}{s} > 0 \]
 We now need to multiply both sides by $s$,
@@ -260,6 +274,13 @@ So we have the interval:
 \[ s \in (-1, 0) \]
 So that is the domain where it is finite. \\
 
+
+\colorText{red}{
+    We can just mention that outisde the range
+    $(-1, 0)$, $\tilde{\ell}^*(s)$ becomes infinity.
+}
+
+
 \newpage
 
 \subsection*{Ex 3}
@@ -270,20 +291,8 @@ will show that $k'(x, y)$ is also positive definite:
     \item 
     For $k'(x, y) = \sum_{r=0}^\infty
     \alpha_r k(x, y)^r$ where $\alpha_r \geq 0$: \\
-    First we will prove that the kernel $k(x, y)^r$
-    for any positive integer $r$, is also positive 
-    definite. If two matrices are positive semi-definite,
-    then their entrywise product is also positive
-    semi-definite. So the Gram matrix of $k(x, y)^r$,
-    which is the elementwise power of
-    $k(x, y)$'s Gram matrix, must be positive semi-definite,
-    making $k(x, y)$ positive definite. \\
-    Now, We know that for some arbitrary vectors $x$
-    and $c$,
-    the following sum is positive:
-    \[ \sum_{j = 1}^m\sum_{i=1}^m c_ic_j k(x_i, x_j) \]
-    Now for $k'$, the sum looks like:
-    \[ \sum_{j = 1}^m\sum_{i=1}^m c_ic_j k(x_i, x_j)
+    The sum looks like:
+    \[ \sum_{j = 1}^m\sum_{i=1}^m c_ic_j k'(x_i, x_j)
     = \sum_{j = 1}^m\sum_{i=1}^m c_ic_j 
     \brac{\sum_{r=0}^\infty \alpha_r k(x_i, x_j)^r} \]
     Which we can rewrite as:
@@ -292,12 +301,81 @@ will show that $k'(x, y)$ is also positive definite:
     \[ \sum_{r=0}^\infty \alpha_r \brac{
      \sum_{j = 1}^m\sum_{i=1}^m
     \brac{ c_ic_j k(x_i, x_j)^r}} \]
-    Since the inner sum is positive,
-    as $k(x, y)^r$ is positive definite, and
-    the outer sum has positive weights, this remains
-    positive.
+    The inner sum is non-negative since the pointwise
+    multiple of two positive definite kernels is
+    a positive deinite kenrel, so
+    $k(x, y)^r$ is positive definite. And
+    the outer sum has positive weights, 
+    so the entire term is non-negative.
     So $k'(x, y)$ is positive definite. \\
     \item 
+    We have:
+    \[ k'(x, y) =  e^{-\lambda(k(x, x) + k(y, y) 
+    - 2k(x, y))} \]
+    So it will have a gram matrix:
+    \[ K_{ij} = \exp\para{-\lambda(k(x_i, x_i) 
+    + k(x_j, x_j) - 2k(x_i, x_j))} \]
+    \[ K_{ij} = e^{\para{-\lambda k(x_i, x_i)}}
+    e^{\para{-\lambda k(x_j, x_j)}}
+    e^{\para{2\lambda k(x_i, x_j)}} \]
+    So the matrix can be written
+    as the product of two diagonal matrices
+    and a matrix:
+    \[ K = \diag\para{e^{\para{-\lambda k(x_i, x_i)}}} 
+    \cdot M \cdot
+    \diag\para{e^{\para{-\lambda k(x_j, x_j)}}} \]
+    Where:
+    \[ M_{ij} = \exp\para{2\lambda k(x_i, x_j)} \]
+    We know that the kernel $k$ is positive
+    definite, and we know that:
+    \[ e^{2\lambda k(x, y)}
+    = \sum_{i=1}^{\infty} \dfrac{(2\lambda)^i}{i!}k(x, y)^i \]
+    must also be a positive definite kernel,
+    which we proved in part a),
+    so $M$ is a positive semi-definite matrix. \\
+    Finally, note that we have:
+    \[ K = DMD \]
+    where $D$ is diagonal, which means that:
+    \[ w^TDMDw = w^TD^TMDw = (Dw)^TM(Dw)  \]
+    Since $M$ is positive semi-definite, the
+    above expression must be positive, so
+    $DMD$ is also positive semi-definite. 
+    This means that $k'$ is a positive definite 
+    kernel. \\
+    \item 
+    For the Guassian kernel:
+    \[ k'(x, y) = e^{-\dfrac{\|x - y\|^2}{2\sigma}} \]
+    We can just say that this is a special case
+    of part $b$ where $k(x, y) = \ang{x, y} = x^Ty$
+    and $\lambda = -\dfrac{1}{2\sigma}$.
+    We know that $k$ is a positive definite
+    kernel since its Gram matrix can be written
+    as $X^TX$. \\
 \end{enumerate}
+
+\colorText{red}{
+    \begin{enumerate}[label = \letters]
+        \item 
+        We can combine the fact that
+        the finite sum, positive scaling,
+        pointwise product, and pointwise limit
+        to infinity of positive definite kernels
+        leads to a positive definite kernel.
+        We use all four properties. \\
+        What I wrote was correct, but for an easier
+        time we can just use the properties from
+        the slides.
+        \item 
+        She didn't mention anything regarding
+        the exponetial terms with just $x$
+        and $y$, and how they turn into diagonal
+        matrices. \\ 
+        Instead, she used the fact that
+        $f(x)f(z)k(x, z)$ is a positive definite
+        kernel if $k(x, z)$ is positive definite,
+        and if $f: \xcal \to \rcal$.
+        \item
+    \end{enumerate}
+}
 
 \end{document}
