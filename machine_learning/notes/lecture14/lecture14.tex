@@ -1,0 +1,272 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture XVI
+}
+\date{2025-06-30}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Principal Component Analysis}
+\subsection*{Principal Component Analysis}
+
+Dimensionality reduction, like clustering, is
+a learning technqiue used in order to
+discover the intrinsic structure of the data. \\
+
+Dimensionality reduction is abotu constructing a map:
+\[ \psi: \xcal \to \rbb^m \]
+where $m$ is a much smaller dimension than that of $\xcal$,
+the inputs. \\
+The mapping should preserve the structure of the data,
+that is, distances and relationships. \\
+
+The point behind doing that is data compression;
+it makes the machine learning process converge faster,
+when the dimension is lower. \\
+
+One method we've already seen that does dimensionality
+reduction, in the supervised learning paradigm,
+is Linear Discriminant Analysis, or LDA. \\
+It projects the data onto a low-dimensional subspace
+where the data is seperated. \\
+
+However, in unsupervised learning, we use different
+techniques to reduce the dimensionality of the data.
+One such method is Principal Component Anlysis. \\
+
+Suppose we have a dataset:
+\[ S = \{ x_1, x_2, \dots, x_n \} \]
+Which have a dimension of $d_x$. \\
+Our goal is to approximate $S$ in an affine subspace
+$\ucal$ of dimension $m$ with a basis:
+\[ \{ u_1, u_2, \dots, u_m \} \]
+Where each vector $u_i \in \rbb^{d_x}$. \\
+We then define the matrix:
+\[ X = (x_1, x_2, \dots x_n) \in \rbb^{d_x \times n} \]
+And the matrix:
+\[ U = (u_1, u_2, \dots u_m) \in \rbb^{d_x \times m} \]
+Which is orthogonal as $U^TU = I$. \\
+Points on $\ucal$ are expressed as linear combinations
+of the basis vectors $u_i$: $U\alpha$,
+where $\alpha$ is a coefficient vector
+(the point expressed in the basis $U$). \\
+We want to express all the points $x_i$ in the
+linear subspace $\ucal$; so we will find the closest
+point $\alpha$ in $\ucal$ to $x_i$ (project),
+where $\alpha$ is an $m$-dimensional point. \\
+We then collect all these points in a matrix
+$A \in \rbb^{m \times n}$. \\
+
+This yields an optimization problem
+where we want to minimize the distance between our
+original points and each point $\alpha$ in $\ucal$,
+in order to get the projections we want:
+\[ \min_{U, A} \frac{1}{n} \| X - UA \|_F^2 \quad 
+\text{ such that } \quad U^\top U = I \]
+Where $\|.\|^2_F$ is the Euclidian norm extended to
+matrices:
+\[ \|X\|^2_F = \tr(X^TX) = \sum_{i=1}^n \|x_i\|^2 \]
+It's just the sum of the column norms squared. \\
+
+Now, this optimization problem is not convex;
+however, if we fix one of the variables, $U$ 
+it does become convex in the other problem $A$. \\
+This is easy to see; when $U$ is fixed, we
+just have the minimum of a quadratic. \\
+The solution is $A = U^TX$. \\
+
+So we have:
+\[ UA = UU^TX \]
+Where $UA$ is the projection of the data points onto
+$\ucal$, as expected. \\
+
+We can now substiute the optimal $UA$ into the
+problem:
+\[ \min_{U} \frac{1}{n} \| X - UU^TX \|_F^2 \quad 
+\text{ such that } \quad U^\top U = I \]
+We now just have a minimization problem in terms of $U$. \\
+We can rewrite:
+\multiline{
+|X - UU^\top X\|_F^2 &= \|(I - UU^\top)X\|_F^2 = 
+\tr\left(X^\top (I - UU^\top)^\top (I - UU^\top) X\right) \\
+&= \|X\|_F^2 - \operatorname{tr}
+\left(X^\top UU^\top X\right)
+}
+Which comes from the fact that:
+\[ (I - UU^T)^2 = I - UU^T \]
+So now we have:
+\[ \min_{U} \|X\|_F^2 - \operatorname{tr}
+\left(X^\top UU^\top X\right) \quad 
+\text{ such that } \quad U^\top U = I \]
+Which is equivalent to:
+\[ \max_{U} \dfrac{1}{n}\tr\para{U^TXX^TU} \quad 
+\text{ such that } \quad U^\top U = I \]
+Which is solved by finding $U$ to be th eigenvectors
+of the largest $m$ eigenvalues of:
+\[ \hat{\Sigma} = \frac{1}{n} XX^T \]
+These eigenvectors are the principal components. \\
+
+\newpage
+
+
+\subsection*{Kernel PCA}
+
+Given a positive definite kernel:
+\[ k: \xcal \times \xcal \to \rbb \]
+We know kernels induce a feature map:
+\[ \varphi: \xcal \to \hcal_k \]
+So to perform PCA when using kernels,
+we perform it in the Hilbert space $\hcal_k$. \\
+
+This can be tricky, since $\hcal_k$
+is a space of functions. \\
+How can we define eigenvectors? How many
+components are there (what are dimensions in the
+Hilbert space)? \\
+
+We know in regular PCA, the eigenvectors $u$
+are in the linear subsbspace $\ucal$, and solve:
+\[  \hat{\Sigma} u = \lambda u \iff
+XX^T u = n \lambda u \iff
+\sum_{i = 1}^n (x_i^Tu)x_i = n \lambda u \]
+Here we know that the eigenvectors $u$ lie in the
+span of the points (since $\ucal$ is a subspace 
+of $\xcal$). \\ 
+We want to adapt that to kernels. \\
+
+Using the feature map:
+\[ \varphi: \xcal \to \hcal_k \]
+We now have:
+\[ \hat{\Sigma}_\varphi =  \sum_{i = 1}^n \varphi(x_i)
+\varphi(x_i)^T \]
+Where all we did was replace $x$ by its feature map. \\
+This yields the eigenvector problem:
+\[ \sum_{i=1}^n \langle \varphi(x_i), 
+u \rangle_{\mathcal{H}_k} \, \varphi(x_i) = n\lambda u \]
+Since the eigenvectors $u$ lie in the
+span of the points, which are mapped with
+$\varphi$ here, we know that $u$ is in the space of 
+$\varphi(x_i)$ for all points $x_i$. \\
+So:
+\[ u = \sum_{i = 1}^n \beta_i\varphi(x_i) \]
+For some vector of coefficients $\beta \in \rbb^n$. \\
+
+\colorText{red}{SEE SLIDES 13 and 14 WHERE WE SOLVE THIS.\\}
+
+We end up with:
+\[ K^TK \beta = n \lambda K^T \beta \]
+Where $K$ is the gram matrix of the kernel $k$.
+Here $\beta$ gives us $u$
+(the coefficients of the sum of points). \\
+
+So we have a generalized eigenvectors problem
+with a matrix $K^TK$.
+Notice that the format is very similar to 
+regular PCA, which had $X$ instead. \\
+It is solvable with numeric solvers. \\
+
+If $K$ is positive-definite (not just positive 
+semi-definite), $K$ is invertible. \\
+If we assume that is the case, this reduces to:
+\[ K \beta = n\lambda \beta \]
+Which is solvable analytically. \\
+Note that we only need $m$ eigenvectors, the
+first $m$ terms
+
+The $u$ vectors we get are our principal components. \\
+
+One main advantage here is that it fits the points
+$\varphi(x_i)$ to a linear subspace $\ucal$ in the
+feature space. But since $\varphi$
+may not be linear, $\ucal$
+will not linear in the input space. \\
+So we are projecting the points $x_i$ to a non-linear
+subspace of a lower dimension. \\
+
+\newpage
+
+\subsection*{Laplacian Eigenmap}
+
+Recall that Variant-II spectral clustering does
+dimensionality reduction on the vertices:
+\[ \varphi: \vcal \to \rbb^k \]
+This is just a type of dimensionality reduction. \\
+
+In fact, we can show that this is Kernel-PCA with
+a special kernel. \\
+
+\newpage
+
+\subsection*{Generalizing PCA}
+
+Problems of PCA include the fact that it can only
+fit linear structures, is sensitive to outliers,
+depends on the scaling of variables. \\
+These can be alleviated by normalizing the features,
+centering the data at the origin by shifting it
+so that the mean is at $0$. \\
+
+So we introduce Robust-PCA. \\
+
+In standard PCA, we have an objective:
+\[ \min_{U, A} \| X - UA \|_F^2 \quad 
+\text{ such that } \quad U^\top U = I \]
+We instead see k some $Z \in \rbb^{d_x \times n}$ 
+such that:
+\[ \min_Z \|X - Z\|^2_F \quad \text{ such that }
+\quad \text{rank}(Z) \leq m \]
+The solution of this objective is given by:
+\[Z = \sum_{i=1}^m \sigma_i u_iv_i^T \]
+Where $u_i$ and $v_i$ are left and right singular
+vectors. \\
+
+Now, in Robust-PCA, we have $Z$ and $S$,
+where:
+\[ X = Z + S \]
+We assume that $Z$ has low rank, and $S$
+can have a large magnitude, but has a sparse support
+($S$ is the error of $Z$ in approximating $UA$). \\
+This gives us the objective:
+\[ \min_{Z, S} \|Z\|_* + \lambda \|S\|_1 \]
+The one norm $\|S\|_1$ ensures sparsity
+(sum of absolute values),
+and the nuclear norm $\|Z\|_*$
+is just the sum of singular vectors,
+which is the result we derived earlier. \\
+
+We can solve $\ell_2$ squared error penalized
+Robust-PCA using a proximal-gradient method, 
+with a smooth part and non-smooth, but prox-friendly
+and convex part:
+\[ \min_{Z, S} 
+\underbrace{\| X - Z - S \|^2_F}_{L-\text{smooth}} \; + \; 
+\underbrace{\rho \|Z\|_* 
++ \lambda \|S\|_1}_{\text{prox-friendly}} \]
+Where $\rho, \lambda > 0$. \\ 
+
+Another way to generalize this is using matrix 
+factorization. We can write:
+\[ \min_{U, A} \frac{1}{n} \| X - UA \|_F^2 
++ \lambda \rcal(U, A) \]
+Where the orthogonality condition is handled by 
+regularization. \\
+
+We can interpret this as dictionary learning. \\
+
+\newpage
+
+
+\end{document}
