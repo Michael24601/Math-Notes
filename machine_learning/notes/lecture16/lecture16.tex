@@ -1,0 +1,312 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture XVIII
+}
+\date{2025-07-07}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Deep Learning}
+\subsection*{Activation Functions}
+
+There are multiple activation functions we can
+use to output a number at each layer's neurons:
+\[ a_{l} = \sigma_l(z_{l}) \]
+Here $\sigma_l$ is the activation function 
+on layer $l$. \\
+
+The first one is the Sigmoid function:
+\[ \sigma(x) = \dfrac{1}{1 + e^{-x}} \]
+Which squashes the output into the $[0, 1]$
+range. \\
+The issue with it is that saturated neurons kill
+the gradient, the output is not $0$ centered,
+and the exponential is expensive to compute. \\
+
+Then there is the tangent hyperbolic function:
+\[ \sigma(x) = \tanh(x) \]
+Which squashes the output into the $[-1, 1]$
+range. \\
+This still has the issue that saturated neurons kill
+the gradient, but the output is $0$ centered. \\
+
+The Rectified Linear Unit (ReLu) function:
+\[ \sigma(x) = \max(0, x) \]
+This function does not saturate for $x \in \rbb^+$. \\
+It is very efficient to compute and converges quite
+fast, but it is also no zero centered, 
+and not differentiable at $x = 0$,
+since $\sigma'(0; -1) = 0$ and $\sigma'(0; +1) = 1$. \\
+
+The Leaky ReLU function:
+\[ \sigma(x) = \max(0.01x, x) \]
+This function does not saturate for any $x$. \\
+It is vert efficient to compute and converges quite
+fast, but it is also no zero centered, 
+and not differentiable at $x = 0$,
+since $\sigma'(0; -1) \neq \sigma'(0; +1)$. \\
+Note that we can have any coefficient $\alpha x$;
+we then call the activation function
+Parametric Rectifier Liner Unit (PReLU).
+Here $\alpha$ becomes another parameter that we can
+optimize. \\
+
+The Exponential Linear Unit (ELU) function:
+\[ \sigma(x) = \piecewise{
+    x \qquad & \IF x > 0 \\
+    \alpha (e^{x}-1) \qquad & \IF x \leq 0 
+} \]
+It has all the benefis of ReLU,
+but adds robustness to noise. \\
+The main issue is that again, the computation
+of the exponential is expensive. \\
+
+There is also the MaxOut activation function which
+we will see in the section about Convolutional
+Neural Networks. \\
+
+
+\newpage
+
+\subsection*{Convolutional Neural Networks}
+
+Convolutional Neural Networks, or CNNs,
+are similar to Neural Networks, but are specialized
+for image data. \\
+
+Images are highly dimensional, which makes
+the fully connected layers of the Neural Networks
+(recall that the outputs of each neuron are
+the onputs of each neuron in the next layer)
+very inefficient. \\
+
+CNNs solve this issue not being fully connected;
+some layers of the CNNs has small receptive fields;
+meaning that the neurons take as input the outputs
+of only a few neurons from the previous layer,
+corresponding to pixels in some region in tghe image. \\
+Receptive field just means that neurons are affected
+by the pixels of a local region. \\
+Moreover there is weight sharing; meaning all neurons
+in the layer share weights and biases. \\
+These layers, called convolutions, are far
+more efficient, and specialized, for learning
+with images. \\
+
+A kernel is filter, used to choose
+which neuron outputs (pixels in the image)
+are used as inputs for some neuron in the next layer. \\
+The kernel is like a mask with weights;
+image for example this $3\times3$ kernel:
+\[ \begin{array}{|c|c|c|}
+\hline
+w_{-1,-1} & w_{-1,0} & w_{-1,1} \\
+\hline
+w_{0,-1} & w_{0,0} & w_{0,1} \\
+\hline
+w_{1,-1} & w_{1,0} & w_{1,1} \\
+\hline
+\end{array} \]
+It only takes $9$ pixels as inputs,
+and applies the weights specified by the kernel.
+The same kernel is used by other neurons in the
+layer. \\
+
+For the $3 \times 3$ kernel, the computed 
+value $z_{ij}$ in the layer $l$
+will only depends on the $9$ values of pixels
+in some region. \\
+This is done by shifting the kernel along pixels
+by the output indexes $i, j$:
+\[ z_{ij} = \sum_{p=-1}^1\sum_{q=-1}^1 w_{p,q}
+x_{i+1+p, j+1+q} = \ang{w, x_{i+1, j+1}} \]
+Here the output layer is also a grid of pixels,
+each corresponding to a neuron,
+but smaller. \\
+We are just sliding the kernel on the image;
+note that because the radius of the kernel
+is $1$ ($1$ pixel off the center),
+so if we have a $10 \times 10$ input image,
+the next layer will be $8 \times 8$
+since we can't do the convolution step
+to the edge pixels. \\
+
+There are multiple types of filters we can
+apply, identified by their size and weigths. \\
+\begin{enumerate}[label = \numbers]
+    \item 
+    The identity kernel:
+    \[ \begin{array}{|c|c|c|} \hline
+    0 & 0 & 0 \\ \hline
+    0 & 1 & 0 \\ \hline
+    0 & 0 & 0 \\ \hline
+    \end{array} \]
+    This keeps the image intact (but removed
+    the edge pixels as discussed before).
+    \item 
+    The $5\times 5$ Blur kernel:
+    \[ \begin{array}{|c|c|c|c|c|} \hline
+    0 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 1 & 1 & 1 & 0 \\ \hline
+    0 & 1 & 1 & 1 & 0 \\ \hline
+    0 & 1 & 1 & 1 & 0 \\ \hline
+    0 & 0 & 0 & 0 & 0 \\ \hline
+    \end{array} \]
+    This just blurs the image by averaging values;
+    note that we need to normalize the weights
+    (divide by $9$),
+    otherwise it becomes brighter.
+    \item 
+    The $5\times 5$ Sharpening kernel:
+    \[ \begin{array}{|c|c|c|c|c|} \hline
+    0 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 0 & -1 & 0 & 0 \\ \hline
+    0 & -1 & 5 & -1 & 0 \\ \hline
+    0 & 0 & -1 & 0 & 0 \\ \hline
+    0 & 0 & 0 & 0 & 0 \\ \hline
+    \end{array} \]
+    Which does the opposite of a blur.
+    \item 
+    The vertical edge-detecting kernel:
+    \[ \begin{array}{|c|c|c|} \hline
+    0 & 0 & 0 \\ \hline
+    -1 & 1 & 0 \\ \hline
+    0 & 0 & 0 \\ \hline
+    \end{array} \]
+    \item 
+    The all edge-detecting kernel:
+    \[ \begin{array}{|c|c|c|} \hline
+    0 & 1 & 0 \\ \hline
+    1 & -4 & 1 \\ \hline
+    0 & 1 & 0 \\ \hline
+    \end{array} \]
+\end{enumerate}
+There are more. \\
+
+Note that a $32 \times 32$ image is actually
+$32 \times 32 \times 3$ dimensional since we
+actually have $3$ color channels. \\
+Same for kernels. \\ 
+
+Sliding the kernel over the image and computing
+the dot products is convolution. \\
+
+In a CNN, we perform convolution on some layers,
+and combine them with an activation function
+layers (where we just apply the actiavtion function
+to the output)... \\
+We will also later see Max-Pooling layers. \\
+
+To prevent the issue of kernels removing the edge
+pixles, we can pad the image with $0$s around it. \\
+This prevents the loss of edge pixels;
+There are other boundary conditions we can use,
+such as reflecting boundaries. \\
+We can pad with as many pixels as needed
+(the larger the filter the more pixels are needed). \\
+
+Sometimes we actually want to reduce the dimension
+of the image, so we don't have to pad the edges. \\
+Likewise, if we want to reduce the dimension,
+we can increase the stride; that means that
+instead of shifting the kernel filter by $1$
+pixel, we can shift it by more pixels. \\
+
+A $2\times 2$ Max-Pooling filter with a $2$ stride
+will essentially take $4$ squares of $4$ pixels,
+that is, an $4 \times 4$ square of pixels,
+and then turn it into a $2 \times 2$
+square where we choose the largest value
+from each $2 \times 2$ square. \\
+
+Pooling layers are used, similarly to
+convolution layers, but don't require an activation
+layer afterwards. \\
+
+We can imagine CNNs taking as input an array of pixels,
+lowering the dimensionality such that the neurons
+represent mid-level features (shapes, edges, ...),
+then lowering the dinension again such that
+we now have high level features (faces,
+objects, ...), and then finally outputting
+a prediction in the final layer. \\
+Each layer aggregates the previous layer's data
+into higher abstraction feature levels,
+which are more complex, but also fewer;
+allowing each layer to need to do less work. \\
+
+This is what the kernel filters are doing;
+taking pixels in a region and aggregating the
+information, so that we now have higher-level
+features;
+a combination of pixels gives us edges and
+simple shapes, a combination of shapes gives
+us objects, organs, faces... \\
+
+\newpage
+
+\subsection*{Additional Discussions}
+
+Unlike parameters, which are optimized in the
+process of applying a machine learning algorithm,
+hyperparameters have to be fine tuned
+empiricially. \\
+This includes things like the learning rate,
+choice of layers... \\
+
+If the dataset is too small, finetuning
+is likely to lead to overfitting,
+causing the neural network to generalize
+poorly to new unseen data. \\
+One way to fix this is to stop finetuning early,
+and leaving some hyperparameters fixed. \\
+
+Cross-dataset generalization can also be used
+to check the overfitting of neural networks. \\
+If the accuracy of tests on the training data
+gets better and better, but that improvement does
+not translate to testing data, it is a good sign
+overfitting has taken place. \\
+
+If the network overfits, we can decrease the number
+of parameters, increase the number of training samples,
+synthetically create new samples, and perfom 
+data augmentation, which can be used to add variance
+into the data. \\
+For example, we can rotate some of our image,
+which allows the neural network to learn rotation
+invariance, which allows it to generalize better. \\
+Other transformation include scaling, brightening,
+blurring, and deforming the data. \\
+
+Note that the transformations that can be used
+depend on the task; if we want our network to
+differentiate between red and green apples,
+we can't shift colors in the hopes the network
+becomes color invariant. \\
+
+We can also try regularization,
+such as Weight decay, for each layer, which
+penalizes the value of the weights. \\
+Weight decay is the sum of the norm squared
+of the weights $\theta_i$. \\
+
+We can also use dropout, where we probabilistically
+remove some nodes from the network. 
+It is a type of regularization. \\
+
+
+\end{document}

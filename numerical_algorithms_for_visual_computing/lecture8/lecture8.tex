@@ -37,35 +37,38 @@ in the outgoing direction $\omega_o$:
 = L_{e}(x, \omega_o)
 + \int_\Omega L_{i}(x, \omega_i) \cdot
 f(x, \omega_i, \omega_o) \cdot
-(\omega_i \cdot n) \; d\omega_i \]
+(\omega_i \cdot n(x)) \; d\omega_i \]
 Here, the outgoing radiance is the emitted light
 (if the point is a source of light)
 plus the light reflected at that point (from other
 light sources). \\
 
 So $L_{e}(x, \omega_o)$ is the emitted light 
-from point $0$ in direction $\omega_o$. \\
-It is $0$ on a non-light source, an non-zero
-on a light source.
+from point $x$ in direction $\omega_o$. \\
+It is $0$ on a non-light source, and non-zero
+on a light source. \\
  
 On the other hand, the integral:
 \[ \int_\Omega L_{i}(x, \omega_i) \cdot
 f(x, \omega_i, \omega_o) \cdot
-(\omega_i \cdot n) \; d\omega_i \]
+(\omega_i \cdot n(x)) \; d\omega_i \]
 integrates over all incoming rays of light
 of direction $\omega_i$ into point $x$.
 Here $\Omega$ is the hemisphere above $x$. \\
+
 So $L_{i}(x, \omega_i)$ is the incoming ray
 of light in direction $-\omega_i$. \\
+
 And $f(x, \omega_i, \omega_o)$ is the BRDF, 
 which is the amount of light from direction $\omega_i$
 that gets reflected in direction $\omega_o$
 at point $x$.
 This will depend on the material that $x$ is made of. \\
+
 Finally, $\omega_i \cdot n$ is the dot product,
-which basically gives us the angle $\theta$
+which basically gives us the cosine of the angle $\theta$
 between the incoming light direction and the normal
-$n$ at $x$, which scales how much light is reflected
+$n(x)$ at $x$, which scales how much light is reflected
 (Lambert's cosine law).
 It's the cosine of the angle because we 
 assume both directions $n$ and $\omega_i$
@@ -579,6 +582,8 @@ we would get:
 \[ L_o = L_e + T( L_e + T( L_e + T (L_e + \dots))) \]
 \[ L_o = L_e + TL_e + T^2L_e + T^3L_e \dots \]
 Which is the Neumann series we derived earlier. \\
+
+
 
 \newpage
 

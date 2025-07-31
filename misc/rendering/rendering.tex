@@ -1,0 +1,586 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Ray Tracing
+}
+\date{2025-07-29}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{The Rendering Equation}
+
+The rendering equation calculates the amount of
+outgoing radiance or light from a point $x$
+in the outgoing direction $\omega_o$:
+\[ L_{o}(x, \omega_o)
+= L_{e}(x, \omega_o)
++ \int_\Omega L_{i}(x, \omega_i) \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\omega_i \]
+Here, the outgoing radiance is the emitted light
+(if the point is a source of light)
+plus the light reflected at that point (from other
+light sources). \\
+
+When a ray of light in direction $\omega_i$
+hits a point $x$, it will be reflected in all 
+outgoing directions $w_o$. \\
+Likewise, the outgoing reflected ray of light in
+direction $\omega_o$ is the result of many incoming
+rays of light that hit $x$ and get reflected. \\
+
+Here, $L_{e}(x, \omega_o)$ is the emitted light 
+from point $x$ in direction $\omega_o$. \\
+It is $0$ on a non-light source, and non-zero
+on a light source. \\
+ 
+On the other hand, the integral:
+\[ \int_\Omega L_{i}(x, \omega_i) \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n(x)) \; d\omega_i \]
+integrates over all incoming rays of light
+of direction $\omega_i$ into point $x$.
+Here $\Omega$ is the hemisphere above $x$. \\
+
+So $L_{i}(x, \omega_i)$ is the incoming ray
+of light in direction $-\omega_i$. \\
+
+And $f(x, \omega_i, \omega_o)$ is the BRDF, 
+which is the amount of light from direction $\omega_i$
+that gets reflected in direction $\omega_o$
+at point $x$.
+This will depend on the material that $x$ is made of. \\
+The BRDF allows us to achieve effects such as reflectivity,
+roughness, glossiness... \\ 
+
+Finally, $\omega_i \cdot n$ is the dot product,
+which basically gives us the cosine of the angle $\theta$
+between the incoming light direction and the normal
+$n(x)$ at $x$, which scales how much light is reflected
+(Lambert's cosine law).
+It's the cosine of the angle because we 
+assume both directions $n$ and $\omega_i$
+have length $1$. \\
+We can also sometimes write it as $\cos(\theta)$. \\
+
+By convention, when we say $L_i(x, \omega_i)$,
+we actually mean the coming into $x$
+from direction $-\omega_i$
+($\omega_i$ shoots out of $x$ towards the source). \\
+This is by convention, and it is a bit confusing. \\
+
+The scene, or geometry,
+$\mcal$, is basically made up of surfaces defined
+by some equations:
+\[ \mcal = \unionof{i=1}{n} S_i \]
+where $S$ is the set of the surfaces. \\
+
+The function $N:\mcal \to \rbb^d$
+gives the normal $N(x)$ at any point $x$ on $\mcal$. \\
+
+We can imagine that the screen on which we view the
+scene is the sensor, that captures rays of light 
+$L_o(x, \omega_o)$ and then showcases the correct pixel
+color depending on which rays hit which pixels. \\
+The rays originate in the light sources and bounce around
+until they hit the sensor. \\
+However, the probability that rays will hit the sensor
+is very low, so we usually do the operation in the
+opposite direction, and shoot light rays from the sensor
+until they hit the light sources,
+and then do the calculation in reverse. \\
+
+We have a ray tracing function $x_\mcal(x, \omega)$
+or $r(x, \omega)$, which basically shoots a ray
+from $x$ in direction $\omega$. We use it extensively
+in order to figure out where light rays go and come from. \\
+
+As mentioned earlier, the incoming light $L_i(x, \omega)$
+is the ray of light that leaves $y$ in the direction $-\omega$
+and hits $x$.
+We can write $y$ as $r(x,\omega)$
+since we can get $y$ by shooting a ray in the direction
+$\omega$ from $x$ (recall that $L_i(x, \omega_i)$
+has an incoming ray in direction $-\omega_i$). \\
+So we can write:
+\[ L_i(x, \omega) = L_o(r(x, \omega), -\omega) \]
+Which means that we write $L_i$,
+the light coming into a point $x$ from some direction,
+as the light $L_o$, coming out of a point in
+the opposite direction towards $x$. \\
+
+This is called the conservation of enegery along the ray,
+and it states that:
+\[ L_i(x, \omega) = L_o(r(x, \omega), -\omega) \]
+This tells us we can write the rendering equation recursively
+in terms of outgoing light only (using a ray tracer). \\
+
+Note that $L_i(x, \omega) \neq L_o(x, \omega)$,
+since light leaving a point $x$ isn't
+necessarily equivalent to the amount of light
+entering it.
+Outgoing light does depend on incident light,
+but it also depends on things like emitted light $L_e$
+and angle and surface as we saw in 
+the rendering equation. \\
+
+There is an issue with the rendering equation:
+\[ L_{o}(x, \omega_o)
+= L_{e}(x, \omega_o)
++ \int_\Omega L_{i}(x, \omega_i) \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\omega_i \]
+We define the light sources, 
+which give us $L_{e}(x, \omega_o)$.
+We also define the BRDF $f(x, \omega_i, \omega_o)$.
+The geometry of the scene gives us $\omega_i \cdot n$. \\
+But what about $L_{i}(x, \omega_i)$?
+How can we calculate the incident light
+at a point $x$? \\
+
+Now, recall that we mentioned that:
+\[ L_i(x, \omega) = L_o(r(x, \omega), -\omega) \]
+Which means that the incoming light at a point
+is just the outgoing light from the point
+we get if we just follow the light ray
+in the opposite direction until we hit
+an intersection with a surface (light source
+or otherwise). \\
+This implies that we can write the rendering
+equation as such:
+\[ L_{o}(x, \omega_o)
+= L_{e}(x, \omega_o)
++ \int_\Omega L_o(r(x, \omega_i), -\omega_i)  \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\omega_i \]
+Which means that the incident light at $x$
+is just the outgoing (exitant) light 
+from some point $r(x, \omega_i)$.
+And that outgoing light $L_o(r(x, \omega_i), -\omega_i)$
+can itself be calculated using the rendering
+equation, since it by definition
+gives us the value of the exitant randiance
+in some direction $\omega_o$. \\
+
+And this implies a sort of recursion,
+where the outgoing light at one point $x$
+depends on the outgoings lights from other points $y$,
+which themselves depend on the outgoing light
+from other points... \\
+This creates a recursion, where each recursion
+is a light bounce on a surface. \\
+
+Each recursion of the rendering equation
+is one bounce of light. \\
+Energy needs to be conserved, since otherwise light would
+bounce around forever and the scene keeps getting brighter;
+this law is obeyed if the BRDF is well defined. \\
+In partice, what this means is that with each bounce
+away from the light, more and more light is asbosrbed,
+and less light is being contributed; we can truncate
+the sum after a few bounces, when the energy being
+added is near $0$. \\
+
+Now in order to explicitely write out the the rendering
+equation as a series of bounces, we first have to
+show we to resolve the recursions.
+We have:
+\[ L_{o}(x, \omega_o)
+= L_{e}(x, \omega_o)
++ \int_\Omega L_o(r(x, \omega_i), -\omega_i)  \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\omega_i \]
+We can replace $L_o(r(x, \omega_i), -\omega_i)$
+by the rendering equation:
+\[ L_o(r(x, \omega_i), -\omega_i)
+= L_{e}(r(x, \omega_i), -\omega_i)
++ \int_\Omega L_i(r(x, \omega_i), \omega_j) \cdot
+f(x, \omega_j, -\omega_i) \cdot
+(\omega_j \cdot n) \; d\omega_j \]
+And then repeat, until we have:
+\multiline{
+L_{o}(x, \omega_o)
+& = L_{e}(x, \omega_o) \\
+& + \int_\Omega \bigg( L_e(r(x, \omega_i), -\omega_i)
++ f(x, \omega_i, \omega_o) \cdot 
+(\omega_i \cdot n) \\
+& + \int_\Omega 
+\bigg( L_e(r(r(x, \omega_i), \omega_j), -\omega_j) 
++ f(x, \omega_j, -\omega_i) \cdot 
+(\omega_j \cdot n) \\
+& + \int_\Omega \bigg( 
+L_e(r(r(r(x, \omega_i), \omega_j), \omega_k), -\omega_k)
++ f(x, \omega_k, -\omega_j) \cdot 
+(\omega_k \cdot n) \\ 
+& + \int_\Omega \dots \bigg)
+\; d\omega_k \bigg) \; d\omega_j \bigg) \; d\omega_i }
+Each integral expresses a bounce of the light. \\
+
+\newpage
+
+\subsection*{Neumann Series}
+
+enerally speaking, if we have an integral:
+\[ f(x) = \integral{a}{b}{K(x, y)g(y)}{dy} \]
+We can approximate it as a Riemann sum,
+that is, discretize it
+by taking a sample of size $n$ of columns,
+which we multiply by small steps $\Delta y$:
+\[ f(x_j) \sim \sumof{i = 1}{n} (K(x_j, y_i)g(y_i) \Delta y) \]
+Note here that if we envision
+a vector $g$ that contains all values of $g(y_i)$
+for each $i \in \{1, 2, \dots n\}$,
+then we can rewrite this as a matrix multiplication:
+\[ f = K \cdot g \]
+And this is how we discretize an integral and write
+it as a matrix multiplication. \\
+
+For the rendering equation, we introduce the term $T$:
+\[ TL_o =  \int_\Omega L_o(r(x, \omega_i), -\omega_i)  \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\omega_i \]
+But notice that if we were to use $T$
+to express the result we found in the last section, we
+would get:
+\[ L_o = L_e + T( L_e + T( L_e + T (L_e + \dots))) \]
+\[ L_o = L_e + TL_e + T^2L_e + T^3L_e \dots \]
+Which is called the Neumann series of the rendering equation. \\
+
+Here each term $T^kLe$ expresses one bounce of light. \\
+
+An alternative way to derive the Neumann series
+is to note that the rendering equation written using $T$
+implies that:
+\[ L = L_e + TL \]
+\[ L - TL = L_e \]
+\[ (I - T)L = L_e \]
+\[ L = (I-T)\inv L_e \]
+Here, the Neumann expansion of $(I-T)\inv$ is:
+\[ (I-T)\inv = \sum_{i=0}^\infty T^k \]
+So we end up with:
+\[ L = \sum_{i=0}^\infty T^kL_e \]
+Which is the same Neumann series we derived earlier. \\
+
+To prove that the Neumann expansion is correct,
+we can use the eigendecomposion of $T$:
+\[ T = P\Lambda P\inv \]
+Which means that:
+\multiline{ (I - T)\inv = (I - P\Lambda P\inv)\inv
+& = (PIP\inv - P\Lambda P\inv)\inv 
+= (P (I - \Lambda) P\inv)\inv \\
+& = P (I - \Lambda)\inv P\inv }
+Note that $I - \Lambda$
+is a diagonal matrix with diagonal entries
+$1 - \lambda_i$. This means that
+we can distribute the inverse (since it is
+diagonal) and get:
+\[ P \bmat{ 
+\dfrac{1}{1-\lambda_1} & 0 & \dots & 0 \vs{5} \\
+0 & \dfrac{1}{1-\lambda_2} & \dots & 0 \vs{5} \\
+\vdots & \ddots & \ddots & \vdots \vs{5} \\
+0 & \dots & 0 & \dfrac{1}{1-\lambda_n} } P\inv \]
+On the other hand, we have:
+ \[ \sum_i^{\infty} T^i
+= \sum_i^{\infty} (P\Lambda P\inv)^i \]
+Notice that because this is the eigen decomposition
+and $P$ is orthogonal,
+that $(P\Lambda P\inv)^i = P\Lambda^i P\inv$.
+So we have:
+\[ \sum_i^{\infty} P\Lambda^i P\inv
+= P \para{\sum_i^{\infty}\Lambda^i} P\inv \]
+Notice that because $\Lambda$ 
+is diagonal, we can distribute both the 
+sum and the power to the diagonal elements:
+\[ P \bmat{ 
+\sum_i^{\infty} \lambda_1^i & 0 & \dots & 0 \vs{5} \\
+0 & \sum_i^{\infty} \lambda_2^i & \dots & 0 \vs{5} \\
+\vdots & \ddots & \ddots & \vdots \vs{5} \\
+0 & \dots & 0 & \sum_i^{\infty} \lambda_n^i } P\inv \]
+If we assume that $|\lambda_i| < 1$,
+we can write the geometric sums
+as the value they converge to:
+\[ P \bmat{ 
+\dfrac{1}{1-\lambda_1} & 0 & \dots & 0 \vs{5} \\
+0 & \dfrac{1}{1-\lambda_2} & \dots & 0 \vs{5} \\
+\vdots & \ddots & \ddots & \vdots \vs{5} \\
+0 & \dots & 0 & \dfrac{1}{1-\lambda_n} } P\inv \]
+Which proves  $(I-T)\inv =  \sum_i^{\infty} T^i$,
+so long as $|\lambda_i| < 1$ for all $i$. \\
+
+Note that the condition $|\lambda_i| < 1$ is automatically
+satisfied when the BRDF is enegery conserving, that is,
+when the scene conserves energy and bounces gradually
+lose radiance. \\
+
+If after $K$ bounces, we have:
+\[ \sum_{i=0}^{\infty} T^i \approx \sum_{i=0}^{K} T^i \]
+We can truncate the sum and stop bouncing light. \\
+
+\newpage
+
+\subsection*{The Area Formulation}
+
+Instead of integrating over all the directions
+$\omega$ in $\Omega$, the hemisphere
+above $x$,
+then we can use an area formulation;
+The idea behind it is to integrate
+in terms of all the points $y$
+from which a light ray can be projected
+towards $x$. \\
+
+We can take each small area $d\sigma(\omega)$
+on the hemisphere and project them.
+They will hit points on the surfaces
+of the scene $\mcal$. \\
+
+We would then have $d\sigma(\omega)
+= \dfrac{\cos(\theta)y}{\|x-y\|^2}dA(y)$
+where $y$ is the point intersected
+when we project from $x$ in the $\omega$
+direction, and $dA(y)$ is a small area around it
+on the surface in $\mcal$. \\
+
+We can absorb these terms into the
+geometry term $G(x, y)$:
+\[ G(x, y) = \dfrac{((y-x)\cdot N(x))((x-y)\cdot N(y))}
+{\|x-y\|^4} \]
+Note that we also added the term $(y-x)\cdot N(x)$
+which also appears in the original integral. \\
+
+When using solid angles, we have a ray tracing 
+function to check the first point intersected
+by a ray of light, so we could always be sure
+that the point $r(x, \omega_i)$ is visible
+from $x$. \\
+This guarantee does not exist in the area formulation,
+where we pick two points $x$ and $y$ from
+the scene. \\
+We instead use a visibility function $V(x, y)$:
+\[ V(x, y) = \piecewise{
+    1 \qquad \IF r(x, ) \\
+    0 \qquad \ELSE
+} \]
+It ensures that $y$ is visible from $x$
+without obstruction. \\
+
+So instead of:
+\[  L_{o}(x, \omega_o)= L_{e}(x, \omega_o) +
+\int_\Omega L_{i}(x, \omega_i) \cdot
+f(x, \omega_i, \omega_o) \cdot
+(\omega_i \cdot n) \; d\sigma(\omega_i) \]
+We will have:
+\[  L_{o}(x \to z)= L_{e}(x \to z) +
+\int_\mcal L_{i}(x \leftarrow y) \cdot
+f(x, \vec{xy} \to \vec{xz}) G(x, y) V(x, y) \; dA(y) \]
+So we now have the same integral
+for the rendering equation, but instead
+of thinking in terms of directions, we think
+in terms of points on the scene $x$ and $y$,
+and light bouncing between them. \\
+So we can get the outgoing light $L_o$
+at a point $x$ in the direction towards a point $y$,
+which is $0$ if the visibility function
+determines we can't see $x$ from $y$ and vice-versa. \\
+
+Everything we said in regards to solid angles still
+applies in the area formulation of the rendering
+equation. \\
+
+Using the area formulation, we can express
+each bounce of light $T^kL_e$ as:
+\multiline{
+    T^k L_e &= \int_{\mathcal{M}^n} 
+    L_e(x_{k+1} \to x_k) \\
+    & \prod_{k=1}^{n} 
+    \left[ f_r(x_{k-1}, x_{k+1} \to x_k) 
+    \cdot G(x_k, x_{k+1}) \cdot V(x_k, x_{k+1})
+    \; dA(x_{k+1}) \right]
+}
+Where $\int_{\mcal^n}$ is $n$ nested integrals
+each over $\mcal$. \\
+
+\newpage
+
+\subsection*{Monte-Carlo Integration}
+
+Monte-Carlo integration is a numerical
+algorithm that allows us to approximate
+integrals efficiently. \\
+
+Why do we use Monte-Carlo
+integration, instead of just using any
+other integration method, like Riemann
+Sums or the Trapezoidal rule? \\
+These methods work fine for a small
+dimension, but as the dimension of a scene
+increases, they become less and less efficient. 
+For example, Riemann sums use rectangles in
+$\rbb^2$, but columns in $\rbb^3$.
+Recall that some of our integrals
+$T^kL_e$ have dimensions $k$,
+which can grow very large.
+Monte-Carlo integration is probabilistic
+and has far less of a dependency
+on the dimension. \\
+
+Now for some motivation;
+we know that the average is just the
+sum divided by the number of elements:
+\[ \mu(x) = \dfrac{1}{n}\sum_{i=1}^n x_i \]
+Intuitively, this means that we can write
+the sum as the average multilplied the number
+of elements:
+\[ n\mu(x) = \sum_{i=1}^n x_i \]
+This is the intuition behind Monte-Carlo
+integration. \\
+
+As we know, integration is just a sum,
+over an interval instead of a number of elements.
+So we can do the same thing here:
+\[ \mu(x) = \dfrac{1}{b-a}\int_a^b x \; dx \]
+Which means that:
+\[ (b-a)\mu(x) = \int_a^b x \; dx \]
+Here we use the measure (length)
+of the interval, since we don't have a number
+of elements, in order to calculate the intergal
+using the average. \\
+
+In a more general case, if we have:
+\[ \int_\dcal f(x) \; dx \]
+Then we would need the generalization
+of the volume or length to $\dcal$,
+whatever dimension $d$ it may be,
+which we can write as $v_d(\dcal)$. \\
+So we can approximate the integral as:
+\[ \int_\dcal f(x) dx
+= v_d(\dcal)\mu(f(x)) \]
+Where we can get the average by just taking
+$N$ random samples and dividing by $N$:
+\[ \int_\dcal f(x) dx
+= \dfrac{v_d(\dcal)}{N} \sum_{i=1}^N f(x_i) \]
+This is how Monte-Carlo integration works. \\
+
+However, one trick we can use
+is to map the coordinates int $\dcal$
+to a $d$-dimensional unit hypercube,
+which always has a measure of $1$.
+In $\rbb^2$ this is a unit square,
+and in $\rbb^3$ this is a unit cube. \\
+We can the unit hypercube in $\rbb^n$ 
+as $[0, 1]^d$. \\
+So if we can transform the variables
+such that they span a hypercube,
+we will have:
+\[ \int_{[0, 1]^d} f(u) du
+= \dfrac{1}{N} \sum_{i=1}^N f(u_i)  \]
+Where the volume of the space is just $1$. \\
+
+So, how can we do this mapping?
+We can show it using an example. \\
+Suppose we have an integral over a hemisphere:
+\[ \int_\Omega f(\omega) \; d\sigma(\omega) \]
+Which uses solid angles ($\sigma(\omega)$). \\
+Now, we can use a mapping:
+\[ T: [0, \sfrac{\pi}{2}] \times [0, 2\pi] \to \Omega \]
+Which maps the angles to parametric coordinates:
+\[ T(\phi, \theta) = \pmat{
+    \cos(\phi)\sin(\theta) \\
+    \sin(\phi)\sin(\theta) \\
+    \cos(\theta)
+} \]
+Notice that the new coordinate space is a rectangle,
+since we have $\theta \in [0, \sfrac{\pi}{2}]$
+and $\phi \in [0, 2\pi]$. \\
+Now note that the infinitessimal $d\sigma(\omega)$
+will change to this when we perform the transformation:
+\[ d\sigma(\omega) = |\det(J_T)| \; d\phi \; d\theta \]
+Where $J_T$ is the Jacobian of the transformation,
+and $\det(J_T)$ is calculated the same way
+we calculate the determinant of any rectangular
+matrix:
+\[ \det(J_T) = \sqrt{(J_T)^TJ_T}
+\qquad \AND \qquad J_T = \pmat{
+-\sin\theta \sin\phi & \cos\theta \cos\phi  \\
+\sin\theta \cos\phi  & \cos\theta \sin\phi\\
+0 & -\sin\theta } \]
+So in total, we get:
+\[ \int_\Omega f(\omega) \; d\sigma(\omega)
+= \int_0^{2\pi} \int_0^{\sfrac{\pi}{2}} 
+f(T(\phi, \theta)) \cdot |\det(J_T)| 
+\; d\theta \; d\phi\]
+Which is the integration with a change
+of variables. \\
+
+Now, this is a rectangle with length $2\pi$
+and width $\dfrac{\pi}{2}$,
+and we need a unit square,
+so we can just do a second transformation,
+this time:
+\[ F: [0, 1]^2 \to [0, \sfrac{\pi}{2}] \times [0, 2\pi] \]
+Where:
+\[ F(u, v) = \pmat{2\pi u \vs{10} \\ \dfrac{\pi}{2}v} \]
+Which will also have a Jacobian $J_F$,
+and which gets us a new integral:
+\[ \int_0^{1} \int_0^{1} 
+f(T(F(u, v))) \cdot
+|\det(J_T)| \cdot
+|\det(J_F)| \; du \; dv \]
+Which we can also write as:
+\[ \int_{[0, 1]^2}
+f(T(F(u, v))) \cdot
+|\det(J_T)| \cdot
+|\det(J_F)| \; d(u, v) \]
+Where $[0, 1]^2$
+has area that is just $1$. \\
+
+Note that the transformation has to be 
+differentiable for this change of variables
+to work. \\
+
+So in short, we have:
+\multiline{ 
+\int_\Omega f(\omega) \; d\sigma(\omega)
+& = \int_0^{1} \int_0^{1} 
+f(T(F(u, v))) \cdot
+|\det(J_T)| \cdot
+|\det(J_F)| \; du \; dv \\
+&\approx \dfrac{1}{N} \sumof{i = 1}{N}
+f(T(F(u_i, v_i))) \cdot
+|\det(J_T)| \cdot |\det(J_F)| }
+Which is Monte-Carlo integration in a nutshell. \\
+
+We apply this to each integral $T^kLe$. \\
+
+Note that sampling points from $[0, 1]^d$
+is very easy; we just find $d$ random numbers
+between $0$ and $1$. \\
+
+\newpage
+
+\subsection*{In Practice}
+
+Light travels from the source, bounces around the
+scene accumulating colors, and finally hits a pixel
+on the sensor, whcih determines the final color
+of that part of the screen. \\
+
+As mentioned, in practice, we instead send rays of
+light out of the sensor, and then bounce it around
+the scene until it hits a light source, or we
+truncate 
+
+\newpage
+
+\end{document}

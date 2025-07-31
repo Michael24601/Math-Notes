@@ -1,0 +1,120 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{%
+    \Huge Machine Learning \\
+    \Large Lecture XIX
+}
+\date{2025-07-07}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\section*{Deep Learning}
+\subsection*{Generative Learning}
+
+The goal is to model the distribution of the data,
+and generate samples based on this distribution. \\
+
+Usually we don't have the distribution, but rather
+have sample data that we can use. \\
+
+There are two approaches. \\
+In Explicit Density, we model the distribution
+and sample from it, and in the implicit model,
+we directly generate samples without explicitely
+computing the distribution. \\
+
+We are given points $x_i$ for $i = 1, 2, \dots, n$. \\
+They are identically distributed and independent,
+sampled from a random variable $X$
+that obeys some distribution $\pbb_X$
+that is unknown. \\
+
+We want to be able to estimate $\pbb_X$,
+and then sample from it. We want to also control
+some properties of the sample (like changing
+some features in image generation). \\
+
+We will model a joint distribution
+$\pbb_{(X, Z)}$ over the data $\xcal$
+and some latent space $\zcal$,
+which we can think of as the control space,
+allowing us to control the generation (like a text
+input). \\
+
+In this case we consider $\pbb_X$
+is the marginal of the joint distribution 
+$\pbb_{(X, Z)}$:
+\[ p_X(x) = \int_\zcal p_{(X, Z)}(x, z) dz \]
+Recall then that:
+\[ \pbb_{(X, Z)} = \pbb_X \otimes \pbb_{Z \mid X} 
+= \pbb_Z \otimes \pbb_{X \mid Z} \]
+This allows us to sample a point $z$ from $Z$,
+like a feature specification, 
+which would then give us a sample $X$
+(generated image or data). \\
+
+We call $\pbb_Z$ the prior distribution. \\
+
+We call $\pbb_{X \mid Z = z}$ is the likelihood. \\
+
+We call $\pbb_{Z \mid X = x}$ the posterior. \\
+
+Our goal is to find $\pbb_X$, or the density
+$p_X(x)$, which again is an interal
+over the joint density. \\
+We can find the joint by calculating it as:
+\[ p_{(X, Y)}(x, z) = p_{X \mid Z = z}(x)p_Z(z) \]
+Also written:
+\[ p(x, z) = p(x \mid z)p(z) \]
+This is an intractable problem however. \\
+
+We can make it tractable by approximating
+$p(z \mid x)$, using the Kullback-Leiber Divergence:
+\multiline{
+\text{KL}(q(z \mid x) \,\|\, p(z \mid x)) 
+&:= \ebb_{q(z \mid x)} \left[ \log 
+\frac{q(z \mid x)}{p(z \mid x)} \right] \\
+&= \ebb_{q(z \mid x)} \left[ \log 
+\frac{q(z \mid x)p(x)}{p(x, z)} \right] \\
+&= \ebb_{q(z \mid x)} \left[ \log 
+\frac{q(z \mid x)}{p(x, z)} \right] + \log p(x)}
+We can't compute this due to $p(x)$. \\
+But we can minimize this in terms of $q(z \mid x)$,
+and $p(z)$ is just a constant with respect to
+this minimization. \\
+
+\newpage
+
+\subsection*{Autoencoders}
+
+Autoencoders allow us to input data (such as images)
+and get features back (like a description of
+features) which is lower dimensional. \\
+
+We can then use a decoder to take features, 
+and reconstruct the data. \\
+
+These encoders/decoders are just neural networks. \\
+
+We expect that if we encode an image, then decode
+the features, we should get the original image
+back. Of course this means we want to minimize 
+the distance between the two images:
+\[ \|x - \hat{x}\|^2 \]
+Through this L2 loss function. \\
+
+
+
+
+\end{document}

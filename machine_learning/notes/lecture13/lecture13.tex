@@ -56,7 +56,7 @@ So we need a prototype, and a similarity measure;
 for instance: mean and distance. \\
 
 The sum is:
-\[ \arg \min_{(C_k, \mu_k)} \sum_{i=1}^K \sum_{j=1}^K
+\[ \arg \min_{(C_k, \mu_k)} \sum_{i=1}^K \sum_{x_j \in C_i}
 \|x_j - \mu_i\|^2 \]
 We can minimize this and get the clusters and prototype
 pairs that are optimal. \\

@@ -1,0 +1,122 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Machine Learning \\
+    \Large Assignment X
+}
+\date{2025-07-01}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Ex 1}
+We have:
+\[ \min_{M \in \mathbb{R}^{d \times K},\; Z 
+\in \{0,1\}^{K \times N}} \; \|X - MZ\|_F^2 \\
+\text{ such that} 
+\quad Z^\top \mathbf{1} = \mathbf{1} \]
+Here the columns of $X$ are the datapoints $x_j$,
+and the columns of $M$ are the prototypes $\mu_i$.
+Here Z is used to assign specific prototypes
+to each datapoint, that is:
+\[ Mz_{j} = \mu_i \]
+Where $\mu_i$ is the prototype of $x_j$. \\
+We can write the matrix norm as:
+\[ \|A\|^2_F = \sum_{i= 1}^{n}\sum_{j=1}^{m} |a_{ij}|
+= \sum_{j=1}^{m} \| a_{j} \|^2 \]
+Which is the sum of norms squared of the columns. \\
+So we have:
+\[ \min_{M \in \mathbb{R}^{d \times K},\; Z 
+\in \{0,1\}^{K \times N}} \; \|X - MZ\|_F^2 
+= \min_{M \in \mathbb{R}^{d \times K},\; z_j} \;
+\sum_{j=1}^{n} \| x_{j} - Mz_j \|^2 \]
+As discussed, $z_j$ just chooses a prototype that
+$x_j$ belongs to.
+So instead of summing over all points
+from $j = 1$ to $j = n$, we can instead
+sum over each cluster, and then sum over each
+point in said cluster. This is because we know
+that $Z$ will associate each point $x_j$
+with exatcly one $\mu_i$, no more no less:
+\[ \arg \min_{(C_k, \mu_k)} \sum_{i=1}^K \sum_{x_j \in C_i}
+\|x_j - \mu_i\|^2 \]
+Here recall that $Mz_j = \mu_i$ as discussed. \\
+
+
+\newpage
+
+\subsection*{Ex 2}
+
+We just do two iterations as described in Ex 3. \\
+
+\colorText{red}{
+    \subsection*{Correction}
+    We can use distance or distance squared;
+    the result is the same. \\
+}
+
+\newpage
+
+\subsection*{Ex 3}
+
+In Lloyd's algorithm, we first
+set some initial set of prototypes
+$ \{\mu_1, \mu_2, \dots \mu_K \}$. \\
+Then for each iteration $i$,
+the following two steps are repeated:
+First we create $K$
+clusters by placing a point in a cluster
+belonging to the prototype that is closest
+to the point (by whatever metric we are
+using). \\
+Then, we recalculate the prototypes of
+each cluster (such as the mean when the
+metric is the 2-norm). \\
+
+But these two steps correspond
+to the two steps of alternating minimization;
+we fix one variables, and minimize using 
+the other. \\
+In this case, we are minimizing according
+to $\{(\mu_i, C_i)\}_i$, the expression:
+\[ \arg \min_{(C_k, \mu_k)} \sum_{i=1}^K \sum_{x_j \in C_i}
+\|x_j - \mu_i\|^2 \]
+If we fix the prototypes and minimize using
+the clusters, this is equivalent to associating
+the points with the cluster of the closest
+prototype, since that minimizes the distance
+to the prototype. \\
+Then, we fix these clusters, and minimize using the
+prototype variables; that is equivalent to finding
+the prototype that minimizes the distance metric
+to all points in the cluster; that is by definition
+the mean (at least for the 2-norm). Recall that
+the expected value of the $\ell_2$ loss is the mean. \\ 
+
+\colorText{red}{
+    \subsection*{Correction}
+    If we want to show that the mean is the
+    point that minimizes the sum when the clusters
+    are fixed, we have to do the derivative
+    with respect to $\mu_i$, and show it has
+    to be the mean for the sum of squared
+    distances to be minimal. \\
+    We can also take the second derivative to check
+    for convexity. \\
+    What I did, using the expected value of the
+    loss, is correct; recall that we also used the
+    derivative to prove that however. \\ 
+}
+
+\end{document}
