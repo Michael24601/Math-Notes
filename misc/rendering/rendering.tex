@@ -18,6 +18,13 @@
 \setlength{\parindent}{0pt}
 \pagenumbering{arabic}
 
+\section*{Theory}
+
+This first part deals with the more theoretical
+aspects of the rendering equation. \\
+
+\newpage
+
 \subsection*{The Rendering Equation}
 
 The rendering equation calculates the amount of
@@ -561,25 +568,465 @@ f(T(F(u_i, v_i))) \cdot
 |\det(J_T)| \cdot |\det(J_F)| }
 Which is Monte-Carlo integration in a nutshell. \\
 
-We apply this to each integral $T^kLe$. \\
-
 Note that sampling points from $[0, 1]^d$
 is very easy; we just find $d$ random numbers
 between $0$ and $1$. \\
 
+Monte-Carlo integration has a convergence rate
+of $O\para{\dfrac{1}{\sqrt{N}}}$, which makes it
+rather efficient when the number of samples
+and dimensionality is high. \\
+
 \newpage
 
-\subsection*{In Practice}
+\subsection*{Surfaces}
+
+Surfaces of any dimension, include two,
+can be expressed parametrically or implicitely. \\
+
+A parametric function has the form $g(\alpha)$,
+where $\alpha$ is a set of $n$ $d$-dimensional 
+parameters. Every point $g(\alpha)$ for any 
+$\alpha \in \rbb^{n \times d}$ is a point on the
+surface $S$ defined by $g$. \\
+
+An implicit function on the other hand,
+has the form $f(p) = 0$,
+where $p$ is a $d$-dimensional point. 
+Every point $p$ that satisifes 
+$f(p) = 0$ $p$ is on the surface $S$ defined by $f$. \\
+
+Parametric functions are great for generating
+points, though it can be difficult to check 
+if a point belongs to the surface 
+(we would need to check if a set of
+parameters $\alpha$ generate the point). \\
+
+On the other hand, implicit functions are great
+for checking for membership (we just need to
+plug the point into the function and check
+if it evaluates to $0$). But it can be difficult
+to generate points on the surface, as we
+can't know before evaluating the function
+whether or not a point belongs to the surface. \\
+
+A ray can be parametrically defined as:
+\[ t(t) = o + td \]
+Where $o \in \rbb^d$ is the origin of the ray,
+$d \in \rbb^d$ is the direction (assumed to be
+normalized with $\|d\| = 1$), and $t \in \rbb$
+is a parameter that signifies how far along
+the ray a point is. \\
+
+In order to check if ray intersects a
+surface defined by a parametric function
+$g(\alpha)$, recall that both the ray and
+surface are parametrically defined, so
+they are both functions that generate points
+on their respective surfaces. \\
+So to check for an intersection, we just try to
+solve the equation:
+\[ g(\alpha) = r(t) \]
+for the parameters $\alpha$ and $t$.
+For instance, this may lead to linear system,
+where $\alpha$ and $t$ are unknowns. \\
+If we can solve the equation (for example,
+if the linear system has a unique solution),
+then we know there is an intersection, and
+we have the parameters that will give us the
+intersection point if we plug them into
+$r(t)$ or $g(\alpha)$. \\
+
+In order to check for an intersection between
+a ray and an implicitely defined surface,
+given by $f(p) = 0$,
+we can just plug the ray's parametric equation
+(which generates points) into the implict function:
+\[ f(r(t)) = 0 \]
+This equation may be a polynomial equation with $t$
+as the variable. \\
+We know that if the above equation is satisfied
+for some $t = t_0$, then the point $r(t)$
+must be on the surface, and as such must be
+an intersection between the ray and the surafce. \\
+If the equation is not solvable, then there
+is no intersection. \\
+Generally, if the shapes allow for more than one
+intersection, such as a sphere, then the equation
+will reflect that (the equation could be
+quadratic with two possible solutions). \\
+
+As a general rule, we only consider solutions
+with $t > 0$, since rays have a forward direction,
+and we only want intersections that take place
+in that direction (in front of the ray). \\
+
+Sometimes, we need to transform objetcs in a
+scene, which we can do by transforming the surfaces,
+using both a linear transformation encoded in
+a matrix, $A$, and a translation $b$, \\
+We can encode both in a square homogeneous matrix:
+\[ \bmat{A & b \\ 0^\top & 1} \bmat{p \\ 1} \]
+Which we can apply to a point $p$ by multiplying
+the homogeneous matrix by a padded vector
+(in homogeneous coordinates). \\
+
+Suppose we have
+a parametrically defined set (surface):
+\[ \mathcal{M}_\varphi = 
+\{ \varphi(s) \in \rbb^n \mid 
+s \in \mathcal{D} \subseteq \rbb^k \} \]
+In order to transform this set,
+we just transform every point in it.
+As we know, parametric equations are great at
+generating the points of the surface,
+so this is as simple as just transforming the
+generated points. \\
+We can thus apply the affine transformation $Ap + b$:
+\[ A\mathcal{M}_\varphi + b
+= \{ A\varphi(s) + b\in \rbb^n \mid 
+s \in \mathcal{D} \subseteq \rbb^k \} \]
+So we just apply the transformation
+to each point on the set.
+We denote the transformed set or surface
+$\mathcal{M}_{A\varphi + b}$. \\
+
+Now, if we want to intersect the resulting
+transformed surface with a line,
+we would solve:
+\[ r(t) = A\mathcal{M}_\varphi + b \]
+Another way we could have solved the same
+equation was apply the inverse transformation
+to the line $r(t)$
+and intersect it with the original surface:
+\[ A\inv(r(t) - b) = \mathcal{M}_\varphi \]
+All we've done is applied the inverse transformation
+to both sides. \\
+
+On the other hand, suppose we have an implicitely
+defined surface:
+\[ \mathcal{M}_{f\inv(0)}
+= \{ p \in \rbb^n \mid f(p) =0 \} \]
+which is just the set of points $p$
+such that $f(p) = 0$ is satisfied. \\
+This makes it easy to check for membership,
+but harder to generate points,
+which makes transforming it slightly more
+complicated:
+\[ A\mathcal{M}_{f\inv(0)} + b
+= \{ Ap + b \in \rbb^n \mid f(p) =0 \} \]
+Basically it is the set of transformed points 
+$Ap + b$ from the original surface definition,
+so the condition to satisfy is still $f(p)$. \\
+The only issue is that this defintion isn't
+really implicit the way we defined one. \\
+If we define $q = Ap + b$
+and $p = A\inv(q - b)$ can thus rewrite
+the set in the original format of
+an implicit surface:
+\[ A\mathcal{M}_{f\inv(0)} + b
+= \{ q \in \rbb^n \mid f(A\inv(q - b)) = 0 \} \]
+but this time with a new function,
+which is the composition of $f$ and the inverse of the
+affine transformation into one function:
+\[ f \circ A\inv \circ T(-b) \]
+which means that:
+\[ A\mathcal{M}_{f\inv(0)} + b
+= \{ q \in \rbb^n \mid 
+(f \circ A\inv \circ T(-b))(q) = 0 \} \]
+We can thus denote the transformed set or surface
+$\mathcal{M}_{(f \circ A\inv \circ T(-b))\inv(0)}$. \\
+
+The same thing applies regarding the
+light intersection. \\
+We could just replace $p$
+by $r(t)$
+inside of the transformed set 
+$A\mathcal{M}_{f\inv(0)} + t$. \\
+Or we could use the original set
+$\mathcal{M}_{f\inv(0)}$
+and replace $p$
+by the line transformed by the inverse of
+the affine transformation: 
+$A\inv(o + \tau d - t)$. \\
+
+One last thing to note regarding surfaces
+is that, if we have disjoint sets (surfaces):
+\[ S_1, S_2, \dots S_n \]
+And defined $S$ as the union of these sets:
+\[ S = \bigcup_{i = 1}^n S_i \]
+Then an integral over $S$
+can be decomposed into a sum of integrals
+over the original list of sets:
+\[ \int_S f(t)\;dt
+= \int_{S_1} f(t)\;dt + \int_{S_2} f(t)\;dt +
+\dots \int_{S_n} f(t)\;dt \]
+This can be used when we have a scene
+$\mcal$ which is made up of several surfaces
+$S$, be they parametric or implicit. \\
+
+Usually, scene data is encoded as a vector
+of triplets of vertices representing triangles. \\
+These triangles can be seen as our disjoint
+sets of surfaces. \\
+We can also procedurally generate the surface
+data in the shaders themselves, though that is
+less efficient. \\
+
+\newpage
+
+\section*{Application}
+
+The following sections deal with implementation-level
+details and optimization techniques. \\
+
+\newpage
+
+\subsection*{Ray Tracing}
 
 Light travels from the source, bounces around the
 scene accumulating colors, and finally hits a pixel
 on the sensor, whcih determines the final color
 of that part of the screen. \\
 
-As mentioned, in practice, we instead send rays of
+As mentioned, in practice, we send rays of
 light out of the sensor, and then bounce it around
-the scene until it hits a light source, or we
-truncate 
+the scene until we truncate it. \\
+
+The scene is made up of multiple objects, which
+can be stored as an array of implicit or parametric
+surfaces, along with a ray-surface intersection
+routine that we will need to bounce rays
+around the scene. \\
+
+Then, for each pixel on the sensor (screen), we will
+send the first ray in the direction of of the view ray
+(that is, following the direction from the camera position
+to the pixel on the camera sensor/screen), and then choose
+random points in the scene to bounce the light rays
+around, which we will repeat until we have
+enough bounces, hopefully hitting some light sources in
+the process. \\
+
+Using the area formulation and the Neumann expansion, 
+each bounce will have the form of an integral:
+\multiline{
+    T^k L_e &= \int_{\mathcal{M}^n} 
+    L_e(x_{k+1} \to x_k) \\
+    & \prod_{k=1}^{n} 
+    \left[ f_r(x_{k-1}, x_{k+1} \to x_k) 
+    \cdot G(x_k, x_{k+1}) \cdot V(x_k, x_{k+1})
+    \; dA(x_{k+1}) \right]
+}
+The first step will be to parmatrize the bounds of the
+integrla such that they form a series of unit hypercubes
+with a volume of $1$, using some change of variables
+\[ T: \mcal^n \to [0, 1]^d \]
+This will allow us to more easily sample points
+for the Monte-Carlo estimator we will be using. \\
+
+Note that in pratice, we won't have $\mcal$;
+instead, we will have a sum of integrals 
+over disjoint sets each
+representing a surface, such as a triangles:
+\[ \mcal^n = \bigcup_{i=1}^l S_i^n \]
+So the integral will look like:
+\[ \int_{\mcal^n} f(t)\;dt
+= \int_{S_1^n} f(t)\;dt + \int_{S_2^n} f(t)\;dt +
+\dots \int_{S_l^n} f(t)\;dt \]
+We can then parametrize each set $S_i^n$ individually. \\
+
+Note that when we have the scene parametrized
+with parameters in $[0, 1]^d$, it also becomes
+much easier to sample random points on the scene,
+as we can just generate $d$ random floating point
+numbers between $0$ and $1$. \\
+
+This will give us an integral:
+\multiline{
+    T^k L_e &= \int_{[0, 1]^d} 
+    \sqrt{\det(J_T^\top J_T)}L_e(u_{k+1} \to u_k) \\
+    & \prod_{k=1}^{n} 
+    \left[ f_r(u_{k-1}, u_{k+1} \to u_k) 
+    \cdot G(u_k, u_{k+1}) \cdot V(u_k, u_{k+1})
+    \; dA(u_{k+1}) \right]
+}
+Where $u_i = T(x_i)$ for all $i$, and $J_T$
+is the jacobian of the transformation. \\
+
+This gives us an estimator:
+\multiline{
+    \widehat{I_k} &= \dfrac{1}{N}\sum_{i=0}^{N}
+    \sqrt{\det(J_T^\top J_T)}L_e(u_{k+1, i} \to u_k) \\
+    & \prod_{k=1}^{n} 
+    \left[ f_r(u_{k-1}, u_{k+1, i} \to u_k) 
+    \cdot G(u_k, u_{k+1, i}) \cdot V(u_k, u_{k+1, i})
+    \right]
+}
+For the $\nth{k}$ bounce. \\
+
+So to calculate the color or radiance of a single pixel,
+we can use the full Neumann Series, with each term
+being estimated using Monte-Carlo integration:
+\[ L = \sum_{k=0}^\infty \widehat{I_k} \]
+\multiline{
+    L &= \sum_{k=0}^\infty \bigg[ \; 
+    \dfrac{1}{N}\sum_{i=0}^{N} \bigg(
+    \sqrt{\det(J_T^\top J_T)}L_e(u_{k+1, i} \to u_k) \\
+    & \prod_{k=1}^{n} 
+    \left[ f_r(u_{k-1}, u_{k+1, i} \to u_k) 
+    \cdot G(u_k, u_{k+1, i}) \cdot V(u_k, u_{k+1, i})
+    \right] \bigg) \bigg]
+}
+Conceptually, what this means is that, for each
+bounce $k$, we generate $N$ ray samples,
+each representing a different $\nth{k+1}$ bounce,
+and then for each of those, we generate
+$N$ ray samples representing the $\nth{k+2}$ bounce... \\
+
+The issue with this approach is that it is inefficient
+and not especially well suited for optimization.
+By the linearity of expectation, we can flip
+the two sums, and still converge towards the same 
+result:
+\multiline{
+    L &= \dfrac{1}{N}\sum_{i=0}^{N} \bigg( \; 
+    \sum_{k=0}^\infty \bigg[
+    \sqrt{\det(J_T^\top J_T)}L_e(u_{k+1, i} \to u_k) \\
+    & \prod_{k=1}^{n} 
+    \left[ f_r(u_{k-1}, u_{k+1, i} \to u_k) 
+    \cdot G(u_k, u_{k+1, i}) \cdot V(u_k, u_{k+1, i})
+    \right] \bigg] \bigg)
+}
+In other words, each Monte-Carlo sample is one full
+path of a single ray; for each sample $i$,
+we shoot a ray, bounce it around the scene,
+truncate the bounces, and then return the final answer. \\
+
+The reason why this is more efficient is that we 
+don't have to generate all $N$ needed samples in a 
+single frame; for instance we can generate $4$
+Monte-Carlo samples per frame, and then add
+this frame's samples to the last, meaning the lighting
+becomes more and more accurate as time goes on.
+We can use this formula to add $n$ samples to an average
+which had previously been calculated using $N$
+older samples:
+\[ \text{new average} = 
+\dfrac{\text{average} \times N + 
+\text{new samples}}{N + n} \]
+Note however that if the scene changes, such as by moving
+the camera, many if not most of the accumulated
+pixel averages will have to be recalculated,
+as the old averages are no longer relevant. \\
+
+Note that the term:
+\[ \prod_{k=1}^{n} 
+\left[ f_r(u_{k-1}, u_{k+1, i} \to u_k) \cdot 
+G(u_k, u_{k+1, i}) \cdot V(u_k, u_{k+1, i}) \right] \]
+does not need to be recomputed each bounce;
+we can just save the product in a variable
+and then multiply it by the $\nth{k}$
+operands each bounce. \\
+
+\newpage
+
+\subsection*{BRDF}
+
+There are multiple algorithms that can be used define
+BRDFs. \\
+The one I will be using is the Cook-Torrance BRDF.
+It combines diffuse and specular components, 
+and accounts for surface roughness, 
+fresnel effects, and geometric shadowing and masking. \\
+
+The BRDF, in the area formulation, will take as input
+three points $x_1$, $x_2$, and $x_3$,
+where $x_3$ is the point of contact, and
+the normalized incident and exitant directions are:
+\[ \omega_i = \dfrac{(x_2 - x_1)}{\|x_2 - x_1\|} 
+\qquad \AND \qquad 
+\omega_o = \dfrac{(x_2 - x_3)}{\|x_2 - x_3\|} \]
+We will use these in the rest of the algorithm. \\
+
+Given the surface point $x_2$ with normal $n$, 
+an incoming light direction $\omega_i$, 
+and an outgoing direction $\omega_o$, 
+we define:
+\[ h = \frac{\omega_i + \omega_o}
+{\|\omega_i + \omega_o\|} \]
+as the halfway vector (in between the two). \\
+
+The full Cook-Torrance BRDF is given by
+\[f_r(\omega_i, \omega_o) = (1 - F(\omega_i, h)) 
+\cdot \frac{c_d}{\pi}
++ \frac{D(h) \cdot F(\omega_i, h) \cdot 
+G(\omega_i, \omega_o)}{4 (n \cdot \omega_i)
+(n \cdot \omega_o)} \]
+where $c_d$ is the base color or texture at $x_2$, 
+and $ F(\omega_i, h)$ is the fresnel term, 
+$D(h)$ is the normal distribution function, 
+and $ G(\omega_i, \omega_o) $ is the geometry function. 
+All dot products such as $ n \cdot \omega $ 
+are clamped to zero from below. \\
+
+The term $(1 - F(\omega_i, h)) 
+\cdot \dfrac{c_d}{\pi}$ is the diffuse term. \\
+
+The Fresnel term can be approximated using 
+Schlick's approximation:
+\[ F(\omega_i, h) = F_0 + (1 - F_0)
+(1 - \omega_i \cdot h)^5 \]
+where $F_0$ is the reflectance at normal incidence. 
+For dielectrics, $F_0 \approx 0.04$, 
+and for metals, $F_0 = c_d$. \\
+
+The GGX normal distribution function is defined as
+\[ D(h) = \frac{\alpha^2}{\pi \left[ 
+(n \cdot h)^2 (\alpha^2 - 1) + 1 \right]^2} \]
+where $\alpha = \text{roughness}^2$ 
+is the remapped roughness parameter. \\
+
+The geometry function uses the Smith GGX approximation:
+\[ G(\omega_i, \omega_o) = 
+G_1(\omega_i) \cdot G_1(\omega_o) \]
+with
+\[ G_1(\omega) = \frac{2 (n \cdot \omega)}
+{(n \cdot \omega) + \sqrt{\alpha^2 + (1 - \alpha^2)
+(n \cdot \omega)^2}} \]
+Which is called the geometry shadowing-masking 
+function for a single direction $\omega$. \\
+
+For metallic materials, 
+the diffuse component is zero, and 
+$F_0 = c_d$. \\ 
+For dielectrics, the BRDF includes both 
+diffuse and specular components, 
+and $F_0 \approx 0.04$. \\
+
+This model ensures energy conservation and 
+realism, and is often the BRDF of choice
+in rendering and physics simulations. \\
+
+\newpage
+
+\subsection*{Random Number Generator}
+
+We need a pseudo-random number generator that
+can generate several 
+floating-point numbers between $0$
+and $1$ for each pixel of each frame. \\
+
+These numbers need to be completely independent
+from each other; meaning that we will need to
+seed the generator using a combination of the frame,
+pixel coordinate, and random number index. \\
+
+We will use a hash based pseudo-random number
+generator; this allows us to generate completely
+independent samples while ensuring reproducibility,
+that is, given the same seed, the generator returns
+the same number, which will help with debugging. \\
 
 \newpage
 
