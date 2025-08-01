@@ -1068,7 +1068,24 @@ Now, by the Fundamental Theorem of Calculus:
 \[ \sqrt{\det(J_{\varphi\inv}^\top J_{\varphi\inv})}
 = \sqrt{\det((J_{\varphi}\inv)^\top J_{\varphi}\inv)}
 = \dfrac{1}{\sqrt{\det((J_{\varphi})^\top J_{\varphi})}}
-= \dfrac{}{}\]
+= \dfrac{1}{g(x)}\]
+Which means that, having applied the
+change of variables, the term g(x)
+will cancel out. \\
+
+We thus end up with the integral:
+\[ int_0^1 f(\varphi\inv(t)) \; dt \]
+Samples from $f(\varphi\inv(t))$
+have far less variance. \\
+
+Note that if we have more than one variable,
+and the variables are not separable,
+inverse sampling becomes significantly harder. \\
+
+In practice, the high variance term is
+the geometry term, while the BRDF is the flat term. \\
+
+While importance sampling is not necessary, it is highly recommended. \\
 
 
 \end{document}
