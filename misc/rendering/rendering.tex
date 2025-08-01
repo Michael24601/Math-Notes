@@ -1030,4 +1030,45 @@ the same number, which will help with debugging. \\
 
 \newpage
 
+\subsection*{Importance Sampling}
+
+Suppose an integral has the form:
+\[ \int_a^b f(x)g(x)\;dx \]
+Where $g(x)$ has a large variance,
+while $f(x)$ is mostly flat. \\
+
+If we wanted to estimate this using
+Monte-Carlo integration, the samples would have
+too high a variability. \\
+
+In order to cancel out the $g(x)$,
+we will use a special kind of change of variable
+called inverse transform sampling. \\
+
+Recall that when we transform the variables
+using some transformation:
+\[ T: [c, d] \to [a, b] \]
+We end up adding a change of variable term:
+\[ \sqrt{\vs{100}\det(J_T^\top J_T)} \]
+We can design a transformation such that the
+change of variable term cancels out $g(x)$. \\
+
+If we define a transformation:
+\[ \varphi(x) = \dfrac{\int_a^x g(x) \;dx}
+{\int_a^b g(x) \;dx}
+= \dfrac{G(x) - G(a)}
+{G(b) - G(a)} \]
+This induces an inverse transform:
+\[ \varphi\inv: [0, 1] \to [a, b] \]
+Note that we divide by $G(b) - G(a)$
+specifically to ensure the transformed parameters
+are from $0$ to $1$. \\
+
+Now, by the Fundamental Theorem of Calculus:
+\[ \sqrt{\det(J_{\varphi\inv}^\top J_{\varphi\inv})}
+= \sqrt{\det((J_{\varphi}\inv)^\top J_{\varphi}\inv)}
+= \dfrac{1}{\sqrt{\det((J_{\varphi})^\top J_{\varphi})}}
+= \dfrac{}{}\]
+
+
 \end{document}
