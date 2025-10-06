@@ -21,9 +21,269 @@
 \setlength{\parindent}{0pt}
 \pagenumbering{arabic}
 
-\subsection*{}
 
+\subsection*{The Damped Wave Equation}
+
+In order to ensure that the waves dampen and dissapear
+eventually, we can introduce a damping term:
+\[\partial_{tt} u + \gamma \partial_t u = c^2 \Delta u \]
+The coefficient $\gamma$ can be space and time dependent. \\
+
+To understand what is happening, we can reparametrize
+the damping term:
+\[ \gamma = \dfrac{\beta}{1 - \beta} \]
+This gives us:
+\[\partial_{tt} u + \dfrac{\beta}{1 - \beta} \partial_t u 
+= c^2 \Delta u \]
+\[(1 - \beta)\partial_{tt} u + \beta \partial_t u 
+= (1 - \beta)c^2 \Delta u \]
+Notice that $\beta$ multiplies $\partial_t u $,
+which is the heat diffusion term. The larger $\beta$
+is, the smaller the wave term $\partial_{tt} u$
+is. This indicates that damping the wave is essentially
+just diffusing it. \\
+
+We can solve the equation
+in the spectral domain after uncoupling it:
+\[ d_{tt}\hat{u}_j(t) + \gamma d_t\hat{u}_j(t) = 
+c^2 \lambda_j \hat{u}_j(t) \]
+It can be solved using a harmonic oscillator.
 
 \newpage
+
+\subsection*{Stability}
+
+The CFL condition is the condition placed on the
+time step (when discretizing time) that gives us the
+value range for which the simulation remains stable. \\
+
+We will be using the wave equation as an example. \\
+
+We know that, in forward Euler, we have:
+\[ u^{k+1} = (I + \tau L)u^k \]
+In order for such an equation to be stable, we require
+the matrix multiplying $u^k$ to have a spectral
+radius smaller or equal to $1$, where the spectral
+radius is the largest absolute value of an eigenvalue. \\
+
+This is because, in order for some matrix $A$ not to increase
+the error introduced each iteration $\delta$,
+we require that:
+\[ \|A\delta\| \leq \|\delta\| \]
+Which is achieved when $\rho(A) \leq 1$. \\
+
+We know that the eigenvalues of $I + \tau L$
+look like $1 + \tau \lambda_i$ where $\lambda_i$
+is an eigenvalue of $L$. \\
+However, $\lambda_i$ can be negative or positive,
+we can assume either is true and work from there. \\
+
+So we require that:
+\[ |1 + \tau \lambda_i| \leq 1 \]
+Which means that we want:
+\[ 1 + \tau \lambda_i \leq 1 \qquad \AND \qquad 
+1 + \tau \lambda_i \geq -1 \]
+Assuming that $\lambda_i < 0$, this leads to:
+\[ \tau \geq 0 \qquad \AND \qquad 
+\tau \leq -\dfrac{2}{\lambda_i} \]
+This means that:
+\[ \tau \in \Big[0, \dfrac{2}{\rho(L)}\Big) \]
+Which is our CFL condition. \\
+
+Now, in order to find $\rho(L)$ or a bound on it,
+we can use the Fourrier series to express $u(x)$. \\
+Since $u$ is discretized, we can use the Discrete
+Fourrier Transform, or $DFT$. \\
+We will express the $u$ vector in the Fourrier domain. \\
+
+We know that the stencil for $L$ is (in one dimension):
+\[ [1 \quad -2 \quad 1] \]
+We can then convert to the Fourrier domain for each
+point in $u$ individually. \\
+\[ \hat{u}_k = e^{2 \pi i (j-1) \sfrac{k}{n}}
+-2 e^{2 \pi i (j) \sfrac{k}{n}} 
++ e^{2 \pi i (j+1) \sfrac{k}{n}}\]
+Here $k$ is the frequency index, but it will
+also allow us to find the $\nth{k}$ eigenvalue of $L$. \\
+Since the stencil has 3 elements, we have three points
+$j-1$, $j$, and $j+1$,
+where we multiply each term by the stencil coefficient
+that corresponds to it. \\
+Here $n$ is the number of points in total. \\
+We then factor out $e^{2 \pi i j \sfrac{k}{n}}$:
+\[ e^{2 \pi i j \sfrac{k}{n}}(e^{-2 \pi i \sfrac{k}{n}}
+-2 + e^{2 \pi i \sfrac{k}{n}}) \]
+What's left is $\lambda_k$. \\
+Now, we want the spectral radius: the largest absolute
+value this expression can take is $4$, since 
+each exponetial term is bound between $1$ and $-1$. \\
+
+So we have:
+\[ \tau \in \Big[0, \dfrac{1}{2}\Big) \]
+in one dimension. \\
+
+In more dimensions, we use the larger stencil, and
+end up with a bound on $\rho(L)$ of $4 \cdot m$,
+where $m$ is the dimension. \\
+
+Note that while implicit Euler is unconditionally
+stable, it does require using a linear solver to get
+the solution. \\
+
+\newpage
+
+\subsection*{Consistency}
+
+Consitency is what tells us how accurate our method is,
+that is, the order of the error. \\
+
+In general, when fitting a quadratic polynomial, 
+we have an error of $O(h^2)$ when using a centered
+derivative, and an error of $O(h)$ otherwise. \\
+
+Now, to find the order of consistency of any stencil,
+we can use the Taylor expansion. \\
+
+Suppose we have a stencil:
+\[ \dfrac{1}{h^2}[1 \quad -2 \quad 1] \]
+We can call the corresponding points 
+$u_{i-1}$, $u_i$, $u_{i+1}$. \\
+Assuming that the step size is $h$, then:
+\[ u_{i+1} = u(x_i + h) \qquad \AND \qquad 
+u_{i-1} = u(x_i - h) \]
+Using the taylor expansion of $u(x)$, this gives us:
+\[ u_{i+1} = u(x_i + h) = u_i + h \dd{u_i}{x}
++ \dfrac{h^2}{2!} \dd{^2u_i}{x^2} 
++ \dfrac{h^3}{3!} \dd{^3u_i}{x^3} \dots \]
+\[ u_{i-1} = u(x_i - h) = u_i - h \dd{u_i}{x}
++ \dfrac{h^2}{2!} \dd{^2u_i}{x^2} 
+- \dfrac{h^3}{3!} \dd{^3u_i}{x^3} \dots \]
+Placing them back inside the stencil, we notice 
+that all of the odd terms of the two sums cancel out,
+leaving us with:
+\[ \dfrac{-2u_i + 2u_i + 2\dfrac{h^2}{2!}\dd{^2u_i}{x^2}
++ 2\dfrac{h^4}{4!}\dd{^4u_i}{x^4} ...}{h^2} \]
+Here the $-2u_i$ from the stencil cancels out the
+$2u_i$ we get from the taylor expansion sum:
+\[ \dfrac{2\dfrac{h^2}{2!}\dd{^2u_i}{x^2}
++ 2\dfrac{h^4}{4!}\dd{^4u_i}{x^4} ...}{h^2} \]
+Canceling out some more terms, we end up with
+\[ \dd{^2u_i}{x^2} + 2\dfrac{h^2}{4!}\dd{^4u_i}{x^4} ... \]
+Since the largest error is of order $2$,
+that is, $dd{^2u_i}{x^2}$, we conclude that the
+stencil is of order $O(h^2)$. \\
+
+We can use this method for other stencils and in higher
+dimensions. \\
+
+\newpage
+
+\subsection*{Finite Element Method}
+
+While the finite difference method is easier, the finite
+element method is more accurate, and allows us to more
+easily perform diffusion (and other functions) on meshes. \\
+
+Suppose we start with heat diffusion (with a source term):
+\[ \partial_t u = \Delta u + f \]
+We multiply the equation by a test function $v$:
+\[ v \partial_t u = v\Delta u + vf \]
+And then we integrate:
+\[ \int_\Omega v \partial_t u = 
+\int_\Omega v\Delta u +  \int_\Omega vf \]
+We then use the product rule and teh divergence
+theorem to split the second distribute (laplacian)
+between $v$ and $u$. \\
+The product rule is an extension of the one dimensional
+product rule:
+\[ (uv)' = u'v + v'u \]
+\[ \nabla \cdot (uv) = \nabla u v + u\nabla v \]
+So we may write:
+\[ \nabla \cdot (v \nabla u) = \nabla u \cdot \nabla v + 
+v \nabla \cdot \nabla u = 
+\nabla u \cdot \nabla v + v \Delta u \]
+So we have:
+\[ \int_\Omega v \partial_t u = 
+\int_\Omega \nabla \cdot (v \nabla u)
+- \int_\Omega \nabla u \cdot \nabla v + \int_\Omega vf \]
+We know that by the divergence theorem:
+\[ \int_\Omega \nabla \cdot F = 
+\int_{\partial \Omega} F \cdot n \]
+So, we have:
+\[ \int_\Omega v \partial_t u = 
+\int_\Omega (v \nabla u) \cdot n
+- \int_\Omega \nabla u \cdot \nabla v + \int_\Omega vf \]
+\[ \int_\Omega v \partial_t u = 
+\int_\Omega v \partial_n u
+- \int_\Omega \nabla u \cdot \nabla v + \int_\Omega vf \]
+Where $\partial_\Omega$ is the border of $\Omega$. \\
+
+Now suppose we have Neumann bouundary condition (reflecting),
+which is expressed as:
+\[ \partial_n u = g \]
+Which applies at the border $\partial_\Omega$
+with normal $n$. \\
+Then we could write:
+\[ \int_\Omega v \partial_t u = 
+\int_\Omega vg
+- \int_\Omega \nabla u \cdot \nabla v + \int_\Omega vf \]
+Which is where we can stop. \\
+
+Now we replace $u$ and $v$ by finite dimensional
+approximations:
+\[ v \approx v_h = \sum_{i = 1}^m v^i_h \psi_i(x) \]
+\[ u \approx u_h = \sum_{j = 1}^n u^j_h \phi_j(x) \]
+So we get:
+\multiline{
+\int_\Omega \sum_{i = 1}^m v^i_h \psi_i(x) 
+\partial_t \sum_{j = 1}^n u^j_h \phi_j(x) &= 
+\int_\Omega \sum_{i = 1}^m v^i_h \psi_i(x)g \\
+- \int_\Omega \nabla \sum_{j = 1}^m v^j_h \phi_j(x) 
+&\cdot \nabla \sum_{i = 1}^n u^i_h \psi_i(x) + 
+\int_\Omega \sum_{i = 1}^m v^i_h \psi_i(x)f }
+\multiline{
+\sum_{i = 1}^m \sum_{j = 1}^n v^j_h \partial_t u^j_h
+\int_\Omega \psi_i(x) \phi_j(x) &= 
+\sum_{i = 1}^m v^i_h \int_\Omega \psi_i(x)g \\
+- \sum_{j = 1}^m \sum_{i = 1}^n v^j_h u^i_h 
+\int_\Omega \nabla \phi_j(x) &\cdot \nabla \psi_i(x) + 
+\sum_{i = 1}^m v^i_h \int_\Omega \psi_i(x)f }
+Now, note that this expression is linear with $v_h$,
+so it holds for any $v_h$, which means we can remove
+the $v_h$ terms. \\
+So for each $v_h^i$, where $1 \leq i \leq m$:
+\[ \sum_{j = 1}^n \partial_t u^j_h
+\int_\Omega \psi_i(x) \phi_j(x) = 
+\int_\Omega \psi_i(x)g - \sum_{i = 1}^n u^i_h 
+\int_\Omega \nabla \phi_j(x) \cdot \nabla \psi_i(x) + 
+\int_\Omega \psi_i(x)f \]
+Which gives us the weight matrix $W$, 
+the mass matrix $M$,
+and the $b$ term vector:
+\[ \sum_{j = 1}^n \partial_t u^j_h
+\underbrace{\int_\Omega \psi_i(x) \phi_j(x)}_{M_{ij}} = 
+\underbrace{\int_\Omega \psi_i(x)g}_{b_{\partial \Omega, i}} 
+- \sum_{i = 1}^n u^i_h 
+\underbrace{\int_\Omega \nabla \phi_j(x) \cdot 
+\nabla \psi_i(x)}_{W_{ij}} + 
+\underbrace{\int_\Omega \psi_i(x)f}_{b_{\Omega, i}} \]
+We can rewrite this using matrix notation. \\
+
+Rewriting it using matrix notation, and grouping
+the $b$ term into a single vector, we get:
+\[ M d_tu_h(t) = -Wu_h(t) + b(t) \]
+Which can be solved for a continuous solution. \\
+
+The discrete solution uses both forward or backwards Euler:
+\[ u_h^{k+1} = u_h^k + \tau \, 
+M^{-1} \para{ - W u_h^k + b^k} \]
+\[ u_h^{k+1} = u_h^k + \tau \, M^{-1} 
+\para{- W u_h^{k+1} + b^{k+1}} \]
+As before, Explicit Euler is conditioanlly stable,
+while Implicit Euler is Unconditionally stable,
+but requires some solver. \\
+Whether we can use conjugant gradient or some more
+general solver depends on whether the weight matrix
+is symmetrix or not. \\
 
 \end{document}

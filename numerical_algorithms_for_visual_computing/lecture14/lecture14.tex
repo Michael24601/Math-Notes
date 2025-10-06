@@ -269,6 +269,19 @@ with amplitudes that decrease with time
 as well, but modifying the frequency
 domain differential equation. \\
 
+We end up with:
+\[ u(t) = \cos(t \lambda_j) \hat{f}(0) 
++ \frac{\sin(t \lambda_j)}{\lambda_j} \hat{g}(0) \]
+Which we can then convert back to $u$. \\
+
+Note that we can solve the continuous differential
+equation without the spectral method. We will however
+need to turn the higher order differential
+equation into a system of first order differential
+equations. \\
+
+This same method can also be used for heat diffusion. \\
+
 \newpage
 
 \subsection*{Finite Differences in Higher Dimensions}
@@ -333,7 +346,7 @@ sum of two square matrices $A$
 and $B$ of dimensions $n \times n$
 and $m \times m$ respectively
 is:
-\[ A \otimes I_m + I_n \otimes B \]
+\[ A \oplus B = A \otimes I_m + I_n \otimes B \]
 Notice that we end up with an $mn \times mn$
 matrix. \\
 
@@ -370,6 +383,37 @@ of higher dimensional finite difference laplacian
 matrices, and can instead just use the one 
 dimensional  matrix's DCT or DST, and then 
 generalize it to $n$-dimensions. \\
+
+Suppose that we have the eigendecomposition:
+\[ A = P\Lambda P\inv \qquad B = Q\Sigma Q\inv \]
+Then the eigendecomposion of the Kronecker sum
+of $A$ and $B$ (the larger stencil in multiple
+dimensions) will be:
+\multiline{
+A \oplus B &= A \otimes I_H + I_W \otimes B \\
+&= (P \Lambda P^{-1}) \otimes (Q I Q^{-1}) 
++ (P I P^{-1}) \otimes (Q \Sigma Q^{-1}) \\
+&= (P \otimes Q) (\Lambda \otimes I_H) 
+(P^{-1} \otimes_K Q^{-1}) + (P \otimes Q) 
+(I_W \otimes \Sigma) (P^{-1} \otimes Q^{-1}) \\
+&= (P \otimes Q) \big(\Lambda \otimes I_H 
++ I_W \otimes \Sigma \big) (P^{-1} \otimes Q^{-1}) \\
+&= (P \otimes Q) \big(\Lambda \oplus \Sigma \big) 
+(P^{-1} \otimes Q^{-1}) }
+So the diagonal matrix with the eigenvalues
+of $A \oplus B$ has entries that look like:
+\[ \lambda_i + \mu_j \]
+where $\lambda_i$ and $\mu_j$ are the eigenvalues of $A$
+and $B$ respectively. \\
+Here $\lambda_i + \mu_j$ is the eigenvalue of
+the element at the point $(i, j)$ on the two dimensional
+grid. \\
+
+We can also find the eigenvectors using the Kronecker
+product of $P$ and $Q$. \\
+
+The same applies for more dimensions. \\
+
 
 \newpage
 

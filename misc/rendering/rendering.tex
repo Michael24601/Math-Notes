@@ -18,11 +18,6 @@
 \setlength{\parindent}{0pt}
 \pagenumbering{arabic}
 
-\section*{Theory}
-
-This first part deals with the more theoretical
-aspects of the rendering equation. \\
-
 \newpage
 
 \subsection*{The Rendering Equation}
@@ -776,13 +771,6 @@ less efficient. \\
 
 \newpage
 
-\section*{Application}
-
-The following sections deal with implementation-level
-details and optimization techniques. \\
-
-\newpage
-
 \subsection*{Ray Tracing}
 
 Light travels from the source, bounces around the
@@ -943,6 +931,36 @@ we can just save the product in a variable
 and then multiply it by the $\nth{k}$
 operands each bounce. \\
 
+Note that the first ray of light, called the primary
+ray, is not randomly sampled; it is always
+the ray shot from the camera position onto the scene
+in the direction of the current pixel on the grid. \\
+This is equivalent to the first bounce in the Neumann
+expansion, $T^0L_e$, where we only have the contribution
+of $L_e$, that is, no BRDF or geometry term. \\
+
+If at any point along a single path, the visibility
+function evaluates to $0$, the rest of the light
+bounces along this path starting from the current one
+will all also be $0$. \\
+We can truncate the path at this point, and count only
+the previous bounces. \\
+A similar thing happes when using solid angles;
+while we don't run the risk of having an obstruction,
+we do run the risk of shooting a ray into the void,
+in which case we also truncate the path. \\
+
+Note that in order to choose an object to sample
+from truly randomly, the objects should not be equally
+likely to be picked; the likelihood of picking a point
+should be proportional to the surface area of the object. \\
+We can achieve this by calcualting the surface areas
+of each object, as well as the total surface area,
+and then use the probability density. \\
+
+Note that sampling using angles on the hemisphere 
+instead of picking random can lead to bias. \\
+
 \newpage
 
 \subsection*{BRDF}
@@ -998,7 +1016,7 @@ and for metals, $F_0 = c_d$. \\
 The GGX normal distribution function is defined as
 \[ D(h) = \frac{\alpha^2}{\pi \left[ 
 (n \cdot h)^2 (\alpha^2 - 1) + 1 \right]^2} \]
-where $\alpha = \text{roughness}^2$ 
+where $\alpha = \text{roughness}$ 
 is the remapped roughness parameter. \\
 
 The geometry function uses the Smith GGX approximation:
@@ -1041,6 +1059,13 @@ generator; this allows us to generate completely
 independent samples while ensuring reproducibility,
 that is, given the same seed, the generator returns
 the same number, which will help with debugging. \\
+
+In order to implement anti-aliasing, we could introduce
+some jitter for the position on the pixel grid before
+tracing the primary-ray. When we average out Monte-Carlo
+samples, this provides a smoother surface.
+We can use the pseudo-random number generator
+to generate some random jitter, scaled accordingly. \\
 
 \newpage
 
@@ -1159,32 +1184,6 @@ w_B = \dfrac{p_B}{p_L + p_B} \]
 Where $p_B$ and $p_L$ are the probability density 
 functions for picking a point on the light source
 and the scene respectively. \\
-
-Here, we have:
-\[ p_L = \frac{p_A(x_L) \, \|x_L - x_k\|^2}
-{|\cos\theta_L|} \qquad
-p_B = \frac{p_A(x_b) 
-\cdot \|x_b - x_k\|^2}{\left| \hs{2} n_b \cdot 
-\dfrac{x_k - x_b}{\|x_k - x_b\|} \hs{1} \right|} \]
-Here $p_A(x_L)$ is the probability density of picking
-a point $x_L$ on a light source;
-in our scheme, we first choose a light source
-randomly, then pick a point on it, so:
-\[ p_A(x_L) = \dfrac{1}{n} \cdot \dfrac{1}{A_i} \]
-Where we have $n$ light sources and the chosen
-light source as surface area $A_i$. \\
-Likewise, $p_A(x_b)$
-is the porbability density of picking
-this point on the scene geometry.
-We usually pick points by first randomly
-choosing an object, and then randomly
-choosing a point on its surface, so:
-\[ p_A(x_b) = \dfrac{1}{m} \cdot \dfrac{1}{A_j} \]
-Where we have $m$ light sources and the chosen
-light source as surface area $A_j$. 
-Here $n_b$ is the normal at $x_b$. \\
-Note that the objects includes both non
-light sources and light sources. \\
 
 Next-event estimation is not necessary but is
 highly recommended. \\
