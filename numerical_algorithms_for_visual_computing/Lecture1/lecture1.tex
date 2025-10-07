@@ -123,20 +123,20 @@
     \]
     We can express this line in vector
     notation:
-    \[ \vecTwo{A}{B} \cdot \vecTwo{x}{y} 
-    + \vecTwo{A}{B}  \cdot \vecTwo{q_1}{q_2} = 0 \]
-    \[ \vecTwo{A}{B}  \cdot \left( \vecTwo{x}{y}
-    + \vecTwo{q_1}{q_2} \right) = 0 \]
+    \[ \bmat{{A} \\ {B}} \cdot \bmat{{x} \\{y}} 
+    + \bmat{{A}\\{B}}  \cdot \bmat{{q_1}\\{q_2}} = 0 \]
+    \[ \bmat{{A}\\{B}}  \cdot \left( \bmat{{x}\\{y}}
+    + \bmat{{q_1}\\{q_2}} \right) = 0 \]
     where
-    \[ \vecTwo{A}{B} \cdot \vecTwo{q_1}{q_2} = c \]
+    \[ \bmat{{A}\\{B}} \cdot \bmat{{q_1}\\{q_2}} = c \]
     Notice that
-    \[ \vecTwo{A}{B} \]
+    \[ \bmat{{A}\\{B}} \]
     is the gradient $\nabla f$ of the function,
     meaning that it represents the normal $\bv{n}$
     to the surface.
     (which is constant since this is a line). \\
     Moreover, the equation 
-    \[ \vecTwo{A}{B} \cdot \vecTwo{q_1}{q_2} = c \]
+    \[ \bmat{{A}\\{B}} \cdot \bmat{{q_1}\\{q_2}} = c \]
     can be satisfied by many points $\bv{q}$,
     as long as they are on the line. \\
     To conclude, we can define a line
@@ -363,9 +363,9 @@
     intersecting each other (or $n+1$ $n$-dimensional hyperplanes)
     at the solution. \\
     We can compactly write this using dot products:
-    \[ \vecTwo{a_1^1}{a_1^2} \cdot \vecTwo{x^1}{x^2}
+    \[ \bmat{{a_1^1}\\{a_1^2}} \cdot \bmat{{x^1}\\{x^2}}
     = b^1 \]
-    \[ \vecTwo{a_2^1}{a_2^2} \cdot \vecTwo{x^1}{x^2}
+    \[ \bmat{{a_2^1}\\{a_2^2}} \cdot \bmat{{x^1}\\{x^2}}
     = b^2 \]
     Notice how each row is turned into a vector.
     This is the row major approach. \\
@@ -374,11 +374,11 @@
     infinite solutions. \\
 
     The second way to think of it is as two vectors
-    \[ \vecTwo{a_1^1}{a_2^1} \qquad \vecTwo{a_1^2}{a_2^2} \]
+    \[ \bmat{{a_1^1}\\{a_2^1}} \qquad \bmat{{a_1^2}\\{a_2^2}} \]
     and we need to find some linear combination of them
     equal to the point $b$: 
-    \[ x^1\vecTwo{a_1^1}{a_2^1} + x^2\vecTwo{a_1^2}{a_2^2}
-    = \vecTwo{b^1}{b^2} \]
+    \[ x^1\bmat{{a_1^1}\\{a_2^1}} + x^2\bmat{{a_1^2}\\{a_2^2}}
+    = \bmat{{b^1}\\{b^2}} \]
     Notice how each column in the system is a vector.
     This is the column major approach. \\
     If the two vectors are colinear,
@@ -396,26 +396,28 @@
     \[ a_1^1 \quad a_1^2 \quad a_2^1 \quad a_2^2
     \quad b^1 \quad b^2 \]
     We can compactly write these using matrix notation:
-    \[ \matTwo{a_1^1}{a_1^2}{a_2^1}{a_2^2}
-    \vecTwo{x^1}{x^2} = \vecTwo{b^1}{b^2} \]
+    \[ \bmat{{a_1^1}&{a_1^2}\\{a_2^1}&{a_2^2}}
+    \bmat{{x^1} \\ {x^2}} = \bmat{{b^1} \\ {b^2}} \]
     Now we motivate matrix multiplication.
     Matrix multiplication of a vector needs
     to yield the original system:
-    \[ \matTwo{a_1^1}{a_1^2}{a_2^1}{a_2^2}
-    \vecTwo{x^1}{x^2}
-    = \vecTwo{a_1^1x^1 + a_2^1x^2}{a_1^2x^1 + a_2^2x^2}
-    = \vecTwo{b^1}{b^2} \]
+    \[ \bmat{{a_1^1} & {a_1^2} \\ {a_2^1} & {a_2^2}}
+    \bmat{{x^1} \\{x^2}}
+    = \bmat{{a_1^1x^1 + a_2^1x^2} \\ {a_1^2x^1 + a_2^2x^2}}
+    = \bmat{{b^1} \\ {b^2}} \]
     Notice how we can still think of matrix multiplication
     in two ways.
     The row major approach:
-    \[ \vecTwo{a_1^1x^1 + a_2^1x^2}{a_1^2x^1 + a_2^2x^2}
-    = \vecTwo{\vecTwo{a_1^1}{a_1^2} \cdot \vecTwo{x^1}{x^2}}
-    {\vecTwo{a_2^1}{a_2^2} \cdot \vecTwo{x^1}{x^2}}
-    = \vecTwo{b^1}{b^2} \]
+    \[ \bmat{{a_1^1x^1 + a_2^1x^2} \\ {a_1^2x^1 + a_2^2x^2}}
+    = \bmat{{\bmat{{a_1^1} \\ {a_1^2}} 
+    \cdot \bmat{{x^1} \\ {x^2}}} \vs{10} \\
+    {\bmat{{a_2^1} \\ {a_2^2}} \cdot \bmat{{x^1} \\ {x^2}}}}
+    = \bmat{{b^1}\\ {b^2}} \]
     And the column major approach:
-    \[ \vecTwo{a_1^1x^1 + a_2^1x^2}{a_1^2x^1 + a_2^2x^2}
-    = x^1\vecTwo{a_1^1}{a_2^1} + x^2\vecTwo{a_1^2}{a_2^2}
-    = \vecTwo{b^1}{b^2} \]
+    \[ \bmat{{a_1^1x^1 + a_2^1x^2} \\ {a_1^2x^1 + a_2^2x^2}}
+    = x^1\bmat{{a_1^1} \\ {a_2^1}} 
+    + x^2\bmat{{a_1^2} \\ {a_2^2}}
+    = \bmat{{b^1} \\ {b^2}} \]
     \\
 
     More generally however, we can multiply
@@ -430,11 +432,11 @@
     We can formalize Cramer's rule,
     where:
     \[ x^1 = \dfrac{
-        \det{\matTwo{b^1}{a_1^2}{b^2}{a_2^2}}
-    }{\det{\matTwo{a_1^1}{a_2^1}{a_1^2}{a_2^2}}} \]
+        \det{\bmat{{b^1} & {a_1^2} \\ {b^2} & {a_2^2}}}
+    }{\det{\bmat{{a_1^1} & {a_2^1} \\ {a_1^2} & {a_2^2}}}} \]
     \[ x^2 = \dfrac{
-        \det{\matTwo{a_1^1}{b^1}{a_1^2}{b^2}}
-    }{\det{\matTwo{a_1^1}{a_2^1}{a_1^2}{a_2^2}}} \]
+        \det{\bmat{{a_1^1} & {b^1} \\ {a_1^2} & {b^2}}}
+    }{\det{\bmat{{a_1^1} & {a_2^1} \\ {a_1^2} & {a_2^2}}}} \]
     If teh determinant is 0, 
     the system has no unique solution. \\
 

@@ -211,32 +211,35 @@ We will show how to do it using determinants. \\
 
 As we know, we can calculate the determinant
 of a square matrix using a cofactor expansion:
-\[ \det \para{ \matThree{a_1^1}{a_2^1}{a_3^1}
-{a_1^2}{a_2^2}{a_3^2}{a_1^3}{a_2^3}{a_3^3} }
-= a_1^1 \det\para{\matTwo{a_2^2}{a_3^2}
-{a_2^3}{a_3^3}}
-- a_2^1 \det\para{\matTwo{a_1^2}{a_3^2}
-{a_1^3}{a_3^3}}
-+ a_3^1 \det\para{\matTwo{a_1^2}{a_2^2}
-{a_1^3}{a_2^3}} \]
+\[ \det \para{ \bmat{{a_1^1} & {a_2^1} 
+& {a_3^1} \\ {a_1^2} & {a_2^2} & {a_3^2} \\ 
+{a_1^3} & {a_2^3} & {a_3^3}} }
+= a_1^1 \det\para{ \bmat{{a_2^2} & {a_3^2} \\
+{a_2^3} & {a_3^3}}}
+- a_2^1 \det\para{\bmat{{a_1^2} & {a_3^2} \\
+{a_1^3} & {a_3^3}}}
++ a_3^1 \det\para{\bmat{{a_1^2} & {a_2^2} \\
+{a_1^3} & {a_2^3}}} \]
 We don't need to use coefficients from the top
 row, it can from any row:
-\[ \det \para{ \matThree{a_1^1}{a_2^1}{a_3^1}
-{a_1^2}{a_2^2}{a_3^2}{a_1^3}{a_2^3}{a_3^3} }
-= -a_1^2 \det\para{\matTwo{a_2^1}{a_3^1}
-{a_2^3}{a_3^3}}
-+ a_2^2 \det\para{\matTwo{a_1^1}{a_3^1}
-{a_1^3}{a_3^3}}
-- a_3^2 \det\para{\matTwo{a_1^1}{a_2^1}
-{a_1^3}{a_2^3}} \]
-\[ \det \para{ \matThree{a_1^1}{a_2^1}{a_3^1}
-{a_1^2}{a_2^2}{a_3^2}{a_1^3}{a_2^3}{a_3^3} }
-= a_1^3 \det\para{\matTwo{a_2^1}{a_3^1}
-{a_2^2}{a_3^2}}
-- a_2^3 \det\para{\matTwo{a_1^1}{a_3^1}
-{a_1^2}{a_3^2}}
-+ a_3^3 \det\para{\matTwo{a_1^1}{a_2^1}
-{a_1^2}{a_2^2}} \]
+\[ \det \para{ \bmat{{a_1^1} & {a_2^1} & 
+{a_3^1} \\ {a_1^2} & {a_2^2} & {a_3^2} \\
+{a_1^3} & {a_2^3} & {a_3^3}} }
+= -a_1^2 \det\para{ \bmat{{a_2^1} & {a_3^1} \\
+{a_2^3} & {a_3^3}}}
++ a_2^2 \det\para{\bmat{{a_1^1} & {a_3^1} \\
+{a_1^3} & {a_3^3}}}
+- a_3^2 \det\para{\bmat{{a_1^1} & {a_2^1} \\
+{a_1^3} & {a_2^3}}} \]
+\[ \det \para{ \bmat{{a_1^1} & {a_2^1} & {a_3^1} \\
+{a_1^2} & {a_2^2} & {a_3^2} \\{a_1^3} & 
+{a_2^3} & {a_3^3}} }
+= a_1^3 \det\para{\bmat{{a_2^1} & {a_3^1} \\
+{a_2^2} & {a_3^2}}}
+- a_2^3 \det\para{\bmat{{a_1^1} & {a_3^1} \\
+{a_1^2} & {a_3^2}}}
++ a_3^3 \det\para{\bmat{{a_1^1} & {a_2^1} \\
+{a_1^2} & {a_2^2}}} \]
 We can use any row we want for the coefficients
 so long as we multiply it by the determinant
 of the $2 \times 2$ matrix that we get from
@@ -266,9 +269,9 @@ entry is the determinant of $C_{ij}$
 multiplied by $-1^{i+j}$,
 we would call $M$ a cofactor matrix:
 \[ M = \cof(A) = 
-\matThree{\det(C_{11})}{-\det(C_{12})}{\det(C_{12})}
-{-\det(C_{21})}{\det(C_{22})}{-\det(C_{23})}
-{\det(C_{31})}{-\det(C_{32})}{\det(C_{33})} \]
+\bmat{{\det(C_{11})} & {-\det(C_{12})} & {\det(C_{12})} \\
+{-\det(C_{21})} & {\det(C_{22})} & {-\det(C_{23})} \\
+{\det(C_{31})} & {-\det(C_{32})} & {\det(C_{33})}} \]
 
 The adjugate matrix $\adj(A)$
 is just $\cof(A)^T$. \\
@@ -280,8 +283,8 @@ then the determinant would just be the dot
 product of the $\nth{i}$ row of $A$
 and the $\nth{i}$ column of $\adj(A)$. \\
 This means that
-\[ A (\adj(A)) = \matThree{\det(A)}{}{}
-{}{\det(A)}{}{}{}{\det(A)} \]
+\[ A (\adj(A)) = \bmat{{\det(A)} & {} & {} \\
+{} & {\det(A)} & {} \\ {} & { } & {\det(A)}} \]
 As for the other elements,
 notice that when we have the dot product of the
 $\nth{i}$ row of $A$
@@ -295,14 +298,15 @@ and second column is:
 a_1^1 \det(C_{12})
 - a_2^1 \det(C_{22}) + a_3^1 \det(C_{32}) \]
 which is the formula for the determinant of
-\[ \matThree{a_1^1}{a_2^1}{a_3^1}
-{a_1^1}{a_2^1}{a_3^1}{a_3^1}{a_3^2}{a_3^3} \]
+\[ \bmat{{a_1^1} & {a_2^1} & {a_3^1} \\
+{a_1^1} & {a_2^1} & {a_3^1} \\ {a_3^1} & 
+{a_3^2} & {a_3^3}} \]
 which has two identical rows and is therefore
 singular. \\
 This means that $A_1(\adj(A))^2 = 0$,
 which tells us that:
-\[ A (\adj(A)) = \matThree{\det(A)}{0}{0}
-{0}{\det(A)}{0}{0}{0}{\det(A)} 
+\[ A (\adj(A)) = \bmat{{\det(A)} & {0} & {0} \\
+{0} & {\det(A)} & {0} \\ {0} & {0} & {\det(A)}} 
 = \det(A)I \]
 
 Now, to calculate the inverse, we just need
@@ -387,7 +391,7 @@ trasnformations such as shears and translations. \\
 
 We can apply the linear transformation
 by using block element multiplication:
-\[ \vecTwoTransposed{A}{t}\vecTwo{p}{1} \] \\
+\[ \bmat{{A} & {t}} \bmat{{p}\\{1}} \] \\
 
 A linear transformation $L$ must satisfy the
 property that, for any two vectors $u$ and $v$,
@@ -409,7 +413,7 @@ as $p$ and $q$). \\
 
 We can model the translation as an affine
 transformation:
-\[ \vecTwoTransposed{I_n}{t}\vecTwo{p}{1} \]
+\[ \bmat{{I_n}& {t}} \bmat{{p}\\{1}} \]
 using the idendity matrix for $A$
 so that the affine transformation only translates
 $p$. \\
@@ -420,20 +424,21 @@ in order to model the transformation using a
 square matrix. \\
 So suppose we have $p, q \in \rbb^2$,
 then notice that:
-\[ \vecTwo{q_1}{q_2} = \vecTwo{p_1 + t_1}{p_2 + t_2} \]
+\[ \bmat{{q_1}\\{q_2}} = \bmat{{p_1 + t_1}\\{p_2 + t_2}} \]
 If we were to add a padding to the vector
 (a third entry, with value $1$, 
 which we know can be discarded),
 Then we can write:
-\[ \matThree{1}{0}{t_1}{0}{1}{t_2}{0}{0}{1}
-\vecThree{p_1}{p_2}{1} = \vecThree{p_1 + t_1}{p_2 + t_2}{1}
-= \vecThree{q_1}{q_2}{1} \]
+\[ \bmat{{1}&{0}&{t_1}\\{0}&{1}&{t_2}\\{0}&{0}&{1}}
+\bmat{{p_1}\\{p_2}\\{1}} = 
+\bmat{{p_1 + t_1}\\{p_2 + t_2}\\{1}}
+= \bmat{{q_1}\\{q_2}\\{1}} \]
 So the linear transformation gave us the translated vector,
 but in homoegenous coordinates. \\
 We can more generally write a translation of
 vectors in $\rbb^n$ as the homogeneous matrix in
 $\rbb^{(n+1) \times (n+1)}$ with the format:
-\[ \matTwo{I}{t}{0}{1} \]
+\[ \bmat{{I} & {t} \\{0} & {1}} \]
 where $I$ is the identity matrix in $\rbb^{n \times n}$
 and $t \in \rbb^n$. \\
 
@@ -444,16 +449,17 @@ As we know, the inverse of applying a translation
 is to translate by the opposite direction vector of $t$:
 \[ p = q - t \]
 So, the inverse transformation must be:
-\[ \matTwo{I}{-t}{0}{1} \]
+\[ \bmat{{I} & {-t} \\{ 0} & {1}} \]
 And if we were to try and calculate the inverse of the
 matrix, we would find the same answer. \\
 
 The combination of two translation matrices
 is their product:
-\[ \matTwo{I}{t_2}{0}{1}\matTwo{I}{t_1}{0}{1} \]
+\[ \bmat{{I} & {t_2} \\ {0} & {1}} 
+\bmat{{I} & {t_1} \\ {0} & {1}} \]
 Appropriately, the result of this product is
 just:
-\[ \matTwo{I}{t_2 + t_1}{0}{1} \]
+\[ \bmat{{I} & {t_2 + t_1} \\{0} & {1}} \]
 since we are just applying one translation
 after the other,
 which is to say, adding $t_1$ then $t_2$. \\
@@ -477,16 +483,18 @@ We want the transformation $R$
 that rotates $u$ to $v$,
 meaning that it rotates by an angle $\theta$:
 \[ Ru = v \]
-\[ R\vecTwo{\cos(\phi)}{\sin(\phi)}
-= \vecTwo{\cos(\phi + \theta)}{\sin(\phi + \theta)} \]
+\[ R \bmat{{\cos(\phi)} \\{\sin(\phi)}}
+= \bmat{{\cos(\phi + \theta)} \\ {\sin(\phi + \theta)}} \]
 We can then use the identities for
 $\cos(a + b)$ and $\sin(a+b)$:
-\[ R\vecTwo{\cos(\phi)}{\sin(\phi)}
-= \vecTwo{\cos(\phi)\cos(\theta) - \sin(\phi)\sin(\theta)}
-{\sin(\phi)\cos(\theta) + \cos(\phi)\sin(\theta)} \]
+\[ R \bmat{{\cos(\phi)} \\ {\sin(\phi)}}
+= \bmat{{\cos(\phi)\cos(\theta) - 
+\sin(\phi)\sin(\theta)} \\
+{\sin(\phi)\cos(\theta) + 
+\cos(\phi)\sin(\theta)}} \]
 Notice that this means that
-\[R = \matTwo{\cos(\theta)}{-\sin(\theta)}
-{\sin(\theta)}{\cos(\theta)} \]
+\[R = \bmat{{\cos(\theta)} & {-\sin(\theta)} \\
+{\sin(\theta)} & {\cos(\theta)}} \]
 We can extend this to any dimension $\rbb^n$. \\
 We can write $R(\theta)$ to indicate
 a rotation of angle $\theta$. \\
@@ -498,10 +506,10 @@ which is the result we would get should we
 actually calculate the inverse. \\
 Note however that:
 \[ (R(\theta))\inv = R(-\theta) 
-= \matTwo{\cos(-\theta)}{-\sin(-\theta)}
-{\sin(-\theta)}{\cos(-\theta)}
-= \matTwo{\cos(\theta)}{\sin(\theta)}
-{-\sin(\theta)}{\cos(\theta)} = R(\theta)^T \]
+= \bmat{{\cos(-\theta)} & {-\sin(-\theta)} \\
+{\sin(-\theta)} & {\cos(-\theta)}}
+= \bmat{{\cos(\theta)} & {\sin(\theta)} \\
+{-\sin(\theta)} & {\cos(\theta)}} = R(\theta)^T \]
 The reason the inverse is the transpose 
 is because a rotation is orthogonal,
 meaning that the inverse is the transpose. \\
@@ -547,7 +555,7 @@ with determinant that has an absolute
 value of $1$. \\
 However some of the entries can be $-1$
 instead of $1$:
-\[ \matTwo{1}{0}{0}{-1} \]
+\[ \bmat{{1} & {0} \\ {0} & {-1}} \]
 The transformation reflects the space $\rbb^n$
 around basis vectors of the $-1$ entries.
 
@@ -556,14 +564,14 @@ around basis vectors of the $-1$ entries.
 \subsection*{Scaling}
 
 The matrix:
-\[ S = \matThree{\alpha_1}{0}{0}
-{0}{\alpha_2}{0}{0}{0}{\alpha_3} \]
+\[ S = \bmat{{\alpha_1} & {0} & {0} \\
+{0} & {\alpha_2} & {0} \\ {0} & {0} & {\alpha_3}} \]
 scales vectors in $\rbb^3$
 by $\alpha_1$, $\alpha_2$, and $\alpha_3$
 in the directions
-\[ \vecThree{1}{0}{0}
-\qquad \vecThree{0}{1}{0}
-\qquad \vecThree{0}{0}{1} \]
+\[ \bmat{{1} \\ {0}\\ {0}}
+\qquad \bmat{{0} \\{1} \\{0}}
+\qquad \bmat{{0} \\ {0}\\{1}} \]
 We thus call it a scaling matrix. \\
 
 A scaling matrix in $\rbb^n$ has a determinant equal 
@@ -578,25 +586,25 @@ expansion is used. \\
 The inverse of the scaling matrix
 is clearly just the scaling matrix
 with inverse scaling factors:
-\[ S\inv = \matThree{\sfrac{1}{\alpha_1}}{0}{0}
-{0}{\sfrac{1}{\alpha_2}}{0}
-{0}{0}{\sfrac{1}{\alpha_3}} \] \\
+\[ S\inv = \bmat{{\sfrac{1} {\alpha_1}} & 
+{0} & {0} \\ {0} & {\sfrac{1}{\alpha_2}} & {0} \\ 
+{0} & {0} & {\sfrac{1}{\alpha_3}}} \] \\
 
 Moreover, the product of two scaling
 matrices is just the scaling matrix
 that applies both scales:
-\[ \matThree{\alpha_1}{0}{0}
-{0}{\alpha_2}{0}{0}{0}{\alpha_3}
-\matThree{\beta_1}{0}{0}
-{0}{\beta_2}{0}{0}{0}{\beta_3}
-= \matThree{\alpha_1 \cdot \beta_1}{0}{0}
-{0}{\alpha_2 \cdot \beta_2}{0}
-{0}{0}{\alpha_3 \cdot \beta_3} \] \\
+\[ \bmat{{\alpha_1} & {0} & {0} \\
+{0} & {\alpha_2} & {0} \\ {0} & {0} & {\alpha_3}}
+\bmat{{\beta_1} & {0} & {0} \\
+{0} & {\beta_2} & {0} \\ {0} & {0} & {\beta_3}}
+= \bmat{{\alpha_1 \cdot \beta_1} & {0} &{0} \\
+{0} & {\alpha_2 \cdot \beta_2} & {0} \\
+{0} & {0} & {\alpha_3 \cdot \beta_3}} \] \\
 
 We can write $S(s)$
 as a shorthand for a scaling matrix:
-\[ S(s) = \matThree{s_1}{0}{0}
-{0}{s_2}{0}{0}{0}{s_3} \]
+\[ S(s) = \bmat{{s_1} & {0} & {0} \\
+{0} & {s_2} & {0} \\ {0} & {0} & {s_3}} \]
 that scales in each direction by 
 the entry $s_i$ in the $s$ vector. \\
 
@@ -617,8 +625,8 @@ coordinates,
 this forces the other matrices to also be written as such. \\
 So if we have a rotation $A$ and scaling matrix $B$,
 then we would replace them with
-\[ R = \matTwo{A}{0}{0}{1}
-\qquad S = \matTwo{B}{0}{0}{1} \]
+\[ R = \bmat{{A} & {0} \\{0} & {1}}
+\qquad S = \bmat{{B} & {0} \\ {0} & {1}} \]
 which are homoegenous. \\
 
 We apply scaling and rotation first,
@@ -631,7 +639,7 @@ where $v$ is any point. \\
 Matrix multiplication is not commutative so
 the order does matter and can't be flipped. \\
 Note that $M$ is an affine transformation since:
-\[ M = \matTwo{SR}{t}{0}{1} \]
+\[ M = \bmat{{SR} & {t} \\ {0} & {1}} \]
 which just applies $SR$ to $v$,
 then adds the translation $t$. \\
 
@@ -655,8 +663,8 @@ Recall that $(AB)\inv = B\inv A\inv$. \\
 
 If we instead have just a a homoegenous matris $M$,
 then the inverse is also homogeneous:
-\[ \matTwo{A}{t}{0}{1}\inv
-= \matTwo{A\inv}{-A\inv t}{0}{1} \]
+\[ \bmat{{A} & {t} \\ {0} & {1}}\inv
+= \bmat{{A\inv} & {-A\inv t} \\ {0} & {1}} \]
 This is because the matrix works by applying $A$
 first to the vector, then adding $t$:
 \[ q = Ap + t \]
@@ -806,13 +814,13 @@ This method does not generalize however
 as it only works in $\rbb^3$. \\
 As we saw earlier,
 multiplying a vector by:
-\[ \vecTwoTransposed{f_1}{f_2}^T \]
+\[ \bmat{{f_1} & {f_2}}^T \]
 has the effect of projecting it
 onto the plane spanned by $f_1$ and $f_2$. \\
 On the other hand,
 multiplying the vectors together:
-\[ F^TF = \vecTwo{f_1}{f_2}
-\vecTwoTransposed{f_1}{f_2} \]
+\[ F^TF = \bmat{{f_1} \\ {f_2}}
+\bmat{{f_1}& {f_2}} \]
 returns a matrix in $\rbb^2$
 that represents the same basis
 as the one defined by $f_1$ and $f_2$,

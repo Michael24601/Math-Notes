@@ -68,7 +68,7 @@ Which is our inverse. \\
 Last lecture we arrived at:
 \[ \dd{u}{\theta} = Ju \]
 where $J$ is a rotation matrix:
-\[ J = \matTwo{0}{1}{-1}{0} \]
+\[ J = \bmat{{0}&{1}\\{-1}&{0}} \]
 which rotates by $90$ degrees. \\
 We will now see how to solve this. \\
 
@@ -167,11 +167,11 @@ We again use the Taylor Series:
 + \dfrac{J^5\theta^5}{5!} \dots \]
 Now notice that as we take the power of the
 matrix, it cycles:
-\[ J^0 = \matTwo{1}{0}{0}{1} = I \qquad
-J = \matTwo{0}{1}{-1}{0}
-\qquad J^2 = \matTwo{-1}{0}{0}{-1} = -I \]
-\[ J^3 = \matTwo{0}{-1}{1}{0}
-\qquad J^4 = \matTwo{1}{0}{0}{1} = I \]
+\[ J^0 = \bmat{{1}&{0}\\{0}&{1}} = I \qquad
+J = \bmat{{0}&{1}\\{-1}&{0}}
+\qquad J^2 = \bmat{{-1}&{0}\\{0}&{-1}} = -I \]
+\[ J^3 = \bmat{{0}&{-1}\\{1}&{0}}
+\qquad J^4 = \bmat{{1}&{0}\\{0}&{1}} = I \]
 So as we can see, $J$ cycles;
 every $4$ powers, it goes back to $J$,
 which means that $J^4 = I$ is the identity.
@@ -189,8 +189,8 @@ as a factor):
 + J\sum_{k = 0}^{\infty} (-1)^{k}
 \dfrac{\theta^{2k + 1}}{(2k + 1)!} \]
 \[ e^{J\theta} = I\cos(\theta) + J\sin(\theta)
-= \matTwo{\cos(\theta)}{\sin(\theta)}
-{-\sin(\theta)}{\cos(\theta)} \]
+= \bmat{{\cos(\theta)}&{\sin(\theta)}\\
+{-\sin(\theta)}&{\cos(\theta)}} \]
 So the result is just a rotation matrix
 by angle $\theta$. \\
 
@@ -334,8 +334,8 @@ curve, which is a one dimensional manifold
 in $\rbb^n$ space:
 \[ C(t) = \{\gamma(t) \in \rbb^n \mid t \in \rbb \} \]
 Where:
-\[ \gamma(t) = \vecThree{\gamma_1(t)}
-{\vdots}{\gamma_n(t)} \]
+\[ \gamma(t) = \bmat{{\gamma_1(t)} \\
+{\vdots} \\ {\gamma_n(t)}} \]
 is any point $p$ on the curve. \\
 
 Since we have a curve, the tangent will be a line. \\
@@ -435,13 +435,13 @@ output variables $\gamma^1, \gamma^2, \dots$
 individually, it's best to think of it
 as a single output that happes to be a vector:
 \[ \gamma(\alpha, \beta) = 
-\vecThree{\gamma^1(\alpha, \beta)}
-{\vdots}{\gamma^n (\alpha, \beta)} \]
+\bmat{{\gamma^1(\alpha, \beta)} \\
+{\vdots} \\ {\gamma^n (\alpha, \beta)}} \]
 So instead, we can think of the Jacobian
 as the block component matrix:
-\[ J_\gamma = \vecTwoTransposed
-{\partialdd{\gamma}{\alpha}}
-{\partialdd{\gamma}{\beta}} \]
+\[ J_\gamma = \bmat{
+{\partialdd{\gamma}{\alpha}} & 
+{\partialdd{\gamma}{\beta}}} \]
 Where $\partialdd{\gamma}{\alpha}$
 and $\partialdd{\gamma}{\beta}$
 are just the derivatives of the $\gamma$ vector. \\
@@ -452,7 +452,7 @@ of $\gamma$. \\
 
 We can then express the tangent space as:
 \[ T_pC = \curl{ 
-J_g \vecTwo{\lambda}{\mu}
+J_g \bmat{{\lambda} \\ {\mu}}
 \mid \lambda, \mu \in \rbb } \]
 Which we know is just a linear combination of each
 column in the Jacobian, which are each

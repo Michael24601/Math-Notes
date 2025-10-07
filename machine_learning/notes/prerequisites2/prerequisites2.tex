@@ -80,9 +80,9 @@
     we can formalize the notion of measurements
     by noting that the length,
     area, and volume are no more than functions
-    \[ L:\pcal{\rbb} \to [0, \infty) \]    
-    \[ A:\pcal{\rbb^2} \to [0, \infty) \]
-    \[ V:\pcal{\rbb^3} \to [0, \infty) \]
+    \[ L:\pcal(\rbb) \to [0, \infty) \]    
+    \[ A:\pcal(\rbb^2) \to [0, \infty) \]
+    \[ V:\pcal(\rbb^3) \to [0, \infty) \]
     that map subsets of some global space
     to a non-negative real number. \\
     Here $\pcal{A}$ is the powerset 
@@ -926,13 +926,13 @@
     \[ X: \Omega \to \rbb^n
     \qquad Y: \Omega \to \rbb^d \]
     If we have a vector
-    \[ \vecTwo{X}{Y} \]
+    \[ \bmat{{X} \\ {Y}} \]
     then its covariance matrix is
-    \[ \cov\para{\vecTwo{X}{Y}}
-    = \matTwo{\cov(X, X)}{\cov(X, Y)}
-    {\cov(Y, X)}{\cov(Y, Y)}
-    = \matTwo{\cov(X)}{\cov(X, Y)}
-    {\cov(Y, X)}{\cov(Y)} \]
+    \[ \cov\para{\bmat{{X} \\ {Y}}}
+    = \bmat{{\cov(X, X)} & {\cov(X, Y)} \\
+    {\cov(Y, X)} &{\cov(Y, Y)}}
+    = \bmat{{\cov(X)} & {\cov(X, Y)} \\
+    {\cov(Y, X)} & {\cov(Y)}} \]
     Here, every entry of the covariance
     matrix is itself a matrix,
     since we treated the entries
@@ -953,7 +953,7 @@
     \cov(Y, X)^T \]
     Also note that
     \[ \cov(X, Y) \neq 
-    \cov\para{\vecTwo{X}{Y}} \]
+    \cov\para{\bmat{{X} \\ {Y}}} \]
     One is the covariance comparing
     $X$ to $Y$,
     the other is the covariance of the

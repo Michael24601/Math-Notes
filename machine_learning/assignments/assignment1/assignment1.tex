@@ -21,7 +21,7 @@
 
     \subsection*{Ex 1}
 
-    \begin{enumerate}[label=\alph*)]
+    \begin{enumerate}[label=\letters]
         \item 
         We know that if $v$ is an eigenvector of $A$,
         and $\lambda$ is its eigenvalue,
@@ -315,7 +315,7 @@
         \item 
         We know that for a random vector
         in $\rbb^{2d}$
-        \[ X = \vecTwo{X_1}{X_2} \]
+        \[ X = \bmat{{X_1}\\{X_2}} \]
         (where each of $X_1$ and $X_2$
         are themselves vectors, though we
         can treat them as block components),
@@ -326,11 +326,11 @@
         (if the entry itself is a vector
         we can treat its covariance like 
         a block element):
-        \[ \cov\para{\vecTwo{X_1}{X_2}}
-        = \matTwo{\var(X_1)}{\cov(X_1X_2)}
-        {\cov(X_2X_1)}{\var(X_2)} 
-        = \matTwo{\Sigma_1}{C}
-        {C^{T}}{\Sigma_2} = M \]
+        \[ \cov\para{\bmat{{X_1} \\ {X_2}}}
+        = \bmat{{\var(X_1)} & {\cov(X_1X_2)} \\
+        {\cov(X_2X_1)} & {\var(X_2)} }
+        = \bmat{{\Sigma_1} & {C} \\
+        {C^{T}} & {\Sigma_2}} = M \]
         (Here $C$ is not a scalar,
         but a matrix, since both $X_1$
         and $X_2$ are random vectors,
@@ -338,9 +338,9 @@
         changes). \\
         As for the mean of this random variable,
         it is just 
-        \[ \ebb\brac{ \vecTwo{X_1}{X_2}}
-        = \vecTwo{\ebb(X_1)}{\ebb(X_2)}
-        = \vecTwo{0}{0} \]
+        \[ \ebb\brac{ \bmat{{X_1} \\ {X_2}}}
+        = \bmat{{\ebb(X_1)} \\ {\ebb(X_2)}}
+        = \bmat{{0} \\ {0}} \]
         So the random variable follows the
         distribution
         \[ X \sim \normal(0, M) \]

@@ -120,7 +120,8 @@ each exponetial term is bound between $1$ and $-1$. \\
 
 So we have:
 \[ \tau \in \Big[0, \dfrac{1}{2}\Big) \]
-in one dimension. \\
+in one dimension for the forward Euler heat
+diffusion solution. \\
 
 In more dimensions, we use the larger stencil, and
 end up with a bound on $\rho(L)$ of $4 \cdot m$,
@@ -197,7 +198,7 @@ between $v$ and $u$. \\
 The product rule is an extension of the one dimensional
 product rule:
 \[ (uv)' = u'v + v'u \]
-\[ \nabla \cdot (uv) = \nabla u v + u\nabla v \]
+\[ \nabla \cdot (uv) = (\nabla u) v + u (\nabla v) \]
 So we may write:
 \[ \nabla \cdot (v \nabla u) = \nabla u \cdot \nabla v + 
 v \nabla \cdot \nabla u = 
@@ -262,7 +263,8 @@ the mass matrix $M$,
 and the $b$ term vector:
 \[ \sum_{j = 1}^n \partial_t u^j_h
 \underbrace{\int_\Omega \psi_i(x) \phi_j(x)}_{M_{ij}} = 
-\underbrace{\int_\Omega \psi_i(x)g}_{b_{\partial \Omega, i}} 
+\underbrace{\int_\Omega 
+\psi_i(x)g}_{b_{\partial \Omega, i}} 
 - \sum_{i = 1}^n u^i_h 
 \underbrace{\int_\Omega \nabla \phi_j(x) \cdot 
 \nabla \psi_i(x)}_{W_{ij}} + 
@@ -274,7 +276,7 @@ the $b$ term into a single vector, we get:
 \[ M d_tu_h(t) = -Wu_h(t) + b(t) \]
 Which can be solved for a continuous solution. \\
 
-The discrete solution uses both forward or backwards Euler:
+The discrete solution uses forward or backwards Euler:
 \[ u_h^{k+1} = u_h^k + \tau \, 
 M^{-1} \para{ - W u_h^k + b^k} \]
 \[ u_h^{k+1} = u_h^k + \tau \, M^{-1} 
@@ -284,6 +286,6 @@ while Implicit Euler is Unconditionally stable,
 but requires some solver. \\
 Whether we can use conjugant gradient or some more
 general solver depends on whether the weight matrix
-is symmetrix or not. \\
+is symmetric or not. \\
 
 \end{document}

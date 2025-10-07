@@ -66,7 +66,7 @@
     numbers $\rbb$, such as $\rbb^2$ (set of all 2D vectors). \\
 
     An example of a vector in $\rbb^3$:
-    \[ \vecThree{1}{0}{2} \] \\
+    \[ \bmat{1 \\ 0 \\ 2} \] \\
 
     The Euclidian inner product, called the dot product,
     is defined as:
@@ -166,7 +166,7 @@
     We can think of the basis as the coordinate
     system of the vector space.
     For instance, when we have a vector
-    \[ \vecThree{1}{5}{6} \]
+    \[ \bmat{1 \\ 5 \\ 6} \]
     The entries refer to the scalar factors
     that have to be applied to the basis vectors
     such that their linear combinaton produces
@@ -195,16 +195,16 @@
 
     For example, for $\rbb^2$,
     we have the standard basis:
-    \[ \vecTwo{1}{0} \qquad
-    \text{ and } \qquad \vecTwo{0}{1} \]
+    \[ \bmat{1 \\ 0} \qquad
+    \text{ and } \qquad \bmat{0 \\ 1} \]
     This satisfies both properties. \\
     For instance, for any two scalars $a$ and $b$,
-    \[ a\vecTwo{1}{0} + b\vecTwo{0}{1} = \vecTwo{0}{0} \]
+    \[ a\bmat{1 \\ 0} + b\bmat{0 \\ 1} = \bmat{0 \\ 0} \]
     implies that 
-    \[ \vecTwo{a}{b} = \vecTwo{0}{0}  \]
+    \[ \bmat{a \\ b} = \bmat{0 \\ 0}  \]
     which means that $a = b = 0$. \\
     Moroever, we can write any vector
-    \[ \vecTwo{x}{y} = x\vecTwo{1}{0} + y\vecTwo{0}{1} \]
+    \[ \bmat{x \\ y} = x\bmat{1 \\ 0} + y \bmat{0 \\ 1} \]
 
     We can now define the notion of a linear
     mapping.
@@ -249,7 +249,7 @@
     of the new (transformed) basis. \\
 
     The identity matrix $I$:
-    \[ \matThree{1}{0}{0}{0}{1}{0}{0}{0}{1} \]
+    \[ \bmat{1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1} \]
     is a linear transformation that keeps
     every vector in place
     (can be defined for any vector space $\rbb^n$). \\
@@ -287,10 +287,11 @@
 
     The determinant of a $2 \times 2$ matrix
     can be computed as follows:
-    \[ \det\left( \matTwo{a}{b}{c}{d} \right) 
+    \[ \det\left( \bmat{a & b \\ c & d} \right) 
     = ad - bc \]
     As for $3 \times 3$ matrices:
-     \[ \det\left( \matThree{a}{b}{c}{d}{e}{f}{g}{h}{i} \right) 
+    \[ \det\left( \bmat{a & b & c \\ 
+    d & e & f \\ g & h & i} \right) 
     = aei + bfg + cdh - gec - hfa - idb \]
     It can be calculated by summing
     the products main diagonals starting at each entry in
@@ -487,15 +488,16 @@
     \[ f: \rbb^n \to R^m \]
     is defined as:
     \[   J_f =
-        \matThree{\partialdd{f_1}{x_1}}
-        {\dots}
-        {\partialdd{f_1}{x_n}}
-        {\vdots}
-        {\ddots}
-        {\vdots}
-        {\partialdd{f_m}{x_1}}
-        {\dots}
-        {\partialdd{f_m}{x_n}}
+        \bmat{{\partialdd{f_1}{x_1}} &
+            {\dots} &
+            {\partialdd{f_1}{x_n}} \\
+            {\vdots} & 
+            {\ddots} &
+            {\vdots} \\
+            {\partialdd{f_m}{x_1}} &
+            {\dots} &
+            {\partialdd{f_m}{x_n}}
+        }
     \] \\
 
     We can use the Jacobian to calculate

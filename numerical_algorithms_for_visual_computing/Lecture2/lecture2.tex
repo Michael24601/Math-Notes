@@ -48,12 +48,13 @@ such that their linear combinaton produces
 the vector. \\
 By default, all vectors are written in the standard
 basis, which in $\rbb^2$ means the vectors:
-\[ \hat{i} = \vecTwo{1}{0} \qquad \text{ and }
-\qquad \hat{j} = \vecTwo{0}{1} \]
+\[ \hat{i} = \bmat{{1} \\ {0}} \qquad \text{ and }
+\qquad \hat{j} = \bmat{{0} \\ {1}} \]
 So, when we have a vector:
-\[ \vecTwo{2}{5} \]
+\[ \bmat{{2}\\{5}} \]
 it can be reached using the linear combination:
-\[ \vecTwo{2}{5} = 2 \vecTwo{1}{0} + 5 \vecTwo{0}{1} \]
+\[ \bmat{{2}\\{5}} = 2 \bmat{{1}\\{0}} 
++ 5 \bmat{{0}\\{1}} \]
 The basis vectors are essentially the reference
 point using which we define all other vectors. \\
 
@@ -61,17 +62,18 @@ More compactly, we can express a basis using
 a matrix (where the columns are basis vectors). \\
 This is useful as it allows us to express
 vectors in a basis using matrix multiplication:
-\[ \vecTwo{2}{5} = 2 \vecTwo{1}{0} + 5 \vecTwo{0}{1}
-= \matTwo{1}{0}{0}{1}\vecTwo{5}{2} \] \\
+\[ \bmat{{2}\\{5}} = 2 \bmat{{1}\\{0}} 
++ 5 \bmat{{0}\\{1}}
+= \bmat{{1}&{0}\\{0}&{1}} \bmat{{5}\\{2}} \] \\
 
 Now suppose we have a new basis
-\[ A = \matTwo{a_1^1}{a_2^1}{a_1^2}{a_2^2} \]
+\[ A = \bmat{{a_1^1} & {a_2^1} \\ {a_1^2} & {a_2^2}} \]
 If we have a vector 
-\[ v = \vecTwo{5}{2} \]
+\[ v = \bmat{{5}\\{2}} \]
 expressed in the basis $A$,
 then the vector can be formed using
-\[ \vecTwo{5}{2} = 5 \vecTwo{a_1^1}{a_1^2}
-+ 2 \vecTwo{a_2^1}{a_2^2} \]
+\[ \bmat{{5}\\{2}} = 5 \bmat{{a_1^1}\\{a_1^2}}
++ 2 \bmat{{a_2^1}\\{a_2^2}} \]
 which gives us the coordinates of the 
 vector in the standard basis. \\
 In other words, multiplying a vector
@@ -86,10 +88,10 @@ the basis, then multiply by its inverse
 (which we know exists since basis column vectors
 are by definition linearly independent):
 \[ A\inv Av = 
-\matTwo{a_1^1}{a_2^1}{a_1^2}{a_2^2}\inv
-\para{\matTwo{a_1^1}{a_2^1}{a_1^2}{a_2^2}
-\vecTwo{5}{2}}
-= \vecTwo{5}{2} \]
+\bmat{{a_1^1} & {a_2^1} \\{a_1^2}& {a_2^2}} \inv
+\para{\bmat{{a_1^1} & {a_2^1} \\ {a_1^2} \\ {a_2^2}}
+\bmat{{5}\\{2}}}
+= \bmat{{5}\\{2}} \]
 We know that $v$ is the vector
 expressed in the standard basis,
 and that $Av$ is the value of the vector
@@ -211,11 +213,11 @@ We can do the following:
 = \bv{o} - \bv{q} \]
 which turns the equation into a linear system:
 \[ 
-    \matThree{f_1^1}{f_2^1}{-d^1}
-    {f_1^2 }{f_2^2}{-d^2}
-    {f_1^3}{f_2^3}{-d^3}
-    \vecThree{\alpha}{\beta}{t}
-    = \vecThree{o^1 - q^1}{o^2 - q^2}{o^3 - q^3} 
+    \bmat{{f_1^1}&{f_2^1}&{-d^1}\\
+    {f_1^2 }&{f_2^2}&{-d^2}\\
+    {f_1^3}&{f_2^3}&{-d^3}}
+    \bmat{{\alpha}\\{\beta}\\{t}}
+    = \bmat{{o^1 - q^1}\\{o^2 - q^2}\\{o^3 - q^3}} 
 \]
 Solving this entails finding
 $\alpha$, $\beta$, and $t$. \\
@@ -325,17 +327,17 @@ We can thus express $\bv{p_0}$ in this
 new basis (as a linear combination
 of $\bv{f_1}$ and $\bv{f_2}$). \\
 The four points
-\[ \vecTwo{0}{0} \qquad
-\vecTwo{0}{1} \qquad
-\vecTwo{1}{1} \qquad
-\vecTwo{1}{0} \qquad \]
+\[ \bmat{{0}\\{0}} \qquad
+\bmat{{0}\\{1}} \qquad
+\bmat{{1}\\{1}} \qquad
+\bmat{{1}\\{0}} \qquad \]
 expressed in this new basis
 define a parallelogram
 (whose area is the determinant of the basis).
 As we know, the vectors
-\[ \vecTwo{0}{0} \qquad
-\vecTwo{0}{1} \qquad
-\vecTwo{1}{0} \qquad \]
+\[ \bmat{{0}\\{0}} \qquad
+\bmat{{0}\\{1}} \qquad
+\bmat{{1}\\{0}} \qquad \]
 in the new basis correspond to
 $\bv{v_0}$, $\bv{v_1}$, and $\bv{v_3}$.
 So in the parametric equation
@@ -362,23 +364,23 @@ of the matrix
 whose columns are basis vectors
 gives us the coordinates
 of that same vector in said basis:
-\[ \vecTwoTransposed{\bv{f_1}}{\bv{f_2}}\inv
-\bv{p_0} = \vecTwo{\alpha}{\beta} \]
+\[ \bmat{{\bv{f_1}}&{\bv{f_2}}}\inv
+\bv{p_0} = \bmat{{\alpha}\\{\beta}} \]
 which is the same as saying we need to 
 solve the linear system
-\[ \vecTwoTransposed{\bv{f_1}}{\bv{f_2}}
-\vecTwo{\alpha}{\beta}
+\[ \bmat{{\bv{f_1}}&{\bv{f_2}}}
+\bmat{{\alpha} \\ {\beta}}
 = \bv{p_0} \]
 The only issue here is that
-\[\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}\]
+\[\bmat{{\bv{f_1}} & {\bv{f_2}}}\]
 is not square.
 It is a $3 \times 2$ matrix. \\
 One solution to that is to multiply both sides
 by the transpose:
-\[ \vecTwo{\bv{f_1}}{\bv{f_2}}
- \vecTwoTransposed{\bv{f_1}}{\bv{f_2}}
-\vecTwo{\alpha}{\beta}
-= \vecTwo{\bv{f_1}}{\bv{f_2}}\bv{p_0} \]
+\[ \bmat{{\bv{f_1}}\\{\bv{f_2}}}
+\bmat{{\bv{f_1}} & {\bv{f_2}}}
+\bmat{{\alpha} \\ {\beta}}
+= \bmat{{\bv{f_1}} \\ {\bv{f_2}}} \bv{p_0} \]
 This gives us a linear system with a $2 \times 2$
 square matrix that we can solve. \\
 
@@ -394,37 +396,37 @@ expressed in the new basis. \\
 
 This happening makes sense when you consider
 what the matrix
-$\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}$
+$\bmat{{\bv{f_1}} & {\bv{f_2}}}$
 does when it transform $\bv{p_0}$:
 \[ \begin{bmatrix}
     f_1^1 & f_1^2 & f_1^3 \\
     f_2^1 & f_2^2 & 2_1^3
-\end{bmatrix} \vecThree{p_0^1}{p_0^2}{p_0^3} \]
+\end{bmatrix} \bmat{{p_0^1}\\{p_0^2}\\{p_0^3}} \]
 It is a $2 \times 3$ matrix,
 meaning that it flattens $\rbb^3$
 space onto a plane. \\
 In this case in particular,
 it projects $\bv{p_0}$ onto the plane
 defined by the basis
-$\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}$. \\
+$\bmat{{\bv{f_1}} & {\bv{f_2}}}$. \\
 
 As we know, solving a linear system
 is the equivalent of multiplying by the inverse
 of a matrix. \\
 In order to get the coordinates of $\bv{p_0}$
-in the basis $\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}$,
+in the basis $\bmat{{\bv{f_1}} & {\bv{f_2}}}$,
 we can just multiply iy by the inverse
 of that basis. \\
-However, $\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}$
+However, $\bmat{{\bv{f_1}} & {\bv{f_2}}}$
 is not square, so instead, we do the following:
-\[ \vecTwo{\bv{f_1}}{\bv{f_2}}
- \vecTwoTransposed{\bv{f_1}}{\bv{f_2}}
-\vecTwo{\alpha}{\beta}
-= \vecTwo{\bv{f_1}}{\bv{f_2}}\bv{p_0} \]
-\[ \vecTwo{\alpha}{\beta}
-= \para{\vecTwo{\bv{f_1}}{\bv{f_2}}
-\vecTwoTransposed{\bv{f_1}}{\bv{f_2}}}\inv
-\vecTwo{\bv{f_1}}{\bv{f_2}}\bv{p_0} \]
+\[ \bmat{{\bv{f_1}} \\ {\bv{f_2}}}
+\bmat{{\bv{f_1}} & {\bv{f_2}}}
+\bmat{{\alpha}\\{\beta}}
+= \bmat{{\bv{f_1}}\\{\bv{f_2}}}\bv{p_0} \]
+\[ \bmat{{\alpha} \\ {\beta}}
+= \para{\bmat{{\bv{f_1}}\\{\bv{f_2}}}
+\bmat{{\bv{f_1}}&{\bv{f_2}}}}\inv
+\bmat{{\bv{f_1}} \\ {\bv{f_2}}}\bv{p_0} \]
 and solve to get $\alpha$ and $\beta$,
 the coordinates of $\bv{p_0}$
 in the new basis. \\
@@ -452,10 +454,10 @@ We can rewrite this formula using vector notation:
 where
 \[ 
     \boldsymbol{Q} = 
-    \matThree{A}{\sfrac{D}{2}}{\sfrac{E}{2}}
-    {\sfrac{D}{2}}{B}{\sfrac{F}
-    {2}}{\sfrac{E}{2}}{\sfrac{F}{2}}{C}
-    \qquad b = \vecThree{G}{H}{I}
+    \bmat{{A} & {\sfrac{D}{2}} & {\sfrac{E}{2}} \\
+    {\sfrac{D}{2}} & {B} & {\sfrac{F} {2}} \\ 
+    {\sfrac{E}{2}} & {\sfrac{F}{2}} & {C}}
+    \qquad b = \bmat{{G} \\ {H} \\{I}}
 \]
 Expanding the formula shows it is the same. \\
 
@@ -471,7 +473,7 @@ For example,
 suppose we have the quadric surface:
 \[ 3(x-5)^2 - 2(y-1)^2 -z^2 + 1 = 0 \]
 and a ray
-\[ \vecThree{1}{0}{-1}t \]
+\[ \bmat{{1} \\{0} \\{-1}}t \]
 Then we can first develop the formula of the quadric:
 \[ 3x^2 - 30x - 2y^2 +4y -z^2 + 74 = 0 \]
 where
@@ -482,24 +484,24 @@ where
 This can then be written in vector notation:
 \[
     (\bv{p})^T
-    \matThree{3}{0}{0}{0}{-2}{0}{0}{0}{-30}
+    \bmat{{3}&{0}&{0} \\ {0}&{-2}&{0} \\ {0}&{0}&{-30}}
     \bv{p}
-    + \vecThreeTranposed{-39}{4}{0}
+    + \bmat{{-39}&{4}&{0}}
     \bv{p}
     + 74 = 0
 \]
 Then, we can replace $\bv{p}$ by the ray:
 \[
-    \vecThreeTranposed{t}{0}{-t}
-    \matThree{3}{0}{0}{0}{-2}{0}{0}{0}{-30}
-    \vecThree{t}{0}{-t}
-    + \vecThreeTranposed{-30}{4}{0}
-    \vecThree{t}{0}{-t}
+    \bmat{{t}&{0}&{-t}}
+    \bmat{{3}&{0}&{0}\\{0}&{-2}&{0}\\{0}&{0}&{-30}}
+    \bmat{{t}\\{0}\\{-t}}
+    + \bmat{{-30}&{4}&{0}}
+    \bmat{{t}\\{0}\\{-t}}
     + 74 = 0
 \]
 \[
-    \vecThreeTranposed{t}{0}{-t}
-    \vecThree{3t}{0}{30t}
+    \bmat{{t}&{0}&{-t}}
+    \bmat{{3t}\\{0}\\{30t}}
     - 30t + 74 = 0
 \]
 \[

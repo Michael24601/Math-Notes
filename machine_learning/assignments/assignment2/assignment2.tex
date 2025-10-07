@@ -32,10 +32,10 @@ where $p_X$ is the density function of $X$. \\
 We need to find the desnity function $p_{X_1, X_2}$,
 where
 \[ X = g(U) \]
-\[ \vecTwo{X_1}{X_2} = g\para{\vecTwo{U_1}{U_2}}
-= \vecTwo
-{\sqrt{-2\ln(U_2)}\sin(2\pi U_1) \vspace{10pt}}
-{\sqrt{-2\ln(U_2)}\cos(2\pi U_1)}\]
+\[ \bmat{{X_1} \\ {X_2}} = g\para{\bmat{{U_1} \\ {U_2}}}
+= \bmat{
+{\sqrt{-2\ln(U_2)}\sin(2\pi U_1) \vspace{10pt}} \\
+{\sqrt{-2\ln(U_2)}\cos(2\pi U_1)}}\]
 Note that the joint desnity $p_{X_1, X_2}$
 is the same as the density of the vector $p_X$.
 Likewise, $p_{U_1, U_2} = p_U$. \\ 
@@ -77,22 +77,22 @@ and
 \[ -\dfrac{1}{2}(X_1^2 + X_2^2) = \ln(U_2) \]
 \[ \exp\para{-\dfrac{X_1^2 + X_2^2}{2}} = U_2 \]
 which means that
-\[ g\inv(x) = \vecTwo
-{\dfrac{1}{2\pi}\arctan\para{\dfrac{X_1}{X_2}}}
-{\exp\para{-\dfrac{X_1^2 + X_2^2}{2}} } \]
+\[ g\inv(x) = \bmat{
+{\dfrac{1}{2\pi}\arctan\para{\dfrac{X_1}{X_2}}} \\
+{\exp\para{-\dfrac{X_1^2 + X_2^2}{2}} }} \]
 We know that:
-\[ J_{g\inv} = \matTwo
-{\partialdd{(g\inv)_1}{x_1} \hspace{10pt}}
-{\partialdd{(g\inv)_1}{x_2} \vspace{10pt}}
-{\partialdd{(g\inv)_2}{x_1} \hspace{10pt}}
-{\partialdd{(g\inv)_2}{x_2}} \]
-\[ J_{g\inv} = \matTwo
+\[ J_{g\inv} = \bmat{
+{\partialdd{(g\inv)_1}{x_1} \hspace{10pt}} &
+{\partialdd{(g\inv)_1}{x_2} \vspace{10pt}} \\
+{\partialdd{(g\inv)_2}{x_1} \hspace{10pt}} &
+{\partialdd{(g\inv)_2}{x_2}}} \]
+\[ J_{g\inv} = \bmat{
 {-\dfrac{X_2}{2\pi(X_1^2 + X_2^2)} \hspace{30pt}
-\vspace{10pt}}
-{\dfrac{X_1}{2\pi(X_1^2 + X_2^2)}}
+\vspace{10pt}} &
+{\dfrac{X_1}{2\pi(X_1^2 + X_2^2)}} \\
 {-X_1\exp\para{-\dfrac{X_1^2 + X_2^2}{2}} 
-\hspace{10pt}}
-{-X_2\exp\para{-\dfrac{X_1^2 + X_2^2}{2}}} \]
+\hspace{10pt}} &
+{-X_2\exp\para{-\dfrac{X_1^2 + X_2^2}{2}}}} \]
 Now we can find:
 \[ \det(J_{g\inv}) = 
 \dfrac{X_2^2 \exp\para{-\dfrac{X_1^2 + X_2^2}{2}}}
@@ -116,7 +116,7 @@ So to conclude
 { 0, \qquad \qquad \qquad \qquad \quad 
 \text{ for } u \notin [0, 1]^2} \]
 
-\myColor{red}{
+\colorText{red}{
 \subsection*{Correction}
 The answer is correct, but there are two details
 worth mentioning if we want to dot our is
@@ -125,15 +125,15 @@ First, we can only invert the function $g$
 if it is bijective (injective and surjective). \\
 Notice however that because $\sin$
 and $\cos$ are periodic every $2\pi$: 
-\[ g(0, u_2) = \vecTwo{0}{\sqrt{-2\ln(u_2)}} \]
-\[ g(1, u_2) = \vecTwo{0}{\sqrt{-2\ln(u_2)}} \]
+\[ g(0, u_2) = \bmat{{0} \\ {\sqrt{-2\ln(u_2)}}} \]
+\[ g(1, u_2) = \bmat{{0} \\ {\sqrt{-2\ln(u_2)}}} \]
 So we can't have $U_1=1$ and $U_1 = 0$
 in the domain, we have to choose one only. \\
 Also whenever $U_2 = 1$,
 the entire output is always $0$ regardless
 of $U_1$, which means it is also not
 bijective (or injective in this case):
-\[ g(u_1, 1) = \vecTwo{0}{0} \]
+\[ g(u_1, 1) = \bmat{{0} \\ {0}} \]
 So we remove $U_2 = 1$. \\
 We also remove $U_2 = 0$ since the logarithm
 is not defined or differential there. \\
@@ -190,7 +190,7 @@ offset by $\pi$ just vanishes when we differentiate. \\
 
 \subsection*{Ex 2}
 
-\begin{enumerate}[label=\alph*)]
+\begin{enumerate}[label=\letters]
     \item 
     The probability that the prediction is correct
     includes the event where the prediction
@@ -241,7 +241,7 @@ offset by $\pi$ just vanishes when we differentiate. \\
 
 \subsection*{Ex 3}
 
-\begin{enumerate}[label=\alph*)]
+\begin{enumerate}[label=\letters]
     \item 
     The probability that "Free" is in the text:
     \[\pbb(F) = \pbb(F \mid S) \cdot \pbb(S)

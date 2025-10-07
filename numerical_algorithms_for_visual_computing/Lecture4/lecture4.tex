@@ -169,7 +169,7 @@ is defined). \\
 
 We can think of covectors as just row vectors
 along with the dot product operator:
-\[ \alpha = \vecTwoTransposed{\alpha_2}{\alpha_2} \]
+\[ \alpha = \bmat{{\alpha_2}&{\alpha_2}} \]
 This function maps a vector $v$
 to the dot product of the row vector $\alpha$
 and the column vector $v$. \\
@@ -178,8 +178,8 @@ So for example, if we have a vector $v \in \rbb^2$,
 then the covector $\alpha$ along with the dot product
 operation form a function:
 \[ \alpha(v) =
-\vecTwoTransposed{\alpha_1}{\alpha_2}
-\vecTwo{v^1}{v^2} = \alpha_1v^1 + \alpha_2v^2 \]
+\bmat{{\alpha_1}&{\alpha_2}}
+\bmat{{v^1}\\{v^2}} = \alpha_1v^1 + \alpha_2v^2 \]
 which maps the vector $v$ from $\rbb^2$
 to $\alpha_1v^1 + \alpha_2v^2$ in $\rbb$. \\
 
@@ -494,16 +494,16 @@ and $R_z$ is the rotation in the $xy$ plane. \\
 Each one can be expressed similarly to 
 a rotation in $\rbb^2$ (since they are a rotation
 in a single plane), but in a $3\times 3$ matrix:
-\[ R_x(\theta) = \matTwo{0}{0}{0}{R(\theta)}
-\matThree{0}{0}{0}{0}{\cos(\theta)}
-{-\sin(\theta)}{0}{\sin(\theta)}{\cos(\theta)} \]
+\[ R_x(\theta) = \bmat{{0}&{0}\\{0}&{R(\theta)}}
+\bmat{{0}&{0}&{0}\\{0}&{\cos(\theta)}&
+{-\sin(\theta)}\\{0}&{\sin(\theta)}&{\cos(\theta)}} \]
 \[ R_y(\alpha) =
-\matThree{\cos(\alpha)}{0}{-\sin(\alpha)}{0}{0}
-{0}{\sin(\alpha)}{0}{\cos(\alpha)} \]
-\[ R_z(\beta) = \matTwo{R(\beta)}{0}{0}{0}
-\matThree{\cos(\beta)}{-\sin(\beta)}{0}
-{\sin(\beta)}{\cos(\beta)}
-{0}{0}{0}{0} \] \\
+\bmat{{\cos(\alpha)}&{0}&{-\sin(\alpha)}\\{0}&{0}&
+{0}\\{\sin(\alpha)}&{0}&{\cos(\alpha)}} \]
+\[ R_z(\beta) = \bmat{{R(\beta)}&{0}\\{0}&{0}}
+\bmat{{\cos(\beta)}&{-\sin(\beta)}&{0}\\
+{\sin(\beta)}&{\cos(\beta)}&
+{0}\\{0}&{0}&{0}} \] \\
 
 We can express a full $3$-dimensional rotation
 by just composing the matrices:
@@ -565,12 +565,12 @@ to $SO(2)$:
 \[ \varphi: R_x \to SO(2) \]
 then we can map:
 \[ \varphi\para{
-\matThree{0}{0}{0}{0}{\cos(\theta)}
-{-\sin(\theta)}{0}{\sin(\theta)}
-{\cos(\theta)}}
-= \matTwo{\cos(\theta)}
-{-\sin(\theta)}{\sin(\theta)}
-{\cos(\theta)} \] \\
+\bmat{{0} & {0} & {0} \\ {0} & {\cos(\theta)} &
+{-\sin(\theta)} \\ {0} & {\sin(\theta)} &
+{\cos(\theta)}}}
+= \bmat{{\cos(\theta)} &
+{-\sin(\theta)} \\ {\sin(\theta)} &
+{\cos(\theta)}} \] \\
 
 \newpage
 
@@ -784,8 +784,8 @@ but what basis is it expressed in? \\
 Suppose we don't know that a $2$-dimensional rotation
 matrix has the format:
 \[ R(\theta) = 
-\matTwo{\cos(\theta)}{-\sin(\theta)}
-{\sin(\theta)}{\cos(\theta)} \]
+\bmat{{\cos(\theta)} & {-\sin(\theta)} \\
+{\sin(\theta)} & {\cos(\theta)}} \]
 How would we find out that this is
 the formula? \\
 Assume zero knowledge of trigonometry as well. \\
@@ -803,8 +803,8 @@ to small inaccuracies). \\
 In order to define a linear transformation,
 we generally attempt to apply it to
 the basis vectors:
-\[ \hat{\imath}  = \vecTwo{1}{0} \AND 
-\hat{\jmath} = \vecTwo{0}{1} \]
+\[ \hat{\imath}  = \bmat{{1}\\{0}} \AND 
+\hat{\jmath} = \bmat{{0}\\{1}} \]
 We then take the result and use them
 as column vectors for our transformation
 matrix; this is because transforming
@@ -822,7 +822,7 @@ would move almost purely horizontally
 to the right. \\
 This means that the rotation:
 \[ R(d\theta) 
-= \matTwo{1}{-d\theta}{d\theta}{1} \]
+= \bmat{{1}&{-d\theta}\\{d\theta}&{1}} \]
 We can use this matrix to define
 a differential equation,
 whose result will give us a function
@@ -839,11 +839,11 @@ We can thus define the differential equation:
 \[ du = R(d\theta)u - u \]
 \[ du = (R(d\theta) - I)u \]
 \[ du = R(d\theta)u - u \]
-\[ du = \para{\matTwo{1}{-d\theta}{d\theta}{1}
-- \matTwo{1}{0}{0}{1}}u \]
-\[ du = \matTwo{0}{-d\theta}{d\theta}{0}u \]
+\[ du = \para{\bmat{{1} & {-d\theta} \\ {d\theta} & {1}}
+- \bmat{{1} & {0} \\ {0} & {1}}}u \]
+\[ du = \bmat{{0} & {-d\theta} \\ {d\theta} & {0}}u \]
 \[ \dfrac{du}{d\theta} 
-= \matTwo{0}{-1}{1}{0}u \]
+= \bmat{{0} & {-1} \\ {1} & {0}} u \]
 So this is our differential equation. \\
 Solving it should give us the $R(\theta)$
 that we defined earlier. \\
