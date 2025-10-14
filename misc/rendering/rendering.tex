@@ -6,7 +6,7 @@
 \input{../../variables.tex}
 
 \title{%
-    \Huge Ray Tracing
+    \Huge Path Tracing
 }
 \date{2025-07-29}
 \author{Michael Saba}
@@ -19,6 +19,36 @@
 \pagenumbering{arabic}
 
 \newpage
+
+\subsection*{Introduction}
+
+In Computer Graphics, several methods are used
+in rendering scenes. \\
+
+Rastarization is when a 3 dimensional scene is flattened
+(using linear transformations) onto a 2 dimensional
+screens. This is fast and efficient, but, since
+the shader won't have access to the full 3 dimensional
+scene, the lighting of the scene won't look accurate
+to real life. \\
+
+In ray tracing, the shader has access to the full 3
+dimensional scene. A camera shoots rays onto a pixel
+grid, and then traces those rays as they hit the scene. \\
+Based on whether they hit an object, or a light source,
+or nothing at all, the pixel or fragment is colored 
+accordingly. \\
+
+One type of ray tracing is called path tracing; it is
+when the rays of light are traced and bounced around
+a scene in a way that mimicks the way light bounces
+in the real world. \\ 
+A path tracer is any algorithm that converges towards
+the rendering equation. While slow, it is the most accurate
+method. \\
+
+\newpage
+
 
 \subsection*{The Rendering Equation}
 
@@ -233,7 +263,7 @@ Each integral expresses a bounce of the light. \\
 
 \subsection*{Neumann Series}
 
-enerally speaking, if we have an integral:
+Generally speaking, if we have an integral:
 \[ f(x) = \integral{a}{b}{K(x, y)g(y)}{dy} \]
 We can approximate it as a Riemann sum,
 that is, discretize it
@@ -248,7 +278,9 @@ then we can rewrite this as a matrix multiplication:
 And this is how we discretize an integral and write
 it as a matrix multiplication. \\
 
-For the rendering equation, we introduce the term $T$:
+For the rendering equation, we introduce the term $T$,
+which is the integral operator. When the space
+is discretized, this becomes a matrix:
 \[ TL_o =  \int_\Omega L_o(r(x, \omega_i), -\omega_i)  \cdot
 f(x, \omega_i, \omega_o) \cdot
 (\omega_i \cdot n) \; d\omega_i \]
@@ -262,8 +294,9 @@ Which is called the Neumann series of the rendering equation. \\
 Here each term $T^kLe$ expresses one bounce of light. \\
 
 An alternative way to derive the Neumann series
-is to note that the rendering equation written using $T$
-implies that:
+is to note that, since $T$ behaves like a matrix
+when the space is discretized, we can rewrite
+the rendering equation like this:
 \[ L = L_e + TL \]
 \[ L - TL = L_e \]
 \[ (I - T)L = L_e \]
@@ -481,7 +514,7 @@ to a $d$-dimensional unit hypercube,
 which always has a measure of $1$.
 In $\rbb^2$ this is a unit square,
 and in $\rbb^3$ this is a unit cube. \\
-We can the unit hypercube in $\rbb^n$ 
+We can write the unit hypercube in $\rbb^d$ 
 as $[0, 1]^d$. \\
 So if we can transform the variables
 such that they span a hypercube,
@@ -572,6 +605,8 @@ Monte-Carlo integration has a convergence rate
 of $O\para{\dfrac{1}{\sqrt{N}}}$, which makes it
 rather efficient when the number of samples
 and dimensionality is high. \\
+Other methods, like the Trapezoidal rule or Riemann
+sums scale far worse in higher dimensions. \\
 
 \newpage
 
@@ -771,7 +806,7 @@ less efficient. \\
 
 \newpage
 
-\subsection*{Ray Tracing}
+\subsection*{Full Path Tracer}
 
 Light travels from the source, bounces around the
 scene accumulating colors, and finally hits a pixel
@@ -926,6 +961,7 @@ Note that the term:
 \left[ f(u_{k-1}, \overset{\rightarrow}{u_k u_{k+1, i}} 
     \to \overset{\rightarrow}{u_k u_{k-1}})  \cdot 
 G(u_k, u_{k+1, i}) \cdot V(u_k, u_{k+1, i}) \right] \]
+which is called the Throughput,
 does not need to be recomputed each bounce;
 we can just save the product in a variable
 and then multiply it by the $\nth{k}$
@@ -950,13 +986,21 @@ while we don't run the risk of having an obstruction,
 we do run the risk of shooting a ray into the void,
 in which case we also truncate the path. \\
 
-Note that in order to choose an object to sample
-from truly randomly, the objects should not be equally
-likely to be picked; the likelihood of picking a point
-should be proportional to the surface area of the object. \\
+Recall that we reparametrized integrals over each
+surface as an integral over a $d$-dimensional hypercube,
+allowing us to easily randomly sample points on
+said surface. \\
+However, we migth have a union of multiple surfaces.
+Sampling a point thus requires first choosing a surface,
+then sampling it. To ensure true randomness, 
+the likelihood of choosing a surface should be
+proportional to the surface area itself. \\
 We can achieve this by calcualting the surface areas
 of each object, as well as the total surface area,
-and then use the probability density. \\
+to build a probability density function. \\
+If we then sample a random number from say, $0$ to $1$,
+we can use the dencity function to determine which
+surface the number points to. \\
 
 Note that sampling using angles on the hemisphere 
 instead of picking random can lead to bias. \\
@@ -1069,7 +1113,7 @@ to generate some random jitter, scaled accordingly. \\
 
 \newpage
 
-\subsection*{Inverse Sampling}
+\subsection*{Multiple Importance Sampling}
 
 Suppose an integral has the form:
 \[ \int_a^b f(x)g(x)\;dx \]
@@ -1082,7 +1126,7 @@ too high a variability. \\
 
 In order to cancel out the $g(x)$,
 we will use a special kind of change of variable
-called inverse transform sampling. \\
+called multiple importance sampling. \\
 
 Recall that when we transform the variables
 using some transformation:
@@ -1124,8 +1168,8 @@ inverse sampling becomes significantly harder. \\
 In practice, the high variance term is
 the geometry term, while the BRDF is the flat term. \\
 
-While inverse sampling is not necessary, 
-it is highly recommended. \\
+While multiple importance sampling is not necessary, 
+it is highly recommended for faster convergence. \\
 
 \newpage
 
@@ -1157,9 +1201,6 @@ G(x_k, x_L) \cdot
 V(x_k, x_L) \; dA(x_L) \]
 We can add this term $L_k^{NEE}$
 to our regular $T^k L_e$ bounce term. \\
-
-This is a special case of multiple importance sampling,
-where we combine samples from multiple sources. \\
 
 Note that $A_L$ is the set of all light sources;
 we can randomly pick one light sounrce, and then
