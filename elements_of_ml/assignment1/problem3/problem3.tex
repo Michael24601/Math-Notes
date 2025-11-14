@@ -1,0 +1,111 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Elements of Machine Learning \\
+    \huge Assignment I \\
+    \LARGE Problem 3
+}
+\date{2025-11-01}
+\author{
+    Michael Saba (Matriculation No. 7076371) \\
+    Chongbiao Wang (Matriculation No. 7076265)
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Michael Saba 7076371}
+\fancyhead[R]{Chongbiao Wang 7076265}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Problem 3}
+
+\begin{enumerate}[label = \numbers]
+\item
+    \begin{enumerate}[label = \letters]
+    \item
+        The outlier is a data point whose target value $y$ is
+        very different from the prediction of the other data points.
+        If its absolute value is more than $3$ standard deviations
+        away, it is an outlier. \\ 
+
+        Conversly, a high-leverage point is a data point
+        whose input value $x$ is far from those of the other
+        data points. \\
+    \item
+        Plot (a) shows heteroscedasticity, due to the funnel
+        shape of the plot. \\
+        
+        Plot (b) shows non-linearity, as a linear function could
+        not possibly fit those points. \\
+
+        Plot (c) shows a high-leverage point, as its $x$
+        coordinate is far from the rest of the points,
+        but its target $y$ is in line with the prediction of other
+        data points. \\
+        
+        Plot (d) shows outliers, as the red data points
+        have an $x$ coordinate within
+        range of the other points, but a target $y$ that is
+        not in line with the prediction. \\
+    \end{enumerate}
+\item
+    \begin{enumerate}[label = \letters]
+    \item
+        In a classification problem, the output (target) is discrete.
+        We are trying to classify the inputs into categories. \\
+        In a regression problem, the output (target) is continuous.
+        We are trying to make a real value prediction based on 
+        the input. \\
+    \item 
+        No, it won't necessarily. Testing error (with unseen data)
+        can increase even when training error decreases.
+        This happens when the model overfits the training data,
+        and generalizes badly to unseen data. \\
+    \item 
+        In supervised learning, we have a set of data points
+        $\{(x, y)\}$ with inputs and ouputs, and our goal is to train
+        a model to capture the relationship between the two. 
+        An example could be the problem of whether or not
+        cancerous tumors exist (target) on medical scans (input). \\
+
+        In unsupervised learning, we have a set of data points
+        $\{x\}$ without an accompanying target value, and our
+        goal is to discover the relationship and groupings
+        of the points. An example given in the lecture was
+        the problem of grouping genes (which is our input)
+        with similar gene expressions. \\
+
+        In semi-supervised learning, some of our data points
+        are labeled (have a target $y$), while others don't,
+        and our goal is to leverage both in order to train
+        our model. \\ 
+    \item 
+        In the bias-variance decomposition of the mean-square error,
+        we seperate the MSE into reducible error,
+        comprised of bias and variance, and irreducible error,
+        which is $\var(\eps)$. This $\var(\eps)$
+        originates from the random noise present in the true
+        data distribution $Y = f(X) + \eps$.
+        It's called an irreducible error because, unlike bias
+        and variance, it can't be reduced by improving
+        our training algorithm (such as adding data points 
+        or choosing a better model). It is completely random. \\
+    \end{enumerate}
+\end{enumerate}
+
+\newpage
+
+\end{document}

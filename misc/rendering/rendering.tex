@@ -502,13 +502,24 @@ which we can write as $v_d(\dcal)$. \\
 So we can approximate the integral as:
 \[ \int_\dcal f(x) dx
 = v_d(\dcal)\mu(f(x)) \]
-Where we can get the average by just taking
+Where we can estimate the average by just taking
 $N$ random samples and dividing by $N$:
 \[ \int_\dcal f(x) dx
-= \dfrac{v_d(\dcal)}{N} \sum_{i=1}^N f(x_i) \]
-This is how Monte-Carlo integration works. \\
+\approx \dfrac{v_d(\dcal)}{N} \sum_{i=1}^N f(x_i) \]
+This is how Monte-Carlo integration works. \\'
 
-However, one trick we can use
+This is acyually a special case of Monte-Carlo
+integration where the points we sample are sampled
+uniformally (randomly). \\
+In general, we have:
+\[ \int_\dcal f(x) dx
+\approx \dfrac{1}{N} \sum_{i=1}^N \dfrac{f(x_i)}{p(x_i)} \]
+where $p(x)$ is the probability desnity function of
+picking a point $x$. \\
+This function happens to be the reciprocal of 
+the volume if the distribution is uniform. \\ 
+
+One trick we can use
 is to map the coordinates int $\dcal$
 to a $d$-dimensional unit hypercube,
 which always has a measure of $1$.
@@ -584,6 +595,26 @@ has area that is just $1$. \\
 Note that the transformation has to be 
 differentiable for this change of variables
 to work. \\
+
+Another note is that spherical coordinates
+transformation $T\inv$ doesn't
+actually map 3 dimensional points uniformally
+on a sphere (or hemisphere). So we need
+to divide by a probability desnity function. \\
+However, the change of measure term, which is
+the determinant of the Jacobian of $T$,
+actually gives us the probability density function. \\
+This is because the determinant of the Jacobian
+of the inverse transform scales the probability
+density function:
+\[ |\det(J_T)| = \dfrac{1}{|\det(J_{T})\inv|}
+= \dfrac{1}{|\det(J_{T\inv})|} \]
+So this term will scale the probability
+density function of the original samples $u$, and $v$
+to become correct given the new transform.
+And since they were uniformally distributed
+in a unit hypercube, the change of measure term
+is our probability density function reciprocal. \\
 
 So in short, we have:
 \multiline{ 
@@ -995,12 +1026,18 @@ Sampling a point thus requires first choosing a surface,
 then sampling it. To ensure true randomness, 
 the likelihood of choosing a surface should be
 proportional to the surface area itself. \\
+
 We can achieve this by calcualting the surface areas
 of each object, as well as the total surface area,
 to build a probability density function. \\
 If we then sample a random number from say, $0$ to $1$,
-we can use the dencity function to determine which
+we can use the density function to determine which
 surface the number points to. \\
+If we don't use the density function in order to
+ensure uniform sampling. Otherwise, we would have
+to divide by the probability density function
+that comes from picking surfaces without taking
+surface area into consideration. \\
 
 Note that sampling using angles on the hemisphere 
 instead of picking random can lead to bias. \\
@@ -1113,7 +1150,7 @@ to generate some random jitter, scaled accordingly. \\
 
 \newpage
 
-\subsection*{Multiple Importance Sampling}
+\subsection*{Inverse Sampling}
 
 Suppose an integral has the form:
 \[ \int_a^b f(x)g(x)\;dx \]
@@ -1126,7 +1163,7 @@ too high a variability. \\
 
 In order to cancel out the $g(x)$,
 we will use a special kind of change of variable
-called multiple importance sampling. \\
+called inverse sampling. \\
 
 Recall that when we transform the variables
 using some transformation:
@@ -1168,7 +1205,7 @@ inverse sampling becomes significantly harder. \\
 In practice, the high variance term is
 the geometry term, while the BRDF is the flat term. \\
 
-While multiple importance sampling is not necessary, 
+While inverse sampling is not necessary, 
 it is highly recommended for faster convergence. \\
 
 \newpage

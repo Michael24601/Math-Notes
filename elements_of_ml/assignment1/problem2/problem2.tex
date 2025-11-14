@@ -1,0 +1,101 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Elements of Machine Learning \\
+    \huge Assignment I \\
+    \LARGE Problem 2
+}
+\date{2025-11-01}
+\author{
+    Michael Saba (Matriculation No. 7076371) \\
+    Chongbiao Wang (Matriculation No. 7076265)
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Michael Saba 7076371}
+\fancyhead[R]{Chongbiao Wang 7076265}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Problem 2}
+
+\begin{enumerate}[label = \numbers]
+\item
+    We want to test the Null Hypotheses $\beta_1 = 0$
+    and $\beta_2 = 0$. \\
+    We know that the $t$-statistic measures the normalized
+    distance between an estimator and the zero-mean:
+    \[ t = \dfrac{\hat{\beta}_k - 0}{SE(\hat{\beta}_k)} \]
+    So we have:
+    \[ t_1 = \dfrac{2}{0.8} = 2.5
+    \qquad \AND \qquad t_2 = \dfrac{1}{0.6} \approx 1.67  \]
+    We have a critical value $v_t = 2.3$. Critical values,
+    which are derived from some desired significance,
+    tell us how far the $t$-statistic of an estimator can be
+    from the zero-mean before we are no longer confident
+    (according to our significance level) that 
+    the predictor is 0. \\
+    The further away $t$ is from the zero-mean,
+    the smaller the area under the graph of the 
+    $t$-distribution where $|t| > v_t$,
+    and when it becomes smaller than the significance,
+    we can say that $t$ is statistically significant
+    and reject the null hypothesis stating the
+    estimator is $0$. \\
+    Since $|t_1| > v_t$, it is statistically significant,
+    while $|t_2| < v_t$, so it is not statistically significant. \\
+\item 
+    The $F$-statistic used test if a subset of the predictors
+    (last $q$ features) are insignificant
+    (that they equal $0$) is calculated as:
+    \[ F = \dfrac{\para{\dfrac{\text{RSS}_0 - \text{RSS}}{q}}}
+    {\para{\dfrac{\text{RSS}}{n - p - 1}}} \]
+    Where $\text{RSS}_0$ is the residual sum of squares
+    of the data points ignoring the last $q$ features. \\
+    We want to test the null hypothesis that $\beta_1 = \beta_2 = 0$,
+    so we have:
+    \[ \text{RSS} = \text{RSS}_U = 36
+    \qquad \AND \qquad \text{RSS}_0 = \text{RSS}_R = 150 \]
+    We have $n = 10$ data points, $p=2$ features,
+    and $q = 2$ features that we are testing for 
+    insignificance, so:
+    \[ F = \dfrac{\para{\dfrac{150 - 36}{2}}}
+    {\para{\dfrac{36}{7}}} \approx 11.08 \]
+    Since $|F|$ is larger than the critical value $v_F = 4.1$,
+    we can conclude that both features are significant. \\
+\item 
+    With the $t$-statistic, we concluded that hours-studied
+    was a statistically significant estimator,
+    and that hours slept was not. \\
+    But with the $F$-statistic, we concluded that both
+    were statistically significant. \\
+    The $F$-statistic jointly tests for the significance
+    of features.
+    The $t$-statistic does not; this means that when 
+    we are testing for the significance of the hours-slept
+    feature, we are only testing for the value it adds
+    on its own. \\
+    However, the $F$-statistic tests for the combined 
+    information that is given by both features, and even though
+    the hours-slept feature alone won't significantly
+    lead to an improved exam-score, hours-slept
+    when combined with hours-studied does significantly 
+    affect the score. \\
+\end{enumerate}
+
+\newpage
+
+\end{document}

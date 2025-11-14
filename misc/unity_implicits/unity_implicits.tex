@@ -1,0 +1,163 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../variables.tex}
+
+\title{%
+    \Huge Implementing Multi-Level Partition of Unity Implicits
+}
+\date{2025-10-28}
+\author{Michael Saba}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\newpage
+
+\subsection*{Introduction}
+
+The goal of this project is to implement a surface
+reconstruction algorithm from a set of a points on a
+surface.  \\
+
+The algorithm is an approximation, not an interpolation,
+of the surface points. \\
+
+\newpage
+
+\subsection*{Octree Subdivision}
+
+First, we are given a set of points:
+\[ \prsfs = \{p_1, p_2, \dots, p_n \}  \]
+assumed to be on some surface. 
+The points are also accompanied by a respective set
+of surface normals:
+\[ \nrsfs = \{n_1, n_2, \dots,  \} \] 
+which we can either calculate ourself or receive along
+with the point data. \\
+
+Our goal is to find some function $3$ dimensional function:
+\[ f: \rbb^3 \to \rbb \]
+Which approximates the signed distance function from 
+the surface. \\
+That is, $f(x, y, z)$ gives the distance between $x, y, z$
+and the surface. \\
+The function has a negative value outside the surface, 
+and a positive value inside. \\
+Thus, the zero level of the function, $f(x, y, z) = 0$,
+approximates the function itself. \\
+
+We call $f$ a multi-level partition of unity implicits 
+because it is an implicit function that approximates 
+the surface using piece-wise quadratics that locally 
+fit the points of the surface. \\
+
+These quadratics will be reffered to as local
+shape functions, and denoted as $f_i(x)$. \\
+
+The first step will be to subdivide the $3$ dimensional
+region $\Omega$ containing the points into smaller cells, such
+that each can be accurately approximated by a quadratic
+function. \\
+
+We will be using an octree for that. Essentially,
+we start by bounding the points in an axis-aligned box,
+and then subdivide it into $8$ smaller boxes; these
+boxes can then be subdivided in turn. \\
+Each time we arrive at a leaf of the tree, we attempt
+to fit a local shape function to the points in the
+cell. If the approximation does not match the points
+well, we can subdivide again until we have reached
+the desired accuracy. \\
+
+\newpage
+
+\subsection*{Partition of Unity}
+
+Now that we have a set of local shape function
+$f_i$, we notice that the functions are discontinuous
+between on the border of cells. \\
+
+Our end goal is to have a smooth and continuous function
+$f(x)$ that approximates the surface. \\
+
+The Partition of Unity method is what we will use
+to combine the local approximations into a global one. \\
+It does this by blending the different shape functions
+using smooth local weights. \\
+
+To start, we can image that we have a set of 
+nonnegative compactly supported functions:
+\[ \{ w_1, w_2, \dots \} \]
+Here, complactly supported means that the function
+is non-zero only on in a small region $\supp(w_i)$. \\
+
+This set of weight functions must cover all of the
+region we are working in:
+\[ \Omega \; \subset \; \bigcup_i \supp(w_i)  \]
+Another requirement we have is that the sum of the
+weights at any given point $(x, y, z)$ must be $1$.
+This condition can be achieved by normalizing the weights.
+So we define a set of normalized weights $\{\varphi_i\}$
+such that:
+\[ \varphi_i = \dfrac{w_i}{\sum_k w_k} \]
+Which satisfies:
+\[ \sum_i \varphi_i(x, y, z) \equiv 1 \]
+For any $(x, y, z) \in \Omega$. \\
+
+We can now define our signed distance approximation
+as:
+\[ f(x, y, z) = \sum_i f_i(x)\varphi_i(x, y, z) \]
+Which guarantees continuity and smoothness at the cell
+borders. \\
+
+As for the weights $w_i$, we can use the quadratic
+$B$-spline to generate them:
+\[ w_i = b\para{\dfrac{3|\bl{x} - \bl{c}_i|}{2R_i}} \]
+Here $R_i$ is radius and $c_i$ the center of the spline. \\
+
+\newpage
+
+\subsection*{The Octree}
+
+To start, we can fit the points in $\prsfs$ with
+an axis aligned bounding box. We can then rescale
+the points such that the diagonal of the AABB is $1$. \\
+
+After subdividing the AABB into smaller cells, each cell 
+will have a diagonal and center. The length of the
+diagonal will be called $d$,
+and the center $\bl{c}$. \\
+
+We can then associate each cell with a support radius $R$,
+which alongside the center of the cell, is a parameter
+of the $B$-spline weight we have chosen for each cell.
+The radius will be proportional to the diagonal length:
+\[ R = \alpha d \]
+The local shape functions $f_i(x)$ associated with each
+cell will then be fit to the points contained in the support
+region of each cell (within the sphere centered at $\bl{c}$
+with radius $R$). 
+So a larger $\alpha$ that points will contribute to
+multiple adjacent shape functions, ensuring a smoother
+approximation. \\
+
+To ensure the local estimations correctly
+reflect the shape of the surface, we need the ball of each 
+cell to contain enough points. \\
+We can do this by incrementally increasing the support 
+radius:
+\[ \hat{R} = \hat{R} + \lambda R \] until it encompasses
+$N_{\min}$ points, which is a parameter
+set by the user (usually to $15$). \\
+
+
+
+
+\end{document}

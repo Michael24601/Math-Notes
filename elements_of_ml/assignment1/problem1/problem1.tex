@@ -1,0 +1,108 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Elements of Machine Learning \\
+    \huge Assignment I \\
+    \LARGE Problem 1
+}
+\date{2025-11-01}
+\author{
+    Michael Saba (Matriculation No. 7076371) \\
+    Chongbiao Wang (Matriculation No. 7076265)
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Michael Saba 7076371}
+\fancyhead[R]{Chongbiao Wang 7076265}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Problem 1}
+
+\begin{enumerate}[label = \numbers]
+\item
+    In order to find the optimal estimators $\hat{\beta}$,
+    we will need to differentiate the residual sum of squares
+    with respect to the vector $\beta$. \\
+    We have:
+    \[ \text{RSS}(\beta) = \sum_i (y_i - \hat{y}_i)^2
+    = \sum_i \para{y_i - \sum_j X^\top_{ij} \beta_j }^2
+    = (Y - X \beta)^\top(Y - X \beta) \]
+    Then, we can differentiate and set the derivative equal
+    to $0$:
+    \[ \partialdd{\text{RSS}(\beta)}{\beta}
+    = -2X^\top(Y - X\beta) \]
+    \[ -2X^\top(Y - X\beta) = 0 \]
+    \[ X^\top(Y - X\beta) = 0 \]
+    \[ X^\top Y = X^\top X\beta \]
+    \[ \hat{\beta} = (X^\top X)\inv X^\top Y \]
+    Assuming of course that $X^\top X$ is invertible. \\
+    In our case the matrix $X$ has the data points as rows,
+    each with $2$ predictors (the first column in the bias):
+    \[ X = \bmat{ 1 & x_{11} & x_{12} \\
+    1 & x_{21} & x_{22} \\ 1 & x_{31} & x_{32}}
+    = \bmat{1 & 1 & 0 \\ 1 & 0 & 1 \\ 1 & 1 & 1 } \]
+    And we have:
+    \[ X^\top = \bmat{1 & 1 & 1 \\ 1 & 0 & 1 \\ 0 & 1 & 1}
+    \qquad \AND \qquad Y = \bmat{3 \\ 5 \\ 6} \]
+    If $X$ happens to be square and invertible, 
+    we can calculate the inverse of $X^\top X$ as:
+    \[ (X^\top X)\inv = X\inv (X^\top)\inv \]
+    So we need:
+    \[ (X^\top X)\inv X^\top Y
+    = X\inv (X^\top)\inv X^\top Y = X \inv Y \]
+    The determinant of $X$ (using the formula in the question
+    sheet) is:
+    \[ |X| = 1 \cdot (0 - 1) - 1 \cdot(1 - 1) + 0 \cdot (1 - 0) = -1 \]
+    So we conclude that it is invertible, and proceed. \\
+    The adjugate is the transpose of the matrix we would get
+    if the $\nth{i}$ and $\nth{j}$ entry contained the determinant
+    of $X$ without the $\nth{i}$ row and $\nth{j}$ column:
+    \[ \adj(X) = \bmat{ -1 & - 1 & 1 \\ 0 & 1 & -1 \\ 1 & 0 & -1 } \] 
+    So the inverse is $X\inv = \dfrac{1}{|X|}\adj(X) = -\adj(X)$. \\
+    Finally we can calculate:
+    \[ \hat{\beta} = X\inv Y
+    = \bmat{ 1 & 1 & -1 \\ 0 & -1 & 1 \\ -1 & 0 & 1 }
+    \bmat{3 \\ 5 \\ 6} = \bmat{2 \\ 1 \\ 3} \]
+    So we have $\hat{\beta_0} = 2$, 
+    $\hat{\beta_1} = 1$, and $\hat{\beta_2} = 3$. \\
+\item 
+    First, we can calculate the predicted values $\hat{Y}$, 
+    which match the real target values: 
+    \[ \hat{Y} = X \hat{\beta} = 
+    \bmat{1 & 1 & 0 \\ 1 & 0 & 1 \\ 1 & 1 & 1 }
+    \bmat{2 \\ 1 \\ 3} = \bmat{3 \\ 5 \\ 6} = Y \]
+    And the empricial mean of $Y$ is:
+    \[ \bar{y} = \dfrac{3 + 5 + 6}{3} = \dfrac{14}{3} \]
+    So we have:
+    \[ \text{RSS} = \sum_i (y_i - \hat{y}_i)^2
+    = 0 \]
+    And:
+    \[\text{TSS} = \sum_i (y_i - \bar{y})^2
+    = (-\sfrac{5}{3})^2 + (\sfrac{1}{3})^2 + (\sfrac{4}{3})^2
+    = \dfrac{42}{9} = \dfrac{14}{3} \]
+    We can calculate the $R^2$ statistic as:
+    \[ R^2 = 1 - \dfrac{\text{RSS}}{\text{TSS}} = 1 \]
+    Now, the $\text{RSE}$ can be calculated using:
+    \[ \text{RSE} = \sqrt{\dfrac{\text{RSS}}{n - 2}} = 0 \]
+    This is because we have $3$ degrees of freedom (coefficients),
+    and $3$ data points, so we can fit them perfectly to the data,
+    and end up with an $\text{RSS}$ and $\text{RSE}$ of $0$. \\
+\end{enumerate}
+
+\newpage
+
+\end{document}
