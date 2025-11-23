@@ -179,10 +179,73 @@ Suppose that $\varphi: G \to H$ is a homomorphism:
     $\im(\varphi)$, the image of $G$ under $\varphi$,
     is a subgroup of $H$. \\
     This is true for all homomorphisms and their co-domains.
+    We already know that $1_H$ is part of the image since
+    it is the image of $1_G$. The co-domain has the
+    same group operator as $H$ itself, so it is associative.
+    And finally, if $x, y \in \im(\varphi)$,
+    then $x = \varphi(a)$ and $y = \varphi(b)$,
+    where $a, b \in G$ are not necessarily distinct.
+    And $\varphi(ab\inv) = \varphi(a)\varphi(b)\inv = xy\inv$,
+    so $xy\inv$ is in the codomain.
 \end{itemize}
 With that we can define some terminology. \\
 
+Now, if we have a homomorphism:
+\[ \varphi: G \to H \]
+Then we will define the quotient group of fibers
+to be $G/K$, where where $K$ is the kernel of the homomorphism. \\
+This is because we can think of the fibers as being
+the quotients we get from dividing the group by the kernel.
+For example, in the $D_{2n}$ example cited above, we get the
+group of reflections by dividing out by the group of rotations,
+which in this case is the kernel. \\
 
+Notice that the other fibers will share the same structure
+as the kernel. We say they are translates of the kernel. \\
+For example, in the $D_{2n}$ case, the other fiber is the
+set of reflected rotations. \\
+However, out of all the fibers, only the kernel contains the
+identity, and is therefore the only fiber that is also a group. \\
 
+Because of that, and because it is the only one made up
+purely of the operation we are trying to abstract (in the
+$D_{2n}$ case, the rotation), it's the one we use when dividing
+$G$. It wouldn't make sense to divide by the
+set of reflected rotations,
+since those contain reflections (and aren't a group). \\
+
+\subsection*{Cosets}
+
+Now that we have defined what a quotient group is,
+and gotten an intuition as to what it is and what it contains,
+we can move on to defining it without using homomorphisms. \\
+This is useful, since the group of fibers itself is just
+a partition of the elements of a group $G$, such that the sets
+form a group consistent with the group operation of $G$
+and the way we partitioned the elements.
+The homomorphism itself is not a necessary part of that
+definition. \\
+
+Recall that we needed the homomorphism from $G$ to $H$,
+as the group operation of $H$ told us how to combine the
+fibers and turn them into a group. \\
+Instead, we will now use the group operation of $G$
+in order to define the operation. \\
+So if we have two fibers $X_a$ and $X_b$, such that
+$g \in X_a$ and $h \in X_b$ are two elements, one in each 
+fiber, we will define the group operation to be:
+\[ X_a \cdot X_b = C \]
+Where $C$ is the group that contains $gh$. \\
+
+This operation has to be well defined, that is, indepdent
+of the choice of representatives $g$ and $h$. \\
+The concept of well-defintion is usually used when functions
+map sets to other sets using representatives from the sets,
+and in this case, the function is the group operation. \\
+
+If we know that $X_a$ and $X_b$ are fibers of a homomorphism,
+this is trivial. \\
+We know that $\varphi(gh) = \varphi(g)\varphi(h) = X_aX_b$
+for any choice of representatives. \\
 
 \end{document}

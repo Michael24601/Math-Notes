@@ -1,0 +1,176 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Elements of Machine Learning \\
+    \huge Assignment II \\
+    \LARGE Problem 2
+}
+\date{2025-11-15}
+\author{
+    Michael Saba (Matriculation No. 7076371) \\
+    Chongbiao Wang (Matriculation No. 7076265)
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Michael Saba 7076371}
+\fancyhead[R]{Chongbiao Wang 7076265}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Problem 2}
+
+\begin{enumerate}[label = \letters]
+\item
+    To estimate the mean of each class, 
+    we can use the sample mean $\mu_k$ for the set of
+    points with output $k$:
+    \[ \mu_k = \dfrac{1}{n_k} \sum_{y_i = k} x_i \]
+    Where $n_k$ is the number of points in class $k$. \\
+    Note that since the input $x_i \in \rbb^2$ is a vector with
+    components $x_{i1}$ and $x_{i2}$, the data points we sum
+    are vectors. \\
+    We have $4$ point in classes $1$ and $2$:
+    \[ \mu_1 = \dfrac{1}{4}\para{\bmat{1 \\ 2} 
+    + \bmat{2 \\ 1} + \bmat{2 \\ 3} + \bmat{3 \\ 2}}
+    = \bmat{2 \\ 2} \]
+    \[ \mu_2 = \dfrac{1}{4}\para{\bmat{3 \\ 4} 
+    + \bmat{3 \\ 6} + \bmat{5 \\ 4} + \bmat{5 \\ 6}}
+    = \bmat{4 \\ 5} \]
+    So now we have an estimate for the class means. \\
+\item 
+    First we calculate the covariance matrices of each
+    class on its own, using the formula (for some class $k$):
+    \[ \cov(X) = \Sigma_k = \ebb[(X - \mu_k)(X - \mu_k)^\top] \]
+    We can use an unbiased estimator for the covariance
+    matrix (since we don't have access to the whole distribution):
+    \[ \hat{\Sigma}_k = \dfrac{1}{n_k - 1} 
+    \sum_{y_i = k}(x_i - \mu_k)(x_i - \mu_k)^\top \]
+    Calculating the covariance matrices, we get:
+    \[ \hat{\Sigma}_1 = \dfrac{1}{3}\bmat{2 & 0 \\ 0 & 2} \]
+    \[ \hat{\Sigma}_2 = \dfrac{1}{3}\bmat{4 & 0 \\ 0 & 4} \]
+    The pooled covariance matrix has a formula:
+    \[ \Sigma = \dfrac{\sum_{k=1}^K (n_k-1) \cdot \Sigma_k}
+    {\sum_{k=1}^K (n_k-1)} \]
+    Which in our case we can estimate to be:
+    \[ \Sigma = \dfrac{1}{3 + 3}
+    \para{\bmat{2 & 0 \\ 0 & 2} + \bmat{4 & 0 \\ 0 & 4}}
+    = \bmat{1 & 0 \\ 0 & 1} = I \]
+    Which is the identity matrix. \\
+\item 
+    We know that LDA is a generative approach to classification;
+    that is, we estimate the prior $P(Y)$ and
+    the conditional $P(X \mid Y = k)$, which we can use along
+    with Baye's rule to get an estimate on $P(Y = k \mid X)$. \\
+    Our goal then is to pick the class $k$ 
+    that maximizes the estimate of this probability.
+    After simplifying for a bit, and taking the logarithm,
+    we end up with the discriminant:
+    \[ \delta_k(x) = x^\top \Sigma^{-1} \mu_k - 
+    \frac{1}{2} \mu_k^\top \Sigma^{-1} \mu_k + \log(\pi_k) \]
+    Since the logarithm is a monotonically increasing function,
+    the class $k$ that maximizes the discriminant also
+    maximizes the conditional probability estimate. \\
+    We were given an input and priors:
+    \[ x = \bmat{4 \\ 3} \qquad \pi_1 = \pi_2 = 0.5 \]
+    So the discriminants are:
+    \[ \delta_1\para{\bmat{4 \\ 3}} = 
+    \bmat{4 & 3}\bmat{1 & 0 \\ 0 & 1}\inv \bmat{2 \\ 2}
+    -\dfrac{1}{2}\bmat{2 & 2}\bmat{1 & 0 \\ 0 & 1}\inv \bmat{2 \\ 2}
+    = 10 + \log(0.5) \]
+    \[ \delta_2\para{\bmat{4 \\ 3}} = 
+    \bmat{4 & 3}\bmat{1 & 0 \\ 0 & 1}\inv \bmat{4 \\ 5}
+    -\dfrac{1}{2}\bmat{4 & 5}\bmat{1 & 0 \\ 0 & 1}\inv \bmat{4 \\ 5}
+    = \dfrac{21}{2} + \log(0.5) \]
+    The discriminant of class $2$ is larger, so we should
+    classify the point into class $2$. \\
+\item 
+    The points $x$ on the decision boundary are those
+    that are equally likely to be classified into
+    classes $1$ and $2$, that is, the discriminants are equal:
+    \[ \delta_1(x) = \delta_2(x)  \]
+    \[ x^\top \Sigma^{-1} \mu_1 - 
+    \frac{1}{2} \mu_1^\top \Sigma^{-1} \mu_1 + \log(\pi_1)
+    = x^\top \Sigma^{-1} \mu_2 - 
+    \frac{1}{2} \mu_2^\top \Sigma^{-1} \mu_2 + \log(\pi_2) \]
+    We can then rearrange it such that $x$ is on one side,
+    and we arrive at out linear decision boundary:
+    \[ x^\top \para{ \Sigma^{-1} \mu_1 - \Sigma^{-1} \mu_2}
+    = \frac{1}{2} \para{ \mu_1^\top \Sigma^{-1} \mu_1
+    - \mu_2^\top \Sigma^{-1} \mu_2} + \log(\pi_2) - \log(\pi_1) \]
+    Assuming equal priors, and substituting with the actual
+    values, we get:
+    \[ x^\top \para{\bmat{2 \\ 2} - \bmat{4 \\ 5} }
+    = \frac{1}{2} \para{ 8 - 41} + \log(0.5) - \log(0.5) \]
+    \[ 2x_1 + 3x_2 = \frac{33}{2} \]
+    We can draw this as a linear boundary on the figure:
+    \begin{center}
+    \tikzGraphic{
+        % Grid
+        \draw[step=1cm,gray,very thin] (0,0) grid (7,7);
+
+        % Axes
+        \draw[thick,->] (0,0) -- (7.5,0) node[right] {$x_1$};
+        \draw[thick,->] (0,0) -- (0,7.5) node[above] {$x_2$};
+
+        % Points
+        \coordinate (p1) at (1,2);
+        \coordinate (p2) at (2,1);
+        \coordinate (p3) at (2,3);
+        \coordinate (p4) at (3,2);
+
+        \coordinate (p5) at (3,4);
+        \coordinate (p6) at (3,6);
+        \coordinate (p7) at (5,4);
+        \coordinate (p8) at (5,6);
+
+        % Drawing
+        \foreach \p in {p1,p2,p3,p4} {
+            \fill[blue] (\p) circle (4pt);
+        }
+        \foreach \p in {p5,p6,p7,p8} {
+            \fill[red] (\p) circle (4pt);
+        }
+
+        % Line
+        \draw[thick, dashed, purple] (0,5.5) -- (7,0.1667);
+    }
+    \end{center}
+    As we can see it correctly classifies the points. \\
+\item 
+    LDA assumes that the covariance matrix of the data
+    is the same for all classes, 
+    while QDA makes no assumptions about the
+    covariance matrices. \\
+    In practice, what this does is turn the linear boundary
+    into a quadratic boundary (unless the covariance
+    matrices happen to be equal, which degenerates to LDA). \\ 
+    If we were to go back to
+    the generative model that estimates the prior and conditional,
+    we would notice that it looks to be quadratic in $x$,
+    but simplifies to linear because the covariance matrix
+    is the same for all classes, and the quadratic terms
+    cancel out, leaving linear terms that lead to a 
+    linear boundary. \\
+    If the covariance matrices were different for each class,
+    the quadratic terms would remain, and the decision boundary
+    would become quadratic. \\
+    Moreover, QDA has more parameters than LDA, since each
+    class has its own covariance matrix. \\ 
+\end{enumerate}
+
+\newpage
+
+\end{document}

@@ -1,0 +1,299 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Elements of Machine Learning \\
+    \huge Assignment II \\
+    \LARGE Problem 1
+}
+\date{2025-11-15}
+\author{
+    Michael Saba (Matriculation No. 7076371) \\
+    Chongbiao Wang (Matriculation No. 7076265)
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Michael Saba 7076371}
+\fancyhead[R]{Chongbiao Wang 7076265}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Problem 1}
+
+\begin{enumerate}[label = \letters]
+\item
+    Logistic Regression is a discriminative approach to
+    binary classification that attempts to estimate the conditional
+    $P(Y=1 \mid X=x)$ using a linear classifier 
+    $f(X) = \bf{X}\beta$, 
+    hence why it has regression in its name. \\
+    It uses the logistic function, $\sigma(a)$, to map
+    the values of the linear model to $[0, 1]$, ensuring
+    we have a probability. \\
+    So we end up with:
+    \[ P(Y = 1 \mid X=x) = \sigma(\bf{X}\beta)
+    = \dfrac{\exp(\beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k)}
+    {1 + \exp(\beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k)} \] 
+    Here, $f(X) = \beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k$ 
+    is the linear model given that $X$ has $p$ features, 
+    and $\sigma(f(X))$ is the mapping of that output to $[0, 1]$,
+    which turns the result into a probability that the given
+    $X$ has class output $Y=1$. \\
+\item 
+    The decision boundary is the set of points that are determined
+    by the model to be equally likely in class $Y=0$ or class $Y=1$.
+    That is, it is the set of all $x \in \rbb^p$
+    such that:
+    \[P(Y = 1 \mid X = x) = 0.5 \]
+    We can find this boundary by using the odds and log-odds:
+    \[ P(Y = 1 \mid X = x) = 0.5 \]
+    \[ \text{odds ratio } = \dfrac{P(Y = 1 \mid X = x)}
+    {1 - P(Y = 1 \mid X = x)} 
+    = \dfrac{0.5}{0.5} = 1 \]
+    \[ \log\para{\dfrac{P(Y = 1 \mid X = x)}
+    {1 - P(Y = 1 \mid X = x)}} = \log(1) = 0 \]
+    We know that:
+    \multiline{
+    \dfrac{P(Y = 1 \mid X = x)}{1 - P(Y = 1 \mid X = x)}
+    &= \dfrac{\dfrac{\exp(\beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k)}
+    {1 + \exp(\beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k)}}
+    {1 - \dfrac{\exp(\beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k)}
+    {1 + \exp(\beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k)}}
+    = \dfrac{\dfrac{\exp(\beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k)}
+    {1 + \exp(\beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k)}}
+    {\dfrac{1}{1 + \exp(\beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k)}} \\
+    &= \exp(\beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k)}
+    So:
+    \[ \log\para{\dfrac{P(Y = 1 \mid X = x)}
+    {1 - P(Y = 1 \mid X = x)}} = \beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k \]
+    So our decision boundary now looks like:
+    \[ \beta_0 + \sum_{k=1}^p\bf{X}_k\beta_k = 0 \]
+    Which is a linear function, and is therefore a $p$-dimensional
+    hyperplane (a linear decision boundary). \\
+\item
+    If we have $n$ independent datapoints $\{x_i, y_i\}_{i=1}^n$,
+    then the likelihood that we will see this data given our
+    logistic regression model $\sigma(f(x))$ is
+    the joint probability that $Y = y_i$ given $X=x_i$
+    and the parameters $\beta$, for all data points. \\
+    Since the datapoints are independent, the joint probability
+    is going to be a simple product:
+    \[ p(y_1, \dots, y_n \mid x_1, \dots, x_n, \beta)
+    = \prod_{i=1}^n p(y_i \mid x_i, \beta) \]
+    Since we want to write our likelihood in terms of $\sigma(f(x))$,
+    which is $p(y = 1 \mid x)$, we will split our product between
+    all data points in class $Y = 1$ and class $Y = 0$:
+    \[\prod_{y_i=1} p(y_i = 1 \mid x_i, \beta)
+    \prod_{y_i=0} p(y_i = 0 \mid x_i, \beta) \]
+    And, since the output is binary, we end up with:
+    \[ \prod_{y_i=1} p(y_i = 1 \mid x_i, \beta_i)
+    \prod_{y_i=0} (1 - p(y_i = 1 \mid x_i, \beta_i)) \]
+    (We can actually write this as a single product
+    over all points, which we will do in the next question). \\
+    Since we want the log-likelihood, we can take
+    the logarithm, which turns products into sums:
+    \[ \log\para{\prod_{y_i=1} p(y_i = 1 \mid x_i, \beta_i)
+    \prod_{y_i=0} (1 - p(y_i = 1 \mid x_i, \beta_i))} \]
+    \[ = \sum_{y_i=1} \log(p(y_i = 1 \mid x_i, \beta_i))
+    + \sum_{y_i=0} \log(1 - p(y_i = 1 \mid x_i, \beta_i)) \]
+    We can then replace the conditional probability by our 
+    logistic regression model:
+    \[ \sum_{y_i=1} \log(\sigma(f(x_i)))
+    + \sum_{y_i=0} \log(1 -\sigma(f(x_i))) \]
+    Our goal is to maximize the likelihood of seeing
+    the training data, given our parameters $\beta$.
+    We can do this by maximizing the log-likelihood (since
+    the logarithm is a monotonically increasing function),
+    which can be done by differentiating with repsect
+    to the vector of parameters $\beta$, and setting
+    the derivative to be equal to $0$. \\
+    We can do this using the partial derivative of each 
+    individual parameter $\beta_i$ and then solve a system. \\
+    This will give us the optimal parameters $\beta$ 
+    for our model. \\
+\item 
+    \begin{enumerate}[label = \romans]
+    \item 
+        The cost function is:
+        \[ \ell(\beta) = 
+        -\sum_{i=1}^n y_i\log(p(y_i = 1 \mid x_i, \beta_i)) 
+        + (1-y_i)\log(1 - p(y_i = 1 \mid x_i, \beta_i))  \]
+        We want to show the relationship it has with the
+        log-likelihood. \\
+        Since $y_i$ is either $0$ or $1$, 
+        we can write the likelihood:
+        \[ \prod_{y_i=1} p(y_i = 1 \mid x_i, \beta_i)
+        \prod_{y_i=0} (1 - p(y_i = 1 \mid x_i, \beta_i)) \]
+        as a single product, using exponents:
+        \[ \prod_{i=1}^n p(y_i = 1 \mid x_i, \beta_i)^{y_i}
+        (1 - p(y_i = 1 \mid x_i, \beta_i))^{1-y_i} \]
+        This works because when $y_i = 1$, the first term
+        remains the same, and the second becomes $1$,
+        and vice-versa. \\
+        When we take the logaritm of the likelihood,
+        we thus end up with:
+        \[ \log\para{\prod_{i=1}^n p(y_i = 1 \mid x_i, \beta_i)^{y_i}
+        (1 - p(y_i = 1 \mid x_i, \beta_i))^{1-y_i}} \]
+        \[ = \sum_{i=1}^n y_i\log(p(y_i = 1 \mid x_i, \beta_i))
+        + (1-y_i)\log(1 - p(y_i = 1 \mid x_i, \beta_i)) \]
+        So the log-likelihood is the negation of the 
+        cost function, which is the log-likelihood multiplied
+        by $-1$. 
+        Thus, finding the optimal parameters requires minimizing
+        instead of maximizing the cost function. \\
+    \item 
+        First we can note that the logistic function
+        can be rewritten:
+        \[ \sigma(x) = \dfrac{e^x}{1+e^x}
+        = \dfrac{e^x \cdot e^{-x}}{(1+e^x) \cdot e^{-x}}
+        = \dfrac{1}{1+e^{-x}} \]
+        And we note that:
+        \[ (1 - \sigma(x)) = 1 - \dfrac{1}{1+e^{-x}}
+        = \dfrac{e^{-x}}{1+e^{-x}} \]
+        The derivative of the logistic function is:
+        \[ \dd{}{x}\sigma(x)
+        = \dd{}{x} \para{\dfrac{1}{1+e^{-x}}}
+        = -\dfrac{1}{(1 + e^{-x})^2}\dd{}{x}(1+e^{-x}) 
+        = \dfrac{e^{-x}}{(1 + e^{-x})^2}\]
+        And we can factor it as:
+        \[ \dfrac{e^{-x}}{(1 + e^{-x})^2} = 
+        \dfrac{1}{1 + e^{-x}} \cdot \dfrac{e^{-x}}{1 + e^{-x}}
+        = \sigma(x)(1 - \sigma(x)) \]
+        Which is what we wanted to prove. \\
+    \item 
+        Assuming that all $x_i$ has been padded with a $1$,
+        that is $x_{i0} = 1$:
+        \[ \beta^\top x_i = 
+        \beta_0 + \sum_{k = 1}^p \beta_k x_{ik}
+        = \sum_{k = 0}^p \beta_k x_{ik} \]
+        we want to calculate:
+        \[ \partialdd{}{\beta_j} y_i\log(p(y_i = 1 \mid x_i, \beta)) \]
+        We substitute the probability with our logistic
+        regression model:
+        \[ \partialdd{}{\beta_j} y_i\log(\sigma(\beta^\top x_i)) \]
+        Using the chain rule, we get:
+        \[ \dfrac{y_i}{\sigma(\beta^\top x_i)}
+        \partialdd{\sigma(\beta^\top x_i)}{\beta_j} \]
+        Then, using the property 
+        $\dd{}{x}\sigma(x) = \sigma(x)(1-\sigma(x))$
+        and the chain rule again, we get:
+        \[ \dfrac{y_i}{\sigma(\beta^\top x_i)}
+        \sigma(\beta^\top x_i)(1 - \sigma(\beta^\top x_i)) 
+        \partialdd{\beta^\top x_i}{\beta_j}
+        =y_i(1 - \sigma(\beta^\top x_i)) 
+        \partialdd{\beta^\top x_i}{\beta_j} \]
+        Since all $\beta_k$ except for $\beta_j$ are treated
+        as constants, the derivative of $\beta^\top x_i$
+        with respect to $\beta_j$ 
+        is just the derivative of $\beta_jx_{ij}$,
+        which is $x_{ij}$, so we end up with:
+        \[ y_i(1 - \sigma(\beta^\top x_i)) x_{ij} \]
+        Which is the form we wanted. \\
+    \item 
+        We can use a similar derivation for:
+        \[ \partialdd{}{\beta_j} 
+        (1-y_i)\log(1 - p(y_i = 1 \mid x_i, \beta)) \]
+        First we substitute the probability with our model:
+        \[ \partialdd{}{\beta_j} 
+        (1-y_i)\log(1 - \sigma(\beta^\top x_i)) \]
+        Then we use the chain rule and get:
+        \[ \dfrac{1 - y_i}{1 - \sigma(\beta^\top x_i)}
+        \partialdd{(1 - \sigma(\beta^\top x_i))}{\beta_j}
+        = -\dfrac{1 - y_i}{1 - \sigma(\beta^\top x_i)}
+        \partialdd{\sigma(\beta^\top x_i)}{\beta_j} \]
+        Then, using the property 
+        $\dd{}{x}\sigma(x) = \sigma(x)(1-\sigma(x))$
+        and the chain rule again, we get:
+        \[ -\dfrac{1 - y_i}{1 - \sigma(\beta^\top x_i)}
+        \sigma(\beta^\top x_i)(1 - \sigma(\beta^\top x_i)) 
+        \partialdd{\beta^\top x_i}{\beta_j}
+        = -(1-y_i)\sigma(\beta^\top x_i)
+        \partialdd{\beta^\top x_i}{\beta_j} \]
+        Again, we know that the derivative
+        with respect to $\beta_j$ of $\beta^\top x_i$
+        is just the derivative of $\beta_jx_{ij}$,
+        which is $x_{ij}$, so we end up with:
+        \[ -(1-y_i)\sigma(\beta^\top x_i)x_{ij} \]
+        Which is the form we want. \\
+    \item 
+        We want to find:
+        \[ \partialdd{}{\beta_j} y_i\log(p(y_i = 1 \mid x_i, \beta))
+        + \partialdd{}{\beta_j} 
+        (1-y_i)\log(1 - p(y_i = 1 \mid x_i, \beta)) \]
+        Substituting with the results we derived, we have:
+        \[ y_i(1 - \sigma(\beta^\top x_i)) x_{ij}
+        - (1-y_i)\sigma(\beta^\top x_i)x_{ij} \]
+        Expanding, we get:
+        \[ y_ix_{ij} - y_i\sigma(\beta^\top x_i)x_{ij}
+        + y_i\sigma(\beta^\top x_i)x_{ij} 
+        - \sigma(\beta^\top x_i)x_{ij} \]
+        Which we can simplify to:
+        \[ y_ix_{ij} - \sigma(\beta^\top x_i)x_{ij}
+        = (y_i - \sigma(\beta^\top x_i))x_{ij} \]
+        Which is the result we needed to get. \\
+    \item 
+        We want to find the partial derivative:
+        \[ \partialdd{}{\beta_j} \ell(\beta) \]
+        Which is:
+        \[ \partialdd{}{\beta_j} \brac{-\sum_{i=1}^n 
+        y_i\log(p(y_i = 1 \mid x_i, \beta_i)) 
+        + \log(1 - p(y_i = 1 \mid x_i, \beta_i))} \]
+        The derivative of a sum of terms if the sum of
+        the derivatives of those terms, so we get:
+        \[ -\sum_{i=1}^n \partialdd{}{\beta_j} 
+        ( y_i\log(p(y_i = 1 \mid x_i, \beta_i)) 
+        + \log(1 - p(y_i = 1 \mid x_i, \beta_i) )) \]
+        Using the previous result, we get:
+        \[ -\sum_{i=1}^n (y_i - \sigma(\beta^\top x_i))x_{ij}
+        = \sum_{i=1}^n (\sigma(\beta^\top x_i) - y_i)x_{ij} \]
+        Which is derivative of the cost function. \\
+    \end{enumerate}
+\item 
+    \begin{enumerate}[label = \romans]
+    \item 
+        The calculated probablities are:
+        \[ P(y_1 = 1 \mid x_1, \beta) \approx 0.0474 \]
+        \[ P(y_2 = 1 \mid x_2, \beta) \approx 0.2689 \]
+        \[ P(y_3 = 1 \mid x_3, \beta) \approx 0.3775 \]
+        \[ P(y_4 = 1 \mid x_4, \beta) \approx 0.6225 \]
+        \[ P(y_5 = 1 \mid x_5, \beta) \approx 0.6225 \]
+        \[ P(y_6 = 1 \mid x_6, \beta) \approx 0.8808 \]
+        We used a python script to expedite solving this
+        part (since it is purely computational). \\
+    \item 
+        We just compare the probability from the last part
+        with the threshold of $0.5$, and arrive at:
+        \[ \hat{y}_1 = \hat{y}_2 = \hat{y}_3 = 0 \]
+        \[ \hat{y}_4 = \hat{y}_5 = \hat{y}_6 = 1 \]
+        Which are the model's predicted values. \\
+    \item 
+        All of the points except $(x_2, y_2)$, $(x_4, y_4)$,
+        and $(x_5, y_5)$ are classified correctly, 
+        so the accuracy is $\dfrac{3}{6} = 0.5$. \\
+    \item 
+        The loss is calculated as:
+        \[\ell(\beta) = 
+        -\sum_{i=1}^n y_i\log(P(y_i = 1 \mid x_i, \beta_i)) 
+        + (1-y_i)\log(1 - P(y_i = 1 \mid x_i, \beta_i))  \]
+        Using the given $\beta$ values, we get
+        \[ \ell \para{ \bmat{-3 \\ 0.5 \\ -0.5} } \approx 3.911 \]
+        For $\beta_0 = -3$, $\beta_1 = 0.5$, 
+        and $\beta_2 = -0.5$. \\
+    \end{enumerate}
+\end{enumerate}
+
+\newpage
+
+\end{document}

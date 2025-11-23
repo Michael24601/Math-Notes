@@ -1,0 +1,125 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\input{../../../variables.tex}
+
+\title{
+    \Huge Elements of Machine Learning \\
+    \huge Assignment II \\
+    \LARGE Problem 3
+}
+\date{2025-11-15}
+\author{
+    Michael Saba (Matriculation No. 7076371) \\
+    Chongbiao Wang (Matriculation No. 7076265)
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Michael Saba 7076371}
+\fancyhead[R]{Chongbiao Wang 7076265}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\setlength{\parindent}{0pt}
+\pagenumbering{arabic}
+
+\subsection*{Problem 3}
+
+\begin{enumerate}[label = \letters]
+\item
+   Baye's Classifier is optimal because it uses the true
+   data distribution to output $y_i$ such that
+   $P(Y = y_i \mid X = x_i)$ is maximized for each
+   points. This gives us a lower bound on the error a model
+   can have. We don't use it in practice because we usually
+   don't have access to the true distribution, only 
+   a sample of data points. \\
+\item 
+    \begin{enumerate}[label = \romans]
+        \item
+        The sensitivity is the number of true positives,
+        divided by the number of data points that are 
+        actually positive:
+        \[ \text{Sensitivity} = 
+        \dfrac{\text{TP}}{\text{TP} + \text{FN}} 
+        = \dfrac{426}{426 + 2437} \approx 0.1488 \]
+        The specificity is the number of true negatives,
+        divided by the number of data points that are 
+        actually negative:
+        \[ \text{Specificity} = 
+        \dfrac{\text{TN}}{\text{TN} + \text{FP}} 
+        = \dfrac{55928}{55928 + 1891} \approx 0.9673  \]
+        There is a tradeoff between the two; high
+        sensitivity means the model is very likely to detect
+        copyrighted material if it exists, and high specificity
+        means the model is very unlikely to detect copyrighted
+        material exists when it doesn't. \\
+    \item 
+        No, it is not a good idea. This is because the model
+        has very low sensitivity, meaning that if an image
+        actually does contain copyrighted material, the model
+        isn't likely to detect it and return a $1$. So while
+        the model does a good job not returning false positives,
+        it returns far too many false negatives. \\
+    \item 
+        It might be helpful to use QDA. If the distributions
+        of the two classes of data are not easily seperated
+        by a linear boundary, then QDA, which adds more degrees
+        of freedom, and allows a quadratic boundary, is likely
+        to do a better job. \\
+    \end{enumerate}
+\item 
+    \begin{enumerate}[label = \romans]
+    \item
+        LDA, which has far fewer parameters than QDA,
+        is likely to perform better when we have a small
+        sample size. \\
+        QDA has many parameters (the number scales quadratically),
+        so it will struggle to find the parameters with
+        onnly a few datapoints. It is likely going to overfit 
+        the data, causing a high test-error.
+        The $k$-NN model will perform poorly because the points
+        are too far away when the data is high-dimensional,
+        and sparsity causes k-NN to perform pporly. \\
+    \item 
+        QDA is likely to overfit the data, since there are
+        far more parameters than LDA. \\
+        The $k$-NN model is also likely to overfit, especially
+        if we pick a small $k$ size. \\
+        LDA is unlikely to overfit, and will thus generalize
+        nicely to unseen data. \\
+    \item 
+        We shouldn't use $k$-NN with imbalanced data,
+        where one class has far more data points that the other.
+        Recall that $k$-NN works by assigning a class to 
+        a point based on its nearest neighbors'
+        classes (the majority class is chosen). \\
+        The idea is that it's likely points
+        that are close together belong in the same class.
+        This won't work if the data is unbalanced however,
+        as the class with the larger sample size is likely
+        to be chosen everytime, even if its points are
+        further away, because there are so many of them. \\
+    \item 
+        If we are unsure about the sample distribution,
+        we should pick $k$-NN. It is non-parametric, and works
+        well no matter how the data is distributed. \\
+        LDA and QDA both make assumptions about the data;
+        they require that it is Gaussian distributed, 
+        and LDA also has assumptions with regards to the covariance.
+        So if we know nothing about the data, then
+        $k$-NN is the safest bet. \\
+    \end{enumerate}
+
+\end{enumerate}
+
+\newpage
+
+\end{document}
